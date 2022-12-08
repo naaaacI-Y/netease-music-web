@@ -1,0 +1,180 @@
+@import './variables';
+// reset
+* {
+    box-sizing: border-box;
+    outline: none;
+    margin: 0;
+    padding: 0;
+}
+
+@each $colorKey, $color in $colors {
+    .text-#{$colorKey} {
+        color: $color;
+    }
+    .bg-#{$colorKey} {
+        background-color: $color;
+    }
+}
+
+@each $sizeKey, $size in $font-sizes {
+    .fs-#{$sizeKey} {
+        font-size: $size;
+    }
+}
+
+//text align
+@each $var in (left, center, right) {
+    .text-#{$var} {
+        text-align: $var !important;
+    }
+}
+
+
+
+//flex
+.d-flex {
+    display: flex;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+@each $key, $value in $flex-jc {
+    .jc-#{$key} {
+        justify-content: $value;
+    }
+}
+
+@each $key, $value in $flex-ai {
+    .ai-#{$key} {
+        align-items: $value;
+    }
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.flex-around {
+    justify-content: space-around;
+}
+
+.flex-grow-1 {
+    flex-grow: 1;
+}
+
+//sapcing
+// .mt-1  => margin top level 1
+//.pb-2  => padding bottom level 2
+// .m-0
+
+@each $typeKey, $type in $spacing-types {
+    //.mx-1 .my-1
+    @each $sizeKey, $size in $spacing-sizes {
+        .#{$typeKey}x-#{$sizeKey} {
+            #{$type}-left: $size;
+            #{$type}-right: $size;
+        }
+        .#{$typeKey}y-#{$sizeKey} {
+            #{$type}-top: $size;
+            #{$type}-bottom: $size;
+        }
+    }
+    //.m-1
+    @each $sizeKey, $size in $spacing-sizes {
+        .#{$typeKey}-#{$sizeKey} {
+            #{$type}: $size;
+        }
+    }
+    //.mt-1
+    @each $directionKey, $direction in $spacing-direction {
+        @each $sizeKey, $size in $spacing-sizes {
+            // mt-1
+            .#{$typeKey}#{$directionKey}-#{$sizeKey} {
+                #{$type}-#{$direction}: $size * 1px;
+            }
+        }
+    }
+}
+
+//borders
+@each $dir in (top, right, bottom, left) {
+    .border-#{$dir} {
+        border-#{$dir}: 1px solid $border-color;
+    }
+}
+
+
+
+// mixins 放在全局的样式文件中 无需引入
+// 文本溢出隐藏
+@mixin no-wrap($width){
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: $width;
+    white-space: nowrap;
+  }
+// 多行文本溢出
+@mixin multiEllipsis($line:2){
+    overflow : hidden;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: $line;
+    -webkit-box-orient: vertical;
+}
+// 文字居中
+@mixin text-center($height, $size, $color){
+    text-align: center;
+    line-height: $height;
+    height: $height;
+    font-size: $size;
+    color: $color;
+}
+
+@mixin flex ($direction: row, $justify-content: flex-start, $align-items: flex-start,$flex-wrap: nowrap) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify-content;
+    align-items: $align-items;
+    flex-wrap: $flex-wrap;
+}
+
+.label {
+    color: #333;
+    font-size: 18px;
+    // font-weight: bold;
+    margin: auto;
+    @include flex(row, flex-start, center);
+    margin-bottom: 15px;
+    width: 7.4rem;
+    max-width: 1040px;
+
+    span {
+      margin-right: -8px;
+    }
+    i {
+      font-size: 40px;
+    }
+  }
+.pauseBtn{
+    width: 25px;
+    height: 25px;
+    border: 50%;
+    background-color: #929595;
+    // display: flex;
+    // @include flex(row, center, center)
+
+}
+
+@mixin btn_1($alpha){
+    color: rgba($color: #d33b31, $alpha: $alpha);
+    position: absolute;
+    left: 5px;
+    bottom:3px;
+    font-size: 18px;
+}

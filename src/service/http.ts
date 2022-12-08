@@ -1,5 +1,6 @@
 //http.ts
 import axios, { AxiosRequestConfig } from 'axios'
+import { Http } from './common'
 
 // 设置请求头和请求路径
 axios.defaults.baseURL = '/api'
@@ -27,18 +28,8 @@ axios.interceptors.response.use((res) => {
   return res
 })
 
-interface ResType<T> {
-  code: number
-  data?: T
-  msg: string
-  err?: string
-}
-interface Http {
-  get<T>(url: string, params?: unknown): Promise<ResType<T>>
-  post<T>(url: string, params?: unknown): Promise<ResType<T>>
-  upload<T>(url: string, params: unknown): Promise<ResType<T>>
-  download(url: string): void
-}
+
+
 
 const http: Http = {
   get(url, params) {
