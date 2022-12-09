@@ -1,30 +1,91 @@
 //colors
 $colors: (
-    "primary_red_1": #d33b31,
-    "primary_red_2":#da9794,
-    "primary_red_3":#f1c8c6,
-    "black_1":#3a3a3a,
-    "black_2":#4e4e4e,
-    "black_3":#565656,
-    "black_4":#7d7d7d,
-    "black_5":#747474,
-    "black_6":#979797,
-    "black_7":#eeeeee,
-    "black_8":#e9e9e9,
-    "black_9":#521414,
-    "black_10":#ededed,
-    "black_11":#f6f6f6,
-    "black_12":#f9f9f9,
-
-
+  'primary_red_1': #d33b31,
+  'primary_red_2': #da9794,
+  'primary_red_3': #f1c8c6,
+  'black_1': #3a3a3a,
+  'black_2': #4e4e4e,
+  'black_3': #565656,
+  'black_4': #7d7d7d,
+  'black_5': #747474,
+  'black_6': #979797,
+  'black_7': #eeeeee,
+  'black_8': #e9e9e9,
+  'black_9': #521414,
+  'black_10': #ededed,
+  'black_11': #f6f6f6,
+  'black_12': #f9f9f9,
+  'white': '#ffffff',
 );
-$border-color: map-get($colors, "light-1");
+$border-color: map-get($colors, 'light-1');
 //font-size
-$font-sizes: (1: 12px, 2: 13px, 3: 14px, 4:15px, 5:16px, 6:17px, 7:18px,8:19px,9:20px, 10: 30px);
-$flex-jc: (start: flex-start, end: flex-end, center: center, between: space-between, around: space-around);
-$flex-ai: (start: flex-start, end: flex-end, center: center, stretch: stretch);
-$spacing-types: (m: margin, p: padding);
-$spacing-direction: (t: top, r: right, l: left, b: bottom);
+$font-sizes: (
+  1: 12px,
+  2: 13px,
+  3: 14px,
+  4: 15px,
+  5: 16px,
+  6: 17px,
+  7: 18px,
+  8: 19px,
+  9: 20px,
+  10: 30px,
+);
+$flex-jc: (
+  start: flex-start,
+  end: flex-end,
+  center: center,
+  between: space-between,
+  around: space-around,
+);
+$flex-ai: (
+  start: flex-start,
+  end: flex-end,
+  center: center,
+  stretch: stretch,
+);
+$spacing-types: (
+  m: margin,
+  p: padding,
+);
+$spacing-direction: (
+  t: top,
+  r: right,
+  l: left,
+  b: bottom,
+);
 $spacing-base-size: 1;
 // $spacing-sizes: (0: 0, 1: 5, 2:10, 3: 15, 4: 20, 5: 25, 6:30, 7:35);
-$spacing-sizes: (0: 0, 1: 1, 2:2, 3: 3, 4:4, 5: 5, 6:6, 7:7,8:8,9:9,10:10,11:11,12:12,13:13,14:14,15:15,16:16,17:17,18:18,19:19,20:20,21:21,22:22,23:23,24:24,25:25,26:26,27:27,28:28,29:29,30:30);
+$spacing-sizes: (
+  0: 0,
+  1: 1,
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 5,
+  6: 6,
+  7: 7,
+  8: 8,
+  9: 9,
+  10: 10,
+  11: 11,
+  12: 12,
+  13: 13,
+  14: 14,
+  15: 15,
+  16: 16,
+  17: 17,
+  18: 18,
+  19: 19,
+  20: 20,
+  21: 21,
+  22: 22,
+  23: 23,
+  24: 24,
+  25: 25,
+  26: 26,
+  27: 27,
+  28: 28,
+  29: 29,
+  30: 30,
+);

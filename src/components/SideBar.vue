@@ -1,5 +1,5 @@
 <template>
-    <div class="homeWrap">
+    <div class="side-bar-wrapper">
         <div class="left">
             <div class="isLoginHeader" v-if="isLogin">
                 <div class="avatar">
@@ -104,7 +104,7 @@ onMounted(() => {
 })
 </script>
 <style scoped lang="scss">
-.homeWrap {
+.side-bar-wrapper {
     display: flex;
 
     .left {

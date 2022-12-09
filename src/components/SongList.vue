@@ -1,5 +1,5 @@
 <template>
-    个性推荐
+    歌曲列表
 </template>
 
 <script lang="ts" setup>

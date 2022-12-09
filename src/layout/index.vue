@@ -23,11 +23,11 @@ const isShowPLayPage = ref(false)
     display: flex;
 
     .content {
-        // margin-left: 200px;
-        // padding-top: 50px;
-        height: 100%;
-        background-color: aqua;
+        // height: 100%;
+        background-color: white;
         width: calc(100% - 200px);
+        overflow: scroll;
+        padding-bottom: 100px;
     }
 }
 </style>
