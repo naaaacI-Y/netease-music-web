@@ -1,6 +1,6 @@
 <template>
     <div class="nav-wrapper d-flex ai-center">
-        <div class="right bg-black_12 d-flex ai-center" :class='{"active" : isChangeBgc, "hasLeft": isHasLeft}'>
+        <div class="right bg-black_12 d-flex ai-center" :class='{ "active": isChangeBgc, "hasLeft": isHasLeft }'>
             <div class="find d-flex" v-if="isActive('/findMusic')">
                 <div :class="{ 'active': activeIndex == 0 }" @click="activeIndex = 0">
                     个性推荐
@@ -69,13 +69,16 @@ const isHasLeft = computed(() => {
     return paths.includes(route.path)
 })
 watch(activeIndex, () => {
+    console.log(route.path, "route.pathroute.pathroute.pathroute.pathroute.path");
+
     if (!route.path.startsWith('/find')) return;
     switch (activeIndex.value) {
         case 0:
             router.push('/findMusic/personalRecommend')
             break;
         case 1:
-            router.push('/findMusic/songList')
+            router.push('/findMusic/songMenu')
+            // findMusic/songList
             break;
         case 2:
             router.push('/findMusic/hostRadio')
@@ -94,14 +97,16 @@ watch(activeIndex, () => {
     }
 })
 watch(() => route.path, (newVal: string) => {
+    console.log(newVal, "newVal");
+
     switch (newVal) {
         case "/findMusic/personalRecommend":
             activeIndex.value = 0
             break;
-        case "/findMusic/songList":
+        case "/findMusic/songMenu":
             activeIndex.value = 1
             break;
-        case "/findMusic/personalRecommend":
+        case "/findMusic/hostRadio":
             activeIndex.value = 2
             break;
         case "/findMusic/rank":
@@ -110,7 +115,7 @@ watch(() => route.path, (newVal: string) => {
         case "/findMusic/singer":
             activeIndex.value = 4
             break;
-        case "/findMusic/newMusic":
+        case "/findMusic/newestMusic":
             activeIndex.value = 5
             break;
         default:
@@ -211,6 +216,7 @@ const isActive = (path: string) => {
             }
         }
     }
+
     .hasLeft {
         display: flex;
         justify-content: space-between;

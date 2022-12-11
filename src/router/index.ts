@@ -12,11 +12,11 @@ const routes: RouteRecordRaw[] = [
         name: "PersonalRecommend",
         component: () => import('@/pages/findMusic/personalRecommend/index.vue'),
       },
-      // {
-      //   path: "findMusic/songList",
-      //   name: "SongList",
-      //   component: () => import('@/pages/findMusic/personalRecommend/index.vue'),
-      // },
+      {
+        path: "findMusic/songMenu",
+        name: "SongMenu",
+        component: () => import('@/pages/findMusic/SongMenu.vue')
+      },
       {
         path: "findMusic/hostRadio",
         name: "HostRadio",
@@ -32,11 +32,7 @@ const routes: RouteRecordRaw[] = [
         name: "Singer",
         component: () => import('@/pages/findMusic/Singer.vue'),
       },
-      {
-        path: "findMusic/songList",
-        name: "SongList",
-        component: () => import('@/pages/findMusic/SongList.vue'),
-      },
+
       {
         path: "findMusic/newestMusic",
         name: "NewestMusic",

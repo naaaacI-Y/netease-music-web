@@ -1,5 +1,5 @@
 <template>
-    歌单
+    歌单123
 </template>
 
 <script lang="ts" setup>
