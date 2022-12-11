@@ -5,8 +5,8 @@
 <script lang="ts" setup>
 withDefaults(defineProps<
     {
-        cardWidth: number,
-        cardHeight: number
+        cardWidth?: number,
+        cardHeight?: number
     }>(), {
     cardWidth: 158,
     cardHeight: 158

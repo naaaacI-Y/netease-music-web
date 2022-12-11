@@ -13,8 +13,8 @@
 <script lang="ts" setup>
 withDefaults(defineProps<
     {
-        cardWidth: number,
-        cardHeight: number
+        cardWidth?: number,
+        cardHeight?: number
     }>(), {
     cardWidth: 250,
     cardHeight: 135
@@ -38,9 +38,7 @@ withDefaults(defineProps<
             position: absolute;
             top: 10px;
             left: 10px;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
+            @include radius(25px);
             border: 1px solid #ddd;
             background-color: rgba($color: #ccc, $alpha: 0.5);
 

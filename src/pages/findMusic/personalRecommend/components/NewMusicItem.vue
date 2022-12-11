@@ -26,7 +26,7 @@
 import { computed } from 'vue';
 
 const props = withDefaults(defineProps<{
-    isOutSide: boolean,
+    isOutSide?: boolean,
     index?: number
 }>(), {
     isOutSide: false,
@@ -61,10 +61,8 @@ const isShowBackground = computed(() => {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 25px;
-            height: 25px;
             transform: translate(-50%, -50%);
-            border-radius: 50%;
+            @include radius(25px);
             background-color: rgba($color: #bebebb, $alpha: 0.6);
 
             .trangel {

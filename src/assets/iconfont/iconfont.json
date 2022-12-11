@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "2127147",
+      "name": "微笑",
+      "font_class": "Smile",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "23626730",
+      "name": "网格",
+      "font_class": "wangge",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
+      "icon_id": "26134748",
+      "name": "编辑",
+      "font_class": "bianji",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
       "icon_id": "396864",
       "name": "iconfont-yonghuming",
       "font_class": "iconfontyonghuming",

@@ -23,8 +23,8 @@
 
 <script lang="ts" setup>
 withDefaults(defineProps<{
-    isShowTime: boolean,
-    isOneline: boolean
+    isShowTime?: boolean,
+    isOneline?: boolean
 }>(), {
     isShowTime: false,
     isOneline: false

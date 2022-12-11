@@ -1,5 +1,7 @@
 <template>
     <div class="head mb-12 d-flex ai-center ">最新音乐 <i class="iconfont icon-xiangyou1 ml-4"></i></div>
+
+    <CommentItem></CommentItem>
     <NewMusicItem v-for="item in 5" :key="(item + 1)" :index="item"></NewMusicItem>
     <div class="new-music-wrapper d-flex ai-center jc-between mb-30">
 
@@ -19,6 +21,7 @@
 
 <script lang="ts" setup>
 import NewMusicItem from './components/NewMusicItem.vue';
+import CommentItem from '@/components/CommentItem.vue';
 </script>
 <style lang="scss" scoped>
 .head:hover {

@@ -10,7 +10,7 @@
                     <i class="iconfont icon-xiangyou fs-1" style="color:#8e8e8e"></i>
                 </div>
             </div>
-            <div class="isNotLoginHeader" @click="goLogin" v-if="!isLogin">
+            <div class="isNotLoginHeader" @click="goPersonalCenter" v-if="!isLogin">
                 <div class="avatar">
                     <img src="@/assets/images/defaultAvatar.png" alt="">
                 </div>
@@ -87,6 +87,9 @@ const watchInfoUpdate = () => {
 const goLogin = () => {
 
 }
+const goPersonalCenter = () => {
+    router.push("/personal-center")
+}
 const active = (name: string): boolean => {
     return route.path.startsWith('/' + name)
 }
@@ -118,11 +121,8 @@ onMounted(() => {
             @include flex(row, flex-start, center);
 
             .avatar {
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
                 margin-right: 12px;
-                overflow: hidden;
+                @include radius(40px);
 
                 img {
                     width: 100%;
