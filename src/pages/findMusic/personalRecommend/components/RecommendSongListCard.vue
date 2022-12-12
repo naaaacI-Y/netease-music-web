@@ -1,12 +1,13 @@
 <template>
-    <div class="recommend-songlist-card-wrapper mb-30">
-        <div class="img-wrapper mb-6">
+    <div class="recommend-songlist-card-wrapper"
+        :style="{ width: cardWidth ? `${cardWidth}px` : '194px', marginBottom: cardWidth ? '55px' : '30px' }">
+        <div class="img-wrapper mb-6" :style="{ height: cardWidth ? `${cardWidth}px` : '194px' }">
             <img src="" alt="">
             <div class="play-count d-flex ai-center fs-3">
                 <i class="iconfont icon-bofang1 text-white fs-7"></i>
                 19万
             </div>
-            <div class="play-btn">
+            <div class="play-btn" :class="{ isCenter: cardWidth }">
                 <div class="trangel"></div>
             </div>
             <div class="songlist-author" v-if="!isOutSide">
@@ -15,7 +16,7 @@
                 <div class="author-flag"></div>
             </div>
         </div>
-        <div class="songlist-name fs-3 text-black_2" :class="{ isOneLine: isOneline }">歌单名称歌单名称歌单名称歌单名称歌单</div>
+        <div class="songlist-name fs-3 text-black_2" :class="{ isOneLine: isOneline }">歌单名称歌单名称</div>
         <slot name="songCount"></slot>
     </div>
 
@@ -25,6 +26,8 @@
 withDefaults(defineProps<{
     isOutSide?: boolean
     isOneline?: boolean
+    cardWidth?: number
+    cardHeight?: number
 }>(), {
     isOutSide: true,
     isOneline: false
@@ -33,7 +36,6 @@ withDefaults(defineProps<{
 <style lang="scss" scoped>
 .recommend-songlist-card-wrapper {
     width: calc(20% - 14px);
-
 
     .img-wrapper {
         width: 100%;
@@ -74,6 +76,12 @@ withDefaults(defineProps<{
                 top: 50%;
                 transform: translate(-30%, -50%);
             }
+        }
+
+        .isCenter {
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
         }
 
         &:hover {

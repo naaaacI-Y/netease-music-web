@@ -7,7 +7,9 @@
             <div class="music-time">时长</div>
         </div>
         <div class="song-wrapper">
-            <SongListItem v-for="item in 20" :index="item"></SongListItem>
+            <SongListItem v-for="item in 20" :index="item" :type="0">
+
+            </SongListItem>
         </div>
     </div>
 </template>
