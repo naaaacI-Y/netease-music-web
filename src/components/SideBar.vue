@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="other mb-20" style="color:#414141">
-                <div :class="['find', active('findMusic') ? isActive : '']" @click="go('/')">
+                <div :class="['find', active('findMusic') ? isActive : '']" @click="go('/findMusic/personalRecommend')">
                     <i class="iconfont icon-wangyiyunyinyuemusic1193417easyiconnet"></i>
                     <span>发现音乐</span>
                 </div>
@@ -28,7 +28,8 @@
                     <i class="iconfont icon-leida"></i>
                     <span>私人FM</span>
                 </div>
-                <div @click="go('/video')" :class="['find', active('video') ? isActive : '']">
+                <div @click="go('/video/video-inside')" :class="['find', active('video/video-inside', 'video/mv') ?
+                isActive : '']">
                     <i class="iconfont icon-shipin"></i>
                     <span>视频</span>
                 </div>
@@ -84,20 +85,19 @@ const watchInfoUpdate = () => {
     }
     window.addEventListener('storage', cb)
 }
-const goLogin = () => {
-
-}
 const goPersonalCenter = () => {
     router.push("/personal-center")
 }
-const active = (name: string): boolean => {
-    return route.path.startsWith('/' + name)
+const active = (name1: string, name2?: string): boolean => {
+    if (name2) {
+        return route.path.startsWith('/' + name1) || route.path.startsWith('/' + name2)
+    }
+    return route.path.startsWith('/' + name1)
 }
 const go = (path: string): void => {
-    if (route.path !== path && (!(path == '/' && route.path.startsWith('/find')))) {
+    if (route.path !== path) {
         router.push(path)
     }
-
 }
 onMounted(() => {
     initInfo()

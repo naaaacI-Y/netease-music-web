@@ -48,7 +48,25 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/video',
     name: 'Video',
-    component: () => import('@/pages/video/index.vue')
+    component: () => import('@/pages/video/index.vue'),
+    redirect: "video/video-inside",
+    children: [
+      {
+        path: 'video-inside',
+        name: 'VideoChild',
+        component: () => import('@/pages/video/Video.vue'),
+      },
+      {
+        path: 'mv',
+        name: 'VideoMv',
+        component: () => import('@/pages/video/Mv.vue'),
+      },
+      {
+        path: 'all-mv',
+        name: 'AllMv',
+        component: () => import('@/pages/video/AllMv.vue'),
+      },
+    ]
   },
   {
     path: '/focus',
@@ -70,6 +88,11 @@ const routes: RouteRecordRaw[] = [
     name: 'HomeFocus',
     component: () => import('@/pages/homeFocus/index.vue'),
   },
+  {
+    path: '/singer-home',
+    name: 'SingerHome',
+    component: () => import('@/pages/singer/index.vue'),
+  }
 ]
 
 const router = createRouter({

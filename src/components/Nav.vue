@@ -23,8 +23,16 @@
             </div>
             <div class="personalfm" v-if="isActive('/personalFm')"></div>
             <div class="dayRecommend" v-if="isActive('/songlist')"></div>
-            <div class="video" v-if="isActive('/video')">
-                视频 / mv
+            <div class="video pl-30 fs-4" v-if="isActive('/video/all-mv')">全部MV</div>
+            <div class="video d-flex pl-30 fs-4" v-if="isActive('/video/video-inside', '/video/mv')">
+                <div class="video-inside mr-20 text-black_4" :class="{ isVideo: route.path === '/video/video-inside' }"
+                    @click="goInside('/video/video-inside')">
+                    视频
+                </div>
+                <div class="video-mv text-black_4" :class="{ isVideo: route.path === '/video/mv' }"
+                    @click="goInside('/video/mv')">
+                    MV
+                </div>
             </div>
             <div class="friends" v-if="isActive('/friends')">
                 动态 / 发布动态
@@ -65,8 +73,10 @@ const activeIndex = ref(0)
 const route = useRoute()
 const router = useRouter()
 const isHasLeft = computed(() => {
+    console.log(route.path, "route.pathroute.pathroute.pathroute.path");
+
     const paths = ["/findMusic", "/video", "/friends", "/prettyCommon"]
-    return paths.includes(route.path)
+    return paths.some(item => route.path.startsWith(item))
 })
 watch(activeIndex, () => {
     console.log(route.path, "route.pathroute.pathroute.pathroute.pathroute.path");
@@ -124,8 +134,17 @@ watch(() => route.path, (newVal: string) => {
 })
 
 
-const isActive = (path: string) => {
-    return route.path.startsWith(path)
+const isActive = (path1: string, path2?: string) => {
+    if (path2) {
+        return route.path.startsWith(path1) || route.path.startsWith(path2)
+    }
+    return route.path.startsWith(path1)
+
+}
+const goInside = (path: string) => {
+    if (route.path !== path) {
+        router.push(path)
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -162,6 +181,17 @@ const isActive = (path: string) => {
             .active {
                 color: #000;
                 font-weight: bold;
+            }
+        }
+
+        .isVideo {
+            color: #000
+        }
+
+        .video-inside,
+        .video-mv {
+            &:hover {
+                cursor: pointer;
             }
         }
 

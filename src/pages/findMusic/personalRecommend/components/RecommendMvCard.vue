@@ -6,12 +6,13 @@
                 <i class="iconfont icon-bofang1 text-white fs-7"></i>
                 19万
             </div>
-            <div class="play-btn" v-if="isShowTime">
+            <div class="play-btn" v-if="isPlayBtn">
                 <div class="trangel"></div>
             </div>
+            <div class="duration fs-2 text-white" v-if="isShowTime">03:30</div>
         </div>
         <div class="mv-name mt-5">
-            <div class="line1 fs-4 text-black_2">
+            <div class="line1 fs-4 text-black_2" :class="{ noWrap: !isOneline }">
                 mv名称mv名称mv名称mv名称mv名称mv名称
             </div>
             <div class="line2 fs-2 text-black_6" v-if="!isOneline">
@@ -24,15 +25,18 @@
 <script lang="ts" setup>
 withDefaults(defineProps<{
     isShowTime?: boolean,
-    isOneline?: boolean
+    isOneline?: boolean,
+    isPlayBtn?: boolean
 }>(), {
     isShowTime: false,
-    isOneline: false
+    isOneline: false,
+    isPlayBtn: false,
 })
 </script>
 <style lang="scss" scoped>
 .recommend-mv-card-wrapper {
     width: 247px;
+    margin-bottom: 35px;
 
     .img-wrapper {
         width: 100%;
@@ -83,16 +87,24 @@ withDefaults(defineProps<{
                 display: block
             }
         }
+
+        .duration {
+            position: absolute;
+            bottom: 10px;
+            right: 10px
+        }
     }
 
     .mv-name {
         .line1 {
-            @include no-wrap(247);
-
             &:hover {
                 color: #3a3a3a;
                 cursor: pointer;
             }
+        }
+
+        .noWrap {
+            @include no-wrap(247);
         }
 
         .line2:hover {
