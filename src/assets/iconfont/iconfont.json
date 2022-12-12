@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "658008",
+      "name": "多语言",
+      "font_class": "duoyuyan",
+      "unicode": "e654",
+      "unicode_decimal": 58964
+    },
+    {
+      "icon_id": "7629051",
+      "name": "皇冠",
+      "font_class": "huangguan",
+      "unicode": "e6b3",
+      "unicode_decimal": 59059
+    },
+    {
+      "icon_id": "7817216",
+      "name": "分类",
+      "font_class": "fenlei",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
+      "icon_id": "22386339",
+      "name": "风格",
+      "font_class": "fengge",
+      "unicode": "ee26",
+      "unicode_decimal": 60966
+    },
+    {
+      "icon_id": "26212896",
+      "name": "咖啡",
+      "font_class": "kafei",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
       "icon_id": "2127147",
       "name": "微笑",
       "font_class": "Smile",
