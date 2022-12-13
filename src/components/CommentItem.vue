@@ -44,6 +44,8 @@
 </script>
 <style lang="scss" scoped>
 .comment-item-wrapper {
+    width: 100%;
+
     .commoent-left {
         .comment-avatar {
             @include radius(35px);
@@ -72,6 +74,7 @@
     }
 
     .commoent-right {
+        flex: 1;
         border-bottom: 1px solid #eee;
     }
 }

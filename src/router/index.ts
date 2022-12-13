@@ -92,6 +92,11 @@ const routes: RouteRecordRaw[] = [
     path: '/singer-home',
     name: 'SingerHome',
     component: () => import('@/pages/singer/index.vue'),
+  },
+  {
+    path: '/unique-play',
+    name: 'UniquePlay',
+    component: () => import('@/pages/uniquePlay/index.vue'),
   }
 ]
 

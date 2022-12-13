@@ -159,19 +159,3 @@
     font-size: 40px;
   }
 }
-.pauseBtn {
-  width: 25px;
-  height: 25px;
-  border: 50%;
-  background-color: #929595;
-  // display: flex;
-  // @include flex(row, center, center)
-}
-
-@mixin btn_1($alpha) {
-  color: rgba($color: #d33b31, $alpha: $alpha);
-  position: absolute;
-  left: 5px;
-  bottom: 3px;
-  font-size: 18px;
-}

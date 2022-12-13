@@ -21,6 +21,7 @@
                     最新音乐
                 </div>
             </div>
+            <div class="unique-play pl-30" v-if="isActive('/unique-play')"> 独家放送</div>
             <div class="personalfm" v-if="isActive('/personalFm')"></div>
             <div class="dayRecommend" v-if="isActive('/songlist')"></div>
             <div class="video pl-30 fs-4" v-if="isActive('/video/all-mv')">全部MV</div>
@@ -75,7 +76,7 @@ const router = useRouter()
 const isHasLeft = computed(() => {
     console.log(route.path, "route.pathroute.pathroute.pathroute.path");
 
-    const paths = ["/findMusic", "/video", "/friends", "/prettyCommon"]
+    const paths = ["/findMusic", "/video", "/friends", "/prettyCommon", "/unique"]
     return paths.some(item => route.path.startsWith(item))
 })
 watch(activeIndex, () => {

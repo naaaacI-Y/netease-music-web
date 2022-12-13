@@ -11,7 +11,7 @@
                 <div class="main-sub-label fs-2 text-c4">副标题副标题副标题副标题</div>
             </div>
         </div>
-        <CommonBtn :active-type="activeType" :types="types" @change-active-type="changeActiveType"></CommonBtn>
+        <CommonBtn :active-type="activeType" :types="songMenuTypes" @change-active-type="changeActiveType"></CommonBtn>
         <div class="song-list d-flex flex-wrap jc-between">
             <RecommendSongListCard :is-out-side="false" v-for="item in 30"></RecommendSongListCard>
         </div>
@@ -21,9 +21,9 @@
 <script lang="ts" setup>
 import RecommendSongListCard from './personalRecommend/components/RecommendSongListCard.vue';
 import CommonBtn from '@/components/CommonBtn.vue';
+import { songMenuTypes } from "@/utils/const"
 import { ref } from 'vue';
 
-const types = ["华语", "流行", "摇滚", "民谣", "电子", "另类/独立", "轻音乐", "综艺", "影视原声", "ACG"]
 const activeType = ref(-1)
 const changeActiveType = (num: number) => {
     activeType.value = num

@@ -1,13 +1,12 @@
 <template>
-    <div class="recommend-songlist-card-wrapper"
-        :style="{ width: cardWidth ? `${cardWidth}px` : '194px', marginBottom: cardWidth ? '55px' : '30px' }">
-        <div class="img-wrapper mb-6" :style="{ height: cardWidth ? `${cardWidth}px` : '194px' }">
-            <img src="" alt="">
+    <div class="recommend-songlist-card-wrapper">
+        <div class="img-wrapper mb-6">
+            <!-- <img src="" alt=""> -->
             <div class="play-count d-flex ai-center fs-3">
                 <i class="iconfont icon-bofang1 text-white fs-7"></i>
                 19万
             </div>
-            <div class="play-btn" :class="{ isCenter: cardWidth }">
+            <div class="play-btn">
                 <div class="trangel"></div>
             </div>
             <div class="songlist-author" v-if="!isOutSide">
@@ -26,8 +25,6 @@
 withDefaults(defineProps<{
     isOutSide?: boolean
     isOneline?: boolean
-    cardWidth?: number
-    cardHeight?: number
 }>(), {
     isOutSide: true,
     isOneline: false
@@ -35,11 +32,13 @@ withDefaults(defineProps<{
 </script>
 <style lang="scss" scoped>
 .recommend-songlist-card-wrapper {
-    width: calc(20% - 14px);
+    width: calc(20% - 18px);
+    margin-bottom: 45px;
 
     .img-wrapper {
         width: 100%;
-        height: 194px;
+        height: 0;
+        padding-bottom: 100%;
         overflow: hidden;
         position: relative;
         background-color: aqua;

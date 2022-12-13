@@ -12,19 +12,24 @@
                         :class="{ isBtnActive: songListShowType === 'card' }" @click="songListShowType = 'card'">
                         <i class="iconfont icon-datu fs-9 text-66"></i>
                     </div>
-                    <div class="type2 d-flex ai-center jc-center" :class="{ isBtnActive: songListShowType === 'table' }"
+                    <div class="type2 d-flex ai-center jc-center" :class="{ isBtnActive: songListShowType === 'list' }"
                         @click="songListShowType = 'table'">
                         <i class="iconfont icon-liebiao fs-5 text-66"></i>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="album" v-if="activeIndex === 0">
-
+        <div class="album pt-20" v-if="activeIndex === 0">
+            <div class="album-card-wrap d-flex jc-between flex-wrap" v-if="songListShowType === 'card'">
+                <CardForAlbum v-for="item in 12"></CardForAlbum>
+            </div>
+            <div class="album-list-wrap" v-if="songListShowType === 'list'">
+            </div>
         </div>
         <div v-if="activeIndex === 1" class="mv">
             <div class="mv-wrapper d-flex flex-wrap pt-25 jc-between">
-                <RecommendMvCard :is-show-time="true" v-for="item in 30" :is-oneline="true"></RecommendMvCard>
+                <RecommendMvCard :is-show-time="true" v-for="item in 30" :is-oneline="true" :count="5">
+                </RecommendMvCard>
             </div>
         </div>
         <div v-if="activeIndex === 2" class="detail">详情</div>
@@ -41,6 +46,7 @@
 <script lang="ts" setup>
 import RecommendMvCard from '@/pages/findMusic/personalRecommend/components/RecommendMvCard.vue';
 import SingerCard from './SingerCard.vue';
+import CardForAlbum from './CardForAlbum.vue';
 import { ref } from 'vue';
 const labelListMap = ["专辑", "MV", "歌手详情", "相似歌手", "演出"]
 

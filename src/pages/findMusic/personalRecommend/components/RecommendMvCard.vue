@@ -1,7 +1,7 @@
 <template>
     <div class="recommend-mv-card-wrapper">
         <div class="img-wrapper">
-            <img src="" alt="">
+            <!-- <img src="" alt=""> -->
             <div class="play-count d-flex ai-center fs-3">
                 <i class="iconfont icon-bofang1 text-white fs-7"></i>
                 19万
@@ -23,24 +23,36 @@
 </template>
 
 <script lang="ts" setup>
-withDefaults(defineProps<{
-    isShowTime?: boolean,
-    isOneline?: boolean,
+import { computed } from 'vue';
+
+const props = withDefaults(defineProps<{
+    isShowTime?: boolean
+    isOneline?: boolean
     isPlayBtn?: boolean
+    count?: number
 }>(), {
     isShowTime: false,
     isOneline: false,
     isPlayBtn: false,
+    count: 4
+})
+const cardWidth = computed(() => {
+    if (props.count === 4) {
+        return "calc(25% - 18px)"
+    }
+    return "calc(20% - 18px)"
 })
 </script>
-<style lang="scss" scoped>
+<style lang="scss" scoped >
 .recommend-mv-card-wrapper {
-    width: 247px;
     margin-bottom: 35px;
+    width: v-bind(cardWidth);
 
     .img-wrapper {
         width: 100%;
-        height: 138px;
+        // height: 138px;
+        height: 0;
+        padding-bottom: 56%;
         border-radius: 10px;
         overflow: hidden;
         position: relative;

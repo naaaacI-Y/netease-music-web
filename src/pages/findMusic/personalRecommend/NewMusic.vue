@@ -1,5 +1,6 @@
 <template>
-    <div class="head mb-12 d-flex ai-center ">最新音乐 <i class="iconfont icon-xiangyou1 ml-4"></i></div>
+    <div class="head mb-12 d-flex ai-center " @click="router.push('/findMusic/newestMusic')">最新音乐 <i
+            class="iconfont icon-xiangyou1 ml-4"></i></div>
 
     <div class="new-music-wrapper d-flex ai-center jc-between mb-30">
 
@@ -18,7 +19,9 @@
 </template>
 
 <script lang="ts" setup>
+import { useRouter } from 'vue-router';
 import NewMusicItem from './components/NewMusicItem.vue';
+const router = useRouter()
 </script>
 <style lang="scss" scoped>
 .head:hover {

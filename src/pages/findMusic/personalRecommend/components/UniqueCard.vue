@@ -22,6 +22,7 @@ withDefaults(defineProps<
 </script>
 <style lang="scss" scoped>
 .unique-card-wrapper {
+    margin-bottom: 40px;
 
     .img-wrapper {
         width: 100%;
