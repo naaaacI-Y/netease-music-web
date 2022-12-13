@@ -1,7 +1,7 @@
 <template>
     <div class="new-music-item-wrapper d-flex ai-center"
-        :style="{ paddingLeft: `${!isOutSide ? '20px' : ''}`, backgroundColor: isShowBackground }">
-        <div class="index mr-12 fs-2" v-if="!isOutSide">01</div>
+        :style="{ paddingLeft: `${!isOutSide ? '30px' : ''}`, backgroundColor: isShowBackground }">
+        <div class="index mr-12 fs-2" v-if="!isOutSide">{{ paddingIndex(index) }}</div>
         <div class="song-cover mr-12">
             <img src="" alt="">
             <div class="play-btn">
@@ -30,10 +30,15 @@ const props = withDefaults(defineProps<{
     index?: number
 }>(), {
     isOutSide: false,
+    index: 1
 })
 const isShowBackground = computed(() => {
     return props.index ? (props.index % 2 === 0 ? "" : "#fafafa") : ""
 })
+const paddingIndex = (index: number) => {
+    if (index < 10) return `0${index}`
+    return index
+}
 </script>
 <style lang="scss" scoped>
 .new-music-item-wrapper {
@@ -100,7 +105,7 @@ const isShowBackground = computed(() => {
     }
 
     .music-time {
-        width: 100px;
+        width: 85px;
         color: #969696;
     }
 
