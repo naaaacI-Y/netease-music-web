@@ -28,7 +28,8 @@
             </div>
         </div>
         <div class="song-list-wrap">
-            <NewMusicItem v-for="(item, index) in 20" :index="index + 1" :key="index"></NewMusicItem>
+            <NewMusicItem v-for="(item, index) in 20" :index="index + 1" :key="index" :is-out-side="false">
+            </NewMusicItem>
         </div>
     </div>
 </template>

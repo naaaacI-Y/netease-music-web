@@ -8,7 +8,7 @@
                 <div class="trangel"></div>
             </div>
         </div>
-        <div class="index fs-2 mr-12" v-if="isOutSide">01</div>
+        <div class="index fs-2 mr-12" v-if="isOutSide">{{ paddingIndex(index) }}</div>
         <div class="music-name d-flex flex-column jc-center ai-start flex-1">
             <div class="name fs-3">歌曲名称</div>
             <div class="music-author" v-if="isOutSide">
@@ -29,11 +29,14 @@ const props = withDefaults(defineProps<{
     isOutSide?: boolean,
     index?: number
 }>(), {
-    isOutSide: false,
+    isOutSide: true,
     index: 1
 })
 const isShowBackground = computed(() => {
-    return props.index ? (props.index % 2 === 0 ? "" : "#fafafa") : ""
+    if (!props.isOutSide) {
+        return props.index ? (props.index % 2 === 0 ? "" : "#fafafa") : ""
+    }
+    return ""
 })
 const paddingIndex = (index: number) => {
     if (index < 10) return `0${index}`
