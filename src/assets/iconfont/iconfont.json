@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "993780",
+      "name": "其它",
+      "font_class": "qita",
+      "unicode": "e64b",
+      "unicode_decimal": 58955
+    },
+    {
+      "icon_id": "6129084",
+      "name": "47最后一页、末页、下一首",
+      "font_class": "zuihouyiyemoyexiayishou1",
+      "unicode": "e76c",
+      "unicode_decimal": 59244
+    },
+    {
       "icon_id": "658008",
       "name": "多语言",
       "font_class": "duoyuyan",

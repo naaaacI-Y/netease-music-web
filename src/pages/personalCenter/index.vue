@@ -77,7 +77,5 @@ const songListShowType = ref("card") // card | table
             }
         }
     }
-
-    .list-content {}
 }
 </style>

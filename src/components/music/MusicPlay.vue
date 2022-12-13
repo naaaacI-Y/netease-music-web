@@ -2,7 +2,8 @@
     <!--播放页面 私人fm以及歌单-->
     <div class="music-play-wrapper" :style="{ width: `${width}px` }">
         <div class="music-play-info">
-            音乐信息
+            <PersonalFmMusic v-if="playType === 'personal'"></PersonalFmMusic>
+            <SongListMusic v-if="playType === 'songList'"></SongListMusic>
         </div>
         <div class="music-play-body-wrap d-flex">
             <div class="comment-wrap" :class="{ isHaveSide: playType === 'songList' }">
@@ -70,6 +71,8 @@
 
 <script lang="ts" setup>
 import CommentItem from '../CommentItem.vue';
+import SongListMusic from "./SongListMusic.vue"
+import PersonalFmMusic from "./PersoanlFmMusic.vue"
 import { computed } from 'vue';
 
 const props = withDefaults(defineProps<
@@ -91,8 +94,7 @@ const width = computed(() => {
     margin: auto;
 
     .music-play-info {
-        height: 400px;
-        border: 1px solid red;
+        height: 450px;
     }
 
     .music-play-body-wrap {
