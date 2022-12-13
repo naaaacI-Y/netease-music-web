@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 import FilterItem from '@/components/FilterItem.vue';
-import RecommendMvCard from '../findMusic/personalRecommend/components/RecommendMvCard.vue';
+import RecommendMvCard from '@/components/RecommendMvCard.vue';
 import { areaList, typeList, sortList } from "@/utils/const"
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';

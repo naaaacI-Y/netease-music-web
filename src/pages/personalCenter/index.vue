@@ -38,7 +38,7 @@
 
 <script lang="ts" setup>
 import PersonalCenterHead from '@/components/PersonalCenterHead.vue';
-import RecommendSongListCard from '../findMusic/personalRecommend/components/RecommendSongListCard.vue';
+import RecommendSongListCard from '@/components/RecommendSongListCard.vue';
 import { ref } from 'vue';
 const songListShowType = ref("card") // card | table
 </script>

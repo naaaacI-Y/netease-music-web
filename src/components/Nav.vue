@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="unique-play pl-30" v-if="isActive('/unique-play')"> 独家放送</div>
-            <div class="personalfm" v-if="isActive('/personalFm')"></div>
+            <div class="personalfm" v-if="isActive('/personal-fm')"></div>
             <div class="dayRecommend" v-if="isActive('/songlist')"></div>
             <div class="video pl-30 fs-4" v-if="isActive('/video/all-mv')">全部MV</div>
             <div class="video d-flex pl-30 fs-4" v-if="isActive('/video/video-inside', '/video/mv')">
@@ -85,14 +85,14 @@ watch(activeIndex, () => {
     if (!route.path.startsWith('/find')) return;
     switch (activeIndex.value) {
         case 0:
-            router.push('/findMusic/personalRecommend')
+            router.push('/findMusic/personal-recommend')
             break;
         case 1:
-            router.push('/findMusic/songMenu')
+            router.push('/findMusic/song-menu')
             // findMusic/songList
             break;
         case 2:
-            router.push('/findMusic/hostRadio')
+            router.push('/findMusic/host-radio')
             break;
         case 3:
             router.push('/findMusic/rank')
@@ -101,7 +101,7 @@ watch(activeIndex, () => {
             router.push('/findMusic/singer')
             break;
         case 5:
-            router.push('/findMusic/newestMusic')
+            router.push('/findMusic/newest-music')
             break;
         default:
             break;
@@ -111,13 +111,13 @@ watch(() => route.path, (newVal: string) => {
     console.log(newVal, "newVal");
 
     switch (newVal) {
-        case "/findMusic/personalRecommend":
+        case "/findMusic/personal-recommend":
             activeIndex.value = 0
             break;
-        case "/findMusic/songMenu":
+        case "/findMusic/song-menu":
             activeIndex.value = 1
             break;
-        case "/findMusic/hostRadio":
+        case "/findMusic/host-radio":
             activeIndex.value = 2
             break;
         case "/findMusic/rank":
@@ -126,7 +126,7 @@ watch(() => route.path, (newVal: string) => {
         case "/findMusic/singer":
             activeIndex.value = 4
             break;
-        case "/findMusic/newestMusic":
+        case "/findMusic/newest-music":
             activeIndex.value = 5
             break;
         default:

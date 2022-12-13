@@ -8,7 +8,7 @@
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import RecommendMvCard from './components/RecommendMvCard.vue';
+import RecommendMvCard from '@/components/RecommendMvCard.vue';
 const router = useRouter()
 </script>
 <style lang="scss" scoped>

@@ -5,20 +5,20 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     name: 'FindMusic',
     component: () => import('@/pages/findMusic/index.vue'),
-    redirect: "findMusic/personalRecommend",
+    redirect: "findMusic/personal-recommend",
     children: [
       {
-        path: "findMusic/personalRecommend",
+        path: "findMusic/personal-recommend",
         name: "PersonalRecommend",
         component: () => import('@/pages/findMusic/personalRecommend/index.vue'),
       },
       {
-        path: "findMusic/songMenu",
+        path: "findMusic/song-menu",
         name: "SongMenu",
         component: () => import('@/pages/findMusic/SongMenu.vue')
       },
       {
-        path: "findMusic/hostRadio",
+        path: "findMusic/host-radio",
         name: "HostRadio",
         component: () => import('@/pages/findMusic/HostRadio.vue'),
       },
@@ -34,14 +34,14 @@ const routes: RouteRecordRaw[] = [
       },
 
       {
-        path: "findMusic/newestMusic",
+        path: "findMusic/newest-music",
         name: "NewestMusic",
         component: () => import('@/pages/findMusic/NewestMusic.vue'),
       },
     ]
   },
   {
-    path: '/personalFm',
+    path: '/personal-fm',
     name: 'PersonalFM',
     component: () => import('@/pages/personalFm/index.vue'),
   },

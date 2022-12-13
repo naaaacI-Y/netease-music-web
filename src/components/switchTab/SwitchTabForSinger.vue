@@ -2,7 +2,7 @@
     <div class="switch-tab-wrapper mt-30">
         <div class="head d-flex jc-between">
             <div class="head-item-wrapper d-flex">
-                <div class="head-item mr-30 fs-4 text-black_2" v-for="(item, index) in labelListMap"
+                <div class="head-item mr-30 fs-4 text-black_2" v-for="(item, index) in labelList"
                     :class="{ isActive: activeIndex === index }" @click="activeIndex = index" :key="index">{{ item }}
                 </div>
             </div>
@@ -44,11 +44,11 @@
 </template>
 
 <script lang="ts" setup>
-import RecommendMvCard from '@/pages/findMusic/personalRecommend/components/RecommendMvCard.vue';
-import SingerCard from './SingerCard.vue';
-import CardForAlbum from './CardForAlbum.vue';
+import RecommendMvCard from '../RecommendMvCard.vue';
+import SingerCard from '../singer/SingerCard.vue';
+import CardForAlbum from '../CardForAlbum.vue';
 import { ref } from 'vue';
-const labelListMap = ["专辑", "MV", "歌手详情", "相似歌手", "演出"]
+import { labelList } from "@/utils/const"
 
 const activeIndex = ref(0)
 const songListShowType = ref("card")

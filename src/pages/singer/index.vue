@@ -9,8 +9,8 @@
 </template>
 
 <script lang="ts" setup>
-import SingerHeader from '@/components/SingerHeader.vue';
-import SwitchTab from '@/components/SwitchTab.vue';
+import SingerHeader from '../../components/singer/SingerHeader.vue';
+import SwitchTab from '../../components/switchTab/SwitchTab.vue';
 </script>
 <style lang="scss" scoped>
 .singer-homepage-wrapper {

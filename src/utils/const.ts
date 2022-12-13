@@ -8,7 +8,7 @@ const videoTypes = ["现场", "翻唱", "舞蹈", "听BGM", "MV", "生活", "游
 const sortList = ["上升最快", "最热", "最新"]
 const newestMusicType = ["全部", "华语", "欧美", "韩国", "日本", "小语种"]
 const songMenuTypes = ["华语", "流行", "摇滚", "民谣", "电子", "另类/独立", "轻音乐", "综艺", "影视原声", "ACG"]
-
+const labelList = ["专辑", "MV", "歌手详情", "相似歌手", "演出"]
 export {
     languageList,
     categoryList,
@@ -18,5 +18,6 @@ export {
     sortList,
     videoTypes,
     newestMusicType,
-    songMenuTypes
+    songMenuTypes,
+    labelList
 }

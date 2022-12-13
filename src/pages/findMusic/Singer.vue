@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import SingerCard from '@/components/SingerCard.vue';
+import SingerCard from '@/components/singer/SingerCard.vue';
 import FilterItem from '@/components/FilterItem.vue';
 import { languageList, categoryList, filterList } from "@/utils/const"
 import { ref } from 'vue';

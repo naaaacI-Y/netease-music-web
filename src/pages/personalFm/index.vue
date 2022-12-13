@@ -1,11 +1,16 @@
 <template>
     <DefaultLayout>
-        <div>私人fm</div>
+        <div class="personal d-flex ai-center">
+            <MusicPlay></MusicPlay>
+        </div>
     </DefaultLayout>
 </template>
 
 <script lang="ts" setup>
+import MusicPlay from '@/components/music/MusicPlay.vue';
 </script>
 <style lang="scss" scoped>
-
+.personal {
+    padding-top: 35px;
+}
 </style>

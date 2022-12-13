@@ -75,9 +75,7 @@ const cardWidth = computed(() => {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+            @include radius(30px);
             background-color: rgba($color: #bebebb, $alpha: 0.6);
             transform: translate(-50%, -50%);
 

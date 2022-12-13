@@ -30,8 +30,8 @@
 </template>
 
 <script lang="ts" setup>
-import RecommendSongListCard from './personalRecommend/components/RecommendSongListCard.vue';
-import SongListItem from '@/components/SongListItem.vue';
+import RecommendSongListCard from '@/components/RecommendSongListCard.vue';
+import SongListItem from '@/components/song/SongListItem.vue';
 import { useRouter } from 'vue-router';
 const router = useRouter()
 const checkAll = () => {

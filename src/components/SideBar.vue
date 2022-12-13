@@ -20,11 +20,12 @@
                 </div>
             </div>
             <div class="other mb-20" style="color:#414141">
-                <div :class="['find', active('findMusic') ? isActive : '']" @click="go('/findMusic/personalRecommend')">
+                <div :class="['find', active('findMusic') ? isActive : '']"
+                    @click="go('/findMusic/personal-recommend')">
                     <i class="iconfont icon-wangyiyunyinyuemusic1193417easyiconnet"></i>
                     <span>发现音乐</span>
                 </div>
-                <div :class="['find', active('personalFm') ? isActive : '']" @click="go('/personalFm')">
+                <div :class="['find', active('personal-fm') ? isActive : '']" @click="go('/personal-fm')">
                     <i class="iconfont icon-leida"></i>
                     <span>私人FM</span>
                 </div>

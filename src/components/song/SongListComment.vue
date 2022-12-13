@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>import { computed, ref } from 'vue';
-import CommentItem from './CommentItem.vue';
+import CommentItem from '../CommentItem.vue';
 const maxLength = computed(() => {
     return 140 - commentContent.value.length
 })

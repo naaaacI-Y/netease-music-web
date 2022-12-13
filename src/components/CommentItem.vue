@@ -9,10 +9,10 @@
             </div>
         </div>
         <div class="commoent-right">
-            <div class="right-top fs-3 mb-10">
+            <div class="right-top fs-2 mb-10">
                 <span class="comment-name text-shadow_blue ">评论人：</span>
                 <span
-                    class="text-black_1">出狱2年，至今避免不了到处的歧视，两年圈子大变，他们不曾记得我过去的帮助或是大方，他们只会仰仗着他们眼前的成功摆出一副不可一世的样子嘲笑他人。从零开始真的非常煎熬，但是四季会交替，昼夜会更替，这是自然万物的法则，我相信每个人都会迎来自己的春天。</span>
+                    class="text-black_3">出狱2年，至今避免不了到处的歧视，两年圈子大变，他们不曾记得我过去的帮助或是大方，他们只会仰仗着他们眼前的成功摆出一副不可一世的样子嘲笑他人。从零开始真的非常煎熬，但是四季会交替，昼夜会更替，这是自然万物的法则，我相信每个人都会迎来自己的春天。</span>
             </div>
             <div class="right-middle fs-2 bg-black_11  mb-10" style="padding: 9px;">
                 <span class="origin-reply text-shadow_blue">@原始评论人：</span>

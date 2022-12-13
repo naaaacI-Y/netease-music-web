@@ -8,8 +8,8 @@
 </template>
 
 <script lang="ts" setup>
-import CommonBtn from '@/components/CommonBtn.vue';
-import RecommendMvCard from '../findMusic/personalRecommend/components/RecommendMvCard.vue';
+import CommonBtn from '@/components/global/CommonBtn.vue';
+import RecommendMvCard from '@/components/RecommendMvCard.vue';
 import { videoTypes } from '@/utils/const';
 import { ref } from 'vue';
 

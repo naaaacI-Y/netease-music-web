@@ -19,8 +19,8 @@
 </template>
 
 <script lang="ts" setup>
-import RecommendSongListCard from './personalRecommend/components/RecommendSongListCard.vue';
-import CommonBtn from '@/components/CommonBtn.vue';
+import RecommendSongListCard from '@/components/RecommendSongListCard.vue';
+import CommonBtn from '@/components/global/CommonBtn.vue';
 import { songMenuTypes } from "@/utils/const"
 import { ref } from 'vue';
 

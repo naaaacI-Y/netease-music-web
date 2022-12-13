@@ -6,19 +6,17 @@
         </div>
         <SongList v-if="activeIndex === 0"></SongList>
         <SongListComment v-if="activeIndex === 1"></SongListComment>
-        <Collectors v-if="activeIndex === 2"></Collectors>
+        <div v-if="activeIndex === 2" class="detail">专辑详情</div>
     </div>
 </template>
 
 <script lang="ts" setup>
-// 歌单 ==> 0
-// 歌手 ==> 1
-// 专辑 ==> 2
+import SongListComment from "../song/SongListComment.vue"
+import SongList from '../song/SongList.vue';
 import { ref } from 'vue';
-import SongListComment from "@/components/SongListComment.vue"
-import Collectors from "@/components/Collectors.vue"
-import SongList from './SongList.vue';
-const labelListMap = ["歌曲列表", "评论", "收藏者"]
+
+const labelListMap = ["歌曲列表", "评论", "专辑详情"]
+
 const activeIndex = ref(0)
 </script>
 <style lang="scss" scoped>
