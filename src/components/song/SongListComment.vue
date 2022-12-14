@@ -17,11 +17,11 @@
             </div>
             <div class="top-vote-comment mt-20">
                 <div class="comment-label text-black_2 mb-15">精彩评论</div>
-                <CommentItem v-for="item in 10"></CommentItem>
+                <CommentItem v-for="item in 10" :is-grey="isGrey"></CommentItem>
             </div>
             <div class="new-comment mt-30">
                 <div class="comment-label text-black_2 mb-15">最新评论</div>
-                <CommentItem v-for="item in 10"></CommentItem>
+                <CommentItem v-for="item in 10" :is-grey="isGrey"></CommentItem>
 
             </div>
         </div>
@@ -30,6 +30,11 @@
 
 <script lang="ts" setup>import { computed, ref } from 'vue';
 import CommentItem from '../CommentItem.vue';
+withDefaults(defineProps<{
+    isGrey?: boolean
+}>(), {
+    isGrey: true
+})
 const maxLength = computed(() => {
     return 140 - commentContent.value.length
 })

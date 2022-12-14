@@ -28,7 +28,7 @@
                 </div>
                 <div class="account-about">
                     <div class="count d-flex mb-4">
-                        <div class="dynamic d-flex flex-column ai-center mr-30">
+                        <div class="dynamic d-flex flex-column ai-center mr-30" @click="goDynamic">
                             <div class="fs-9">26</div>
                             <div class="text-66 fs-2">动态</div>
                         </div>
@@ -72,10 +72,13 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter()
 const goFocus = () => {
-    router.push("/home-focus")
+    router.push("/focus?focusName=实名举报你可爱过度")
 }
 const goFans = () => {
-
+    router.push("/fans?fansName=实名举报你可爱过度")
+}
+const goDynamic = () => {
+    router.push("/dynamic?dynamicName=实名举报你可爱过度")
 }
 </script>
 <style lang="scss" scoped>
@@ -140,6 +143,25 @@ const goFans = () => {
                             background-color: rgba($color: #000000, $alpha: 0.1);
                             cursor: pointer;
                         }
+                    }
+                }
+            }
+
+            .account-about .count {
+
+                .dynamic,
+                .focus-count {
+                    position: relative;
+
+                    &::after {
+                        content: "丨";
+                        display: block;
+                        position: absolute;
+                        right: -52px;
+                        font-size: 45px;
+                        font-weight: 100;
+                        color: #eee;
+                        bottom: -10px;
                     }
                 }
             }

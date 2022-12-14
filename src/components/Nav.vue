@@ -21,6 +21,9 @@
                     最新音乐
                 </div>
             </div>
+            <div class="personalCenter pl-30" v-if="isActive('/dynamic')">{{ dynamicName }}动态</div>
+            <div class="personalCenter pl-30" v-if="isActive('/focus')">{{ focusName }}关注</div>
+            <div class="personalCenter pl-30" v-if="isActive('/fans')">{{ fansName }}粉丝</div>
             <div class="unique-play pl-30" v-if="isActive('/unique-play')"> 独家放送</div>
             <div class="personalfm" v-if="isActive('/personal-fm')"></div>
             <div class="dayRecommend" v-if="isActive('/songlist')"></div>
@@ -70,18 +73,17 @@ withDefaults(defineProps<{
 }>(), {
     isChangeBgc: false
 })
-const activeIndex = ref(0)
 const route = useRoute()
 const router = useRouter()
-const isHasLeft = computed(() => {
-    console.log(route.path, "route.pathroute.pathroute.pathroute.path");
+const { dynamicName, focusName, fansName } = route.query  // 动态 关注  粉丝
+const activeIndex = ref(0)
 
-    const paths = ["/findMusic", "/video", "/friends", "/prettyCommon", "/unique"]
+
+const isHasLeft = computed(() => {
+    const paths = ["/findMusic", "/video", "/friends", "/prettyCommon", "/unique", "/dynamic", "/focus", "/fans"]
     return paths.some(item => route.path.startsWith(item))
 })
 watch(activeIndex, () => {
-    console.log(route.path, "route.pathroute.pathroute.pathroute.pathroute.path");
-
     if (!route.path.startsWith('/find')) return;
     switch (activeIndex.value) {
         case 0:

@@ -84,11 +84,6 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/pages/songList/index.vue'),
   },
   {
-    path: '/home-focus',
-    name: 'HomeFocus',
-    component: () => import('@/pages/homeFocus/index.vue'),
-  },
-  {
     path: '/singer-home',
     name: 'SingerHome',
     component: () => import('@/pages/singer/index.vue'),
@@ -97,6 +92,21 @@ const routes: RouteRecordRaw[] = [
     path: '/unique-play',
     name: 'UniquePlay',
     component: () => import('@/pages/uniquePlay/index.vue'),
+  },
+  {
+    path: '/fans',
+    name: 'Fans',
+    component: () => import('@/pages/personalCenter/Fans.vue'),
+  },
+  {
+    path: '/focus',
+    name: 'Focus',
+    component: () => import('@/pages/personalCenter/Focus.vue'),
+  },
+  {
+    path: '/dynamic',
+    name: 'Dynamic',
+    component: () => import('@/pages/personalCenter/Dynamic.vue'),
   }
 ]
 

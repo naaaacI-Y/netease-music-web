@@ -1,0 +1,107 @@
+<template>
+    <div class="dynamic-item-wrapper d-flex">
+        <div class="left mr-10"></div>
+        <div class="right flex-1">
+            <div class="name-info fs-3 mb-5">
+                <span class="text-shadow_blue mr-8">名称</span>
+                <span>分享单曲</span>
+            </div>
+            <div class="time fs-2 mb-10 text-black_4">2021年7月7日 10:15</div>
+            <div class="dynamic-content fs-2 mb-5">动态内容</div>
+            <div class="quote d-flex ai-center mb-15">
+                <div class="song-img mr-10">
+                    <!-- <img src="" alt=""> -->
+                    <div class="play-btn">
+                        <div class="trangel"></div>
+                    </div>
+                </div>
+                <div class="song-info fs-2">
+                    <div class="song-name mb-3">歌曲名称</div>
+                    <div class="singer text-black_4">演唱者</div>
+                </div>
+            </div>
+            <div class="comment-reactive d-flex ai-center fs-2 jc-end mb-15">
+                <div class="vote d-flex ai-center mr-6">
+                    <i class="iconfont icon-dianzan1 mr-4"></i>
+                    <span class="vote-count">3099</span>
+                </div>
+                <span class="text-black_7">丨</span>
+                <div class="share mr-6 ml-6">
+                    <i class="iconfont icon-fenxiang2 fs-3"></i>
+                </div>
+                <span class="text-black_7">丨</span>
+                <div class="comment ml-6 mr-4" @click="isShowCommentDetail = !isShowCommentDetail">
+                    <i class="iconfont icon-liuyan-duandian"></i>
+                </div>
+            </div>
+            <div class="comment-detail" v-if="isShowCommentDetail">
+                <SongListComment :is-grey="false"></SongListComment>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script lang="ts" setup>import { ref } from 'vue';
+import SongListComment from '@/components/song/SongListComment.vue';
+const isShowCommentDetail = ref(false)
+</script>
+<style lang="scss" scoped>
+.dynamic-item-wrapper {
+    padding-bottom: 50px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #f2f2f2;
+
+    .left {
+        @include radius(40px);
+        background-color: aqua;
+    }
+
+    .right {
+        .quote {
+            height: 60px;
+            width: 100%;
+            background-color: #f5f5f5;
+            padding: 9px;
+
+            .song-img {
+                width: 40px;
+                height: 40px;
+                border-radius: 5px;
+                position: relative;
+                background-color: #d33b31;
+
+                .play-btn {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    @include radius(20px);
+                    background-color: rgba($color: #bebebb, $alpha: 0.6);
+                    transform: translate(-50%, -50%);
+
+                    .trangel {
+                        width: 0;
+                        height: 0;
+                        position: absolute;
+                        border-top: 5px solid transparent;
+                        border-bottom: 5px solid transparent;
+                        border-left: 8px solid #d33b31;
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-30%, -50%);
+                    }
+                }
+
+            }
+
+            &:hover {
+                background-color: #ededed;
+            }
+        }
+
+        .comment-detail {
+            background-color: #f5f5f5;
+            padding: 0 10px;
+        }
+    }
+}
+</style>
