@@ -22,8 +22,8 @@
                 </div>
             </div>
             <div class="personalCenter pl-30" v-if="isActive('/dynamic')">{{ dynamicName }}动态</div>
-            <div class="personalCenter pl-30" v-if="isActive('/focus')">{{ focusName }}关注</div>
-            <div class="personalCenter pl-30" v-if="isActive('/fans')">{{ fansName }}粉丝</div>
+            <div class="personalCenter pl-30" v-if="isActive('/focus')">{{ focusName }}的关注</div>
+            <div class="personalCenter pl-30" v-if="isActive('/fans')">{{ fansName }}的粉丝</div>
             <div class="unique-play pl-30" v-if="isActive('/unique-play')"> 独家放送</div>
             <div class="personalfm" v-if="isActive('/personal-fm')"></div>
             <div class="dayRecommend" v-if="isActive('/songlist')"></div>

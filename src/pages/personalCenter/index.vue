@@ -28,7 +28,7 @@
                         </RecommendSongListCard>
                     </div>
                     <div class="content-type2" v-if="songListShowType === 'table'">
-
+                        <songForList v-for="item in 4"></songForList>
                     </div>
                 </div>
             </div>
@@ -39,6 +39,7 @@
 <script lang="ts" setup>
 import PersonalCenterHead from '@/components/PersonalCenterHead.vue';
 import RecommendSongListCard from '@/components/RecommendSongListCard.vue';
+import songForList from '@/components/songForList.vue';
 import { ref } from 'vue';
 const songListShowType = ref("card") // card | table
 </script>

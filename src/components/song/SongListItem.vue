@@ -21,14 +21,13 @@
                 专辑名称
             </div>
             <div class="time text-c4 d-flex ai-center" v-if="isShow === 'all' || isShow === 'singer'">03:01</div>
-            <div class="count" v-if="isShow === 'listen'">7次</div>
+            <div class="count text-c4 d-flex ai-cente" v-if="isShow === 'listen'">7次</div>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
 // 歌单页
-
 // 我的听歌排行
 // 歌手页
 // 排行榜
