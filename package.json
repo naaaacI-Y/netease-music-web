@@ -13,9 +13,11 @@
   "dependencies": {
     "axios": "^0.24.0",
     "pinia": "^2.0.0-rc.10",
+    "pinia-plugin-persistedstate": "^3.0.1",
     "vfonts": "^0.1.0",
     "vue": "^3.2.2",
-    "vue-router": "4"
+    "vue-router": "4",
+    "vue-slider-component": "^3.2.24"
   },
   "devDependencies": {
     "@babel/types": "^7.16.0",

@@ -6,11 +6,12 @@
             <slot></slot>
         </div>
     </div>
+    <Footer></Footer>
 </template>
 
 <script lang="ts" setup>
 // import musicPlayOther from '@/components/music-play-other'
-// import Footer from '@/components/footer'
+import Footer from '@/components/Footer.vue'
 import SideBar from '@/components/SideBar.vue'
 import Nav from "@/components/Nav.vue"
 import { ref } from 'vue';

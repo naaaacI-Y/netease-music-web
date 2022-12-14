@@ -62,6 +62,7 @@
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { profile } from "@/service/api/login/types"
+
 const route = useRoute()
 const router = useRouter()
 const isLogin = ref(false)
@@ -87,7 +88,9 @@ const watchInfoUpdate = () => {
     window.addEventListener('storage', cb)
 }
 const goPersonalCenter = () => {
-    router.push("/personal-center")
+    // 检查是否登录 TODO
+
+    // router.push("/personal-center")
 }
 const active = (name1: string, name2?: string): boolean => {
     if (name2) {

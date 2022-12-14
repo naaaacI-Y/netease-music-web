@@ -3,7 +3,7 @@
         <div class="loginWrapper">
 
             <div class="head">
-                <div class="closeWrapper">
+                <div class="closeWrapper" @click="closeDialog">
                     <i class="iconfont icon-guanbi close"></i>
                 </div>
                 <div class="acctountTipWrapper" v-if="status.isAccountLogin">
@@ -95,9 +95,11 @@
 //     checkLoginStatus,
 //   } from "../api/login";
 //   import useUsernfoStore from "@/store"
-//   const userStore = useUsernfoStore()
-import Registry from './Registry.vue';
+
+import Registry from './global/Registry.vue';
 import { reactive, ref, watch } from 'vue';
+import useStore from "@/store"
+const { globalState } = useStore()
 const status = reactive({
     overdue: true,
     isScanLogin: true,
@@ -190,6 +192,9 @@ const goRegistry = () => {
     status.isScanLogin = false
     status.isAccountLogin = false
     status.isRegistry = true
+}
+const closeDialog = () => {
+    globalState.isShowLoginBox = !globalState.isShowLoginBox
 }
 //   getQrcodeImg();
 </script>
