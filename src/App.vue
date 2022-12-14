@@ -1,9 +1,10 @@
 <template>
   <router-view></router-view>
+  <Login></Login>
 </template>
 
 <script lang="ts" setup>
-
+import Login from '@/components/global/Login.vue';
 </script>
 
 <style lang="scss">
