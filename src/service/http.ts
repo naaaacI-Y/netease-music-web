@@ -1,6 +1,12 @@
 //http.ts
 import axios, { AxiosRequestConfig } from 'axios'
-import { Http } from './common'
+interface Http {
+  get<T>(url: string, params?: unknown): Promise<T>
+  post<T>(url: string, params?: unknown): Promise<T>
+  upload<T>(url: string, params: unknown): Promise<T>
+  download(url: string): void
+}
+
 
 // 设置请求头和请求路径
 axios.defaults.baseURL = '/api'
