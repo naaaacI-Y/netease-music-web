@@ -1,8 +1,8 @@
 <template>
     <div class="footer-wrapper">
         <div class="progressBar">
-            <!-- <vue-slider v-model="progress" :min="0" :max="100" :interval="1" :drag-on-click="true" :duration="0"
-                :dot-size="12" :height="2" tooltip='none' :lazy="true" :silent="true"></vue-slider> -->
+            <vue-slider v-model="progress" :min="0" :max="100" :interval="1" :drag-on-click="true" :duration="0"
+                :dot-size="12" :height="2" tooltip='none' :lazy="true" :silent="true"></vue-slider>
         </div>
         <div class="footer-content d-flex ai-center">
             <div class="left d-flex">
@@ -20,20 +20,20 @@
                 </div>
             </div>
             <div class="middle d-flex ai-center">
-                <i class="iconfont icon-aixin fs-9 text-4b mr-30"></i>
+                <i class="iconfont icon-24gl-heart fs-9 text-4b mr-30"></i>
                 <i class="iconfont icon-diyiyeshouyeshangyishou text-primary_red_1 fs-10 mr-25"></i>
                 <i class="iconfont icon-zanting2x text-primary_red_1  mr-25" style="font-size: 40px;"></i>
                 <i class="iconfont icon-zuihouyiyemoyexiayishou text-primary_red_1 fs-10 mr-30"></i>
-                <i class="iconfont icon-shanchu text-4b fs-6"></i>
+                <i class="iconfont icon-24gl-trash2 text-4b fs-6"></i>
                 <!-- <i class="iconfont icon-fenxiang1 text-black_1"></i> -->
             </div>
-            <div class="right">
-                <i class="iconfont icon-danquxunhuan"></i>
-                <i class="iconfont icon-shunxubofang"></i>
-                <i class="iconfont icon-suijibofang"></i>
-                <i class="iconfont icon-icon-test"></i>
-                <i class="iconfont icon-shengyin"></i>
-                <i class="iconfont icon-guanbishengyin"></i>
+            <div class="right text-4b d-flex ai-center mr-15">
+                <i class="iconfont icon-24gl-repeatOnce2 text-4b mr-15 fs-7"></i>
+                <i class="iconfont icon-24gl-indent text-4b mr-15 fs-5"></i>
+                <i class="iconfont icon-24gl-repeat2 text-4b mr-15 fs-7"></i>
+                <i class="iconfont icon-24gl-playlist text-4b mr-15 fs-5"></i>
+                <i class="iconfont icon-24gl-volumeZero text-4b mr-10 fs-7"></i>
+                <i class="iconfont icon-24gl-volumeDisable fs-7"></i>
             </div>
         </div>
     </div>
@@ -41,7 +41,8 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-// import VueSlider from 'vue-slider-component'
+import VueSlider from 'vue-slider-component'
+import "@/assets/slider.css";
 const progress = ref(20)
 </script>
 <style lang="scss" scoped>
@@ -55,7 +56,7 @@ const progress = ref(20)
 
     .progressBar {
         height: 2px;
-        background-color: #d33b31;
+        // background-color: #d33b31;
     }
 
     .footer-content {

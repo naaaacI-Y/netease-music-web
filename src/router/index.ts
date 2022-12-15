@@ -68,11 +68,11 @@ const routes: RouteRecordRaw[] = [
       },
     ]
   },
-  {
-    path: '/focus',
-    name: 'Focus',
-    component: () => import('@/pages/focus/index.vue'),
-  },
+  // {
+  //   path: '/focus',
+  //   name: 'Focus',
+  //   component: () => import('@/pages/focus/index.vue'),
+  // },
   {
     path: '/personal-center',
     name: 'PersonalCenter',

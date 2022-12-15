@@ -821,11 +821,6 @@
     "write-file-atomic" "^3.0.0"
     "xdg-basedir" "^4.0.0"
 
-"core-js@^3.6.5":
-  "integrity" "sha512-21491RRQVzUn0GGM9Z1Jrpr6PNPxPi+Za8OM9q4tksTSnlbXXGKK1nXNg/QvwFYettXvSX6zWKCtHHfjN4puyA=="
-  "resolved" "https://registry.npmmirror.com/core-js/-/core-js-3.26.1.tgz"
-  "version" "3.26.1"
-
 "core-util-is@^1.0.2", "core-util-is@~1.0.0":
   "integrity" "sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ=="
   "resolved" "https://registry.npmmirror.com/core-util-is/-/core-util-is-1.0.3.tgz"
@@ -3465,11 +3460,6 @@
   optionalDependencies:
     "fsevents" "~2.3.2"
 
-"vue-class-component@^7.1.0":
-  "integrity" "sha512-+eaQXVrAm/LldalI272PpDe3+i4mPis0ORiMYxF6Ae4hyuCh15W8Idet7wPUEs4N4YptgFHGys4UrgNQOMyO6w=="
-  "resolved" "https://registry.npmmirror.com/vue-class-component/-/vue-class-component-7.2.6.tgz"
-  "version" "7.2.6"
-
 "vue-demi@*":
   "integrity" "sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A=="
   "resolved" "https://registry.npmmirror.com/vue-demi/-/vue-demi-0.13.11.tgz"
@@ -3488,13 +3478,6 @@
     "lodash" "^4.17.21"
     "semver" "^7.3.5"
 
-"vue-property-decorator@^8.0.0":
-  "integrity" "sha512-O6OUN2OMsYTGPvgFtXeBU3jPnX5ffQ9V4I1WfxFQ6dqz6cOUbR3Usou7kgFpfiXDvV7dJQSFcJ5yUPgOtPPm1Q=="
-  "resolved" "https://registry.npmmirror.com/vue-property-decorator/-/vue-property-decorator-8.5.1.tgz"
-  "version" "8.5.1"
-  dependencies:
-    "vue-class-component" "^7.1.0"
-
 "vue-router@4":
   "integrity" "sha512-DYWYwsG6xNPmLq/FmZn8Ip+qrhFEzA14EI12MsMgVxvHFDYvlr4NXpVF5hrRH1wVcDP8fGi5F4rxuJSl8/r+EQ=="
   "resolved" "https://registry.npmmirror.com/vue-router/-/vue-router-4.1.6.tgz"
@@ -3502,13 +3485,10 @@
   dependencies:
     "@vue/devtools-api" "^6.4.5"
 
-"vue-slider-component@^3.2.24":
-  "integrity" "sha512-28hfotAL/CPXPwqHgVFyUwUEV0zweoc2wW0bgraGkoIcRZGlFjk8caYJLE8+Luug5t3b9tJm/NyDXpyIdmcYZg=="
-  "resolved" "https://registry.npmmirror.com/vue-slider-component/-/vue-slider-component-3.2.24.tgz"
-  "version" "3.2.24"
-  dependencies:
-    "core-js" "^3.6.5"
-    "vue-property-decorator" "^8.0.0"
+"vue-slider-component@^4.1.0-beta.7":
+  "integrity" "sha512-Qb7K920ZG7PoQswoF6Ias+i3W2rd3k4fpk04JUl82kEUcN86Yg6et7bVSKWt/7VpQe8a5IT3BqCKSCOZ7AJgCA=="
+  "resolved" "https://registry.npmmirror.com/vue-slider-component/-/vue-slider-component-4.1.0-beta.7.tgz"
+  "version" "4.1.0-beta.7"
 
 "vue-tsc@^0.0.24":
   "integrity" "sha512-Qx0V7jkWMtvddtaWa1SA8YKkBCRmjq9zZUB2UIMZiso6JSH538oHD2VumSzkoDnAfFbY3t0/j1mB2abpA0bGWA=="
@@ -3517,7 +3497,7 @@
   dependencies:
     "unzipper" "0.10.11"
 
-"vue@*", "vue@^2.0.0", "vue@^2.6.14 || ^3.2.0", "vue@^3.0.0-0 || ^2.6.0", "vue@^3.2.0", "vue@^3.2.2", "vue@3.2.45":
+"vue@^2.6.14 || ^3.2.0", "vue@^3.0.0-0 || ^2.6.0", "vue@^3.2.0", "vue@^3.2.2", "vue@3.2.45":
   "integrity" "sha512-9Nx/Mg2b2xWlXykmCwiTUCWHbWIj53bnkizBxKai1g61f2Xit700A1ljowpTIM11e3uipOeiPcSqnmBg6gyiaA=="
   "resolved" "https://registry.npmmirror.com/vue/-/vue-3.2.45.tgz"
   "version" "3.2.45"

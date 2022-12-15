@@ -6,11 +6,95 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "993780",
-      "name": "其它",
-      "font_class": "qita",
-      "unicode": "e64b",
-      "unicode_decimal": 58955
+      "icon_id": "7596496",
+      "name": "24gl-indent",
+      "font_class": "24gl-indent",
+      "unicode": "eb04",
+      "unicode_decimal": 60164
+    },
+    {
+      "icon_id": "7547862",
+      "name": "24gl-heart",
+      "font_class": "24gl-heart",
+      "unicode": "e899",
+      "unicode_decimal": 59545
+    },
+    {
+      "icon_id": "7592564",
+      "name": "24gl-volumeDisable",
+      "font_class": "24gl-volumeDisable",
+      "unicode": "ea0c",
+      "unicode_decimal": 59916
+    },
+    {
+      "icon_id": "7592566",
+      "name": "24gl-volumeZero",
+      "font_class": "24gl-volumeZero",
+      "unicode": "ea0d",
+      "unicode_decimal": 59917
+    },
+    {
+      "icon_id": "7594052",
+      "name": "24gl-playlist",
+      "font_class": "24gl-playlist",
+      "unicode": "ea6f",
+      "unicode_decimal": 60015
+    },
+    {
+      "icon_id": "7594081",
+      "name": "24gl-shuffle",
+      "font_class": "24gl-shuffle",
+      "unicode": "ea75",
+      "unicode_decimal": 60021
+    },
+    {
+      "icon_id": "7594083",
+      "name": "24gl-repeat2",
+      "font_class": "24gl-repeat2",
+      "unicode": "ea76",
+      "unicode_decimal": 60022
+    },
+    {
+      "icon_id": "7594088",
+      "name": "24gl-repeatOnce2",
+      "font_class": "24gl-repeatOnce2",
+      "unicode": "ea78",
+      "unicode_decimal": 60024
+    },
+    {
+      "icon_id": "7596941",
+      "name": "24gl-trash2",
+      "font_class": "24gl-trash2",
+      "unicode": "eb45",
+      "unicode_decimal": 60229
+    },
+    {
+      "icon_id": "7597947",
+      "name": "24gl-external",
+      "font_class": "24gl-external",
+      "unicode": "eb6e",
+      "unicode_decimal": 60270
+    },
+    {
+      "icon_id": "697063",
+      "name": "删除",
+      "font_class": "shanchu2",
+      "unicode": "e64c",
+      "unicode_decimal": 58956
+    },
+    {
+      "icon_id": "8430121",
+      "name": "其他",
+      "font_class": "qita1",
+      "unicode": "e6d5",
+      "unicode_decimal": 59093
+    },
+    {
+      "icon_id": "12753746",
+      "name": "下一首",
+      "font_class": "xiayishou_huaban",
+      "unicode": "e637",
+      "unicode_decimal": 58935
     },
     {
       "icon_id": "6129084",
