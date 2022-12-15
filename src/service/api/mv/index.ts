@@ -1,6 +1,6 @@
 import { stringifyParams } from "@/utils"
 import http from "../../http"
-import { AllMvParam, MvDetailParam, MvDetailResult, MvInfoResult, MVItem, MVResult, MvUrlParam, MvUrlResult, NetProductParam, newMvParam, RecommendMvResult } from "./types"
+import { AllMvParam, MvDetailParam, MvDetailResult, MvInfoResult, MVResult, MvUrlParam, MvUrlResult, NetProductParam, newMvParam, RecommendMvResult } from "./types"
 
 
 /**
