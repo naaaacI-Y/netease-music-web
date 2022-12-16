@@ -1,16 +1,16 @@
 <template>
     <div class="side-bar-wrapper">
         <div class="left">
-            <div class="isLoginHeader" v-if="isLogin">
+            <div class="isLoginHeader" v-if="userFile?.userId">
                 <div class="avatar">
-                    <img :src="userInfo.avatarUrl" alt="">
+                    <img :src="userFile.avatarUrl" alt="">
                 </div>
                 <div class="toLogin">
-                    <span class="fs-3 mr-2">{{ userInfo.nickname }}</span>
+                    <span class="fs-3 mr-2">{{ userFile.nickname }}</span>
                     <i class="iconfont icon-xiangyou fs-1" style="color:#8e8e8e"></i>
                 </div>
             </div>
-            <div class="isNotLoginHeader" @click="goPersonalCenter" v-if="!isLogin">
+            <div class="isNotLoginHeader" @click="goPersonalCenter" v-if="!userFile?.userId">
                 <div class="avatar">
                     <img src="@/assets/images/defaultAvatar.png" alt="">
                 </div>
@@ -62,35 +62,15 @@
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { profile } from "@/service/api/login/types"
-
+import useStore from "@/store"
+import { storeToRefs } from 'pinia';
+const { globalState, userProfile } = useStore()
 const route = useRoute()
 const router = useRouter()
-const isLogin = ref(false)
 const isActive = ref('isActive')
-const userInfo = ref({} as profile)
-const initInfo = () => {
-    const info = localStorage.getItem('user_info')
-    if (info) {
-        isLogin.value = true
-        userInfo.value = JSON.parse(info).profile
-    }
-}
-const watchInfoUpdate = () => {
-    const cb = () => {
-        console.log('监听到storage变化了====');
-        const info = localStorage.getItem('user_info')
-        if (info) {
-            isLogin.value = true
-            userInfo.value = JSON.parse(info).profile
-        }
-        window.removeEventListener('storage', cb)
-    }
-    window.addEventListener('storage', cb)
-}
+const { userFile } = storeToRefs(userProfile)
 const goPersonalCenter = () => {
-    // 检查是否登录 TODO
-
-    // router.push("/personal-center")
+    globalState.isShowLoginBox = true
 }
 const active = (name1: string, name2?: string): boolean => {
     if (name2) {
@@ -103,12 +83,6 @@ const go = (path: string): void => {
         router.push(path)
     }
 }
-onMounted(() => {
-    initInfo()
-    if (!userInfo.value.nickname) {
-        watchInfoUpdate()
-    }
-})
 </script>
 <style scoped lang="scss">
 .side-bar-wrapper {

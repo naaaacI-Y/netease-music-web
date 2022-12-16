@@ -9,11 +9,19 @@ export interface getQrCodeStatusParams {
 
 export interface getQrcodeKeyResult {
   code: number;
-  unikey: string;
+  data: {
+    code: number
+    unikey: string;
+  }
+  message?: string
 }
 export interface getQrImgResult {
-  qrurl: string;
-  qrimg: string;
+  code: number
+  data: {
+    qrurl: string;
+    qrimg: string;
+  }
+
 }
 
 export interface getQrcodeStatusResult {
@@ -77,7 +85,31 @@ export interface profile {
   avatarDetail: null | string;
   anchor: boolean;
 }
+
+
+
+export interface Account {
+  id: number;
+  userName: string;
+  type: number;
+  status: number;
+  whitelistAuthority: number;
+  createTime: number;
+  tokenVersion: number;
+  ban: number;
+  baoyueVersion: number;
+  donateVersion: number;
+  vipType: number;
+  anonimousUser: boolean;
+  paidFee: boolean;
+}
+
+export interface checkLoginStatusRet {
+  code: number;
+  account: Account;
+  profile: profile;
+}
+
 export interface checkLoginStatusResult {
-  account: account
-  profile: profile
+  data: checkLoginStatusRet;
 }

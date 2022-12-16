@@ -88,18 +88,19 @@
 </template>
 
 <script lang="ts" setup>
-//   import {
-//     getQrcodeKey,
-//     getQrImg,
-//     getQrcodeStatus,
-//     checkLoginStatus,
-//   } from "../api/login";
+import {
+    getQrcodeKey,
+    getQrImg,
+    getQrcodeStatus,
+    checkLoginStatus,
+} from "@/service/api/login/login";
 //   import useUsernfoStore from "@/store"
 
 import Registry from './global/Registry.vue';
-import { reactive, ref, watch } from 'vue';
+import { onUnmounted, reactive, ref, watch } from 'vue';
 import useStore from "@/store"
-const { globalState } = useStore()
+const { globalState, userProfile } = useStore()
+const time = ref<number>()
 const status = reactive({
     overdue: true,
     isScanLogin: true,
@@ -108,7 +109,7 @@ const status = reactive({
     isChecked: false,
     isShowModal: false,
     isAuthing: false,
-    showModalTimer: null
+    showModalTimer: null,
 })
 watch(() => status.isShowModal, (newVal) => {
     if (newVal) {
@@ -123,38 +124,36 @@ const getQrcodeImg = async () => {
     status.overdue = false;
     status.isAuthing = false;
     try {
-        //   const keyResult = await getQrcodeKey();
-        //   const key = keyResult.data.unikey;
-        //   console.log("二维码key========", key);
-        //   const img = await getQrImg(key);
-        //   qrImg.value = img.data.qrimg;
-        //   const time = setInterval(async () => {
-        //     const result = await getQrcodeStatus(key);
-        //     console.log(result, "登录授权情况");
-        //     if (result.code === 800) {
-        //       // 二维码不存在或已过期
-        //       isAuthing.value = false;
-        //       overdue.value = true;
-        //     }
-        //     if (result.code === 802) {
-        //       // 授权中
-        //       isAuthing.value = true;
-        //       overdue.value = false;
-        //     }
-        //     if (result.code === 803) {
-        //       //授权成功  查看登录状态
-        //       const statusResult = await checkLoginStatus();
-        //       const userInfo = {
-        //         account: statusResult.data.account,
-        //         profile: statusResult.data.profile,
-        //       };
-        //       userStore.updateUserInfo(userInfo)
-        //       clearInterval(time);
-        //       isAuthing.value = false;
-        //       // 通知窗口关闭
-        //       closeWindow()
-        //     }
-        //   }, 4000);
+        const keyResult = await getQrcodeKey();
+        const key = keyResult.data.unikey;
+        // console.log("二维码key========", key);
+        const img = await getQrImg(key);
+        qrImg.value = img.data.qrimg;
+        time.value = Number(setInterval(async () => {
+            const result = await getQrcodeStatus(key);
+            // console.log(result, "登录授权情况");
+            switch (result.code) {
+                case 800:
+                    // 二维码不存在或已过期
+                    status.isAuthing = false;
+                    status.overdue = true;
+                    break;
+                case 802:
+                    // 授权中
+                    status.isAuthing = true;
+                    status.overdue = false;
+                    break;
+                case 803:
+                    //授权成功  查看登录状态
+                    const statusResult = await checkLoginStatus();
+                    userProfile.setUserProfile(statusResult.data.profile)
+                    status.isAuthing = false;
+                    // 窗口关闭
+                    closeDialog()
+                default:
+                    break;
+            }
+        }, 4000));
     } catch (error) {
         console.log(error);
     }
@@ -194,9 +193,14 @@ const goRegistry = () => {
     status.isRegistry = true
 }
 const closeDialog = () => {
-    globalState.isShowLoginBox = !globalState.isShowLoginBox
+    globalState.isShowLoginBox = false
+    clearInterval(time.value)
+    time.value = 0
 }
-//   getQrcodeImg();
+getQrcodeImg();
+onUnmounted(() => {
+    closeDialog()
+})
 </script>
 
 <style lang="scss" scoped>

@@ -72,7 +72,7 @@ export function getQrcodeKey() {
 }
 
 /**
- * @param {*} key 获取二维码的key
+ * @param {*} key 获取二维码
  * @returns
  */
 export function getQrImg(key: string) {
