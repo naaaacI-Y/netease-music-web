@@ -1,22 +1,22 @@
 <template>
     <div class="recommend-mv-card-wrapper">
-        <div class="img-wrapper">
-            <!-- <img src="" alt=""> -->
+        <div class="img-wrapper" :style="{}">
+            <img :src="recommendMvItem.picUrl" alt="">
             <div class="play-count d-flex ai-center fs-3">
                 <i class="iconfont icon-bofang1 text-white fs-7"></i>
-                19万
+                {{ recommendMvItem.playCount }}
             </div>
             <div class="play-btn" v-if="isPlayBtn">
                 <div class="trangel"></div>
             </div>
-            <div class="duration fs-2 text-white" v-if="isShowTime">03:30</div>
+            <div class="duration fs-2 text-white" v-if="isShowTime">{{ recommendMvItem.duration }}</div>
         </div>
         <div class="mv-name mt-5">
             <div class="line1 fs-4 text-black_2" :class="{ noWrap: !isOneline }">
-                mv名称mv名称mv名称mv名称mv名称mv名称
+                {{ recommendMvItem.name }}
             </div>
             <div class="line2 fs-2 text-black_6" v-if="!isOneline">
-                作者名称
+                {{ recommendMvItem.artistName }}
             </div>
         </div>
     </div>
@@ -24,17 +24,19 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-
+import { RecommendItem } from '@/service/api/mv/types';
 const props = withDefaults(defineProps<{
     isShowTime?: boolean
     isOneline?: boolean
     isPlayBtn?: boolean
     count?: number
+    recommendMvItem: RecommendItem
 }>(), {
     isShowTime: false,
     isOneline: false,
     isPlayBtn: false,
-    count: 4
+    count: 4,
+    // recommendMvItem: []
 })
 const cardWidth = computed(() => {
     if (props.count === 4) {
@@ -56,11 +58,11 @@ const cardWidth = computed(() => {
         border-radius: 10px;
         overflow: hidden;
         position: relative;
-        background-color: aqua;
 
+        // background-color: aqua;
         img {
             width: 100%;
-            height: 100%;
+            // height: 100%;
         }
 
         .play-count {

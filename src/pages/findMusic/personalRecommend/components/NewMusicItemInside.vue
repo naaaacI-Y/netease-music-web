@@ -3,7 +3,7 @@
         :style="{ paddingLeft: `${!isOutSide ? '30px' : ''}`, backgroundColor: isShowBackground }">
         <div class="index mr-12 fs-2" v-if="!isOutSide">{{ paddingIndex(index) }}</div>
         <div class="song-cover mr-12">
-            <img :src="musicItem.picUrl" alt="">
+            <img :src="musicItem.album.picUrl" alt="">
             <div class="play-btn">
                 <div class="trangel"></div>
             </div>
@@ -12,26 +12,27 @@
         <div class="music-name d-flex flex-column jc-center ai-start flex-1">
             <div class="name fs-3">
                 <span class="mr-4">{{ musicItem.name }}</span>
-                <span v-if="musicItem.song.alias.length" class="text-black_13">({{ musicItem.song.alias[0] }})</span>
+                <span v-if="musicItem.album.alias.length" class="text-black_13">({{ musicItem.album.alias[0] }})</span>
             </div>
             <div class="music-author" v-if="isOutSide">
-                <span class="text-primary_red_2 fs-1 mr-4 sq" v-if="musicItem.song.sqMusic">SQ</span>
-                <span class="fs-2">{{ musicItem.song.artists[0].name }}</span>
+                <!-- <span class="text-primary_red_2 fs-1 mr-4 sq" v-if="musicItem.song.sqMusic">SQ</span> -->
+                <span class="fs-2">{{ musicItem.artists[0].name }}</span>
             </div>
         </div>
-        <div class="music-author fs-2 " v-if="!isOutSide">歌曲演唱者</div>
-        <div class="music-album fs-2" v-if="!isOutSide">{{ musicItem.song.album.name }}</div>
-        <div class="music-time fs-2" v-if="!isOutSide">{{ musicItem.song.duration }}</div>
+        <div class="music-author fs-2 " v-if="!isOutSide">{{ musicItem.artists[0].name }}</div>
+        <div class="music-album fs-2" v-if="!isOutSide">{{ musicItem.album.name }}</div>
+        <div class="music-time fs-2" v-if="!isOutSide">{{ musicItem.duration }}</div>
     </div>
 </template>
 
 <script lang="ts" setup>
+// 图片未加载完成显示默认图片  TODO
 import { computed } from 'vue';
-import { RecommendNewMusicRet } from '@/service/api/recommend/type';
+import { NewMusicRet } from '@/service/api/music/type';
 const props = withDefaults(defineProps<{
     isOutSide?: boolean,
     index?: number
-    musicItem: RecommendNewMusicRet
+    musicItem: NewMusicRet
 }>(), {
     isOutSide: true,
     index: 1

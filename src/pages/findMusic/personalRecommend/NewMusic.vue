@@ -5,14 +5,14 @@
     <div class="new-music-wrapper d-flex ai-center jc-between mb-30">
 
         <div class="new-music-left">
-            <div class="new-music-item" v-for="item in 5" :key="item">
-                <NewMusicItem :index="item"></NewMusicItem>
+            <div class="new-music-item" v-for="(item, index) in newMusicList.data.slice(0, 5)" :key="index">
+                <NewMusicItem :index="index + 1" :music-item="item"></NewMusicItem>
             </div>
 
         </div>
         <div class="new-music-right">
-            <div class="new-music-item" v-for="item in 5" :key="item">
-                <NewMusicItem :index="item"></NewMusicItem>
+            <div class="new-music-item" v-for="(item, index) in newMusicList.data.slice(5)" :key="index">
+                <NewMusicItem :index="index + 1 + 5" :music-item="item"></NewMusicItem>
             </div>
         </div>
     </div>
@@ -21,7 +21,17 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
 import NewMusicItem from './components/NewMusicItem.vue';
+import { getRecommendNewMusic } from "@/service/api/recommend/index"
+import { reactive } from 'vue';
+import { RecommendNewMusicRet } from '@/service/api/recommend/type';
 const router = useRouter()
+const newMusicList = reactive<Record<string, RecommendNewMusicRet[]>>({ data: [] })
+const getRecommendMusic = async () => {
+    const r = await getRecommendNewMusic()
+
+    newMusicList.data = r.result
+}
+getRecommendMusic()
 </script>
 <style lang="scss" scoped>
 .head:hover {

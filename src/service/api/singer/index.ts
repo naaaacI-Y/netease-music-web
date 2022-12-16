@@ -81,6 +81,11 @@ export const collectOrCancelSinger = (params: CollectorCancelSingerParam) => {
     return http.get<CollectorCancelSingerResult>(`/artist/sub${stringifyParams(params)}`)
 }
 
+/**
+ * 歌手热门 50 首歌曲
+ * @param params
+ * @returns
+ */
 export const getSingerTopSong = (params: SingelSingerSongParam) => {
     return http.get<SingerTopSongResult>(`/artist/top/song${stringifyParams(params)}`)
 }

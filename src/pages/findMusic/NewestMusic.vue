@@ -13,8 +13,10 @@
         </div>
         <div class="filter-wrap d-flex ai-center text-black_4 mb-8 jc-between">
             <div class="filter d-flex ai-center">
-                <div class="filter-item fs-3 mr-30" v-for="(item, index) in newestMusicType" @click="filterType = index"
-                    :style="{ color: `${filterType === index ? '#000' : ''}` }" :key="index">{{ item }}</div>
+                <div class="filter-item fs-3 mr-30" v-for="(item) in filterList" @click="filterType = Number(item[0])"
+                    :style="{ color: `${filterType === Number(item[0]) ? '#000' : ''}` }" :key="Number(item[0])">{{
+                            item[1]
+                    }}</div>
             </div>
             <div class="operate d-flex">
                 <div class="play-all fs-1 d-flex ai-center text-white mr-10">
@@ -28,20 +30,31 @@
             </div>
         </div>
         <div class="song-list-wrap">
-            <NewMusicItem v-for="(item, index) in 20" :index="index + 1" :key="index" :is-out-side="false">
-            </NewMusicItem>
+            <NewMusicItemInside v-for="(item, index) in musicList.data" :index="Number(index) + 1" :key="index"
+                :is-out-side="false" :music-item="item">
+            </NewMusicItemInside>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import NewMusicItem from './personalRecommend/components/NewMusicItem.vue';
-
+import NewMusicItemInside from './personalRecommend/components/NewMusicItemInside.vue';
+import { getNewMusic } from "@/service/api/music/index"
 import { newestMusicType } from "@/utils/const"
-import { ref } from 'vue';
-
+import { reactive, ref, watch } from 'vue';
+import { NewMusicParam, NewMusicRet } from '@/service/api/music/type';
+const filterList = Object.entries(newestMusicType)
 const tabType = ref(0)
 const filterType = ref(0)
+const musicList = reactive<Record<string, NewMusicRet[]>>({ data: [] })
+watch(filterType, () => {
+    // 重新请求 TODO
+})
+const getMusic = async () => {
+    const r = await getNewMusic({ type: filterType.value })
+    musicList.data = r.data
+}
+getMusic()
 </script>
 <style lang="scss" scoped>
 .newest-music-wrapper {
