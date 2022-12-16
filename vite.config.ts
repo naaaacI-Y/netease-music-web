@@ -3,6 +3,8 @@ import vue from '@vitejs/plugin-vue'
 import path from 'path'
 //@ts-ignore
 import viteCompression from 'vite-plugin-compression'
+import proxy from './build/proxy'
+import { VITE_PORT } from './build/constant'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -34,10 +36,10 @@ export default defineConfig({
   //启动服务配置
   server: {
     host: '0.0.0.0',
-    port: 8000,
+    port: VITE_PORT,
     open: true,
     https: false,
-    proxy: {},
+    proxy
   },
   // 生产环境打包配置
   //去除 console debugger

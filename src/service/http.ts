@@ -9,10 +9,19 @@ interface Http {
 
 
 // 设置请求头和请求路径
-axios.defaults.baseURL = '/api'
-axios.defaults.timeout = 10000
-axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
-axios.interceptors.request.use(
+const service = axios.create({
+  baseURL: import.meta.env.VITE_APP_API_BASEURL,
+  timeout: 10000,
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json;charset=UTF-8"
+  }
+})
+// axios.defaults.baseURL = import.meta.env.VITE_APP_API_BASEURL
+// axios.defaults.timeout = 10000
+// axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
+// axios.defaults.withCredentials = true
+service.interceptors.request.use(
   (config): AxiosRequestConfig<any> => {
     // const token = window.sessionStorage.getItem('token')
     // if (token) {
@@ -26,7 +35,7 @@ axios.interceptors.request.use(
   }
 )
 // 响应拦截
-axios.interceptors.response.use((res) => {
+service.interceptors.response.use((res) => {
   if (res.data.code === 111) {
     sessionStorage.setItem('token', '')
     // token过期操作
@@ -40,7 +49,7 @@ axios.interceptors.response.use((res) => {
 const http: Http = {
   get(url, params) {
     return new Promise((resolve, reject) => {
-      axios
+      service
         .get(url, { params })
         .then((res) => {
           resolve(res.data)
@@ -52,7 +61,7 @@ const http: Http = {
   },
   post(url, params) {
     return new Promise((resolve, reject) => {
-      axios
+      service
         .post(url, JSON.stringify(params))
         .then((res) => {
           resolve(res.data)
@@ -64,7 +73,7 @@ const http: Http = {
   },
   upload(url, file) {
     return new Promise((resolve, reject) => {
-      axios
+      service
         .post(url, file, {
           headers: { 'Content-Type': 'multipart/form-data' },
         })
