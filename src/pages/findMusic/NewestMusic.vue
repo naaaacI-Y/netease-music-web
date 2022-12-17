@@ -1,7 +1,7 @@
 <template>
     <div class="newest-music-wrapper d-flex flex-column">
         <div class="tab-wrap d-flex jc-center mb-25">
-            <div class="tab d-flex fs-1 text-black_3">
+            <div class="tab d-flex fs-1 text-black_3 jc-between">
                 <div class="song flex-1 d-flex jc-center ai-center" @click="tabType = 0"
                     :style="{ backgroundColor: `${tabType === 0 ? '#b3b3b3' : ''}`, color: `${tabType === 0 ? 'white' : ''}` }">
                     新歌速递</div>
@@ -18,12 +18,12 @@
                             item[1]
                     }}</div>
             </div>
-            <div class="operate d-flex">
+            <div class="operate d-flex jc-between">
                 <div class="play-all fs-1 d-flex ai-center text-white mr-10">
                     <i class="iconfont icon-bofang_o  fs-9"></i>
                     播放全部
                 </div>
-                <div class="collect mr-15 fs-1 d-flex ai-center">
+                <div class="collect fs-1 d-flex ai-center">
                     <i class="iconfont icon-xinjianwenjianjia fs-7 mr-3"></i>
                     <span>收藏全部</span>
                 </div>

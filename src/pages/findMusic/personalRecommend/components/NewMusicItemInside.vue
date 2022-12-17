@@ -3,7 +3,8 @@
         :style="{ paddingLeft: `${!isOutSide ? '30px' : ''}`, backgroundColor: isShowBackground }">
         <div class="index mr-12 fs-2" v-if="!isOutSide">{{ paddingIndex(index) }}</div>
         <div class="song-cover mr-12">
-            <img :src="musicItem.album.picUrl" alt="">
+            <!-- <img :src="musicItem.album.picUrl" > -->
+            <lazy-load-img :src="musicItem.album.picUrl"></lazy-load-img>
             <div class="play-btn">
                 <div class="trangel"></div>
             </div>
@@ -21,12 +22,14 @@
         </div>
         <div class="music-author fs-2 " v-if="!isOutSide">{{ musicItem.artists[0].name }}</div>
         <div class="music-album fs-2" v-if="!isOutSide">{{ musicItem.album.name }}</div>
-        <div class="music-time fs-2" v-if="!isOutSide">{{ musicItem.duration }}</div>
+        <div class="music-time fs-2" v-if="!isOutSide">{{ formatSongTime(musicItem.duration) }}</div>
     </div>
 </template>
 
 <script lang="ts" setup>
 // 图片未加载完成显示默认图片  TODO
+import { formatSongTime } from "@/utils/index"
+import LazyLoadImg from '@/components/LazyLoadImg.vue';
 import { computed } from 'vue';
 import { NewMusicRet } from '@/service/api/music/type';
 const props = withDefaults(defineProps<{
@@ -47,6 +50,7 @@ const paddingIndex = (index: number) => {
     if (index < 10) return `0${index}`
     return index
 }
+
 </script>
 <style lang="scss" scoped>
 .new-music-item-wrapper {
@@ -55,6 +59,10 @@ const paddingIndex = (index: number) => {
 
     .index {
         color: #969696;
+    }
+
+    .music-name .name {
+        @include no-wrap(413px);
     }
 
     .song-cover {
@@ -103,7 +111,8 @@ const paddingIndex = (index: number) => {
     }
 
     .music-album {
-        width: 250px;
+        @include no-wrap(240px);
+        padding-right: 10px;
     }
 
     .music-album,

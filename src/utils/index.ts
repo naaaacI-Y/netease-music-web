@@ -17,21 +17,13 @@ const stringifyParams = (obj: object) => {
     return r
 }
 
-const setUserInfo = (userInfo: profile) => {
-    localStorage.setItem("user-info", JSON.stringify(userInfo))
-}
-
-const removeUserInfo = () => {
-    localStorage.removeItem("user-info")
-}
-
-const isLogin = () => {
-    return !!localStorage.getItem("user-info")
+const formatSongTime = (time: number) => {
+    const minute = time / 1000 / 60 | 0
+    const second = time / 1000 % 60 | 0
+    return `${minute < 10 ? `0${minute}` : minute}:${second < 10 ? `0${second}` : second}`
 }
 export {
     formatTime,
     stringifyParams,
-    setUserInfo,
-    removeUserInfo,
-    isLogin
+    formatSongTime
 }

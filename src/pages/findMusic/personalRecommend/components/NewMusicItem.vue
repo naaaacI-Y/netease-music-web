@@ -56,6 +56,10 @@ const paddingIndex = (index: number) => {
         color: #969696;
     }
 
+    .music-name .name {
+        @include no-wrap(413px);
+    }
+
     .song-cover {
         position: relative;
         width: 60px;
