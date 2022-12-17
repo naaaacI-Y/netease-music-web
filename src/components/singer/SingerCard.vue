@@ -1,11 +1,11 @@
 <template>
     <div class="singer-card-wrapper mb-30">
         <div class="img-wrapper">
-
+            <LazyLoadImg :src="singerItem.picUrl"></LazyLoadImg>
         </div>
         <div class="singer-info d-flex ai-center jc-between">
-            <div class="name fs-2">歌手姓名</div>
-            <div class="flag d-flex ai-center jc-center" v-if="isShowSingerFlag">
+            <div class="name fs-2">{{ singerItem.name }}</div>
+            <div class="flag d-flex ai-center jc-center" v-if="isShowSingerFlag && singerItem.accountId">
                 <i class="iconfont text-white icon-iconfontyonghuming"></i>
             </div>
         </div>
@@ -13,12 +13,15 @@
 </template>
 
 <script lang="ts" setup>
+import { Artist } from '@/service/api/singer/types';
+import LazyLoadImg from "@/components/LazyLoadImg.vue"
 // 虚拟滚动  TODO
 withDefaults(defineProps<
     {
         cardWidth?: number,
         cardHeight?: number,
         isShowSingerFlag?: boolean
+        singerItem: Artist
     }>(), {
     cardWidth: 158,
     cardHeight: 158,
@@ -38,7 +41,13 @@ withDefaults(defineProps<
         overflow: hidden;
         border-radius: 8px;
         margin-bottom: 10px;
-        background-color: #d33b31
+        // background-color: #d33b31;
+
+        img {
+            width: 100%;
+            // height: inherit
+            // height: 100%
+        }
     }
 
     .singer-info {

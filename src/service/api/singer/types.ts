@@ -381,9 +381,9 @@ export interface SimilarSingerResult {
 export interface SingerCategoryParam {
     limit?: number
     offset?: number
-    initial?: string
-    type: -1 | 1 | 2 | 3
-    area: -1 | 7 | 96 | 8 | 16 | 0
+    initial?: string | number
+    type: number
+    area: number
 }
 export interface SingerCategoryResult {
     artists: Artist[];
