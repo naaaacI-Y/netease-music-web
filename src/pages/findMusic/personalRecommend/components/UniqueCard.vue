@@ -1,20 +1,23 @@
 <template>
     <div class="unique-card-wrapper" :style="{ width: `${cardWidth}px` }">
         <div class="img-wrapper mb-5" :style="{ width: `${cardWidth}px`, height: `${cardHeight}px` }">
-            <img src="" alt="">
+            <img :src="cardWidth === 250 ? uniqueItem.sPicUrl : uniqueItem.picUrl" alt="">
             <div class="play-btn">
                 <i class="iconfont icon-bofang1 text-white fs-9"></i>
             </div>
         </div>
-        <div class="unique-name fs-3 text-black_2">独家放送名称独家放送名称独家放送名称独家放送名称</div>
+        <div class="unique-name fs-3 text-black_2">{{ uniqueItem.name }}</div>
     </div>
 </template>
 
 <script lang="ts" setup>
+import { UniqueRecommendRet } from '@/service/api/recommend/type';
+
 withDefaults(defineProps<
     {
         cardWidth?: number,
         cardHeight?: number
+        uniqueItem: UniqueRecommendRet
     }>(), {
     cardWidth: 250,
     cardHeight: 135

@@ -143,3 +143,37 @@ export interface RecommendNewMusicResult {
     result: RecommendNewMusicRet[];
 }
 
+
+
+// 独家放送--推荐
+export interface UniqueRecommendRet {
+    id: number;
+    url: string;
+    picUrl: string;
+    sPicUrl: string;
+    type: number;
+    copywriter: string;
+    name: string;
+    alg?: string;
+    time?: number
+}
+
+export interface UniqueRecommendResult {
+    code: number;
+    name: string;
+    result: UniqueRecommendRet[];
+}
+
+// 独家放送--列表
+export interface UniqueRecommendListParam {
+    limit: number
+    offset?: number
+}
+
+
+export interface UniqueRecommendListRresult {
+    code: number;
+    result: UniqueRecommendRet[];
+    more: boolean;
+    offset: number;
+}
