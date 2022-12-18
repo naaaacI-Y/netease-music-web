@@ -1,6 +1,6 @@
 import { stringifyParams } from "@/utils"
 import http from "../../http"
-import { RecommendNewMusicResult, UniqueRecommendListParam, UniqueRecommendListRresult, UniqueRecommendResult } from "./type"
+import { RecommendNewMusicResult, UniqueRecommendListParam, UniqueRecommendListRresult, UniqueRecommendResult } from "./types"
 
 /**
  * 推荐--最新音乐 10条

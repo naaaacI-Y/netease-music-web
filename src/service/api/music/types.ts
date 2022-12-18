@@ -1,5 +1,5 @@
 import { newestMusicType } from "@/utils/const";
-import { Album, Artist, SqMusic } from "../recommend/type";
+import { Album, Artist, SqMusic } from "../recommend/types";
 
 export type typeList = keyof typeof newestMusicType
 

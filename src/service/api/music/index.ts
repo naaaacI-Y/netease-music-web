@@ -1,6 +1,6 @@
 import { stringifyParams } from "@/utils"
 import http from "../../http"
-import { NewMusicParam, NewMusicResult } from "./type"
+import { NewMusicParam, NewMusicResult } from "./types"
 
 
 /**
