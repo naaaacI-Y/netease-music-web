@@ -1,15 +1,15 @@
 <template>
     <div class="recommend-mv-card-wrapper">
         <div class="img-wrapper" :style="{}">
-            <img :src="recommendMvItem.picUrl" alt="">
+            <img :src="recommendMvItem.picUrl || recommendMvItem.imgurl" alt="">
             <div class="play-count d-flex ai-center fs-3">
                 <i class="iconfont icon-bofang1 text-white fs-7"></i>
-                {{ recommendMvItem.playCount }}
+                {{ formatPlayCount(recommendMvItem.playCount) }}
             </div>
             <div class="play-btn" v-if="isPlayBtn">
                 <div class="trangel"></div>
             </div>
-            <div class="duration fs-2 text-white" v-if="isShowTime">{{ recommendMvItem.duration }}</div>
+            <div class="duration fs-2 text-white" v-if="isShowTime">{{ formatSongTime(recommendMvItem.duration) }}</div>
         </div>
         <div class="mv-name mt-5">
             <div class="line1 fs-4 text-black_2" :class="{ noWrap: !isOneline }">
@@ -25,6 +25,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { RecommendItem } from '@/service/api/mv/types';
+import { formatSongTime, formatPlayCount } from '@/utils';
 const props = withDefaults(defineProps<{
     isShowTime?: boolean
     isOneline?: boolean

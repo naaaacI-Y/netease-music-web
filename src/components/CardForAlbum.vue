@@ -1,19 +1,25 @@
 <template>
     <div class="card-for-album-wrapper">
         <div class="img-wrap mb-5">
+            <LazyLoadImg :src="albumItem.picUrl"></LazyLoadImg>
             <div class="play-btn">
                 <div class="trangel"></div>
             </div>
         </div>
         <div class="album-info">
-            <div class="name mb-10 fs-3 text-black_3">专辑名称专辑名称专辑名称专辑名称专辑名称专辑名称专辑名称专辑名称</div>
-            <div class="time fs-2 text-black_6">2022-10-16</div>
+            <div class="name mb-10 fs-3 text-black_3">{{ albumItem.name }}</div>
+            <div class="time fs-2 text-black_6">{{ formatTime(albumItem.publishTime, "yyyy-MM-dd") }}</div>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-
+import { HotAlbum } from '@/service/api/singer/types';
+import LazyLoadImg from "@/components/LazyLoadImg.vue"
+import { formatTime } from "@/utils/index"
+defineProps<{
+    albumItem: HotAlbum
+}>()
 </script>
 <style lang="scss" scoped>
 .card-for-album-wrapper {
@@ -26,7 +32,11 @@
         padding-bottom: 100%;
         position: relative;
         border-radius: 10px;
-        background-color: aqua;
+
+        // background-color: aqua;
+        img {
+            width: 100%;
+        }
 
         .play-btn {
             display: none;

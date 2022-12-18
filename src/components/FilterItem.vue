@@ -1,12 +1,10 @@
 <template>
-    <div class="filter-wrap">
-        <div class="filter d-flex mb-10 ai-center ">
-            <div class="filter-label fs-1 mr-8 text-black_3">{{ label }}：</div>
-            <div class="language-list d-flex ai-center flex-wrap">
-                <div class="filter-item fs-1 mr-30 text-black_4" v-for="(item, index) in typeList"
-                    :class="{ isActive: activeType === index }" @click="emit('changeActiveType', index)" :key="index">
-                    {{ item }}
-                </div>
+    <div class="filter d-flex mb-10 ai-center ">
+        <div class="filter-label fs-1 mr-8 text-black_3">{{ label }}：</div>
+        <div class="language-list d-flex ai-center flex-wrap">
+            <div class="filter-item fs-1 mr-30 text-black_4" v-for="(item, index) in typeList"
+                :class="{ isActive: activeType === item }" @click="emit('changeActiveType', item)" :key="index">
+                {{ item }}
             </div>
         </div>
     </div>
@@ -14,12 +12,13 @@
 
 <script lang="ts" setup>
 defineProps<{
-    activeType: number
-    typeList: Array<string>
+    activeType: string
+    typeList: object
     label: string
+
 }>()
 const emit = defineEmits<{
-    (e: "changeActiveType", num: number): void
+    (e: "changeActiveType", name: string): void
 }>()
 </script>
 <style lang="scss" scoped>

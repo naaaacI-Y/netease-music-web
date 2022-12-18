@@ -170,15 +170,25 @@ export interface SingelSingerSongResult {
 export interface Mv {
     id: number;
     name: string;
-    status: number;
-    artist: Artist;
-    imgurl: string;
-    imgurl16v9: string;
+    imgurl?: string;
     artistName: string;
     duration: number;
     playCount: number;
-    publishTime: string;
     subed: boolean;
+
+    type?: number;
+    copywriter?: string;
+    canDislike?: boolean;
+    trackNumberUpdateTime?: any;
+    artists?: Artist[];
+    artistId?: number;
+    alg?: string;
+    picUrl?: string;  // imgurl
+
+    status: number;
+    artist: Artist;
+    publishTime: string;
+    imgurl16v9: string;
 }
 export interface SingerMvResult {
     mvs: Mv[];
@@ -382,8 +392,8 @@ export interface SingerCategoryParam {
     limit?: number
     offset?: number
     initial?: string | number
-    type: number
-    area: number
+    type: number | string
+    area: number | string
 }
 export interface SingerCategoryResult {
     artists: Artist[];

@@ -21,21 +21,30 @@
         </div>
         <div class="album pt-20" v-if="activeIndex === 0">
             <div class="album-card-wrap d-flex jc-between flex-wrap" v-if="songListShowType === 'card'">
-                <CardForAlbum v-for="item in 12"></CardForAlbum>
+                <CardForAlbum v-for="item in singerAlbumList.data" :key="item.id" :album-item="item"></CardForAlbum>
             </div>
             <div class="album-list-wrap" v-if="songListShowType === 'list'">
             </div>
         </div>
         <div v-if="activeIndex === 1" class="mv">
             <div class="mv-wrapper d-flex flex-wrap pt-25 jc-between">
-                <RecommendMvCard :is-show-time="true" v-for="item in 30" :is-oneline="true" :count="5">
+                <RecommendMvCard :is-show-time="true" v-for="item in singerMvList.data" :is-oneline="true" :count="5"
+                    :recommend-mv-item="item">
                 </RecommendMvCard>
             </div>
         </div>
-        <div v-if="activeIndex === 2" class="detail">详情</div>
+        <div v-if="activeIndex === 2" class="detail">
+            <div class="detail-item mb-30 pt-20" v-for="item in singerDetail.data">
+                <div class="detail-title f-2 mb-20">{{ item.ti }}</div>
+                <div class="detail-content fs-1  mb-20" v-for="it in item.txt.split('\n')" style="color:#999">
+                    {{ it }}
+                </div>
+            </div>
+        </div>
         <div v-if="activeIndex === 3" class="simlary">
             <div class="simlary-wrapper d-flex flex-wrap pt-25 jc-between">
-                <SingerCard v-for="item in 30" :is-show-singer-flag="false"></SingerCard>
+                <SingerCard v-for="item in similarSingerList.data" :is-show-singer-flag="false" :singer-item="item">
+                </SingerCard>
             </div>
         </div>
         <div class="performance" v-if="activeIndex === 4">演出信息</div>
@@ -47,11 +56,60 @@
 import RecommendMvCard from '../RecommendMvCard.vue';
 import SingerCard from '../singer/SingerCard.vue';
 import CardForAlbum from '../CardForAlbum.vue';
-import { ref } from 'vue';
+import { getSingerAlbum, getSimilarSinger, getSingerDes, getSingerMv } from "@/service/api/singer"
+import { reactive, ref, watchEffect } from 'vue';
 import { labelList } from "@/utils/const"
+import { useRoute } from 'vue-router';
+import { Artist, HotAlbum, Introduction, Mv } from '@/service/api/singer/types';
 
 const activeIndex = ref(0)
 const songListShowType = ref("card")
+const { query } = useRoute()
+const singerId = Number(query.id) // 歌手id
+
+const singerAlbumList = reactive<Record<string, HotAlbum[]>>({ data: [] }) // 专辑信息
+// const singerInfo = reactive({ data: {} as Artist }) // 歌手信息
+// const hotSonList = reactive<Record<string, HotSong[]>>({data:[]})
+const singerMvList = reactive<Record<string, Mv[]>>({ data: [] }) // mv
+const similarSingerList = reactive<Record<string, Artist[]>>({ data: [] }) // 相似歌手
+const singerDetail = reactive<Record<string, Introduction[]>>({ data: [] }) // 歌手详情
+const getAlbum = async () => {
+    const r = await getSingerAlbum({ id: singerId })
+    singerAlbumList.data = r.hotAlbums
+}
+
+// mv
+const getMv = async () => {
+    const r = await getSingerMv({ id: singerId })
+    singerMvList.data = r.mvs
+}
+// 相似歌手
+const getSimilar = async () => {
+    const r = await getSimilarSinger({ id: singerId })
+    similarSingerList.data = r.artists
+}
+// 歌手详情
+const getSingerDetail = async () => {
+    const r = await getSingerDes({ id: singerId })
+    singerDetail.data = r.introduction
+}
+watchEffect(() => {
+    switch (activeIndex.value) {
+        case 0:
+            getAlbum()
+            break
+        case 1:
+            getMv()
+            break
+        case 2:
+            getSingerDetail()
+            break
+        case 3:
+            getSimilar()
+            break
+
+    }
+})
 </script>
 <style lang="scss" scoped>
 .switch-tab-wrapper {

@@ -38,8 +38,11 @@
     </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup>import { Artist } from '@/service/api/singer/types';
 
+defineProps<{
+    singerInfo: Artist
+}>()
 </script>
 <style lang="scss" scoped>
 .singer-header-wrapper {

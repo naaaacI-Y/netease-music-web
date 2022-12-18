@@ -51,20 +51,26 @@ export interface MVResult {
 
 // 推荐mv
 export interface RecommendItem {
-    id: number;
-    type: number;
-    name: string;
-    copywriter: string;
-    picUrl: string;
-    canDislike: boolean;
+    type?: number;
+    copywriter?: string;
+    canDislike?: boolean;
     trackNumberUpdateTime?: any;
+    artists?: Artist[];
+    artistId?: number;
+    alg?: string;
+
+    status?: number;
+    artist?: Artist;
+    publishTime?: string;
+    imgurl16v9?: string;
+    imgurl?: string
+    subed: boolean;
+    artistName: string;
+    picUrl?: string;  // imgurl
+    id: number;
     duration: number;
     playCount: number;
-    subed: boolean;
-    artists: Artist[];
-    artistName: string;
-    artistId: number;
-    alg: string;
+    name: string;
 }
 
 export interface RecommendMvResult {

@@ -1,11 +1,11 @@
 <template>
     <div class="singer-wrapper">
         <div class="filter-wrapper mb-20">
-            <FilterItem :active-type="activeLanguageType" :type-list="languageList" label="语种"
+            <FilterItem :active-type="activeLanguageType" :type-list="Object.keys(languageList)" label="语种"
                 @change-active-type="changeLanguageActive"></FilterItem>
-            <FilterItem :active-type="activeCategoryType" :type-list="categoryList" label="分类"
+            <FilterItem :active-type="activeCategoryType" :type-list="Object.keys(categoryList)" label="分类"
                 @change-active-type="changeCategoryActive"></FilterItem>
-            <FilterItem :active-type="activeFilterType" :type-list="filterList" label="筛选"
+            <FilterItem :active-type="activeFilterType" :type-list="Object.keys(filterList)" label="筛选"
                 @change-active-type="changeFilterActive"></FilterItem>
         </div>
         <div class="singer-list-wrapper d-flex flex-wrap jc-between">
@@ -19,38 +19,45 @@
 import SingerCard from '@/components/singer/SingerCard.vue';
 import FilterItem from '@/components/FilterItem.vue';
 import { languageList, categoryList, filterList } from "@/utils/const"
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import { Artist } from '@/service/api/singer/types';
 import { getSingerByCategory } from '@/service/api/singer';
 const router = useRouter()
-const activeLanguageType = ref(0)
-const activeCategoryType = ref(0)
-const activeFilterType = ref(0)
+const activeLanguageType = ref("全部")
+const activeCategoryType = ref("全部")
+const activeFilterType = ref("热门")
 const pages = reactive({
     limit: 30,
     offset: 0,
-    initial: -1,
-    type: -1,
-    area: -1
 })
 const singerList = reactive<Record<string, Artist[]>>({ data: [] })
+
 const goSingerPage = (id: number) => {
     router.push(`/singer-home?id=${id}`)
 }
-const changeLanguageActive = (num: number) => {
-    activeLanguageType.value = num
+const changeLanguageActive = (name: string) => {
+    activeLanguageType.value = name
 }
-const changeCategoryActive = (num: number) => {
-    activeCategoryType.value = num
+const changeCategoryActive = (name: string) => {
+    activeCategoryType.value = name
 }
-const changeFilterActive = (num: number) => {
-    activeFilterType.value = num
+const changeFilterActive = (name: string) => {
+    activeFilterType.value = name
 }
 const getSingerList = async () => {
-    const r = await getSingerByCategory(pages)
+    const queryInfo = {
+        initial: filterList[activeFilterType.value],
+        type: categoryList[activeCategoryType.value],
+        area: languageList[activeLanguageType.value],
+        ...pages
+    }
+    const r = await getSingerByCategory(queryInfo)
     singerList.data = r.artists
 }
+watchEffect(() => {
+    getSingerList()
+})
 getSingerList()
 </script>
 <style lang="scss" scoped>
