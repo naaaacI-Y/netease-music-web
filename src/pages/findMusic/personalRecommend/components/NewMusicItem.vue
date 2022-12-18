@@ -27,7 +27,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { RecommendNewMusicRet } from '@/service/api/recommend/type';
+import { RecommendNewMusicRet } from '@/service/api/recommend/types';
 const props = withDefaults(defineProps<{
     isOutSide?: boolean,
     index?: number

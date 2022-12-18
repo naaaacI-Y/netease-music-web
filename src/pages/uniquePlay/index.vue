@@ -11,7 +11,7 @@
 import UniqueCard from '../findMusic/personalRecommend/components/UniqueCard.vue';
 import { getUniquereCommendList } from "@/service/api/recommend"
 import { reactive, ref } from 'vue';
-import { UniqueRecommendRet } from '@/service/api/recommend/type';
+import { UniqueRecommendRet } from '@/service/api/recommend/types';
 const uniqueList = reactive<Record<string, UniqueRecommendRet[]>>({ data: [] })
 const pages = reactive({
     limit: 20,

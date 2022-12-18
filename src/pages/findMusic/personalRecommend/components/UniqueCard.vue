@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import { UniqueRecommendRet } from '@/service/api/recommend/type';
+import { UniqueRecommendRet } from '@/service/api/recommend/types';
 
 withDefaults(defineProps<
     {

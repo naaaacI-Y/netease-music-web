@@ -31,7 +31,7 @@
 import { formatSongTime } from "@/utils/index"
 import LazyLoadImg from '@/components/LazyLoadImg.vue';
 import { computed } from 'vue';
-import { NewMusicRet } from '@/service/api/music/type';
+import { NewMusicRet } from '@/service/api/music/types';
 const props = withDefaults(defineProps<{
     isOutSide?: boolean,
     index?: number

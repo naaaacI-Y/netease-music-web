@@ -42,7 +42,7 @@ import NewMusicItemInside from './personalRecommend/components/NewMusicItemInsid
 import { getNewMusic } from "@/service/api/music/index"
 import { newestMusicType } from "@/utils/const"
 import { reactive, ref, watch } from 'vue';
-import { NewMusicParam, NewMusicRet } from '@/service/api/music/type';
+import { NewMusicParam, NewMusicRet } from '@/service/api/music/types';
 const filterList = Object.entries(newestMusicType)
 const tabType = ref(0)
 const filterType = ref(0)
