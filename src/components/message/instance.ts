@@ -23,7 +23,7 @@ const createInstance = (conf: ConfigType) => {
 
     // 创建 Vue 实例并挂载到 Body
     const app = createApp(Message, {
-        conf,
+        config: conf,
         // 移除元素，消息关闭后从 Dom 上取消挂载并移除
         remove() {
             handleRemove()

@@ -10,7 +10,12 @@ function renderMsg(conf: ConfigType) {
         type, // 消息类型
         icon = '', // 消息图标
         content, // 消息内容
-        duration = 1000, // 自动关闭延迟时间
+        duration, // 自动关闭延迟时间
+        isCancelCollect,
+        albumId,
+        singerId,
+        mvid,
+        songListId
     } = conf;
 
     // 创建实例
@@ -19,25 +24,44 @@ function renderMsg(conf: ConfigType) {
         icon,
         content,
         duration,
+        isCancelCollect,
+        albumId,
+        singerId,
+        mvid,
+        songListId
     });
 }
 
 export default {
     // 纯文本消息
     success(content: string) {
-        const textCfg = {
+        const config = {
             type: "text",
-            content
+            content,
+            duration: 500
         }
-        return renderMsg(textCfg);
+        return renderMsg(config);
     },
     error(content: string) {
-        const textCfg = {
+        const config = {
             type: "error",
             icon: "icon-shanchu2",
-            content
+            content,
+            duration: 500
         }
-        return renderMsg(textCfg);
+        return renderMsg(config);
     },
+    cancelCollect(content: string, singerId?: number, mvid?: number, songListId?: number, albumId?: number) {
+        const config = {
+            type: "cancelCollect",
+            content,
+            isCancelCollect: true,
+            singerId,
+            mvid,
+            songListId,
+            albumId
+        }
+        return renderMsg(config);
+    }
 
 }
