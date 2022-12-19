@@ -1,4 +1,6 @@
 
+import useStore from "@/store";
+import { useRoute } from "vue-router";
 
 /**
  * 日期格式化
@@ -46,33 +48,35 @@ const formatTime = (time: number, format: string) => {
  * @returns
  */
 const calcTime = (time: number) => {
-    const interval = time - Date.now()
-    const dayInterval = new Date(time).getDate() - new Date().getDate()
+    const interval = Date.now() - time
+    const dayInterval = new Date().getDate() - new Date(time).getDate()
     // 大于一年 2012年11月20日 14:00
     if (interval > 365 * 24 * 3600 * 1000) {
-        const format = formatTime(time, "yyyy年MM月dd日 hh:mm")
+        const format = formatTime(time, 'yyyy年MM月dd日 hh:mm')
         return format
     }
     // 天数相隔大于1 12月16日 14:00
     if (dayInterval > 1) {
-        return formatTime(time, "MM月dd日 HH:mm")
+        return formatTime(time, 'MM月dd日 hh:mm')
     }
-    // 天数间隔等于1 昨天 14:00
-    if (dayInterval === 1) {
-        return `昨天 ${formatTime(time, "hh:mm")}`
+    //
+    if ((dayInterval === 1)) {
+        return `昨天 ${formatTime(time, 'hh:mm')}`
+    }
+    // 天数间隔等于0 14:00
+    if (dayInterval === 0) {
+        return `${formatTime(time, 'hh:mm')}`
     }
     // 大于一小时
     if (interval > 3600 * 1000) {
-        return formatTime(time, "hh:mm")
+        return formatTime(time, 'hh:mm')
     }
     // 一个小时之内 显示 多少分钟前
     if (interval > 60 * 1000) {
-        return `${((interval) / 1000 / 60) | 0}分钟前`
+        return `${(interval / 1000 / 60) | 0}分钟前`
     }
     // 1分钟以内
-    return "刚刚"
-
-
+    return '刚刚'
 }
 
 /**
@@ -119,10 +123,35 @@ const formatPlayCount = (count: number) => {
     }
     return count
 }
+
+/**
+ * 检查是否登录
+ * @returns
+ */
+const checkLogin = () => {
+    const store = useStore()
+    const isLogin = store.userProfile.userFile?.userId
+    if (!isLogin) {
+        store.globalState.isShowLoginBox = true
+        return false
+    }
+    return true
+}
+
+/**
+ * 获取查询id
+ */
+const getQueryId = () => {
+    const route = useRoute()
+    return Number(route.query.id)
+}
+
 export {
     formatTime,
     stringifyParams,
     formatSongTime,
     calcTime,
-    formatPlayCount
+    formatPlayCount,
+    checkLogin,
+    getQueryId
 }
