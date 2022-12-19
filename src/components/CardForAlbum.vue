@@ -1,8 +1,8 @@
 <template>
-    <div class="card-for-album-wrapper">
+    <div class="card-for-album-wrapper" @click="goAlbum">
         <div class="img-wrap mb-5">
             <LazyLoadImg :src="albumItem.picUrl"></LazyLoadImg>
-            <div class="play-btn">
+            <div class="play-btn" @click.stop="playAlbum">
                 <div class="trangel"></div>
             </div>
         </div>
@@ -17,9 +17,19 @@
 import { HotAlbum } from '@/service/api/singer/types';
 import LazyLoadImg from "@/components/LazyLoadImg.vue"
 import { formatTime } from "@/utils/index"
-defineProps<{
+import { useRouter } from 'vue-router';
+const router = useRouter()
+const props = defineProps<{
     albumItem: HotAlbum
 }>()
+const goAlbum = () => {
+    console.log("goAlbum");
+    router.push(`/album?id=${props.albumItem.id}`)
+}
+const playAlbum = () => {
+    console.log("playAlbum");
+
+}
 </script>
 <style lang="scss" scoped>
 .card-for-album-wrapper {

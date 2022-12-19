@@ -155,7 +155,7 @@ export interface HotSong {
     name: string;
     id: number;
     privilege: Privilege;
-    eq: string;
+    eq?: string;
 }
 export interface SingelSingerSongResult {
     artist: Artist;

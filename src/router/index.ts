@@ -107,6 +107,11 @@ const routes: RouteRecordRaw[] = [
     path: '/dynamic',
     name: 'Dynamic',
     component: () => import('@/pages/personalCenter/Dynamic.vue'),
+  },
+  {
+    path: '/album',
+    name: 'Album',
+    component: () => import('@/pages/album/index.vue'),
   }
 ]
 

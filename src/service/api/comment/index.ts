@@ -28,7 +28,7 @@ export const getComment = (params: AllCommentParam) => {
  * type: 数字 , 资源类型 , 对应歌曲 , mv, 专辑 , 歌单 , 电台, 视频对应以下类型
  * @returns
  */
-export const coteComment = (params: VoteCommnentParam) => {
+export const voteComment = (params: VoteCommnentParam) => {
     return http.get<VoteCommentResult>(`/comment/like${stringifyParams(params)}`)
 }
 

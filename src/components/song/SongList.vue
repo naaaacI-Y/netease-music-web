@@ -7,15 +7,18 @@
             <div class="music-time">时长</div>
         </div>
         <div class="song-wrapper">
-            <SongListItem v-for="item in 20" :index="item" :type="0">
-
-            </SongListItem>
+            <SongListItem v-for="item in songList" :index="item.id" :type="0" :item="item"></SongListItem>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
+import { HotSong } from '@/service/api/singer/types';
+import { inject } from 'vue';
 import SongListItem from './SongListItem.vue';
+const songList = inject<HotSong[]>("songList")
+console.log(JSON.stringify(songList), "songList");
+
 </script>
 <style lang="scss" scoped>
 .song-list-wrapper {

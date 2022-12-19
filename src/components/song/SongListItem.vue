@@ -11,16 +11,18 @@
         </div>
         <div class="main-info fs-2 d-flex ">
             <div class="song-name">
-                <span class="text-black_3">歌名歌名歌名歌名歌名歌名歌名歌名歌名歌名歌名歌名歌名歌名歌名歌名歌名歌名歌名歌名</span>
-                <span class="text-black_13">(别名)</span>
+                <span class="text-black_3">{{ item?.name }}</span>
+                <span class="text-black_13">()</span>
             </div>
             <div class="singer  text-black_13" v-if="isShow === 'all' || isShow === 'rank'">
-                歌手名称歌手名称歌手名称歌手名称歌手名称歌手名称
+                {{ item?.ar[0]?.name }}
             </div>
             <div class="album  text-black_13" v-if="isShow === 'all'">
-                专辑名称
+                {{ item?.al.name }}
             </div>
-            <div class="time text-c4 d-flex ai-center" v-if="isShow === 'all' || isShow === 'singer'">03:01</div>
+            <div class="time text-c4 d-flex ai-center" v-if="isShow === 'all' || isShow === 'singer'">{{
+                    formatSongTime(item!.dt)
+            }}</div>
             <div class="count text-c4 d-flex ai-cente" v-if="isShow === 'listen'">7次</div>
         </div>
     </div>
@@ -31,6 +33,8 @@
 // 我的听歌排行
 // 歌手页
 // 排行榜
+import { HotSong } from '@/service/api/singer/types';
+import { formatSongTime } from '@/utils';
 import { computed } from 'vue';
 
 
@@ -38,6 +42,7 @@ const props = withDefaults(defineProps<
     {
         type?: number
         index: number
+        item?: HotSong
     }>(), {
     type: 2,
 })
@@ -59,6 +64,7 @@ const isShow = computed(() => {
             break;
     }
 })
+const alias = () => { }
 </script>
 <style lang="scss" scoped>
 .song-list-item-wrapper {

@@ -15,21 +15,26 @@
                 <div class="submit-comment  fs-4 d-flex ai-center jc-center text-66"
                     :class="maxLength === 140 ? 'hasNoContent' : ''" @click="submitContent">评 论</div>
             </div>
-            <div class="top-vote-comment mt-20">
+            <div class="top-vote-comment mt-20" v-if="hotCommentList.data.length">
                 <div class="comment-label text-black_2 mb-15">精彩评论</div>
-                <CommentItem v-for="item in 10" :is-grey="isGrey"></CommentItem>
+                <CommentItem v-for="(item) in hotCommentList.data" :is-grey="isGrey" :comment-content="item"
+                    :key="item.commentId"></CommentItem>
             </div>
             <div class="new-comment mt-30">
                 <div class="comment-label text-black_2 mb-15">最新评论</div>
-                <CommentItem v-for="item in 10" :is-grey="isGrey"></CommentItem>
-
+                <CommentItem v-for="(item) in allComment.data" :is-grey="isGrey" :comment-content="item"
+                    :key="item.commentId"></CommentItem>
             </div>
         </div>
     </div>
 </template>
 
-<script lang="ts" setup>import { computed, ref } from 'vue';
+<script lang="ts" setup>
+import { computed, reactive, ref } from 'vue';
 import CommentItem from '../CommentItem.vue';
+import { Comment, HotComment } from "@/service/api/album/types"
+import { getQueryId } from "@/utils"
+import { getAlbumComment } from '@/service/api/album';
 withDefaults(defineProps<{
     isGrey?: boolean
 }>(), {
@@ -38,10 +43,27 @@ withDefaults(defineProps<{
 const maxLength = computed(() => {
     return 140 - commentContent.value.length
 })
+const pages = reactive({
+    id: getQueryId(),
+    type: 3,
+    pageNo: 1,
+    pageSize: 20,
+    sortType: 3
+})
+const allComment = reactive({ data: [] as Comment[] })
+const hotCommentList = reactive({ data: [] as HotComment[] })
 const commentContent = ref("")
+
+// 提交评论
 const submitContent = () => {
 
 }
+const getAllComment = async () => {
+    const r = await getAlbumComment(pages)
+    allComment.data = r.comments
+    hotCommentList.data = r.hotComments
+}
+getAllComment()
 </script>
 <style lang="scss" scoped>
 .comment {

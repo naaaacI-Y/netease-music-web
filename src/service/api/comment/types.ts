@@ -7,10 +7,10 @@ const typeListValue = ["歌曲", "mv", "歌单", "专辑", "电台节目", "视�
 type value = typeof typeListValue[number]
 export interface AllCommentParam {
     id: number
-    type: list
+    type: number
     pageNo?: number
     pageSize?: number
-    sortType?: 1 | 2 | 3
+    sortType?: number
     cursor?: number
 }
 export interface VipRight {
