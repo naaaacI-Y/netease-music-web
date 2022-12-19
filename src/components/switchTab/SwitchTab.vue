@@ -1,8 +1,8 @@
 <template>
     <div class="tab-wrapper mt-30">
         <SwitchTabForSongList v-if="type === 0"></SwitchTabForSongList>
-        <SwitchTabForSinger v-if="type === 1" :hot-song="HotSong"></SwitchTabForSinger>
-        <SwitchTabForAlbum v-if="type === 2"></SwitchTabForAlbum>
+        <SwitchTabForSinger v-if="type === 1" :hot-song="hotSong"></SwitchTabForSinger>
+        <!-- <SwitchTabForAlbum v-if="type === 2"></SwitchTabForAlbum> -->
     </div>
 </template>
 
@@ -13,7 +13,7 @@
 import SwitchTabForSongList from './SwitchTabForSongList.vue';
 import SwitchTabForSinger from './SwitchTabForSinger.vue';
 import SwitchTabForAlbum from "./SwicthTabForAlbum.vue"
-import { HotSong } from '@/service/api/singer/types';
+import { HotSong, Song } from '@/service/api/singer/types';
 
 defineProps<{
     type: number

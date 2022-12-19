@@ -13,18 +13,19 @@
                         <i class="iconfont icon-datu fs-9 text-66"></i>
                     </div>
                     <div class="type2 d-flex ai-center jc-center" :class="{ isBtnActive: songListShowType === 'list' }"
-                        @click="songListShowType = 'table'">
+                        @click="songListShowType = 'list'">
                         <i class="iconfont icon-liebiao fs-5 text-66"></i>
                     </div>
                 </div>
             </div>
         </div>
         <div class="album pt-20" v-if="activeIndex === 0">
-            <div class="album-card-wrap d-flex jc-between flex-wrap" v-if="songListShowType === 'card'">
+            <div class="album-card-wrap d-flex jc-between flex-wrap" v-show="songListShowType === 'card'">
                 <CardForAlbum v-for="item in singerAlbumList.data" :key="item.id" :album-item="item"></CardForAlbum>
             </div>
-            <div class="album-list-wrap" v-if="songListShowType === 'list'">
-            </div>
+            <!-- <div class="album-list-wrap" v-show="songListShowType === 'list'">
+                <songForList type="singer" :index="0"></songForList>
+            </div> -->
         </div>
         <div v-if="activeIndex === 1" class="mv">
             <div class="mv-wrapper d-flex flex-wrap pt-25 jc-between">
@@ -36,7 +37,7 @@
         <div v-if="activeIndex === 2" class="detail">
             <div class="detail-item mb-30 pt-20" v-for="item in singerDetail.data">
                 <div class="detail-title f-2 mb-20">{{ item.ti }}</div>
-                <div class="detail-content fs-1  mb-20" v-for="it in item.txt.split('\n')" style="color:#999">
+                <div class="detail-content fs-1  mb-20" v-for="it in item.txt.split('\n')" style="color:#bcbcbc">
                     {{ it }}
                 </div>
             </div>
@@ -57,6 +58,7 @@ import RecommendMvCard from '../RecommendMvCard.vue';
 import SingerCard from '../singer/SingerCard.vue';
 import CardForAlbum from '../CardForAlbum.vue';
 import { getSingerAlbum, getSimilarSinger, getSingerDes, getSingerMv } from "@/service/api/singer"
+import songForList from '../songForList.vue';
 import { reactive, ref, watchEffect } from 'vue';
 import { labelList } from "@/utils/const"
 import { useRoute } from 'vue-router';
@@ -69,7 +71,7 @@ const singerId = Number(query.id) // 歌手id
 
 const singerAlbumList = reactive<Record<string, HotAlbum[]>>({ data: [] }) // 专辑信息
 // const singerInfo = reactive({ data: {} as Artist }) // 歌手信息
-// const hotSonList = reactive<Record<string, HotSong[]>>({data:[]})
+// const hotSonList = reactive<Record<string, HotSong[]>>({data:[]}) // 热门信息不能通过props传递，项太多 TODO
 const singerMvList = reactive<Record<string, Mv[]>>({ data: [] }) // mv
 const similarSingerList = reactive<Record<string, Artist[]>>({ data: [] }) // 相似歌手
 const singerDetail = reactive<Record<string, Introduction[]>>({ data: [] }) // 歌手详情

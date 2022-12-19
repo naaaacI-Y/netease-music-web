@@ -2,7 +2,9 @@
     <DefaultLayout>
         <div class="singer-homepage-wrapper">
             <SingerHeader :singer-info="singerInfo.data"></SingerHeader>
-            <SwitchTab :type="1" :hot-song="hotSonList.data"></SwitchTab>
+            <div class="tab-wrapper mt-30">
+                <SwitchTabForSinger></SwitchTabForSinger>
+            </div>
         </div>
     </DefaultLayout>
 
@@ -12,8 +14,9 @@
 import { Artist, HotSong } from '@/service/api/singer/types';
 import { reactive } from 'vue';
 import { useRoute } from 'vue-router';
-import SingerHeader from '../../components/singer/SingerHeader.vue';
-import SwitchTab from '../../components/switchTab/SwitchTab.vue';
+import SingerHeader from '@/components/header/SingerHeader.vue';
+// import SwitchTab from '../../components/switchTab/SwitchTab.vue';
+import SwitchTabForSinger from '@/components/switchTab/SwitchTabForSinger.vue';
 import { getSingelSingerSong } from "@/service/api/singer"
 const { query } = useRoute()
 const singerId = Number(query.id) // 歌手id
