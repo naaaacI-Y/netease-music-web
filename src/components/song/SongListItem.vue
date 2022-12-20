@@ -10,9 +10,11 @@
             <div class="flag">-</div>
         </div>
         <div class="main-info fs-2 d-flex ">
-            <div class="song-name">
-                <span class="text-black_3">{{ item?.name }}</span>
-                <span class="text-black_13">()</span>
+            <div class="song-name d-flex ai-center">
+                <div class="text-black_3 mr-4">{{ item?.name }}</div>
+                <div class="text-black_13 mr-4" v-if="item?.alia?.length">({{ item?.alia[0] }})</div>
+                <i class="iconfont icon-h-square text-primary_red_4 fs-2" v-if="item?.sq"></i>
+                <i class="iconfont icon-bofang2 text-primary_red_4 ml-4 fs-7" v-if="item?.mv"></i>
             </div>
             <div class="singer  text-black_13" v-if="isShow === 'all' || isShow === 'rank'">
                 {{ item?.ar[0]?.name }}
@@ -90,6 +92,13 @@ const alias = () => { }
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+
+            .sq {
+                border: 1px solid #ff3133;
+                border-radius: 4px;
+                padding: 0 3px;
+                height: 20px;
+            }
         }
 
         .singer,

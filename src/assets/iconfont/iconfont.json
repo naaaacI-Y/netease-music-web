@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1898798",
+      "name": "h-square",
+      "font_class": "h-square",
+      "unicode": "e6ac",
+      "unicode_decimal": 59052
+    },
+    {
+      "icon_id": "4182376",
+      "name": "AK-MN_排名_fill",
+      "font_class": "mn_paiming_fill",
+      "unicode": "e62a",
+      "unicode_decimal": 58922
+    },
+    {
+      "icon_id": "12330036",
+      "name": "加载",
+      "font_class": "jiazai",
+      "unicode": "e7ba",
+      "unicode_decimal": 59322
+    },
+    {
       "icon_id": "7596496",
       "name": "24gl-indent",
       "font_class": "24gl-indent",
