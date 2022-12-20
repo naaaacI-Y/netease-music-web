@@ -6,19 +6,24 @@
             <div class="music-album">专辑</div>
             <div class="music-time">时长</div>
         </div>
-        <div class="song-wrapper">
-            <SongListItem v-for="item in songList" :index="item.id" :type="0" :item="item"></SongListItem>
+        <div class="song-wrapper" v-if="list?.data?.length">
+            <SongListItem v-for="(item, index) in list.data" :index="index + 1" :type="0" :item="item" :key="item.id">
+            </SongListItem>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { HotSong } from '@/service/api/singer/types';
-import { inject } from 'vue';
+import { inject, reactive, watchEffect } from 'vue';
 import SongListItem from './SongListItem.vue';
-const songList = inject<HotSong[]>("songList")
-console.log(JSON.stringify(songList), "songList");
-
+const injectSongList = inject<{ data: HotSong[] }>("songList")
+const list = reactive({ data: [] as HotSong[] })
+watchEffect(() => {
+    if (injectSongList?.data?.length) {
+        list.data = injectSongList?.data
+    }
+})
 </script>
 <style lang="scss" scoped>
 .song-list-wrapper {

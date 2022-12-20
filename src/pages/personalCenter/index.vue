@@ -1,7 +1,7 @@
 <template>
     <DefaultLayout>
         <div class="persoanl-center-wrapper">
-            <PersonalCenterHead></PersonalCenterHead>
+            <UserHeader></UserHeader>
             <div class="song-list-wrapper">
                 <div class="head d-flex jc-between mb-15 ai-center">
                     <div class="title">
@@ -37,7 +37,8 @@
 </template>
 
 <script lang="ts" setup>
-import PersonalCenterHead from '@/components/PersonalCenterHead.vue';
+// import PersonalCenterHead from '@/components/PersonalCenterHead.vue';
+import UserHeader from '@/components/header/UserHeader.vue';
 import RecommendSongListCard from '@/components/RecommendSongListCard.vue';
 import songForList from '@/components/songForList.vue';
 import { ref } from 'vue';

@@ -48,7 +48,6 @@ import { getCurrentInstance } from 'vue';
 import { HotAlbum } from '@/service/api/singer/types';
 import { checkLogin, formatTime } from '@/utils';
 import { AlbumDynamicInfoResult, Info } from '@/service/api/album/types';
-
 const message = getCurrentInstance()?.appContext.config.globalProperties.$message
 defineProps<{
     albumInfo: HotAlbum & { info: Info }
