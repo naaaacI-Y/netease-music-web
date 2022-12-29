@@ -34,6 +34,7 @@ export interface Artist {
 export interface Ar {
     id: number;
     name: string;
+    tns?: any[];
     alia: string[];
 }
 
@@ -43,6 +44,7 @@ export interface Al {
     picUrl: string;
     pic_str: string;
     pic: number;
+    tns?: any[];
 }
 
 export interface H {
@@ -103,6 +105,7 @@ export interface Privilege {
     cs: boolean;
     maxbr: number;
     fl: number;
+    realPayed?: number;
     toast: boolean;
     flag: number;
     preSell: boolean;
@@ -114,6 +117,7 @@ export interface Privilege {
     plLevel: string;
     dlLevel: string;
     flLevel: string;
+    paidBigBang?: boolean;
     rscl?: any;
     freeTrialPrivilege: FreeTrialPrivilege;
     chargeInfoList: ChargeInfoList[];
@@ -146,6 +150,10 @@ export interface HotSong {
     crbt?: any;
     rtUrl?: any;
     ftype: number;
+    copyright?: number;
+    s_id?: number;
+    mark?: number;
+    originCoverType?: number;
     pst: number;
     alia?: any[];
     pop: number;
@@ -156,6 +164,16 @@ export interface HotSong {
     id: number;
     privilege: Privilege;
     eq?: string;
+
+
+    originSongSimpleData?: any;
+    tagPicList?: any;
+    resourceState?: boolean;
+    version?: number;
+    entertainmentTags?: any;
+    single?: number;
+    publishTime?: number;
+    alg?: string;
 }
 export interface SingelSingerSongResult {
     artist: Artist;

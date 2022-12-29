@@ -1,29 +1,36 @@
 <template>
     <div class="dynamic-item-wrapper d-flex">
-        <div class="left mr-10"></div>
+        <div class="left mr-10">
+            <img :src="dynamicItem.user.avatarUrl" alt="" class="avatar-img">
+            <div class="flag" v-if="dynamicItem.user.avatarDetail">
+                <img :src="dynamicItem.user.avatarDetail.identityIconUrl" alt="">
+            </div>
+        </div>
         <div class="right flex-1">
             <div class="name-info fs-3 mb-5">
-                <span class="text-shadow_blue mr-8">名称</span>
-                <span>分享单曲</span>
+                <span class="text-shadow_blue mr-8">{{ dynamicItem.user.nickname }}</span>
+                <span>{{ map[dynamicItem.type.toString()] }}</span>
             </div>
-            <div class="time fs-2 mb-10 text-black_4">2021年7月7日 10:15</div>
-            <div class="dynamic-content fs-2 mb-5">动态内容</div>
+            <div class="time fs-2 mb-10 text-black_4">{{ calcTime(dynamicItem.eventTime) }}</div>
+            <div class="dynamic-content fs-2 mb-5">{{ info.msg }}</div>
             <div class="quote d-flex ai-center mb-15">
                 <div class="song-img mr-10">
-                    <!-- <img src="" alt=""> -->
+                    <img :src="info.song.album.picUrl" alt="">
                     <div class="play-btn">
                         <div class="trangel"></div>
                     </div>
                 </div>
                 <div class="song-info fs-2">
-                    <div class="song-name mb-3">歌曲名称</div>
-                    <div class="singer text-black_4">演唱者</div>
+                    <div class="song-name mb-3">{{ info.song.name }}</div>
+                    <div class="singer text-black_4">{{ info.song.artists[0].name }}</div>
                 </div>
             </div>
             <div class="comment-reactive d-flex ai-center fs-2 jc-end mb-15">
                 <div class="vote d-flex ai-center mr-6">
                     <i class="iconfont icon-dianzan1 mr-4"></i>
-                    <span class="vote-count">3099</span>
+                    <span class="vote-count" v-if="dynamicItem.info.commentThread.likedCount">{{
+        dynamicItem.info.commentThread.likedCount
+}}</span>
                 </div>
                 <span class="text-black_7">丨</span>
                 <div class="share mr-6 ml-6">
@@ -41,8 +48,30 @@
     </div>
 </template>
 
-<script lang="ts" setup>import { ref } from 'vue';
+<script lang="ts" setup>
+import { computed, ref } from 'vue';
+import { Event } from "@/service/api/user/types"
 import SongListComment from '@/components/song/SongListComment.vue';
+import { calcTime, formatTime } from '@/utils';
+const map = {
+    "18": "分享单曲",
+    "19": "分享专辑",
+    "17": "分享电台节目",
+    "28": "分享电台节目",
+    "22": "转发",
+    "39": "发布视频",
+    "35": "分享歌单",
+    "13": "分享歌单",
+    "24": "分享专栏文章",
+    "41": "分享视频",
+    "21": "分享视频"
+}
+const props = defineProps<{
+    dynamicItem: Event
+}>()
+const info = computed(() => {
+    return JSON.parse(props.dynamicItem.json)
+})
 const isShowCommentDetail = ref(false)
 </script>
 <style lang="scss" scoped>
@@ -52,8 +81,31 @@ const isShowCommentDetail = ref(false)
     border-bottom: 1px solid #f2f2f2;
 
     .left {
-        @include radius(40px);
-        background-color: aqua;
+        // @include radius(40px);
+        width: 40px;
+        height: 40px;
+        position: relative;
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .flag {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 13px;
+            height: 13px;
+
+            img {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+            }
+        }
+
     }
 
     .right {
@@ -69,6 +121,11 @@ const isShowCommentDetail = ref(false)
                 border-radius: 5px;
                 position: relative;
                 background-color: #d33b31;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
 
                 .play-btn {
                     position: absolute;

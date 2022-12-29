@@ -1,6 +1,6 @@
 import { stringifyParams } from "@/utils"
 import http from "../../http"
-import { CollectorCancelSingerParam, CollectorCancelSingerResult, SimilarSingerResult, SingelSingerSongParam, SingelSingerSongResult, SingerAlbumParam, SingerAlbumresult, SingerCategoryParam, SingerCategoryResult, SingerDesResult, SingerFansParam, SingerFansResult, SingerMvResult, SingerTopSongResult } from "./types"
+import * as T from "./types"
 
 
 /**
@@ -9,8 +9,8 @@ import { CollectorCancelSingerParam, CollectorCancelSingerResult, SimilarSingerR
  * id: 歌手id
  * @returns
  */
-export const getSingelSingerSong = (params: SingelSingerSongParam) => {
-    return http.get<SingelSingerSongResult>(`/artists${stringifyParams(params)}`)
+export const getSingelSingerSong = (params: T.SingelSingerSongParam) => {
+    return http.get<T.SingelSingerSongResult>(`/artists${stringifyParams(params)}`)
 }
 
 /**
@@ -19,8 +19,8 @@ export const getSingelSingerSong = (params: SingelSingerSongParam) => {
  * id: 歌手id
  * @returns
  */
-export const getSingerMv = (params: SingelSingerSongParam) => {
-    return http.get<SingerMvResult>(`/artist/mv${stringifyParams(params)}`)
+export const getSingerMv = (params: T.SingelSingerSongParam) => {
+    return http.get<T.SingerMvResult>(`/artist/mv${stringifyParams(params)}`)
 }
 
 
@@ -32,8 +32,8 @@ export const getSingerMv = (params: SingelSingerSongParam) => {
  * offset: 偏移数量 , 用于分页 , 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认 为 0
  * @returns
  */
-export const getSingerAlbum = (params: SingerAlbumParam) => {
-    return http.get<SingerAlbumresult>(`/artist/album${stringifyParams(params)}`)
+export const getSingerAlbum = (params: T.SingerAlbumParam) => {
+    return http.get<T.SingerAlbumresult>(`/artist/album${stringifyParams(params)}`)
 }
 
 /**
@@ -42,8 +42,8 @@ export const getSingerAlbum = (params: SingerAlbumParam) => {
  * id: 歌手id
  * @returns
  */
-export const getSingerDes = (params: SingelSingerSongParam) => {
-    return http.get<SingerDesResult>(`/artist/desc${stringifyParams(params)}`)
+export const getSingerDes = (params: T.SingelSingerSongParam) => {
+    return http.get<T.SingerDesResult>(`/artist/desc${stringifyParams(params)}`)
 }
 
 /**
@@ -51,8 +51,8 @@ export const getSingerDes = (params: SingelSingerSongParam) => {
  * @param params
  * @returns
  */
-export const getSimilarSinger = (params: SingelSingerSongParam) => {
-    return http.get<SimilarSingerResult>(`/simi/artist${stringifyParams(params)}`)
+export const getSimilarSinger = (params: T.SingelSingerSongParam) => {
+    return http.get<T.SimilarSingerResult>(`/simi/artist${stringifyParams(params)}`)
 }
 
 
@@ -66,8 +66,8 @@ export const getSimilarSinger = (params: SingelSingerSongParam) => {
  * area: -1:全部 7华语 96欧美 8:日本 16韩国 0:其他
  * @returns
  */
-export const getSingerByCategory = (params: SingerCategoryParam) => {
-    return http.get<SingerCategoryResult>(`/artist/list${stringifyParams(params)}`)
+export const getSingerByCategory = (params: T.SingerCategoryParam) => {
+    return http.get<T.SingerCategoryResult>(`/artist/list${stringifyParams(params)}`)
 }
 
 /**
@@ -77,8 +77,8 @@ export const getSingerByCategory = (params: SingerCategoryParam) => {
  * t:操作,1 为收藏,其他为取消收藏
  * @returns
  */
-export const collectOrCancelSinger = (params: CollectorCancelSingerParam) => {
-    return http.get<CollectorCancelSingerResult>(`/artist/sub${stringifyParams(params)}`)
+export const collectOrCancelSinger = (params: T.CollectorCancelSingerParam) => {
+    return http.get<T.CollectorCancelSingerResult>(`/artist/sub${stringifyParams(params)}`)
 }
 
 /**
@@ -86,8 +86,8 @@ export const collectOrCancelSinger = (params: CollectorCancelSingerParam) => {
  * @param params
  * @returns
  */
-export const getSingerTopSong = (params: SingelSingerSongParam) => {
-    return http.get<SingerTopSongResult>(`/artist/top/song${stringifyParams(params)}`)
+export const getSingerTopSong = (params: T.SingelSingerSongParam) => {
+    return http.get<T.SingerTopSongResult>(`/artist/top/song${stringifyParams(params)}`)
 }
 
 // 收藏的歌手列表 TODO
@@ -98,7 +98,7 @@ export const getSingerTopSong = (params: SingelSingerSongParam) => {
  * @param params
  * @returns
  */
-export const getSingerFans = (params: SingerFansParam) => {
-    return http.get<SingerFansResult>(`/artist/fans${stringifyParams(params)}`)
+export const getSingerFans = (params: T.SingerFansParam) => {
+    return http.get<T.SingerFansResult>(`/artist/fans${stringifyParams(params)}`)
 }
 
