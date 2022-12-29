@@ -1,115 +1,103 @@
 <template>
-    <div class="recommend-songlist-card-wrapper">
-        <div class="img-wrapper mb-6">
-            <slot name="canlender"></slot>
-            <img :src="songListItem.picUrl" alt="">
-            <div class="mask" v-if="type === 1"></div>
-            <div class="play-count d-flex ai-center fs-3" v-if="type === 1">
-                <i class="iconfont icon-bofang1 text-white fs-7"></i>
-                {{ formatPlayCount(songListItem.playcount!) }}
-            </div>
-            <div class="play-btn">
-                <div class="trangel"></div>
+    <DefaultLayout>
+        <div class="day-recommend-wrapper">
+            <div class="day-recommend-head">
+                <div class="main-info d-flex">
+                    <div class="canlender mr-15">
+                        <div class="day">{{ day }}</div>
+                        <i class="iconfont icon-rili text-primary_red_4"></i>
+                    </div>
+                    <div class="info-des">
+                        <div class="title fs-9">每日歌曲推荐</div>
+                        <div class="time text-66 fs-2">根据你的音乐口味生成， 每天6:00更新</div>
+                    </div>
+                </div>
+                <div class="btns d-flex mt-20">
+                    <div class="play-all fs-3 d-flex ai-center text-white mr-10">
+                        <i class="iconfont icon-bofang_o  fs-9"></i>
+                        播放全部
+                    </div>
+                    <div class="collect-count mr-15 fs-3 d-flex ai-center">
+                        <i class="iconfont icon-xinjianwenjianjia fs-7 mr-3"></i>
+                        <span>收藏全部</span>
+                        <!-- <span>已收藏</span> -->
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="songlist-name fs-3 text-black_2">{{ songListItem.name }}</div>
-    </div>
-
+        <SongList></SongList>
+    </DefaultLayout>
 </template>
 
 <script lang="ts" setup>
-import { Recommend } from '@/service/api/recommend/types';
-import { formatPlayCount } from '@/utils';
-defineProps<{
-    songListItem: Recommend
-    type: number // 0: 每日歌曲推荐 1： 普通歌单
-}>()
+import SongList from '@/components/song/SongList.vue';
+import { getDayRecommend } from '@/service/api/music';
+import { DailySong } from '@/service/api/music/types';
+import { provide, reactive } from 'vue';
+const songList = reactive({ data: [] as DailySong[] })
+const day = new Date().getDate()
+provide("songList", songList)
+const getSongList = async () => {
+    const r = await getDayRecommend()
+    songList.data = r.data.dailySongs
+}
+getSongList()
 </script>
 <style lang="scss" scoped>
-.recommend-songlist-card-wrapper {
-    width: calc(20% - 18px);
-    margin-bottom: 45px;
+.day-recommend-wrapper {
+    .day-recommend-head {
+        padding: 15px 30px;
+        border-bottom: 1px solid #e5e5e5;
 
+        .main-info {
+            .info-des {
+                padding-top: 10px;
 
-    .img-wrapper {
-        width: 100%;
-        height: 0;
-        padding-bottom: 100%;
-        overflow: hidden;
-        position: relative;
-        border-radius: 6px;
-        border: 1px solid #eee;
-        background-color: #d33b31;
+                .title {
+                    font-size: 22px;
+                    font-weight: bold;
+                }
+            }
 
-        img {
-            width: 100%;
-            // height: 100%;
-        }
+            .canlender {
+                position: relative;
 
-        .mask {
-            position: absolute;
-            right: 0px;
-            top: 0px;
-            width: 100%;
-            height: 30px;
-            background-image: linear-gradient(rgba(#000, 0.3), rgba(#000, 0));
-        }
+                .day {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -20%);
+                    color: #d33b31;
+                    font-size: 36px;
+                    font-weight: bold;
+                }
 
-        .play-count {
-            position: absolute;
-            right: 5px;
-            top: 5px;
-            color: white;
-            // background-color: rgba($color: #000000, $alpha: 0.1);
-        }
-
-        .play-btn {
-            display: none;
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            @include radius(30px);
-            background-color: rgba($color: #bebebb, $alpha: 0.6);
-
-            .trangel {
-                width: 0;
-                height: 0;
-                position: absolute;
-                border-top: 7px solid transparent;
-                border-bottom: 7px solid transparent;
-                border-left: 10px solid #d33b31;
-                left: 50%;
-                top: 50%;
-                transform: translate(-30%, -50%);
+                i {
+                    font-size: 100px
+                }
             }
         }
 
-        .isCenter {
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-        }
+        .btns {
+            .collect-count {
+                padding: 4px 12px;
+                border: 1px solid #e5e5e5;
+                border-radius: 18px;
+                width: 110px;
 
-        &:hover {
-            cursor: pointer;
+                &:hover {
+                    background-color: #f2f2f2;
+                    cursor: pointer;
+                }
+            }
 
-            .play-btn {
-                display: block;
-
+            .play-all {
+                width: 105px;
+                background-color: rgba($color: #d33b31, $alpha: 0.9);
+                padding: 4px 12px;
+                border-radius: 18px;
             }
         }
-
     }
-
-    .songlist-name {
-        word-break: break-all;
-
-
-        &:hover {
-            color: #3a3a3a;
-            cursor: pointer;
-        }
-    }
-
 }
 </style>

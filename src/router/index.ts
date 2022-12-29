@@ -122,7 +122,12 @@ const routes: RouteRecordRaw[] = [
     path: '/high-qualtity-song-list',
     name: 'HighQualtitySongList',
     component: () => import('@/pages/findMusic/HighQualtitySongList.vue'),
-  }
+  },
+  {
+    path: '/day-recommend',
+    name: 'DayRecommend',
+    component: () => import('@/pages/findMusic/personalRecommend/components/DayRecommend.vue'),
+  },
 ]
 
 const router = createRouter({

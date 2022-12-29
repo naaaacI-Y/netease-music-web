@@ -446,8 +446,8 @@ export interface DailySong {
     rtype: number;
     rurl?: any;
     publishTime: number;
-    reason: string;
-    recommendReason: string;
+    reason?: string;
+    recommendReason?: string;
     privilege: Privilege;
     alg: string;
 }
