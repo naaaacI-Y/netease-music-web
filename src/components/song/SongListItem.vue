@@ -2,19 +2,22 @@
     <div class="song-list-item-wrapper d-flex" :class="{ odd: index % 2 !== 0 }">
         <div class="left d-flex ai-center fs-2 jc-event" v-if="type !== 3">
             <div class="index text-c4">{{ paddingLeft(index) }}</div>
+            <slot name="flagInside" v-if="rankType === 1"></slot>
             <i class="iconfont icon-aixin text-black_13"></i>
             <i class="iconfont icon-xiazai text-black_13"></i>
         </div>
-        <div class="rank d-flex ai-center" v-if="type === 3">
-            <div class="index">{{ index }}</div>
-            <div class="flag">-</div>
+        <div class="rank d-flex ai-center mr-5 pl-8" v-if="type === 3">
+            <div class="index fs-4 mr-8" :class="{ isTop3: index <= 3 }">{{ index }}</div>
+            <!-- <div class="flag">-</div> -->
+            <slot name="flag"></slot>
         </div>
         <div class="main-info fs-2 d-flex ">
             <div class="song-name d-flex ai-center">
                 <div class="text-black_3 mr-4">{{ item?.name }}</div>
                 <div class="text-black_13 mr-4" v-if="item?.alia?.length">({{ item?.alia[0] }})</div>
-                <i class="iconfont icon-h-square text-primary_red_4 fs-2" v-if="item?.sq"></i>
-                <i class="iconfont icon-bofang2 text-primary_red_4 ml-4 fs-7" v-if="item?.mv"></i>
+                <i class="iconfont icon-h-square text-primary_red_4 fs-2" v-if="item?.sq && type !== 3"></i>
+                <i class="iconfont icon-bofang2 text-primary_red_4 ml-4 fs-7" v-if="item?.mv && type !== 3"
+                    @click="goMvDetail"></i>
             </div>
             <div class="singer  text-black_13" v-if="isShow === 'all' || isShow === 'rank'">
                 {{ item?.ar[0]?.name }}
@@ -23,8 +26,8 @@
                 {{ item?.al.name }}
             </div>
             <div class="time text-c4 d-flex ai-center" v-if="isShow === 'all' || isShow === 'singer'">{{
-                    formatSongTime(item!.dt)
-            }}</div>
+        formatSongTime(item!.dt)
+}}</div>
             <div class="count text-c4 d-flex ai-cente" v-if="isShow === 'listen'">7次</div>
         </div>
     </div>
@@ -35,23 +38,22 @@
 // 我的听歌排行
 // 歌手页
 // 排行榜
+import { TrackId } from '@/service/api/music/types';
 import { HotSong } from '@/service/api/singer/types';
 import { formatSongTime } from '@/utils';
 import { computed } from 'vue';
-
-
+import { useRoute, useRouter } from 'vue-router';
+const rankType = Number(useRoute().query.rankType)
 const props = withDefaults(defineProps<
     {
         type?: number
         index: number
         item?: HotSong
+        info?: TrackId
     }>(), {
     type: 2,
 })
-const paddingLeft = (num: number) => {
-    if (num < 10) return `0${num}`
-    return num
-}
+
 const isShow = computed(() => {
     switch (props.type) {
         case 0:
@@ -66,7 +68,16 @@ const isShow = computed(() => {
             break;
     }
 })
-const alias = () => { }
+const router = useRouter()
+// 序号填充
+const paddingLeft = (num: number) => {
+    if (num < 10) return `0${num}`
+    return num
+}
+// mv详情
+const goMvDetail = () => {
+    router.push(`/video-detail?id=${props.item?.mv}`)
+}
 </script>
 <style lang="scss" scoped>
 .song-list-item-wrapper {
@@ -77,9 +88,24 @@ const alias = () => { }
         width: 7.2%;
         justify-content: space-evenly;
 
+        .index {
+            width: 20px;
+        }
+
         i:hover {
             color: #565656;
             cursor: pointer;
+        }
+    }
+
+    .rank {
+        .index {
+            color: #999;
+            width: 10px;
+        }
+
+        .isTop3 {
+            color: #ff3133;
         }
     }
 
@@ -98,6 +124,10 @@ const alias = () => { }
                 border-radius: 4px;
                 padding: 0 3px;
                 height: 20px;
+            }
+
+            .icon-bofang2:hover {
+                cursor: pointer;
             }
         }
 

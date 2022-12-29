@@ -8,20 +8,39 @@
         </div>
         <div class="song-wrapper" v-if="list?.data?.length">
             <SongListItem v-for="(item, index) in list.data" :index="index + 1" :type="0" :item="item" :key="item.id">
+                <template #flagInside>
+                    <div class="flag d-flex ai-center jc-center" v-if="!info!.data[index].ratio">
+                        <i class="iconfont icon-new text-new" v-if="info!.data[index].lr === undefined"></i>
+                        <div class="no-change" v-if="info!.data[index].lr === 0 || info!.data[index].lr === index">
+                            <span>-</span>
+                        </div>
+                        <i class="iconfont icon-xiangshangjiantou text-primary_red_4"
+                            v-if="info!.data[index].lr! > index"></i>
+                        <i class="iconfont icon-xiangxiajiantou text-deep_blue"
+                            v-if="info!.data[index].lr! < index"></i>
+                    </div>
+                </template>
             </SongListItem>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
+import { TrackId } from '@/service/api/music/types';
 import { HotSong } from '@/service/api/singer/types';
 import { inject, reactive, watchEffect } from 'vue';
 import SongListItem from './SongListItem.vue';
 const injectSongList = inject<{ data: HotSong[] }>("songList")
+const injectSongListInfo = inject<{ data: TrackId[] }>("songListInfo")
 const list = reactive({ data: [] as HotSong[] })
+const info = inject<{ data: TrackId[] }>("songListInfo")
+
 watchEffect(() => {
     if (injectSongList?.data?.length) {
         list.data = injectSongList?.data
+    }
+    if (injectSongListInfo?.data?.length) {
+        info!.data = injectSongListInfo?.data || []
     }
 })
 </script>
@@ -48,6 +67,16 @@ watchEffect(() => {
         .music-time {
             width: 9.6%;
         }
+    }
+
+    .flag {
+        width: 25px;
+    }
+
+    .no-change span {
+        font-size: 12px;
+        transform: scale(0.7);
+        display: inline-block;
     }
 }
 </style>
