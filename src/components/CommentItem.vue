@@ -1,7 +1,7 @@
 <template>
     <div class="comment-item-wrapper d-flex mb-20">
         <div class="commoent-left mr-15">
-            <div class="comment-avatar">
+            <div class="comment-avatar" @click="goPersonCenter">
                 <LazyLoadImg :src="commentContent?.user?.avatarUrl"></LazyLoadImg>
                 <div class="flag" v-if="commentContent?.user?.avatarDetail">
                     <LazyLoadImg :src="commentContent?.user?.avatarDetail?.identityIconUrl"></LazyLoadImg>
@@ -10,10 +10,10 @@
         </div>
         <div class="commoent-right">
             <div class="right-top fs-2 mb-10">
-                <span class="comment-name text-shadow_blue ">{{ commentContent?.user?.nickname }}：</span>
+                <span class="comment-name text-shadow_blue " @click="goPersonCenter">{{ commentContent?.user?.nickname
+                }}：</span>
                 <span class="text-black_3">{{ commentContent.content }}</span>
             </div>
-            <!-- bg-black_11 -->
             <div class="right-middle fs-2   mb-10" style="padding: 9px;" :class="isGrey ? 'bg-black_11' : 'bg-fa'"
                 v-if="commentContent.beReplied.length">
                 <span class="origin-reply text-shadow_blue">@{{ commentContent?.beReplied[0]?.user?.nickname }}：</span>
@@ -24,7 +24,7 @@
                 <div class="comment-reactive d-flex ai-center">
                     <div class="vote d-flex ai-center mr-6">
                         <i class="iconfont icon-dianzan1 mr-4"></i>
-                        <span class="vote-count">{{ commentContent.likedCount }}</span>
+                        <span class="vote-count" v-if="commentContent.likedCount">{{ commentContent.likedCount }}</span>
                     </div>
                     <span class="text-black_7">丨</span>
                     <div class="share mr-6 ml-6" v-if="isGrey">
@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts" setup>
-import { HotComment } from '@/service/api/album/types';
+import { HotComment } from '@/service/api/comment/types';
 import { calcTime } from "@/utils"
 import LazyLoadImg from "@/components/LazyLoadImg.vue"
 withDefaults(defineProps<{
@@ -50,6 +50,10 @@ withDefaults(defineProps<{
 }>(), {
     isGrey: true
 })
+// 前往个人中心
+const goPersonCenter = () => {
+
+}
 </script>
 <style lang="scss" scoped>
 .comment-item-wrapper {

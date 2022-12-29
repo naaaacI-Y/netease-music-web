@@ -1,22 +1,25 @@
 <template>
     <div class="wrapper d-flex">
         <div class="left mr-30">
-            <!-- <img src="" alt=""> -->
+            <img :src="headerInfo.coverImgUrl" alt="">
         </div>
-        <div class="right">
+        <div class="right flex-1">
             <div class="info d-flex ai-center mb-20">
                 <div class="song-list-type mr-10 fs-1 text-primary_red_1">歌单</div>
-                <div class="name fs-9" style="font-weight:bold">熬夜和想你，我都该戒掉了</div>
+                <div class="name fs-9" style="font-weight:bold">{{ headerInfo.name }}</div>
             </div>
             <div class="creator-info d-flex ai-center mb-20">
-                <div class="creator-avatar mr-7">
-                    <!-- <img src="" alt=""> -->
+                <div class="creator-avatar mr-7" @click="goPersonCenter">
+                    <img :src="headerInfo.creator.avatarUrl" alt="">
+                    <div class="flag" v-if="headerInfo.creator.avatarDetail">
+                        <img :src="headerInfo.creator.avatarDetail.identityIconUrl" alt="">
+                    </div>
                 </div>
-                <div class="creator-name fs-2 text-shadow_blue mr-6">
-                    创作者名称
+                <div class="creator-name fs-2 text-shadow_blue mr-6" @click="goPersonCenter">
+                    {{ headerInfo.creator.nickname }}
                 </div>
                 <div class="creator-time fs-2 text-black_13">
-                    2018-03-30创建
+                    {{ formatTime(headerInfo.createTime, "yyyy-MM-dd") }}创建
                 </div>
             </div>
             <div class="operate d-flex text-black_3 mb-8">
@@ -27,12 +30,12 @@
                 <div class="collect-count mr-15 fs-3 d-flex ai-center">
                     <i class="iconfont icon-xinjianwenjianjia fs-7 mr-3"></i>
                     <span>收藏</span>
-                    <span>(1111)</span>
+                    <span>({{ headerInfo.subscribedCount }})</span>
                 </div>
                 <div class="share mr-15 fs-3 d-flex ai-center">
                     <i class="iconfont icon-fenxiang2 mr-3"></i>
                     <span>分享</span>
-                    <span>(1111)</span>
+                    <span>({{ headerInfo.shareCount }})</span>
                 </div>
                 <div class="download-all fs-3 d-flex ai-center">
                     <i class="iconfont icon-xiazai mr-3 fs-6"></i>
@@ -42,24 +45,24 @@
             <div class="other-info">
                 <div class="other-info-label mb-3">
                     <span class="fs-2 text-black_3">标&emsp;签：</span>
-                    <span class="label-name fs-2 text-shadow_blue mr-3">华语</span>
+                    <span class="label-name fs-2 text-shadow_blue mr-3" v-for="(item, index) in headerInfo.tags"
+                        :key="index">{{ item }}</span>
                     <span class="fs-2 mr-3">/</span>
                     <span class="label-name fs-2 text-shadow_blue">流行</span>
                 </div>
                 <div class="song-about d-flex fs-2 mb-3">
                     <div class="song-count mr-11">
                         <span class="text-black_3">歌曲数：</span>
-                        <span class="text-black_13">123</span>
+                        <span class="text-black_13">{{ headerInfo.trackCount }}</span>
                     </div>
                     <div class="play-count fs-2">
                         <span class="text-black_3">播放数：</span>
-                        <span class="text-black_13">4000万</span>
+                        <span class="text-black_13">{{ formatPlayCount(headerInfo.playCount) }}</span>
                     </div>
                 </div>
                 <div class="summary fs-2">
                     <span class="text-black_3">简&emsp;介：</span>
-                    <span
-                        class="text-black_13">命运似乎是一个轮回，在一次次的偶然下，平行线交叉，再平行，故事始终有"然后"，可后来的我们，都学会如何去爱了吗？如果当时你没走，后来的我们会不会不一样。或许，我们每个人都想回到故事最开始的地方。封面：周冬雨By：朩朩青尘</span>
+                    <span class="text-black_13">{{ headerInfo.description }}</span>
                 </div>
             </div>
         </div>
@@ -68,7 +71,18 @@
 
 <script lang="ts" setup>
 // 歌单
+
+import { HeaderInfo } from '@/service/api/music/types';
+import { formatPlayCount, formatTime } from '@/utils';
+
 // 歌手
+defineProps<{
+    headerInfo: HeaderInfo
+}>()
+// 前往个人中心
+const goPersonCenter = () => {
+
+}
 </script>
 <style lang="scss" scoped>
 .wrapper {
@@ -76,8 +90,12 @@
         width: 200px;
         height: 200px;
         border-radius: 10px;
-        background-color: aqua;
+        // background-color: aqua;
         overflow: hidden;
+
+        img {
+            width: 100%;
+        }
     }
 
     .right {
@@ -91,8 +109,31 @@
 
         .creator-info {
             .creator-avatar {
-                @include radius(50px);
-                background-color: #d33b31;
+                position: relative;
+                width: 25px;
+                height: 25px;
+
+                .flag {
+                    position: absolute;
+                    border-radius: 50%;
+                    width: 10px;
+                    height: 10px;
+                    bottom: 7px;
+                    right: 0px;
+                }
+
+                img {
+                    width: 100%;
+                    border-radius: 50%;
+                }
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
+            .creator-name:hover {
+                cursor: pointer;
             }
         }
 

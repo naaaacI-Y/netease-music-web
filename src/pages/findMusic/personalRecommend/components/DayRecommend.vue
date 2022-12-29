@@ -1,43 +1,29 @@
 <template>
     <div class="recommend-songlist-card-wrapper">
         <div class="img-wrapper mb-6">
-            <img :src="songListItem.coverImgUrl" alt="">
-            <div class="mask"></div>
-            <div class="play-count d-flex ai-center fs-3">
+            <slot name="canlender"></slot>
+            <img :src="songListItem.picUrl" alt="">
+            <div class="mask" v-if="type === 1"></div>
+            <div class="play-count d-flex ai-center fs-3" v-if="type === 1">
                 <i class="iconfont icon-bofang1 text-white fs-7"></i>
-                {{ formatPlayCount(songListItem.playCount) }}
+                {{ formatPlayCount(songListItem.playcount!) }}
             </div>
             <div class="play-btn">
                 <div class="trangel"></div>
             </div>
-            <div class="songlist-author" v-if="!isOutSide">
-                <i class="iconfont icon-iconfontyonghuming text-white mr-2 "></i>
-                <div class="author-name fs-2 text-white mr-2 pt-2">{{ songListItem.creator.nickname }}</div>
-                <img :src="songListItem.creator.avatarDetail.identityIconUrl" alt=""
-                    v-if="songListItem.creator.avatarDetail" />
-                <!-- <div class="author-flag" >
-
-                </div> -->
-            </div>
-
         </div>
-        <div class="songlist-name fs-3 text-black_2" :class="{ isOneLine: isOneline }">{{ songListItem.name }}</div>
-        <slot name="songCount"></slot>
+        <div class="songlist-name fs-3 text-black_2">{{ songListItem.name }}</div>
     </div>
 
 </template>
 
 <script lang="ts" setup>
-import { Playlist } from '@/service/api/music/types';
+import { Recommend } from '@/service/api/recommend/types';
 import { formatPlayCount } from '@/utils';
-withDefaults(defineProps<{
-    isOutSide?: boolean
-    isOneline?: boolean
-    songListItem: Playlist
-}>(), {
-    isOutSide: true,
-    isOneline: false
-})
+defineProps<{
+    songListItem: Recommend
+    type: number // 0: 每日歌曲推荐 1： 普通歌单
+}>()
 </script>
 <style lang="scss" scoped>
 .recommend-songlist-card-wrapper {
@@ -53,6 +39,7 @@ withDefaults(defineProps<{
         position: relative;
         border-radius: 6px;
         border: 1px solid #eee;
+        background-color: #d33b31;
 
         img {
             width: 100%;
@@ -112,32 +99,6 @@ withDefaults(defineProps<{
             }
         }
 
-        .songlist-author {
-            position: absolute;
-            bottom: 10px;
-            display: flex;
-            align-items: center;
-            left: 10px;
-            color: white;
-
-            img {
-                width: 13px;
-                height: 13px;
-            }
-
-            // .author-flag {
-            //     // background-color: #d33b31;
-            //     // @include radius(14px);
-            //     width: 13px;
-            //     height: 13px;
-
-            //     img {
-            //         width: 100%;
-            //         height: 100%;
-            //     }
-            // }
-        }
-
     }
 
     .songlist-name {
@@ -148,13 +109,6 @@ withDefaults(defineProps<{
             color: #3a3a3a;
             cursor: pointer;
         }
-    }
-
-    .isOneLine {
-        width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
     }
 
 }
