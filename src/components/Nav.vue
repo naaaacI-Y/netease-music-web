@@ -1,6 +1,6 @@
 <template>
     <div class="nav-wrapper d-flex ai-center">
-        <div class="right bg-black_12 d-flex ai-center" :class='{ "active": isChangeBgc, "hasLeft": isHasLeft }'>
+        <div class="right bg-black_12 d-flex ai-center jc-end" :class='{ "active": isChangeBgc, "hasLeft": isHasLeft }'>
             <div class="find d-flex" v-if="isActive('/findMusic')">
                 <div :class="{ 'active': activeIndex == 0 }" @click="activeIndex = 0">
                     个性推荐
@@ -81,6 +81,7 @@ const activeIndex = ref(0)
 
 const isHasLeft = computed(() => {
     const paths = ["/findMusic", "/video", "/friends", "/prettyCommon", "/unique", "/dynamic", "/focus", "/fans"]
+    if (route.path === "/video-detail") return false
     return paths.some(item => route.path.startsWith(item))
 })
 watch(activeIndex, () => {
@@ -110,8 +111,6 @@ watch(activeIndex, () => {
     }
 })
 watch(() => route.path, (newVal: string) => {
-    console.log(newVal, "newVal");
-
     switch (newVal) {
         case "/findMusic/personal-recommend":
             activeIndex.value = 0
@@ -162,7 +161,7 @@ const goInside = (path: string) => {
         padding: 0 18px 0 0;
         width: 100%;
         position: relative;
-        @include flex(row, flex-end, center);
+        // @include flex(row, flex-end, center);
 
 
         .find {
