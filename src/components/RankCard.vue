@@ -50,7 +50,7 @@ const router = useRouter()
 const props = withDefaults(defineProps<{
     cardWidth: number
     rankItem: RankList
-    isShowRight: boolean
+    isShowRight?: boolean
     rankType: number // -1： 飙升榜 1：普通榜单
 }>(), {
     isShowRight: false

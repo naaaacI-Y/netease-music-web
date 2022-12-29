@@ -8,17 +8,17 @@
         </div>
         <div class="rank d-flex ai-center mr-5 pl-8" v-if="type === 3">
             <div class="index fs-4 mr-8" :class="{ isTop3: index <= 3 }">{{ index }}</div>
-            <!-- <div class="flag">-</div> -->
             <slot name="flag"></slot>
         </div>
         <div class="main-info fs-2 d-flex ">
-            <div class="song-name d-flex ai-center">
+            <div class="song-name d-flex ai-center" :style="{ width: rankType === -1 ? '34.8%' : '42.8%' }">
                 <div class="text-black_3 mr-4">{{ item?.name }}</div>
                 <div class="text-black_13 mr-4" v-if="item?.alia?.length">({{ item?.alia[0] }})</div>
                 <i class="iconfont icon-h-square text-primary_red_4 fs-2" v-if="item?.sq && type !== 3"></i>
                 <i class="iconfont icon-bofang2 text-primary_red_4 ml-4 fs-7" v-if="item?.mv && type !== 3"
                     @click="goMvDetail"></i>
             </div>
+            <slot name="rate"></slot>
             <div class="singer  text-black_13" v-if="isShow === 'all' || isShow === 'rank'">
                 {{ item?.ar[0]?.name }}
             </div>

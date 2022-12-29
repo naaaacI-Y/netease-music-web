@@ -1,7 +1,8 @@
 <template>
     <div class="song-list-wrapper">
         <div class="head text-black_13 fs-2 d-flex ai-center">
-            <div class="music-title">音乐标题</div>
+            <div class="music-title" :style="{ width: rankType === -1 ? '34.8%' : '42.8%' }">音乐标题</div>
+            <div class="rate" v-if="rankType === -1">飙升率</div>
             <div class="music-singer">歌手</div>
             <div class="music-album">专辑</div>
             <div class="music-time">时长</div>
@@ -20,6 +21,9 @@
                             v-if="info!.data[index].lr! < index"></i>
                     </div>
                 </template>
+                <template #rate v-if="rankType === -1">
+                    <div class="rate d-flex ai-center">{{ info!.data[index].ratio }}%</div>
+                </template>
             </SongListItem>
         </div>
     </div>
@@ -29,12 +33,13 @@
 import { TrackId } from '@/service/api/music/types';
 import { HotSong } from '@/service/api/singer/types';
 import { inject, reactive, watchEffect } from 'vue';
+import { useRoute } from 'vue-router';
 import SongListItem from './SongListItem.vue';
 const injectSongList = inject<{ data: HotSong[] }>("songList")
 const injectSongListInfo = inject<{ data: TrackId[] }>("songListInfo")
 const list = reactive({ data: [] as HotSong[] })
 const info = inject<{ data: TrackId[] }>("songListInfo")
-
+const rankType = Number(useRoute().query.rankType)
 watchEffect(() => {
     if (injectSongList?.data?.length) {
         list.data = injectSongList?.data
@@ -54,6 +59,10 @@ watchEffect(() => {
 
         .music-title {
             width: 42.8%;
+        }
+
+        .rate {
+            width: 8%;
         }
 
         .music-singer {
@@ -78,5 +87,13 @@ watchEffect(() => {
         transform: scale(0.7);
         display: inline-block;
     }
+
+    .song-wrapper {
+        .rate {
+            color: #565656;
+            width: 8%;
+        }
+    }
+
 }
 </style>

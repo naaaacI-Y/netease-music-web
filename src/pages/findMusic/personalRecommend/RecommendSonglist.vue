@@ -2,22 +2,22 @@
     <div class="head mb-12" @click="router.push('/findMusic/song-menu')">推荐歌单 <i class="iconfont icon-xiangyou1"></i>
     </div>
     <div class="song-list-wrapper d-flex flex-wrap jc-between mb-20">
-        <DayRecommend :type="0" :song-list-item="{ name: '每日歌曲推荐' }">
+        <DayRecommendCard :type="0" :song-list-item="{ name: '每日歌曲推荐' }" @click="goSongList()">
             <template #canlender>
                 <div class="canlender text-white">
                     <div class="day">{{ day }}</div>
                     <i class="iconfont icon-rili"></i>
                 </div>
             </template>
-        </DayRecommend>
-        <DayRecommend v-for="item in recommendSongList.data" :key="item.id" :song-list-item="item" :type="1"
+        </DayRecommendCard>
+        <DayRecommendCard v-for="item in recommendSongList.data" :key="item.id" :song-list-item="item" :type="1"
             @click="goSongList(item.id!)">
-        </DayRecommend>
+        </DayRecommendCard>
     </div>
 </template>
 
 <script lang="ts" setup>
-import DayRecommend from './components/DayRecommend.vue';
+import DayRecommendCard from './components/DayRecommendCard.vue';
 import { getDayRecommendSongList } from '@/service/api/recommend';
 import { Recommend } from '@/service/api/recommend/types';
 import { reactive } from 'vue';
@@ -26,8 +26,14 @@ const route = useRoute()
 const router = useRouter()
 const recommendSongList = reactive({ data: [] as Recommend[] })
 const day = new Date().getDate()
-const goSongList = (id: number) => {
-    router.push(`/song-list?id=${id}`)
+const goSongList = (id?: number) => {
+    console.log(id, "iddddddd");
+
+    if (id) { // 普通歌单
+        return router.push(`/song-list?id=${id}`)
+    }
+    // 每日歌曲推荐
+    router.push('/day-recommend')
 }
 const getRecommendSongList = async () => {
     const r = await getDayRecommendSongList()
