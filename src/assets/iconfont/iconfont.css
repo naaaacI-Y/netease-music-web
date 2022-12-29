@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3302748 */
-  src: url('iconfont.woff2?t=1671516882242') format('woff2'),
-       url('iconfont.woff?t=1671516882242') format('woff'),
-       url('iconfont.ttf?t=1671516882242') format('truetype');
+  src: url('iconfont.woff2?t=1672286031490') format('woff2'),
+       url('iconfont.woff?t=1672286031490') format('woff'),
+       url('iconfont.ttf?t=1672286031490') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,26 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-new:before {
+  content: "\e62c";
+}
+
+.icon-xiangshangjiantou:before {
+  content: "\eb1f";
+}
+
+.icon-xiangxiajiantou:before {
+  content: "\eb20";
+}
+
+.icon-nvxing:before {
+  content: "\e64a";
+}
+
+.icon-nanxing:before {
+  content: "\e649";
 }
 
 .icon-h-square:before {
@@ -173,28 +193,12 @@
   content: "\e6f7";
 }
 
-.icon-shengyin:before {
-  content: "\e609";
-}
-
 .icon-jingyu:before {
   content: "\e60b";
 }
 
-.icon-guanbishengyin:before {
-  content: "\e616";
-}
-
-.icon-liebiaoxunhuan:before {
-  content: "\e688";
-}
-
 .icon-liebiao:before {
   content: "\e606";
-}
-
-.icon-danquxunhuan2:before {
-  content: "\e653";
 }
 
 .icon-shanchu:before {

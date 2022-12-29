@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "521953",
+      "name": "new",
+      "font_class": "new",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "7335465",
+      "name": "向上箭头",
+      "font_class": "xiangshangjiantou",
+      "unicode": "eb1f",
+      "unicode_decimal": 60191
+    },
+    {
+      "icon_id": "7335470",
+      "name": "向下箭头",
+      "font_class": "xiangxiajiantou",
+      "unicode": "eb20",
+      "unicode_decimal": 60192
+    },
+    {
+      "icon_id": "26661628",
+      "name": "女性",
+      "font_class": "nvxing",
+      "unicode": "e64a",
+      "unicode_decimal": 58954
+    },
+    {
+      "icon_id": "26661632",
+      "name": "男性",
+      "font_class": "nanxing",
+      "unicode": "e649",
+      "unicode_decimal": 58953
+    },
+    {
       "icon_id": "1898798",
       "name": "h-square",
       "font_class": "h-square",
@@ -286,13 +321,6 @@
       "unicode_decimal": 59127
     },
     {
-      "icon_id": "1106193",
-      "name": "声音",
-      "font_class": "shengyin",
-      "unicode": "e609",
-      "unicode_decimal": 58889
-    },
-    {
       "icon_id": "12905209",
       "name": "鲸鱼",
       "font_class": "jingyu",
@@ -300,32 +328,11 @@
       "unicode_decimal": 58891
     },
     {
-      "icon_id": "24805324",
-      "name": "关闭声音",
-      "font_class": "guanbishengyin",
-      "unicode": "e616",
-      "unicode_decimal": 58902
-    },
-    {
-      "icon_id": "1381710",
-      "name": "列表循环",
-      "font_class": "liebiaoxunhuan",
-      "unicode": "e688",
-      "unicode_decimal": 59016
-    },
-    {
       "icon_id": "1494634",
       "name": "列表",
       "font_class": "liebiao",
       "unicode": "e606",
       "unicode_decimal": 58886
-    },
-    {
-      "icon_id": "3061394",
-      "name": "danquxunhuan",
-      "font_class": "danquxunhuan2",
-      "unicode": "e653",
-      "unicode_decimal": 58963
     },
     {
       "icon_id": "5269227",
