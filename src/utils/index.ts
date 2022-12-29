@@ -50,20 +50,26 @@ const formatTime = (time: number, format: string) => {
 const calcTime = (time: number) => {
     const interval = Date.now() - time
     const dayInterval = new Date().getDate() - new Date(time).getDate()
+    const yearInterval = new Date().getFullYear() - new Date(time).getFullYear()
+    const monthInterval = new Date().getMonth() - new Date(time).getMonth()
     // 大于一年 2012年11月20日 14:00
-    if (interval > 365 * 24 * 3600 * 1000) {
+    if (yearInterval) {
         const format = formatTime(time, 'yyyy年MM月dd日 hh:mm')
         return format
     }
-    // 天数相隔大于1 12月16日 14:00
-    if (dayInterval > 1) {
+    // 时间间隔超过一天
+    if (interval > 3600 * 24 * 1000) {
+        // 天数间隔 1 并且月间隔 0
+        if (dayInterval === 1 && monthInterval === 0) {
+            return `昨天 ${formatTime(time, 'hh:mm')}`
+        }
         return formatTime(time, 'MM月dd日 hh:mm')
     }
-    //
-    if ((dayInterval === 1)) {
+    // 天数间隔 1 时间间隔小于 1天
+    if (dayInterval === 1) {
         return `昨天 ${formatTime(time, 'hh:mm')}`
     }
-    // 天数间隔等于0 14:00
+    // 天数间隔等于0 时间间隔小于 1天 14:00
     if (dayInterval === 0) {
         return `${formatTime(time, 'hh:mm')}`
     }
@@ -146,6 +152,23 @@ const getQueryId = () => {
     return Number(route.query.id)
 }
 
+let throttle = (func: Function, delay: number = 200) => {
+    // 第一次触发时间戳
+    let startTime = Date.now();
+    return (...args: any[]) => {
+        // 如果不是剪头函数可以使用arguments获取参数，这样就不用写形参了考虑形参个数了
+        // let args = arguments;
+        // 再次触发时间
+        let curTime = Date.now();
+        // 间隔时间 = 延迟的时间 - （再次触发时间戳 - 第一次触发时间戳）
+        let interval = delay - (curTime - startTime);
+        if (interval <= 0) {
+            // 重新计算开始时间
+            startTime = Date.now();
+            return func(...args);
+        }
+    };
+};
 export {
     formatTime,
     stringifyParams,
@@ -153,5 +176,6 @@ export {
     calcTime,
     formatPlayCount,
     checkLogin,
-    getQueryId
+    getQueryId,
+    throttle
 }
