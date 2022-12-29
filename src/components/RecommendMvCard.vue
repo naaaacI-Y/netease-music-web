@@ -1,7 +1,7 @@
 <template>
     <div class="recommend-mv-card-wrapper">
         <div class="img-wrapper" :style="{}">
-            <img :src="recommendMvItem.picUrl || recommendMvItem.imgurl" alt="">
+            <img :src="recommendMvItem.cover || recommendMvItem.picUrl" alt="">
             <div class="play-count d-flex ai-center fs-3">
                 <i class="iconfont icon-bofang1 text-white fs-7"></i>
                 {{ formatPlayCount(recommendMvItem.playCount) }}
@@ -12,10 +12,10 @@
             <div class="duration fs-2 text-white" v-if="isShowTime">{{ formatSongTime(recommendMvItem.duration) }}</div>
         </div>
         <div class="mv-name mt-5">
-            <div class="line1 fs-4 text-black_2" :class="{ noWrap: !isOneline }">
+            <div class="line1 fs-3 text-black_2" :class="{ noWrap: !isOneline }">
                 {{ recommendMvItem.name }}
             </div>
-            <div class="line2 fs-2 text-black_6" v-if="!isOneline">
+            <div class="line2 fs-1 text-black_6" v-if="!isOneline">
                 {{ recommendMvItem.artistName }}
             </div>
         </div>
@@ -24,14 +24,14 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { RecommendItem } from '@/service/api/mv/types';
+import { MVItem, RecommendItem } from '@/service/api/mv/types';
 import { formatSongTime, formatPlayCount } from '@/utils';
 const props = withDefaults(defineProps<{
     isShowTime?: boolean
     isOneline?: boolean
     isPlayBtn?: boolean
     count?: number
-    recommendMvItem: RecommendItem
+    recommendMvItem: MVItem
 }>(), {
     isShowTime: false,
     isOneline: false,
@@ -56,7 +56,7 @@ const cardWidth = computed(() => {
         // height: 138px;
         height: 0;
         padding-bottom: 56%;
-        border-radius: 10px;
+        border-radius: 5px;
         overflow: hidden;
         position: relative;
 

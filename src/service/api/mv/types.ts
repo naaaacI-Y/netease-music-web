@@ -1,10 +1,12 @@
+import { Decoration } from "../album/types"
+import { BeReplied, ShowFloorComment, Comment, IpLocation } from "../comment/types"
 
 export interface AllMvParam {
-    area: string
-    type: string
-    order: string
-    limit: number
-    offset: number
+    area?: string
+    type?: string
+    order?: string
+    limit?: number
+    offset?: number
 }
 export interface newMvParam {
     area: string
@@ -29,6 +31,10 @@ export interface MVItem {
     name: string
     playCount: number
     briefDesc: null
+    canDislike?: boolean
+    alg?: string
+    picUrl?: string
+    copywriter?: string
     artistName: string
     artistId: number
     duration: number
@@ -77,7 +83,7 @@ export interface RecommendMvResult {
     code: number;
     err?: string
     category: number;
-    result: RecommendItem[];
+    result: MVItem[];
 }
 
 
@@ -191,4 +197,102 @@ export interface MvInfoResult {
     liked: boolean;
     err?: string;
     code: number;
+}
+
+
+// 相似mv
+export interface SimilarMVParams {
+    mvid: number
+}
+export interface Mv {
+    id: number;
+    cover: string;
+    name: string;
+    playCount: number;
+    briefDesc: string;
+    desc?: any;
+    artistName: string;
+    artistId: number;
+    duration: number;
+    mark: number;
+    artists: Artist[];
+    alg: string;
+}
+
+export interface SimilarMVResult {
+    mvs: Mv[];
+    code: number;
+}
+
+// mv评论
+export interface MVCommentParams {
+    id: number
+    limit?: number
+    offset?: number
+    before?: number
+}
+
+
+
+export interface User {
+    locationInfo?: any;
+    liveInfo?: any;
+    anonym: number;
+    commonIdentity?: any;
+    userId: number;
+    avatarDetail?: any;
+    userType: number;
+    avatarUrl: string;
+    authStatus: number;
+    expertTags?: any;
+    experts?: any;
+    vipType: number;
+    followed: boolean;
+    mutual: boolean;
+    remarkName?: any;
+    vipRights?: any;
+    nickname: string;
+}
+
+export interface HotComment {
+    user: User;
+    beReplied: BeReplied[];
+    pendantData?: any;
+    showFloorComment?: any;
+    status: number;
+    commentId: number;
+    content: string;
+    richContent?: any;
+    contentResource?: any;
+    time: number;
+    timeStr: string;
+    needDisplayTime: boolean;
+    likedCount: number;
+    expressionUrl?: any;
+    commentLocationType: number;
+    parentCommentId: number;
+    decoration?: any;
+    repliedMark?: any;
+    grade?: any;
+    userBizLevels?: any;
+    ipLocation: IpLocation;
+    liked: boolean;
+}
+
+
+
+
+
+export interface MVCommentResult {
+    isMusician: boolean;
+    cnum: number;
+    userId: number;
+    topComments: any[];
+    moreHot: boolean;
+    hotComments: HotComment[];
+    commentBanner?: any;
+    code: number;
+    comments: Comment[];
+    total: number;
+    more: boolean;
 }

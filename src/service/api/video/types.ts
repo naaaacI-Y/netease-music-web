@@ -1,3 +1,4 @@
+import { MVItem } from './../mv/types';
 import { getVideoPlayUrl } from './index';
 export interface VideoGroupItem {
     id: number;
@@ -143,7 +144,103 @@ export interface VideoByCategoryParam {
     id: number
     offset?: number
 }
-// TODO
 export interface VideoByCategoryResult {
     code: number
+    count: number
+    data: MVItem[]
+    hasMore: boolean
+}
+
+
+
+
+export interface Resolution {
+    resolution: number;
+    size: number;
+}
+
+export interface Expert {
+    1: string;
+}
+
+export interface VideoCreator {
+    defaultAvatar: boolean;
+    province: number;
+    authStatus: number;
+    followed: boolean;
+    avatarUrl: string;
+    accountStatus: number;
+    gender: number;
+    city: number;
+    birthday: number;
+    userId: number;
+    userType: number;
+    nickname: string;
+    signature: string;
+    description: string;
+    detailDescription: string;
+    avatarImgId: number;
+    backgroundImgId: number;
+    backgroundUrl: string;
+    authority: number;
+    mutual: boolean;
+    expertTags?: any;
+    experts: Expert;
+    djStatus: number;
+    vipType: number;
+    remarkName?: any;
+    avatarImgIdStr: string;
+    backgroundImgIdStr: string;
+}
+
+export interface VideoGroup {
+    id: number;
+    name: string;
+    alg?: any;
+}
+
+export interface VideoByCategoryItem {
+    alg: string;
+    scm: string;
+    threadId: string;
+    coverUrl: string;
+    height: number;
+    width: number;
+    title: string;
+    description: string;
+    commentCount: number;
+    shareCount: number;
+    resolutions: Resolution[];
+    creator: VideoCreator;
+    urlInfo?: any;
+    videoGroup: VideoGroup[];
+    previewUrl: string;
+    previewDurationms: number;
+    hasRelatedGameAd: boolean;
+    markTypes?: any;
+    relateSong: any[];
+    relatedInfo?: any;
+    videoUserLiveInfo?: any;
+    vid: string;
+    durationms: number;
+    playTime: number;
+    praisedCount: number;
+    praised: boolean;
+    subscribed: boolean;
+}
+
+export interface VideoByCategoryRet {
+    type: number;
+    displayed: boolean;
+    alg: string;
+    extAlg?: any;
+    data: VideoByCategoryItem;
+}
+
+export interface VideoByCategoryResult {
+    msg: string;
+    code: number;
+    hasmore: boolean;
+    datas: VideoByCategoryRet[];
+    rcmdLimit: number;
 }

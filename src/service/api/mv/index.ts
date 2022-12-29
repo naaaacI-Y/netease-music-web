@@ -1,6 +1,6 @@
 import { stringifyParams } from "@/utils"
 import http from "../../http"
-import { AllMvParam, MvDetailParam, MvDetailResult, MvInfoResult, MVResult, MvUrlParam, MvUrlResult, NetProductParam, newMvParam, RecommendMvResult } from "./types"
+import * as T from "./types"
 
 
 /**
@@ -13,8 +13,8 @@ import { AllMvParam, MvDetailParam, MvDetailResult, MvInfoResult, MVResult, MvUr
  * offset: 偏移数量 , 用于分页 , 如 :( 页数 -1)*50, 其中 50 为 limit 的值 , 默认 为 0
  * @returns
  */
-export const getAllMv = (params: AllMvParam) => {
-    return http.get<MVResult>(`/mv/all${stringifyParams(params)}`)
+export const getAllMv = (params?: T.AllMvParam) => {
+    return http.get<T.MVResult>(`/mv/all${stringifyParams(params || {})}`)
 }
 
 
@@ -25,8 +25,8 @@ export const getAllMv = (params: AllMvParam) => {
  * 可选参数 : limit: 取出数量 , 默认为 30
  * @returns
  */
-export const getNewMv = (params: newMvParam) => {
-    return http.get<MVResult>(`/mv/first${stringifyParams(params)}`)
+export const getNewMv = (params: T.newMvParam) => {
+    return http.get<T.MVResult>(`/mv/first${stringifyParams(params)}`)
 }
 
 /**
@@ -36,8 +36,8 @@ export const getNewMv = (params: newMvParam) => {
  *           offset: 偏移数量 , 用于分页 , 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认 为 0
  * @returns
  */
-export const getNetProdMV = (params: NetProductParam) => {
-    return http.get<MVResult>(`/mv/exclusive/rcmd${stringifyParams(params)}`)
+export const getNetProdMV = (params?: T.NetProductParam) => {
+    return http.get<T.MVResult>(`/mv/exclusive/rcmd${stringifyParams(params || {})}`)
 }
 
 /**
@@ -45,9 +45,17 @@ export const getNetProdMV = (params: NetProductParam) => {
  * @returns
  */
 export const getRecommendMv = () => {
-    return http.get<RecommendMvResult>(`/personalized/mv`)
+    return http.get<T.RecommendMvResult>(`/personalized/mv`)
 }
 
+/**
+ * 获取相似mv
+ * @param params mvid
+ * @returns
+ */
+export const getSimilarMv = (params: T.SimilarMVParams) => {
+    return http.get<T.SimilarMVResult>(`/simi/mv${stringifyParams(params)}`)
+}
 
 /**
  * mv详情
@@ -55,10 +63,9 @@ export const getRecommendMv = () => {
  * mvid: mv id
  * @returns
  */
-export const getMvDetail = (params: MvDetailParam) => {
-    return http.get<MvDetailResult>(`/mv/detail${stringifyParams(params)}`)
+export const getMvDetail = (params: T.MvDetailParam) => {
+    return http.get<T.MvDetailResult>(`/mv/detail${stringifyParams(params)}`)
 }
-
 
 
 /**
@@ -68,8 +75,8 @@ export const getMvDetail = (params: MvDetailParam) => {
  * 可选参数 : r: 分辨率,默认 1080,可从 /mv/detail 接口获取分辨率列表
  * @returns
  */
-export const getMvUrl = (params: MvUrlParam) => {
-    return http.get<MvUrlResult>(`/mv/url${stringifyParams(params)}`)
+export const getMvUrl = (params: T.MvUrlParam) => {
+    return http.get<T.MvUrlResult>(`/mv/url${stringifyParams(params)}`)
 }
 
 
@@ -78,6 +85,20 @@ export const getMvUrl = (params: MvUrlParam) => {
  * @param params
  * @returns
  */
-export const getMvInfo = (params: MvDetailParam) => {
-    return http.get<MvInfoResult>(`/mv/url${stringifyParams(params)}`)
+export const getMvInfo = (params: T.MvDetailParam) => {
+    return http.get<T.MvInfoResult>(`/mv/detail/info${stringifyParams(params)}`)
+}
+
+
+/**
+ * mv评论
+ * @param params
+ * id: mvid
+ * limit: 取出评论数量 , 默认为 20
+ * offset: 偏移数量 , 用于分页 , 如 :( 评论页数 -1)*20, 其中 20 为 limit 的值
+ * before: 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过 5000 条评论的时候需要用到)
+ * @returns
+ */
+export const getMVComment = (params: T.MVCommentParams) => {
+    return http.get<T.MVCommentResult>(`/comment/mv${stringifyParams(params)}`)
 }

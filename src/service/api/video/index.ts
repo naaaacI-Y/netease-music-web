@@ -1,13 +1,13 @@
 import { stringifyParams } from "@/utils"
 import http from "../../http"
-import { RelatedVideoParams, RelatedVideoResult, VideoByCategoryParam, VideoByCategoryResult, VideoCountInfo, VideoCountInfoParam, VideoDetailResult, VideoGroupListResult, VideoPlayUrlResult } from "./types"
+import * as T from "./types"
 
 /**
  * 获取视频分类标签列表
  * @returns
  */
 export const getVideoLabelList = () => {
-    return http.get<VideoGroupListResult>('/video/group/list')
+    return http.get<T.VideoGroupListResult>('/video/group/list')
 }
 
 
@@ -16,8 +16,8 @@ export const getVideoLabelList = () => {
  * @param params
  * @returns
  */
-export const getRelatedVideo = (params: RelatedVideoParams) => {
-    return http.get<RelatedVideoResult>(`/related/allvideo${stringifyParams(params)}`)
+export const getRelatedVideo = (params: T.RelatedVideoParams) => {
+    return http.get<T.RelatedVideoResult>(`/related/allvideo${stringifyParams(params)}`)
 }
 
 
@@ -27,8 +27,8 @@ export const getRelatedVideo = (params: RelatedVideoParams) => {
  * id: 视频id
  * @returns
  */
-export const getVideoDetail = (params: RelatedVideoParams) => {
-    return http.get<VideoDetailResult>(`/video/detail${stringifyParams(params)}`)
+export const getVideoDetail = (params: T.RelatedVideoParams) => {
+    return http.get<T.VideoDetailResult>(`/video/detail${stringifyParams(params)}`)
 }
 
 /**
@@ -37,8 +37,8 @@ export const getVideoDetail = (params: RelatedVideoParams) => {
  * vid: video id
  * @returns
  */
-export const getVieoCountInfo = (params: VideoCountInfoParam) => {
-    return http.get<VideoCountInfo>(`/video/detail${stringifyParams(params)}`)
+export const getVieoCountInfo = (params: T.VideoCountInfoParam) => {
+    return http.get<T.VideoCountInfo>(`/video/detail${stringifyParams(params)}`)
 }
 
 
@@ -48,8 +48,8 @@ export const getVieoCountInfo = (params: VideoCountInfoParam) => {
  * vid: video id
  * @returns
  */
-export const getVideoPlayUrl = (params: VideoCountInfoParam) => {
-    return http.get<VideoPlayUrlResult>(`/video/url${stringifyParams(params)}`)
+export const getVideoPlayUrl = (params: T.VideoCountInfoParam) => {
+    return http.get<T.VideoPlayUrlResult>(`/video/url${stringifyParams(params)}`)
 }
 
 
@@ -60,6 +60,6 @@ export const getVideoPlayUrl = (params: VideoCountInfoParam) => {
  * 可选参数 : offset: 默认 0
  * @returns
  */
-export const getVideoByCategory = (params: VideoByCategoryParam) => {
-    return http.get<VideoByCategoryResult>(`/video/group${stringifyParams(params)}`)
+export const getVideoByCategory = (params: T.VideoByCategoryParam) => {
+    return http.get<T.VideoByCategoryResult>(`/video/group${stringifyParams(params)}`)
 }
