@@ -1,20 +1,20 @@
 import { stringifyParams } from "@/utils"
 import http from "../../http"
-import { RecommendNewMusicResult, UniqueRecommendListParam, UniqueRecommendListRresult, UniqueRecommendResult } from "./types"
+import * as T from "./types"
 
 /**
  * 推荐--最新音乐 10条
  * @returns
  */
 export const getRecommendNewMusic = () => {
-    return http.get<RecommendNewMusicResult>("/personalized/newsong")
+    return http.get<T.RecommendNewMusicResult>("/personalized/newsong")
 }
 
 /**
  * 推荐-独家放送
  */
 export const getUniquereCommend = () => {
-    return http.get<UniqueRecommendResult>("/personalized/privatecontent")
+    return http.get<T.UniqueRecommendResult>("/personalized/privatecontent")
 }
 
 
@@ -24,7 +24,15 @@ export const getUniquereCommend = () => {
  * @param params  offset : 偏移数量，用于分页 , 如 :( 页数 -1)*60, 其中 60 为 limit 的值 , 默认为 0
  * @returns
  */
-export const getUniquereCommendList = (params: UniqueRecommendListParam) => {
-    return http.get<UniqueRecommendListRresult>(`/personalized/privatecontent/list`)
+export const getUniquereCommendList = (params: T.UniqueRecommendListParam) => {
+    return http.get<T.UniqueRecommendListRresult>(`/personalized/privatecontent/list`)
 }
 
+
+/**
+ * 获取每日推荐歌单
+ * @returns
+ */
+export const getDayRecommendSongList = () => {
+    return http.get<T.DayRecommendSongListResult>(`/recommend/resource`)
+}

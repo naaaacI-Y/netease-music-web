@@ -1,6 +1,6 @@
 import { stringifyParams } from "@/utils"
 import http from "../../http"
-import { AllCommentParam, AllCommentResult, SendOrReplyCommentParam, SendOrReplyCommentResult, VoteCommentResult, VoteCommnentParam } from "./types"
+import * as T from "./types"
 
 
 /**
@@ -10,8 +10,8 @@ import { AllCommentParam, AllCommentResult, SendOrReplyCommentParam, SendOrReply
  * @param params
  * @returns
  */
-export const getComment = (params: AllCommentParam) => {
-    return http.get<AllCommentResult>(`/comment/new${stringifyParams(params)}`)
+export const getComment = (params: T.AllCommentParam) => {
+    return http.get<T.AllCommentResult>(`/comment/new${stringifyParams(params)}`)
 }
 
 // 获取楼层评论
@@ -28,8 +28,8 @@ export const getComment = (params: AllCommentParam) => {
  * type: 数字 , 资源类型 , 对应歌曲 , mv, 专辑 , 歌单 , 电台, 视频对应以下类型
  * @returns
  */
-export const voteComment = (params: VoteCommnentParam) => {
-    return http.get<VoteCommentResult>(`/comment/like${stringifyParams(params)}`)
+export const voteComment = (params: T.VoteCommnentParam) => {
+    return http.get<T.VoteCommentResult>(`/comment/like${stringifyParams(params)}`)
 }
 
 
@@ -41,6 +41,6 @@ export const voteComment = (params: VoteCommnentParam) => {
  * commentId :回复的评论 id (回复评论时必填)
  * @returns
  */
-export const sendOrReplyComment = (params: SendOrReplyCommentParam) => {
-    return http.get<SendOrReplyCommentResult>(`/comment${stringifyParams(params)}`)
+export const sendOrReplyComment = (params: T.SendOrReplyCommentParam) => {
+    return http.get<T.SendOrReplyCommentResult>(`/comment${stringifyParams(params)}`)
 }

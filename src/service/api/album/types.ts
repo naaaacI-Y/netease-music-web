@@ -1,3 +1,4 @@
+import { HotComment, VipRight, Comment } from '../comment/types';
 import { HotAlbum, HotSong } from './../singer/types';
 // 专辑详情
 export interface AlbumDetailParam {
@@ -105,13 +106,6 @@ export interface AlbumCommentParams {
     before?: number
 }
 
-export interface VipRight {
-    associator?: any;
-    musicPackage?: any;
-    redplus?: any;
-    redVipAnnualCount: number;
-    redVipLevel: number;
-}
 
 export interface User {
     locationInfo?: any;
@@ -133,64 +127,7 @@ export interface User {
     vipType: number;
 }
 
-export interface IpLocation {
-    ip?: any;
-    location: string;
-    userId?: any;
-}
 
-export interface HotComment {
-    user: User;
-    beReplied: BeReplied[];
-    pendantData?: any;
-    showFloorComment?: any;
-    status: number;
-    commentId: number;
-    content: string;
-    richContent?: any;
-    contentResource?: any;
-    time: number;
-    timeStr: string;
-    needDisplayTime: boolean;
-    likedCount: number;
-    expressionUrl?: any;
-    commentLocationType: number;
-    parentCommentId: number;
-    decoration?: any;
-    repliedMark?: any;
-    grade?: any;
-    userBizLevels?: any;
-    ipLocation: IpLocation;
-    liked: boolean;
-}
-
-export interface Associator {
-    vipCode: number;
-    rights: boolean;
-    iconUrl: string;
-}
-
-export interface MusicPackage {
-    vipCode: number;
-    rights: boolean;
-    iconUrl: string;
-}
-
-export interface IpLocation {
-    ip?: any;
-    location: string;
-    userId?: any;
-}
-
-export interface BeReplied {
-    user: User;
-    beRepliedCommentId: number;
-    content: string;
-    richContent?: any;
-    status: number;
-    expressionUrl?: any;
-    ipLocation: IpLocation;
-}
 
 export interface PendantData {
     id: number;
@@ -200,30 +137,6 @@ export interface PendantData {
 export interface Decoration { }
 
 
-export interface Comment {
-    user: User;
-    beReplied: BeReplied[];
-    pendantData: PendantData;
-    showFloorComment?: any;
-    status: number;
-    commentId: number;
-    content: string;
-    richContent: string;
-    contentResource?: any;
-    time: number;
-    timeStr: string;
-    needDisplayTime: boolean;
-    likedCount: number;
-    expressionUrl?: any;
-    commentLocationType: number;
-    parentCommentId: number;
-    decoration: Decoration;
-    repliedMark?: any;
-    grade?: any;
-    userBizLevels?: any;
-    ipLocation: IpLocation;
-    liked: boolean;
-}
 
 export interface AlbumCommentResult {
     isMusician: boolean;

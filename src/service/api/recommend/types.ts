@@ -3,17 +3,17 @@ import { Privilege } from "../singer/types";
 export interface Artist {
     name: string;
     id: number;
-    picId: number;
-    img1v1Id: number;
-    briefDesc: string;
-    picUrl: string;
-    img1v1Url: string;
+    picId?: number;
+    img1v1Id?: number;
+    briefDesc?: string;
+    picUrl?: string;
+    img1v1Url?: string;
     followed?: boolean;
-    albumSize: number;
-    alias: any[];
-    trans: string;
+    albumSize?: number;
+    alias?: any[];
+    trans?: string;
     musicSize?: number;
-    topicPerson: number;
+    topicPerson?: number;
     img1v1Id_str?: string;
 }
 
@@ -176,4 +176,55 @@ export interface UniqueRecommendListRresult {
     result: UniqueRecommendRet[];
     more: boolean;
     offset: number;
+}
+
+// 每日歌单推荐
+export interface Creator {
+    remarkName?: any;
+    mutual: boolean;
+    avatarImgIdStr: string;
+    avatarImgId: number;
+    backgroundImgId: number;
+    detailDescription: string;
+    defaultAvatar: boolean;
+    expertTags?: any;
+    djStatus: number;
+    followed: boolean;
+    backgroundUrl: string;
+    userId: number;
+    backgroundImgIdStr: string;
+    accountStatus: number;
+    vipType: number;
+    province: number;
+    avatarUrl: string;
+    authStatus: number;
+    userType: number;
+    nickname: string;
+    gender: number;
+    birthday: number;
+    city: number;
+    description: string;
+    signature: string;
+    authority: number;
+}
+
+export interface Recommend {
+    id?: number;
+    type?: number;
+    name: string;
+    copywriter?: string;
+    picUrl?: string;
+    playcount?: number;
+    createTime?: number;
+    creator?: Creator;
+    trackCount?: number;
+    userId?: number;
+    alg?: string;
+}
+
+export interface DayRecommendSongListResult {
+    code: number;
+    featureFirst: boolean;
+    haveRcmdSongs: boolean;
+    recommend: Recommend[];
 }

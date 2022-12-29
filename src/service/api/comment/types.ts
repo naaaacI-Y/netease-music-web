@@ -17,7 +17,7 @@ export interface VipRight {
     associator?: any;
     musicPackage?: any;
     redplus?: any;
-    redVipAnnualCount: number;
+    redVipAnnualCount?: number;
     redVipLevel: number;
 }
 
@@ -66,15 +66,6 @@ export interface Tag {
     contentPicDatas?: any;
     relatedCommentIds?: any;
 }
-export interface BeReplied {
-    user: User;
-    beRepliedCommentId: number;
-    content?: any;
-    richContent?: any;
-    status: number;
-    expressionUrl?: any;
-    ipLocation: IpLocation;
-}
 export interface ExtInfo { }
 
 export interface CommentVideoVO {
@@ -92,67 +83,138 @@ export interface IpLocation {
     userId?: any;
 }
 
-export interface Comment {
+
+export interface PendantData {
+    id: number;
+    imageUrl: string;
+}
+export interface BeReplied {
     user: User;
-    beReplied?: BeReplied[];
-    commentId: number;
-    threadId: string;
+    beRepliedCommentId: number;
     content: string;
     richContent?: any;
     status: number;
+    expressionUrl?: any;
+    ipLocation: IpLocation;
+}
+export interface HotComment {
+    user: User;
+    beReplied: BeReplied[];
+    pendantData?: PendantData;
+    showFloorComment?: any;
+    status: number;
+    commentId: number;
+    content: string;
+    richContent?: any;
+    contentResource?: any;
     time: number;
     timeStr: string;
     needDisplayTime: boolean;
     likedCount: number;
-    replyCount: number;
-    liked: boolean;
     expressionUrl?: any;
-    parentCommentId: number;
-    repliedMark: boolean;
-    pendantData?: any;
-    pickInfo: PickInfo;
-    showFloorComment: ShowFloorComment;
-    decoration: Decoration;
     commentLocationType: number;
-    musicianSayAirborne?: any;
-    args?: any;
-    tag: Tag;
-    source?: any;
-    resourceSpecialType?: any;
-    extInfo: ExtInfo;
-    commentVideoVO: CommentVideoVO;
-    contentResource?: any;
-    contentPicNosKey?: any;
-    contentPicUrl?: any;
+    parentCommentId: number;
+    decoration?: any;
+    repliedMark?: any;
     grade?: any;
     userBizLevels?: any;
     ipLocation: IpLocation;
-    track: string;
+    liked: boolean;
 }
 
-export interface SortTypeList {
-    sortType: number;
-    sortTypeName: string;
-    target: string;
+export interface Associator {
+    vipCode: number;
+    rights: boolean;
+    iconUrl: string;
 }
 
-export interface AllCommentRet {
-    commentsTitle: string;
-    comments: Comment[];
-    currentCommentTitle: string;
-    currentComment?: any;
-    totalCount: number;
-    hasMore: boolean;
-    cursor: string;
-    sortType: number;
-    sortTypeList: SortTypeList[];
-    style: string;
+export interface MusicPackage {
+    vipCode: number;
+    rights: boolean;
+    iconUrl: string;
 }
+
+
+
+
+export interface Comment {
+    user: User;
+    beReplied: BeReplied[];
+    pendantData: PendantData;
+    showFloorComment?: any;
+    status: number;
+    commentId: number;
+    content: string;
+    richContent: string;
+    contentResource?: any;
+    time: number;
+    timeStr: string;
+    needDisplayTime: boolean;
+    likedCount: number;
+    expressionUrl?: any;
+    commentLocationType: number;
+    parentCommentId: number;
+    decoration: Decoration;
+    repliedMark?: any;
+    grade?: any;
+    userBizLevels?: any;
+    ipLocation: IpLocation;
+    liked: boolean;
+}
+
+// export interface Comment {
+//     user: User;
+//     beReplied?: BeReplied[];
+//     commentId: number;
+
+//     content: string;
+//     richContent?: any;
+//     status: number;
+//     time: number;
+//     timeStr: string;
+//     needDisplayTime: boolean;
+//     likedCount: number;
+//     liked: boolean;
+//     expressionUrl?: any;
+//     parentCommentId: number;
+//     repliedMark: boolean;
+//     pendantData?: any;
+//     showFloorComment: ShowFloorComment;
+//     decoration: Decoration;
+//     commentLocationType: number;
+//     tag: Tag;
+//     source?: any;
+//     contentResource?: any;
+//     grade?: any;
+//     userBizLevels?: any;
+//     ipLocation: IpLocation;
+
+//     contentPicUrl?: any;
+//     contentPicNosKey?: any;
+//     musicianSayAirborne?: any;
+//     track?: string;
+//     extInfo?: ExtInfo;
+//     commentVideoVO?: CommentVideoVO;
+//     resourceSpecialType?: any;
+//     args?: any;
+//     pickInfo?: PickInfo;
+//     replyCount?: number;
+//     threadId?: string;
+// }
+
 
 export interface AllCommentResult {
+    isMusician: boolean;
+    cnum: number;
+    userId: number;
+    topComments: any[];
+    moreHot: boolean;
+    hotComments: HotComment[];
+    commentBanner?: any;
     code: number;
-    err?: string;
-    data: AllCommentRet;
+    comments: Comment[];
+    total: number;
+    more: boolean;
 }
 
 
@@ -183,5 +245,13 @@ export interface SendOrReplyCommentParam {
 export interface SendOrReplyCommentResult {
     code: number
 }
+
+
+
+
+
+
+
+
 
 
