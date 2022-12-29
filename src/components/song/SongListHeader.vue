@@ -15,52 +15,50 @@
                         <img :src="headerInfo.creator.avatarDetail.identityIconUrl" alt="">
                     </div>
                 </div>
-                <div class="creator-name fs-2 text-shadow_blue mr-6" @click="goPersonCenter">
+                <div class="creator-name fs-1 text-shadow_blue mr-6" @click="goPersonCenter">
                     {{ headerInfo.creator.nickname }}
                 </div>
-                <div class="creator-time fs-2 text-black_13">
+                <div class="creator-time fs-1 text-black_13">
                     {{ formatTime(headerInfo.createTime, "yyyy-MM-dd") }}创建
                 </div>
             </div>
             <div class="operate d-flex text-black_3 mb-8">
-                <div class="play-all fs-3 d-flex ai-center text-white mr-10">
+                <div class="play-all fs-2 d-flex ai-center text-white mr-10">
                     <i class="iconfont icon-bofang_o  fs-9"></i>
                     播放全部
                 </div>
-                <div class="collect-count mr-15 fs-3 d-flex ai-center">
+                <div class="collect-count mr-15 fs-2 d-flex ai-center">
                     <i class="iconfont icon-xinjianwenjianjia fs-7 mr-3"></i>
                     <span>收藏</span>
                     <span>({{ headerInfo.subscribedCount }})</span>
                 </div>
-                <div class="share mr-15 fs-3 d-flex ai-center">
+                <div class="share mr-15 fs-2 d-flex ai-center">
                     <i class="iconfont icon-fenxiang2 mr-3"></i>
                     <span>分享</span>
                     <span>({{ headerInfo.shareCount }})</span>
                 </div>
-                <div class="download-all fs-3 d-flex ai-center">
+                <div class="download-all fs-2 d-flex ai-center">
                     <i class="iconfont icon-xiazai mr-3 fs-6"></i>
                     <span>下载全部</span>
                 </div>
             </div>
-            <div class="other-info">
-                <div class="other-info-label mb-3">
+            <div class="other-info mt-12">
+                <div class="other-info-label mb-3" v-if="headerInfo.tags.length">
                     <span class="fs-2 text-black_3">标&emsp;签：</span>
                     <span class="label-name fs-2 text-shadow_blue mr-3" v-for="(item, index) in headerInfo.tags"
                         :key="index">{{ item }}</span>
-                    <span class="fs-2 mr-3">/</span>
-                    <span class="label-name fs-2 text-shadow_blue">流行</span>
                 </div>
-                <div class="song-about d-flex fs-2 mb-3">
+                <div class="song-about d-flex fs-1 mb-3">
                     <div class="song-count mr-11">
                         <span class="text-black_3">歌曲数：</span>
                         <span class="text-black_13">{{ headerInfo.trackCount }}</span>
                     </div>
-                    <div class="play-count fs-2">
+                    <div class="play-count fs-1">
                         <span class="text-black_3">播放数：</span>
                         <span class="text-black_13">{{ formatPlayCount(headerInfo.playCount) }}</span>
                     </div>
                 </div>
-                <div class="summary fs-2">
+                <div class="summary fs-1">
                     <span class="text-black_3">简&emsp;介：</span>
                     <span class="text-black_13">{{ headerInfo.description }}</span>
                 </div>
@@ -119,7 +117,7 @@ const goPersonCenter = () => {
                     width: 10px;
                     height: 10px;
                     bottom: 7px;
-                    right: 0px;
+                    right: -2px;
                 }
 
                 img {
@@ -135,6 +133,10 @@ const goPersonCenter = () => {
             .creator-name:hover {
                 cursor: pointer;
             }
+        }
+
+        .other-info .label-name:hover {
+            cursor: pointer;
         }
 
         .operate {
