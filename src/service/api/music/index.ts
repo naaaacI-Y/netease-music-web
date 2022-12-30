@@ -96,3 +96,43 @@ export const getCollectors4SongList = (params: Omit<T.SongListCommentParams, "be
 export const getDayRecommend = () => {
     return http.get<T.DaliySongResult>(`/recommend/songs`)
 }
+/**
+ * 获取歌曲详情
+ * @param params
+ * ids: 音乐 id, 如 ids=347230
+ * @returns
+ */
+export const getMusicDetail = (params: string) => {
+    return http.get<T.SongDetailResult>(`/song/detail?ids=${params}`)
+}
+
+/**
+ * 获取音乐 url
+ * @param params
+ * 必选参数 : id : 音乐 id
+ * 可选参数 : br: 码率,默认设置了 999000 即最大码率,如果要 320k 则可设置为 320000,其他类推
+ * @returns
+ */
+export const getMusicUrl = (params: string) => {
+    return http.get<T.MusicUrlResult>(`/song/url?id=${params}`)
+}
+
+/**
+ * 听歌打卡
+ * @param params
+ * @returns
+ */
+export const scrobble = (params: T.ScrobbleParams) => {
+    return http.get<T.ScrobbleResult>(`/scrobble${stringifyParams(params)}`)
+}
+
+
+/**
+ * 获取歌词
+ * @param params
+ * id： 歌曲id
+ * @returns
+ */
+export const getLyric = (params: T.LyricParams) => {
+    return http.get<T.LyricsResult>(`/lyric${stringifyParams(params)}`)
+}

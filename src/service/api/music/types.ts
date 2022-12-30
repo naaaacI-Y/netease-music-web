@@ -298,6 +298,7 @@ export interface FreeTrialPrivilege {
     resConsumable: boolean;
     userConsumable: boolean;
     listenType?: any;
+    cannotListenReason?: any;
 }
 
 export interface ChargeInfoList {
@@ -387,11 +388,6 @@ export interface OriginSongSimpleData {
     albumMeta: AlbumMeta;
 }
 
-export interface FreeTrialPrivilege {
-    resConsumable: boolean;
-    userConsumable: boolean;
-    listenType?: any;
-}
 
 export interface ChargeInfoList {
     rate: number;
@@ -468,4 +464,152 @@ export interface DaliySongRet {
 export interface DaliySongResult {
     code: number;
     data: DaliySongRet;
+}
+
+
+// 获取歌曲详情
+export interface SongDetailParams {
+    ids: string
+}
+
+export interface Song {
+    name: string;
+    id: number;
+    pst: number;
+    t: number;
+    ar: Ar[];
+    alia?: any[];
+    pop: number;
+    st: number;
+    rt: string;
+    fee: number;
+    v: number;
+    crbt?: any;
+    cf: string;
+    al: Al;
+    dt: number;
+    h: H;
+    m: M;
+    l: L;
+    sq: Sq;
+    hr?: any;
+    a?: any;
+    cd: string;
+    no: number;
+    rtUrl?: any;
+    ftype: number;
+    rtUrls: any[];
+    djId: number;
+    copyright: number;
+    s_id: number;
+    mark: number;
+    originCoverType: number;
+    originSongSimpleData?: any;
+    tagPicList?: any;
+    resourceState: boolean;
+    version: number;
+    songJumpInfo?: any;
+    entertainmentTags?: any;
+    awardTags?: any;
+    single: number;
+    noCopyrightRcmd?: any;
+    rtype: number;
+    rurl?: any;
+    mst: number;
+    cp: number;
+    mv: number;
+    publishTime: number;
+    tns: string[];
+}
+
+
+
+export interface SongDetailResult {
+    songs: Song[];
+    privileges: Privilege[];
+    code: number;
+}
+
+
+// 获取音乐url
+export interface FreeTimeTrialPrivilege {
+    resConsumable: boolean;
+    userConsumable: boolean;
+    type: number;
+    remainTime: number;
+}
+
+export interface MusicUrlRet {
+    id: number;
+    url: string;
+    br: number;
+    size: number;
+    md5: string;
+    code: number;
+    expi: number;
+    type: string;
+    gain: number;
+    peak: number;
+    fee: number;
+    uf?: any;
+    payed: number;
+    flag: number;
+    canExtend: boolean;
+    freeTrialInfo?: any;
+    level: string;
+    encodeType: string;
+    freeTrialPrivilege: FreeTrialPrivilege;
+    freeTimeTrialPrivilege: FreeTimeTrialPrivilege;
+    urlSource: number;
+    rightSource: number;
+    podcastCtrp?: any;
+    effectTypes?: any;
+    time: number;
+}
+
+export interface MusicUrlResult {
+    data: MusicUrlRet[];
+    code: number;
+}
+
+
+// 听歌打卡
+export interface ScrobbleParams {
+    id: number
+    time?: number
+}
+export interface ScrobbleResult {
+    code: number;
+    data: string;
+    message: string;
+}
+
+// 获取歌词
+export interface LyricParams {
+    id: number
+}
+
+export interface Lrc {
+    version: number;
+    lyric: string;
+}
+
+export interface Klyric {
+    version: number;
+    lyric: string;
+}
+
+export interface Tlyric {
+    version: number;
+    lyric: string;
+}
+
+export interface LyricsResult {
+    sgc: boolean;
+    sfy: boolean;
+    qfy: boolean;
+    lrc: Lrc;
+    klyric: Klyric;
+    tlyric: Tlyric;
+    code: number;
 }

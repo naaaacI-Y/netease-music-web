@@ -151,8 +151,20 @@ const getQueryId = () => {
     const route = useRoute()
     return Number(route.query.id)
 }
-
-let throttle = (func: Function, delay: number = 200) => {
+const shuffleAList = (list: number[]) => {
+    let sortsList = list.map(t => t);
+    for (let i = 1; i < sortsList.length; i++) {
+        const random = Math.floor(Math.random() * (i + 1));
+        [sortsList[i], sortsList[random]] = [sortsList[random], sortsList[i]];
+    }
+    return sortsList
+    // let newSorts: { [key: string]: any } = {};
+    // list.map(track => {
+    //     newSorts[track] = sortsList.pop();
+    // });
+    // return newSorts;
+}
+const throttle = (func: Function, delay: number = 200) => {
     // 第一次触发时间戳
     let startTime = Date.now();
     return (...args: any[]) => {
@@ -177,5 +189,6 @@ export {
     formatPlayCount,
     checkLogin,
     getQueryId,
-    throttle
+    throttle,
+    shuffleAList
 }
