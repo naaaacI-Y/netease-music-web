@@ -48,7 +48,7 @@ export const getVieoCountInfo = (params: T.VideoCountInfoParam) => {
  * vid: video id
  * @returns
  */
-export const getVideoPlayUrl = (params: T.VideoCountInfoParam) => {
+export const getVideoPlayUrl = (params: T.RelatedVideoParams) => {
     return http.get<T.VideoPlayUrlResult>(`/video/url${stringifyParams(params)}`)
 }
 
@@ -62,4 +62,18 @@ export const getVideoPlayUrl = (params: T.VideoCountInfoParam) => {
  */
 export const getVideoByCategory = (params: T.VideoByCategoryParam) => {
     return http.get<T.VideoByCategoryResult>(`/video/group${stringifyParams(params)}`)
+}
+
+
+/**
+ * 获取视频评论
+ * @param params
+ * id string
+ * 可选参数 : limit: 取出评论数量 , 默认为 20
+ * offset: 偏移数量 , 用于分页 , 如 :( 评论页数 -1)*20, 其中 20 为 limit 的值
+ * before: 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过 5000 条评论的时候需要用到)
+ * @returns
+ */
+export const getComment4Video = (params: T.VideoCommentParams) => {
+    return http.get<T.VideoCommentResult>(`/comment/video${stringifyParams(params)}`)
 }

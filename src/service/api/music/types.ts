@@ -613,3 +613,59 @@ export interface LyricsResult {
     tlyric: Tlyric;
     code: number;
 }
+
+// 推荐歌单 不需要登录
+export interface RecommendSongListParams {
+    limit?: number
+}
+
+
+export interface RecommendSongListRet {
+    id?: number;
+    type?: number;
+    name: string;
+    copywriter?: string;
+    picUrl?: string;
+    canDislike?: boolean;
+    trackNumberUpdateTime?: number;
+    playCount?: number;
+    trackCount?: number;
+    highQuality?: boolean;
+    alg?: string;
+}
+
+export interface RecommendSongListResult {
+    hasTaste: boolean;
+    code: number;
+    category: number;
+    result: RecommendSongListRet[];
+}
+
+
+// 相似歌曲
+export interface SimilarSongResult {
+    songs: NewMusicRet[];
+    code: number;
+}
+
+// 歌曲评论
+export interface SongCommentParams {
+    id: number
+    offset?: number
+    before?: number
+}
+
+
+
+export interface SongCommentResult {
+    isMusician: boolean;
+    userId: number;
+    topComments: any[];
+    moreHot: boolean;
+    hotComments: HotComment[];
+    commentBanner?: any;
+    code: number;
+    comments: Comment[];
+    total: number;
+    more: boolean;
+}

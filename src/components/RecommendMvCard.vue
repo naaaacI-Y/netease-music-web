@@ -1,5 +1,5 @@
 <template>
-    <div class="recommend-mv-card-wrapper">
+    <div class="recommend-mv-card-wrapper" @click="goVideoDetail">
         <div class="img-wrapper" :style="{}">
             <img :src="recommendMvItem.cover || recommendMvItem.picUrl" alt="">
             <div class="play-count d-flex ai-center fs-3">
@@ -26,6 +26,8 @@
 import { computed } from 'vue';
 import { MVItem, RecommendItem } from '@/service/api/mv/types';
 import { formatSongTime, formatPlayCount } from '@/utils';
+import { useRouter } from 'vue-router';
+const router = useRouter()
 const props = withDefaults(defineProps<{
     isShowTime?: boolean
     isOneline?: boolean
@@ -45,6 +47,10 @@ const cardWidth = computed(() => {
     }
     return "calc(20% - 18px)"
 })
+// 前往视频详情页
+const goVideoDetail = () => {
+    router.push(`/mv-detail/${props.recommendMvItem.id}`)
+}
 </script>
 <style lang="scss" scoped >
 .recommend-mv-card-wrapper {

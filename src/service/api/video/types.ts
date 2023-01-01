@@ -1,3 +1,4 @@
+import { BeReplied, User, Comment, HotComment } from '../comment/types';
 import { MVItem } from './../mv/types';
 import { getVideoPlayUrl } from './index';
 export interface VideoGroupItem {
@@ -18,7 +19,7 @@ export interface VideoGroupListResult {
 
 // 相关视频
 export interface RelatedVideoParams {
-    id: number
+    id: string
 }
 
 export interface Creator {
@@ -243,4 +244,30 @@ export interface VideoByCategoryResult {
     hasmore: boolean;
     datas: VideoByCategoryRet[];
     rcmdLimit: number;
+}
+
+
+// 视频评论
+export interface VideoCommentParams {
+    id: string
+    limit?: number
+    offset?: number
+    before?: number
+}
+
+
+
+
+export interface VideoCommentResult {
+    isMusician: boolean;
+    cnum: number;
+    userId: number;
+    topComments: any[];
+    moreHot: boolean;
+    hotComments: HotComment[];
+    commentBanner?: any;
+    code: number;
+    comments: Comment[];
+    total: number;
+    more: boolean;
 }

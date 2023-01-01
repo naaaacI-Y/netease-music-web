@@ -5,77 +5,76 @@
                 <div class="video-wrap mb-30">
                     <div class="nav-title mb-15">
                         <i class="iconfont "></i>
-                        <span style="font-weight: bold;">视频详情</span>
+                        <span style="font-weight: bold;">MV详情</span>
                     </div>
                     <div class="play-box mb-20">
                         <video ref="videoPlayerEle" class="plyr"></video>
                     </div>
                     <div class="singer-info-wrap">
                         <div class="avatar-info d-flex ai-center mb-20">
-                            <div class="avatar mr-10" v-if="videoDetailInfo.data && videoDetailInfo.data?.avatarUrl">
-                                <LazyLoadImg :src="videoDetailInfo.data?.avatarUrl"></LazyLoadImg>
+                            <div class="avatar mr-10" v-if="mvDetailInfo.data && mvDetailInfo.data?.artists?.length">
+                                <LazyLoadImg :src="mvDetailInfo.data?.artists[0]?.img1v1Url"></LazyLoadImg>
                             </div>
-                            <div class="name fs-3 text-66">{{ videoDetailInfo.data?.creator?.nickname }}</div>
+                            <div class="name fs-3 text-66">{{ mvDetailInfo.data.artistName }}</div>
                         </div>
-                        <div class="mv-title mb-10" style="font-size: 22px;font-weight: bold">{{
-        videoDetailInfo.data.title
+                        <div class="mv-title mb-10" style="font-size: 22px;font-weight: bold">{{ mvDetailInfo.data.name
 }}</div>
                         <div class="count-info d-flex fs-1 text-bc mb-12">
                             <div class="pubtime mr-25">
                                 <span>发布：</span>
-                                <span>{{ videoDetailInfo.data.publishTime }}</span>
+                                <span>{{ mvDetailInfo.data.publishTime }}</span>
                             </div>
                             <div class="plat-time">
                                 <span>播放：</span>
-                                <span>{{ formatPlayCount(videoDetailInfo.data.playTime) }}次</span>
+                                <span>{{ formatPlayCount(mvDetailInfo.data.playCount) }}次</span>
                             </div>
                         </div>
-                        <div class="label-list d-flex mb-25" v-if="videoDetailInfo.data.videoGroup?.length">
+                        <div class="label-list d-flex mb-25" v-if="mvDetailInfo.data.videoGroup?.length">
                             <div class="label-item fs-1 mr-5 bg-black_11 text-66"
                                 @click="goVideoByCategory(item.id, item.name)"
-                                v-for="item in videoDetailInfo.data.videoGroup">{{ item.name }}</div>
+                                v-for="item in mvDetailInfo.data.videoGroup">{{ item.name }}</div>
                         </div>
                         <div class="operate d-flex ai-center text-black_1">
                             <div class="vote d-flex ai-center jc-center fs-3 mr-12">
                                 <i class="iconfont icon-dianzan1 fs-8 mr-4"></i>
                                 赞
-                                <span>({{ videoDetailInfo.data.praisedCount }})</span>
+                                <span>({{ mvDetailInfo.data.subCount }})</span>
                             </div>
                             <div class="collect d-flex ai-center jc-center fs-3 mr-12">
                                 <i class="iconfont icon-xinjianwenjianjia mr-4 fs-8"></i>
                                 收藏
-                                <span>({{ videoDetailInfo.data.subscribeCount }})</span>
+                                <span>({{ mvDetailInfo.data.subCount }})</span>
                             </div>
                             <div class="share d-flex ai-center jc-center fs-3">
                                 <i class="iconfont icon-fenxiang1 fs-5"></i>
                                 分享
-                                <span>({{ videoDetailInfo.data.shareCount }})</span>
+                                <span>({{ mvDetailInfo.data.shareCount }})</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="comment-wrap">
-                    <SongListComment :source-type="5"></SongListComment>
+                    <SongListComment :source-type="1"></SongListComment>
                 </div>
             </div>
             <div class="video-detail-right">
                 <div class="recommend-title mb-15" style="font-weight: bold;">相关推荐</div>
                 <div class="recommend-list">
-                    <div class="recomment-item d-flex mb-10" v-for="item in similarVideoList.data" :key="item.vid"
-                        @click="goVideoDetail(item.vid)">
+                    <div class="recomment-item d-flex mb-10" v-for="item in similarMVList.data" :key="item.id"
+                        @click="goVideoDetail(item.id)">
                         <div class="mv-img mr-8 text-white fs-1">
-                            <LazyLoadImg :src="item.coverUrl" v-if="item.coverUrl"></LazyLoadImg>
+                            <LazyLoadImg :src="item.cover" v-if="item.cover"></LazyLoadImg>
                             <div class="play-count d-flex ai-center">
                                 <i class="iconfont icon-bofang1 text-white"></i>
-                                <span>{{ formatPlayCount(item.playTime) }}</span>
+                                <span>{{ formatPlayCount(item.playCount) }}</span>
                             </div>
-                            <div class="time text-white">{{ formatSongTime(item.durationms) }}</div>
+                            <div class="time text-white">{{ formatSongTime(item.duration) }}</div>
                         </div>
                         <div class="item-info d-flex flex-column jc-center">
-                            <div class="name mb-10 fs-2 text-balck_1">{{ item.title }}</div>
+                            <div class="name mb-10 fs-2 text-balck_1">{{ item.name }}</div>
                             <div class="author fs-1 d-flex">
                                 <span class="text-66 mr-5">by</span>
-                                <span class="text-bc" v-if="item.creator">{{ item.creator[0]?.nickname }}</span>
+                                <span class="text-bc">{{ item.artistName }}</span>
                             </div>
                         </div>
                     </div>
@@ -88,7 +87,8 @@
 <script lang="ts" setup>
 import SongListComment from '@/components/song/SongListComment.vue';
 import LazyLoadImg from '@/components/LazyLoadImg.vue';
-import { getRelatedVideo, getVideoDetail, getVideoPlayUrl } from "@/service/api/video"
+import { getMvUrl, getMvDetail, getSimilarMv } from "@/service/api/mv"
+import { Mv, MvDetailRet } from '@/service/api/mv/types';
 import { formatPlayCount, formatSongTime } from '@/utils';
 import { onMounted, reactive, ref } from 'vue';
 import '@/assets/plyr.css';
@@ -96,50 +96,59 @@ import Plyr from 'plyr';
 import usePlayerState from '@/store/player';
 import { storeToRefs } from 'pinia';
 import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router"
-import { RelatedVideoRet, VideoDetailRet } from '@/service/api/video/types';
+import { getVideoDetail } from '@/service/api/video';
 const router = useRouter()
 const route = useRoute()
 const queryId = route.params.id as string
-const videoDetailInfo = reactive({ data: {} as VideoDetailRet }) // 详情
+const mvDetailInfo = reactive({ data: {} as MvDetailRet }) // 详情
 
-const similarVideoList = reactive({ data: [] as RelatedVideoRet[] }) // 相似mv
+const similarMVList = reactive({ data: [] as Mv[] }) // 相似mv
 const videoPlayer = reactive({ data: null as unknown as Plyr })
 const videoPlayerEle = ref<HTMLElement>()
 const { player } = storeToRefs(usePlayerState())
 
 // 在当前路由改变，但是该组件被复用时调用
 onBeforeRouteUpdate((to, from, next) => {
-    getDetail4Video(to.params.id as string)
+    getDetail4Mv(Number(to.params.id))
     next()
 })
-// 前往视频
+// 前往mv
 const goVideoByCategory = (id: number, name: string) => {
     // router.push(``)
 }
 // 获取视频详情
 const getDetail4Video = async (id: string) => {
     const r = await getVideoDetail({ id })
-    videoDetailInfo.data = r.data
-    const urlInfo = await getVideoPlayUrl({ id })
-    const sources = urlInfo.urls.map(url => {
-        return {
-            src: url.url.replace(/^http:/, 'https:'),
-            type: 'video/mp4',
-            size: url.size,
-        }
+
+}
+// mv详情
+const getDetail4Mv = async (id: number) => {
+    const r = await getMvDetail({ mvid: id })
+    mvDetailInfo.data = r.data
+    const requests = r.data.brs.map(br => {
+        return getMvUrl({ id, r: br.br })
     })
-    videoPlayer.data.source = {
-        type: 'video',
-        title: videoDetailInfo.data.title,
-        sources: sources,
-        poster: videoDetailInfo.data.coverUrl.replace(/^http:/, 'https:'),
-    };
+    Promise.all(requests).then(results => {
+        let sources = results.map(result => {
+            return {
+                src: result.data.url.replace(/^http:/, 'https:'),
+                type: 'video/mp4',
+                size: result.data.r,
+            };
+        });
+        videoPlayer.data.source = {
+            type: 'video',
+            title: mvDetailInfo.data.name,
+            sources: sources,
+            poster: mvDetailInfo.data.cover.replace(/^http:/, 'https:'),
+        };
+    })
     getSimilar(id)
 }
 // 相似mv
-const getSimilar = async (id: string) => {
-    const r = await getRelatedVideo({ id })
-    similarVideoList.data = r.data
+const getSimilar = async (id: number) => {
+    const r = await getSimilarMv({ mvid: id })
+    similarMVList.data = r.mvs
 }
 // 初始化视频播放器
 const initVideoPlayer = () => {
@@ -158,10 +167,10 @@ const initVideoPlayer = () => {
         player.value.pause();
     });
 
-    getDetail4Video(queryId)
+    Number(queryId) ? getDetail4Mv(Number(queryId)) : getDetail4Video(queryId)
 }
-const goVideoDetail = (id: string) => {
-    router.push(`/video-detail/${id}`)
+const goVideoDetail = (id: number) => {
+    router.push(`/mv-detail/${id}`)
 }
 onMounted(() => {
     initVideoPlayer()
@@ -239,7 +248,7 @@ onMounted(() => {
 
                 .play-count {
                     position: absolute;
-                    top: 0px;
+                    top: 5px;
                     right: 7px;
                 }
 

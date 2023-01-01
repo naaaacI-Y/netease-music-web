@@ -1,6 +1,6 @@
 <template>
-    <div class="nav-wrapper d-flex ai-center">
-        <div class="right bg-black_12 d-flex ai-center jc-end" :class='{ "active": isChangeBgc, "hasLeft": isHasLeft }'>
+    <div class="nav-wrapper d-flex ai-center" :class='{ "active": isChangeBgc }'>
+        <div class="right bg-black_12 d-flex ai-center jc-end" :class='{ "hasLeft": isHasLeft }'>
             <div class="find d-flex" v-if="isActive('/findMusic')">
                 <div :class="{ 'active': activeIndex == 0 }" @click="activeIndex = 0">
                     个性推荐
@@ -68,7 +68,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
     isChangeBgc: boolean
 }>(), {
     isChangeBgc: false
@@ -81,7 +81,7 @@ const activeIndex = ref(0)
 
 const isHasLeft = computed(() => {
     const paths = ["/findMusic", "/video", "/friends", "/prettyCommon", "/unique", "/dynamic", "/focus", "/fans"]
-    if (route.path === "/video-detail") return false
+    if (route.path.startsWith("/video-detail") || route.path.startsWith("/mv-detail")) return false
     return paths.some(item => route.path.startsWith(item))
 })
 watch(activeIndex, () => {
@@ -137,6 +137,7 @@ watch(() => route.path, (newVal: string) => {
 
 
 const isActive = (path1: string, path2?: string) => {
+    if (props.isChangeBgc) return false
     if (path2) {
         return route.path.startsWith(path1) || route.path.startsWith(path2)
     }
@@ -252,6 +253,16 @@ const goInside = (path: string) => {
     .hasLeft {
         display: flex;
         justify-content: space-between;
+    }
+}
+
+.active {
+    background-color: white;
+
+    .right {
+        justify-content: flex-end;
+        background-color: white !important;
+        ;
     }
 }
 </style>

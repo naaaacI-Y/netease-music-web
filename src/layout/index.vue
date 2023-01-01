@@ -1,23 +1,39 @@
 <template>
-    <Nav :isChangeBgc='isShowPLayPage'></Nav>
-    <div class="main-content" :class="{ isAuto: route.path.startsWith('/video-detail') }">
-        <side-bar v-if="route.path !== '/video-detail'"></side-bar>
-        <div class="content" :class="{ isAuto: !route.path.startsWith('/video-detail') }">
+    <Nav :isChangeBgc='isShowPlayPage'></Nav>
+    <div class="main-content" :class="{ isAuto: !isNotVideo }">
+        <side-bar v-show="isNotVideo"></side-bar>
+        <div class="content" :class="{ isAuto: isNotVideo }">
             <slot></slot>
         </div>
     </div>
-    <Footer v-if="route.path !== '/video-detail'"></Footer>
+    <Footer v-show="isNotVideo" @showPlayPage="showPlayPage" :is-show-play="isShowPlayPage">
+    </Footer>
+    <MusicPlay play-type="songList" v-if="isShowPlayPage" :music-id="musicId" style="" class="music-play">
+    </MusicPlay>
 </template>
 
 <script lang="ts" setup>
-// import musicPlayOther from '@/components/music-play-other'
+import MusicPlay from '@/components/music/MusicPlay.vue';
 import Footer from '@/components/Footer.vue'
 import SideBar from '@/components/SideBar.vue'
 import Nav from "@/components/Nav.vue"
-import { ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-const isShowPLayPage = ref(false)
+const isShowPlayPage = ref(false)
+const musicId = ref<number>()
 const route = useRoute()
+const isNotVideo = computed(() => {
+    return !route.path.startsWith('/mv-detail') && !route.path.startsWith('/video-detail')
+})
+watch(() => isShowPlayPage.value, (newVal) => {
+    if (!newVal) {
+        musicId.value = undefined
+    }
+})
+const showPlayPage = (id: number) => {
+    isShowPlayPage.value = !isShowPlayPage.value
+    musicId.value = id
+}
 </script>
 
 <style scoped lang='scss'>
@@ -37,5 +53,16 @@ const route = useRoute()
         // overflow: auto;
         padding-bottom: 100px;
     }
+}
+
+.music-play {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 100%;
+    overflow: scroll;
+    height: calc(100vh - 110px);
+    background-color: white;
+
 }
 </style>

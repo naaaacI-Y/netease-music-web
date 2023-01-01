@@ -121,7 +121,9 @@ export interface Song {
     hMusic: SqMusic;
     mMusic: SqMusic;
     lMusic: SqMusic;
+    transNames?: string[];
     exclusive: boolean;
+    alg?: string;
     privilege: Privilege;
 }
 

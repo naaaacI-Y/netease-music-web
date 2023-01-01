@@ -1,5 +1,5 @@
 <template>
-    <div class="recommend-mv-card-wrapper">
+    <div class="recommend-mv-card-wrapper" @click="goVideoDetail">
         <div class="img-wrapper" :style="{}">
             <img :src="videoItem.data.coverUrl" alt="">
             <div class="play-count d-flex ai-center fs-3">
@@ -27,6 +27,8 @@
 import { computed } from 'vue';
 import { formatSongTime, formatPlayCount } from '@/utils';
 import { VideoByCategoryRet } from '@/service/api/video/types';
+import { useRouter } from 'vue-router';
+const router = useRouter()
 const props = withDefaults(defineProps<{
     isShowTime?: boolean
     isOneline?: boolean
@@ -46,6 +48,13 @@ const cardWidth = computed(() => {
     }
     return "calc(20% - 18px)"
 })
+const goVideoDetail = () => {
+    // flag ==> 标识是视频详情还是mv详情
+    // 区别于mv详情不同 视频的id是字符串要单独处理
+    console.log("router.push(`/video-detail/${props.videoItem.data.vid}`)");
+
+    router.push(`/video-detail/${props.videoItem.data.vid}`)
+}
 </script>
 <style lang="scss" scoped >
 .recommend-mv-card-wrapper {
