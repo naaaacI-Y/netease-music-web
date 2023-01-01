@@ -31,6 +31,41 @@ const newestMusicType = {
 }
 const songMenuTypes = ["华语", "流行", "摇滚", "民谣", "电子", "另类/独立", "轻音乐", "综艺", "影视原声", "ACG"]
 const labelList = ["专辑", "MV", "歌手详情", "相似歌手", "演出"]
+const searchTypeList = {
+    "单曲": {
+        id: 1,
+        unit: "首"
+    },
+    "歌手": {
+        id: 100,
+        unit: "位"
+    },
+    "专辑": {
+        id: 10,
+        unit: "张"
+    },
+    "视频": {
+        id: 1014,
+        unit: "个"
+    },
+    "歌单": {
+        id: 1000,
+        unit: "个"
+    },
+    "歌词": {
+        id: 1006,
+        unit: "首"
+    },
+    "主播电台": {
+        id: 1009,
+        unit: "个"
+    },
+    "用户": {
+        id: 1002,
+        unit: "位"
+    }
+}
+
 export {
     languageList,
     categoryList,
@@ -41,5 +76,6 @@ export {
     videoTypes,
     newestMusicType,
     songMenuTypes,
-    labelList
+    labelList,
+    searchTypeList
 }

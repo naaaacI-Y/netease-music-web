@@ -133,6 +133,11 @@ const routes: RouteRecordRaw[] = [
     name: 'DayRecommend',
     component: () => import('@/pages/findMusic/personalRecommend/components/DayRecommend.vue'),
   },
+  {
+    path: '/search-result-detail',
+    name: 'SearchResultDetail',
+    component: () => import('@/pages/search/SearchResultDetail.vue'),
+  },
 ]
 
 const router = createRouter({
