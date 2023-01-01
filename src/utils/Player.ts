@@ -31,30 +31,30 @@ const excludeSaveKeys = [
 
 class Player {
     // 播放器状态
-    private _playing: boolean = false // 是否正在播放中
-    private _progress: number = 0 // 当前播放歌曲的进度
-    private _enabled: boolean = false // 是否启用Player
-    private _repeatMode: string = "off" // off | on | one
-    private _shuffle: boolean = false // true | false
-    private _reversed: boolean = false
-    private _volume: number = 1 // 0 to 1
-    private _volumeBeforeMuted: number = 1 // 用于保存静音前的音量
-    private _personalFMLoading: boolean = false  // 是否正在私人FM中加载新的track
-    private _personalFMNextLoading: boolean = false // 是否正在缓存私人FM的下一首歌曲
+    public _playing: boolean = false // 是否正在播放中
+    public _progress: number = 0 // 当前播放歌曲的进度
+    public _enabled: boolean = false // 是否启用Player
+    public _repeatMode: string = "one" // off | on | one
+    public _shuffle: boolean = false // true | false
+    public _reversed: boolean = false
+    public _volume: number = 0.5 // 0 to 1
+    public _volumeBeforeMuted: number = 0.5 // 用于保存静音前的音量
+    public _personalFMLoading: boolean = false  // 是否正在私人FM中加载新的track
+    public _personalFMNextLoading: boolean = false // 是否正在缓存私人FM的下一首歌曲
 
     // 播放信息
-    private _list: number[] = []  // 播放列表
-    private _current: number = 0 // 当前播放歌曲在播放列表里的index
-    private _shuffledList: number[] = [] // 被随机打乱的播放列表，随机播放模式下会使用此播放列表
-    private _shuffledCurrent: number = 0 // 当前播放歌曲在随机列表里面的index
-    private _playlistSource = { type: 'album', id: 123 } // 当前播放列表的信息
-    private _currentTrack = { id: 86827685 } as Song // 当前播放歌曲的详细信息
-    private _playNextList: number[] = [] // 当这个list不为空时，会优先播放这个list的歌
-    private _isPersonalFM: boolean = false // 是否是私人FM模式
-    private _personalFMTrack = { id: 0 } as Song // 私人FM当前歌曲
-    private _personalFMNextTrack = { id: 0 } as Song // 私人FM下一首歌曲信息（为了快速加载下一首）
-    private createdBlobRecords: string[] = [] // The blob records for cleanup.
-    private _howler: Howl = null as unknown as Howl
+    public _list: number[] = []  // 播放列表
+    public _current: number = 0 // 当前播放歌曲在播放列表里的index
+    public _shuffledList: number[] = [] // 被随机打乱的播放列表，随机播放模式下会使用此播放列表
+    public _shuffledCurrent: number = 0 // 当前播放歌曲在随机列表里面的index
+    public _playlistSource = { type: 'album', id: 123 } // 当前播放列表的信息
+    public _currentTrack = { id: 86827685 } as Song // 当前播放歌曲的详细信息
+    public _playNextList: number[] = [] // 当这个list不为空时，会优先播放这个list的歌
+    public _isPersonalFM: boolean = false // 是否是私人FM模式
+    public _personalFMTrack = { id: 0 } as Song // 私人FM当前歌曲
+    public _personalFMNextTrack = { id: 0 } as Song // 私人FM下一首歌曲信息（为了快速加载下一首）
+    public createdBlobRecords: string[] = [] // The blob records for cleanup.
+    public _howler: Howl = null as unknown as Howl
     constructor() {
         // howler (https://github.com/goldfire/howler.js)
         Object.defineProperty(this, '_howler', {
@@ -255,6 +255,7 @@ class Player {
         this._shuffledList = shuffleAList(list);
         if (firstTrackID !== -1) this._shuffledList.unshift(firstTrackID);
     }
+    // 听歌记录
     async _scrobble(track: Song, time: number, completed = false) {
         console.debug(
             `[debug][Player.js] scrobble track 👉 ${track.name} by ${track.ar[0].name} 👉 time:${time} completed: ${completed}`
@@ -325,7 +326,8 @@ class Player {
                 if (!result.data[0]) return null;
                 if (!result.data[0].url) return null;
                 if (result.data[0].freeTrialInfo !== null) return null; // 跳过只能试听的歌曲
-                const source = result.data[0].url.replace(/^http:/, 'https:');
+                // const source = result.data[0].url.replace(/^http:/, 'https:');
+                const source = result.data[0].url
                 // if (store.state.settings.automaticallyCacheSongs) {
                 //     cacheTrackSource(track, source, result.data[0].br);
                 // }
@@ -384,7 +386,7 @@ class Player {
             return this._getAudioSource(track).then(source => {
                 if (source) {
                     this._playAudioSource(source, autoplay);
-                    this._cacheNextTrack();
+                    // this._cacheNextTrack();
                     return source;
                 } else {
                     // store.dispatch('showToast', `无法播放 ${track.name}`);
@@ -413,9 +415,12 @@ class Player {
         });
     }
     _loadSelfFromLocalStorage() {
-        const player = JSON.parse(localStorage.getItem('player') || "");
+        const player = JSON.parse(localStorage.getItem('player')!);
+
         if (!player) return;
         for (const [key, value] of Object.entries(player)) {
+            console.log("===========_loadSelfFromLocalStorage===============");
+
             (this as any)[key] = value;
         }
     }
@@ -619,6 +624,8 @@ class Player {
         return true;
     }
     saveSelfToLocalStorage() {
+        console.log("===========saveSelfToLocalStorage=============");
+
         let player = {} as any;
         for (let [key, value] of Object.entries(this)) {
             if (excludeSaveKeys.includes(key)) continue;
@@ -650,7 +657,7 @@ class Player {
             // if (this._currentTrack.name) {
             //     setTitle(this._currentTrack);
             // }
-            this._playDiscordPresence(this._currentTrack, this.seek());
+            // this._playDiscordPresence(this._currentTrack, this.seek());
             // if (store.state.lastfm.key !== undefined) {
             //     trackUpdateNowPlaying({
             //         artist: this.currentTrack.ar[0].name,
@@ -672,8 +679,8 @@ class Player {
     seek(time?: number) {
         if (time !== null) {
             this._howler?.seek(time);
-            if (this._playing)
-                this._playDiscordPresence(this._currentTrack, this.seek());
+            // if (this._playing)
+            // this._playDiscordPresence(this._currentTrack, this.seek());
         }
         return this._howler === null ? 0 : this._howler.seek();
     }

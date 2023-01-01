@@ -1,6 +1,8 @@
 
+
 import useStore from "@/store";
 import { useRoute } from "vue-router";
+import Player from "./Player";
 
 /**
  * 日期格式化
@@ -149,7 +151,7 @@ const checkLogin = () => {
  */
 const getQueryId = () => {
     const route = useRoute()
-    return Number(route.query.id)
+    return Number(route.query.id) || Number(route.params.id) || route.params.id
 }
 const shuffleAList = (list: number[]) => {
     let sortsList = list.map(t => t);
@@ -158,11 +160,6 @@ const shuffleAList = (list: number[]) => {
         [sortsList[i], sortsList[random]] = [sortsList[random], sortsList[i]];
     }
     return sortsList
-    // let newSorts: { [key: string]: any } = {};
-    // list.map(track => {
-    //     newSorts[track] = sortsList.pop();
-    // });
-    // return newSorts;
 }
 const throttle = (func: Function, delay: number = 200) => {
     // 第一次触发时间戳
@@ -181,6 +178,33 @@ const throttle = (func: Function, delay: number = 200) => {
         }
     };
 };
+
+
+const updatePlayer = () => {
+    let parsedData = JSON.parse(localStorage.getItem('player')!);
+    const data = {
+        ...parsedData,
+    };
+    localStorage.setItem('player', JSON.stringify(data));
+};
+const initPlayer = () => {
+    console.log("initPlayerinitPlayerinitPlayerinitPlayerinitPlayerinitPlayerinitPlayerinitPlayer");
+
+    let parsedData = JSON.parse(localStorage.getItem('player')!);
+    let p = new Player();
+    let player = new Proxy(p, {
+        set(target, prop, val) {
+            (target as any)[prop] = val;
+            if (prop === '_howler') return true;
+            target.saveSelfToLocalStorage();
+            return true;
+        },
+    });
+    useStore().usePlayer.player = player
+    // localStorage.setItem('player', JSON.stringify(player));
+    // return player
+
+}
 export {
     formatTime,
     stringifyParams,
@@ -190,5 +214,7 @@ export {
     checkLogin,
     getQueryId,
     throttle,
-    shuffleAList
+    shuffleAList,
+    updatePlayer,
+    initPlayer
 }

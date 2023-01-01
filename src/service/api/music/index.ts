@@ -136,3 +136,25 @@ export const scrobble = (params: T.ScrobbleParams) => {
 export const getLyric = (params: T.LyricParams) => {
     return http.get<T.LyricsResult>(`/lyric${stringifyParams(params)}`)
 }
+
+/**
+ * 获取推荐歌单  不需要登录，如果是没有登录的话就获取10条，如果登陆过了就获取9条
+ * @param params
+ * @returns
+ */
+export const getRecommendSongList = (params?: T.RecommendSongListParams) => {
+    return http.get<T.RecommendSongListResult>(`/personalized${stringifyParams(params || {})}`)
+}
+
+/**
+ * 获取相似歌曲
+ * @param params id 歌曲id
+ * @returns
+ */
+export const getSimilatSong = (params: T.SongListDetailParams) => {
+    return http.get<T.SimilarSongResult>(`/simi/song${stringifyParams(params)}`)
+}
+
+export const getComment = (params: T.SongCommentParams) => {
+    return http.get<T.SongCommentResult>(`/comment/music${stringifyParams(params)}`)
+}

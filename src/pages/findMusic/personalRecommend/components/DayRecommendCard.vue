@@ -6,7 +6,7 @@
             <div class="mask" v-if="type === 1"></div>
             <div class="play-count d-flex ai-center fs-3" v-if="type === 1">
                 <i class="iconfont icon-bofang1 text-white fs-7"></i>
-                {{ formatPlayCount(songListItem.playcount!) }}
+                {{ formatPlayCount(songListItem.playCount!) }}
             </div>
             <div class="play-btn">
                 <div class="trangel"></div>
@@ -18,10 +18,11 @@
 </template>
 
 <script lang="ts" setup>
+import { RecommendSongListRet } from '@/service/api/music/types';
 import { Recommend } from '@/service/api/recommend/types';
 import { formatPlayCount } from '@/utils';
 defineProps<{
-    songListItem: Recommend
+    songListItem: RecommendSongListRet
     type: number // 0: 每日歌曲推荐 1： 普通歌单
 }>()
 </script>

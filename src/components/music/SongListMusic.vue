@@ -2,17 +2,26 @@
     <div class="song-list-music-wrapper d-flex">
         <div class="music-left d-flex flex-column jc-end ai-center">
             <div class="img-wrap">
-
+                <div class="niddle" :class="player.playing ? '' : 'no-play'"></div>
+                <div class="pan">
+                    <div class="card">
+                        <div class="imageWrapper">
+                            <div class="img" :class="player.playing ? 'rotateCircle' : ''">
+                                <img :src="player.currentTrack?.al?.picUrl" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="operate-wrap d-flex ai-center">
                 <div class="collect">
                     <i class="iconfont icon-aixin fs-9"></i>
                 </div>
                 <div class="delete">
-                    <i class="iconfont icon-delete fs-9"></i>
+                    <i class="iconfont icon-xinjianwenjianjia fs-9"></i>
                 </div>
                 <div class="next">
-                    <i class="iconfont icon-xinjianwenjianjia fs-9"></i>
+                    <i class="iconfont icon-xiazai fs-9"></i>
                 </div>
                 <div class="other">
                     <i class="iconfont icon-fenxiang fs-9"></i>
@@ -21,30 +30,46 @@
         </div>
         <div class="music-right">
             <div class="music-name d-flex mb-10 ai-center">
-                <div class="fs-9 mr-10">歌曲名称</div>
+                <div class="fs-9 mr-10">{{ player.currentTrack.name }}</div>
                 <div class="mv fs-2">MV</div>
             </div>
             <div class="other-info d-flex fs-2 text-66 ai-center mb-20">
                 <div class="album  flex-1">
                     <span>专辑：</span>
-                    <span class="text-shadow_blue">专辑专辑专辑专辑专辑专辑专辑专辑专辑专辑</span>
+                    <span class="text-shadow_blue">{{ player.currentTrack?.al?.name }}</span>
                 </div>
                 <div class="singer flex-1">
                     <span>歌手：</span>
-                    <span class="text-shadow_blue">专辑专辑专辑专辑专辑专辑专辑专辑专辑专辑</span>
+                    <span class="text-shadow_blue">{{ player.currentTrack?.ar[0].name }}</span>
                 </div>
                 <div class="from flex-1">
                     <span>来源：</span>
                     <span class="text-shadow_blue">来源来源来源来源来源来源来源来源</span>
                 </div>
             </div>
-            <div class="lyric">222</div>
+            <div class="lyric">
+                <div class="lyric-item fs-3 text-66 mb-10" v-for="(item, index) in lyric.data.lyric" :key="index">
+                    {{ item.content }}
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-
+import { getLyric } from '@/service/api/music';
+import usePlayerState from '@/store/player';
+import { lyricParser } from '@/utils/lyrics';
+import { storeToRefs } from 'pinia';
+import { reactive, ref } from 'vue';
+const { player } = storeToRefs(usePlayerState())
+const lyric = reactive({ data: {} as { lyric: any[], tlyric: any[] } })
+const getlyric = async () => {
+    const r = await getLyric({ id: player.value.currentTrack.id })
+    lyric.data = lyricParser(r)
+    console.log(JSON.stringify(lyric.data));
+}
+getlyric()
 </script>
 <style lang="scss" scoped>
 .song-list-music-wrapper {
@@ -58,8 +83,62 @@
         .img-wrap {
             height: 335px;
             width: 100%;
-            border: 1px solid red;
             margin-bottom: 20px;
+            position: relative;
+
+            .pan {
+                width: 335px;
+                // margin-top: 75px;
+                background-color: #e3e3e3;
+                border-radius: 50%;
+                overflow: hidden;
+                height: 335px;
+                @include flex(row, center, center);
+
+                .card {
+                    width: 315px;
+                    height: 315px;
+                    border-radius: 50%;
+                    background-size: 100% 100%;
+                    background-image: url('../../assets/images/ic_disc.png');
+                    @include flex(row, center, center);
+
+                    .imageWrapper {
+                        @include flex(row, center, center);
+                        width: 220px;
+                        background-color: black;
+                        height: 220px;
+                        border-radius: 50%;
+
+                        .img {
+                            @include flex(row, center, center);
+                            width: 205px;
+                            height: 205px;
+                            border-radius: 50%;
+                            overflow: hidden;
+
+                            img {
+                                width: 100%;
+                                height: 100%
+                            }
+                        }
+
+                        .rotateCircle {
+                            animation: rot 20s infinite linear;
+                        }
+
+                        @keyframes rot {
+                            from {
+                                transform: rotate(0deg);
+                            }
+
+                            to {
+                                transform: rotate(360deg);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         .operate-wrap {
@@ -107,8 +186,29 @@
         .lyric {
             width: 378px;
             flex: 1;
-            // height: 355px;
+            height: 365px;
+            overflow-y: scroll;
             border-right: 1px solid #f2f2f2;
+        }
+
+        /*滚动条整体样式*/
+        .lyric::-webkit-scrollbar {
+            width: 8px;
+            height: 1px;
+        }
+
+        /*滚动条滑块*/
+        .lyric::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            // -webkit-box-shadow: inset 0 0 5px white;
+            background: #dfe0df;
+        }
+
+        /*滚动条轨道*/
+        .lyric::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 1px white;
+            border-radius: 10px;
+            background: #f8f8f8;
         }
 
         .other-info {

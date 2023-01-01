@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import CommentItem from '../CommentItem.vue';
 import { Comment, HotComment } from "@/service/api/comment/types"
 import { getQueryId } from "@/utils"
@@ -48,19 +48,24 @@ import { getAlbumComment } from '@/service/api/album';
 import { getMVComment } from '@/service/api/mv';
 import { getComment4Song, getComment4SongList } from "@/service/api/music"
 import { SongListCommentResult } from '@/service/api/music/types';
-
+import { useRoute } from 'vue-router';
+import { getComment4Video } from '@/service/api/video';
+const route = useRoute()
 // 0: 歌曲 1: mv 2: 歌单 3: 专辑 4: 电台节目 5: 视频 6: 动态 7: 电台
 const props = withDefaults(defineProps<{
     isGrey?: boolean
-    sourceType: 0 | 1 | 2 | 3
+    sourceType: 0 | 1 | 2 | 3 | 5
 }>(), {
     isGrey: true,
     sourceType: 3
 })
+watch(() => route.params.id, (newVal) => {
+    getAllComment(Number(newVal))
+})
 const maxLength = computed(() => {
     return 140 - commentContent.value.length
 })
-const id = getQueryId() // id
+const id = getQueryId() as number | string // id
 const allComment = reactive({ data: [] as Comment[] }) // 所有评论
 const hotCommentList = reactive({ data: [] as HotComment[] }) // 热门评论
 const commentContent = ref("") //
@@ -76,36 +81,37 @@ const submitContent = () => {
 const goMoreHotComment = () => {
 
 }
-const getAllComment = async () => {
+const getAllComment = async (id: string | number) => {
     let r: SongListCommentResult;
+
     switch (props.sourceType) {
         case 0:
-            r = await getComment4Song({ id })
+            r = await getComment4Song({ id } as { id: number })
             break;
         case 1:
-            r = await getMVComment({ id })
+            r = await getMVComment({ id } as { id: number })
             break;
         case 2:
-            r = await getComment4SongList({ id })
+            r = await getComment4SongList({ id } as { id: number })
             break
         case 3:
-            r = await getAlbumComment({ id })
+            r = await getAlbumComment({ id } as { id: number })
             break;
-        // case 5:
-        //     break
+        case 5:
+            r = await getComment4Video({ id } as { id: string })
+            break
         // case 6:
         //     break
         // default:
         //     break;
     }
-    r
     allComment.data = r.comments
     totalComment.value = r.total
     hotCommentList.data = r.hotComments
     hasMoreHot.value = r.moreHot
     hasMore.value = r.more
 }
-getAllComment()
+getAllComment(id)
 </script>
 <style lang="scss" scoped>
 .comment {
