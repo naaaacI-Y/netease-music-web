@@ -669,3 +669,12 @@ export interface SongCommentResult {
     total: number;
     more: boolean;
 }
+
+// 检查歌曲是否可用
+export interface CheckSongAvaliableParams {
+    id: number
+}
+export interface CheckSongAvaliableresult {
+    message: string
+    success: string
+}

@@ -155,6 +155,21 @@ export const getSimilatSong = (params: T.SongListDetailParams) => {
     return http.get<T.SimilarSongResult>(`/simi/song${stringifyParams(params)}`)
 }
 
+/**
+ * 获取歌曲评论
+ * @param params
+ * @returns
+ */
 export const getComment = (params: T.SongCommentParams) => {
     return http.get<T.SongCommentResult>(`/comment/music${stringifyParams(params)}`)
+}
+
+/**
+ * 检查歌曲是否可用
+ * @param params
+ * id: 歌曲id
+ * @returns
+ */
+export const checkMusicAvaliable = (params: T.CheckSongAvaliableParams) => {
+    return http.get<T.CheckSongAvaliableresult>(`/check/music${stringifyParams(params)}`)
 }

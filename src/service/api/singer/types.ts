@@ -480,6 +480,7 @@ export interface Song {
     cp: number;
     publishTime: number;
     privilege: Privilege;
+    lyrics?: string[]
 }
 
 export interface SingerTopSongResult {

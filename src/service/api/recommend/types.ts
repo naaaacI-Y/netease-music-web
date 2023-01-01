@@ -15,6 +15,7 @@ export interface Artist {
     musicSize?: number;
     topicPerson?: number;
     img1v1Id_str?: string;
+    picId_str?: string;
 }
 
 export interface Album {
@@ -45,7 +46,9 @@ export interface Album {
     mark?: number;
     transName?: any;
     gapless?: number;
-    picId_str: string;
+    idStr?: string;
+    picId_str?: string;
+    isSub?: boolean;
 }
 
 export interface SqMusic {
