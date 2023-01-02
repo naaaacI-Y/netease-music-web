@@ -26,8 +26,15 @@ $colors: (
   '4b': #4b4b4b,
   'white': #ffffff,
   'fa': #fafafa,
+  'bc': #bcbcbc,
   'shadow_blue': #5a7cab,
   'deep_blue': #2757aa,
+  'male': #549aca,
+  'mbg': #d2f2f1,
+  'cf': #cfcfcf,
+  'female': #d1457a,
+  'fbg': #f9d0e7,
+  'new': #6d9c65,
 );
 $border-color: map-get($colors, 'light-1');
 //font-size
