@@ -11,7 +11,7 @@
                     :class="{ isActive: index === activeIndex }">{{ item }}</div>
             </div>
             <div class="result-wrapper">
-                <component :is="tabsComponents[showWhichComponent]"></component>
+                <component :is="tabsComponents[showWhichComponent]" @changeTotal="changeTotal"></component>
             </div>
         </div>
     </DefaultLayout>
@@ -46,6 +46,11 @@ const showWhichComponent = computed(() => {
 const changeItem = (item: string) => {
     const index = Object.keys(searchTypeList).findIndex(it => it === item)
     activeIndex.value = index
+}
+const changeTotal = (num: number) => {
+    console.log("changeTotal");
+
+    total.value = num
 }
 </script>
 <style lang="scss" scoped>

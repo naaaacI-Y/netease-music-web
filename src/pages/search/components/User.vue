@@ -1,25 +1,27 @@
 <template>
     <div class="user-wrapper">
-        <CommonItem :index="item - 1" v-for="item in 10" :key="item">
+        <CommonItem v-for="(item, index) in userList.data" :key="item.userId" :index="index">
             <template #avatar>
                 <div class="avatar mr-15">
-                    <div class="flag"></div>
+                    <img :src="item.avatarUrl" alt="">
+                    <div class="flag" v-if="item.avatarDetail">
+                        <img :src="item.avatarDetail.identityIconUrl" alt="">
+                    </div>
                 </div>
             </template>
             <template #name>
                 <div class="name fs-3 d-flex ai-center">
-                    <span class="mr-10">用户名称</span>
-                    <div class="sex d-flex ai-center jc-center" :style="{ backgroundColor: '#d2f2f1' }">
-                        <i class="iconfont icon-nanxing text-male fs-2"></i>
-                    </div>
-                    <div class="sex d-flex ai-center jc-center" :style="{ backgroundColor: '#f9d0e7' }">
-                        <i class="iconfont icon-nvxing text-female fs-2"></i>
+                    <span class="mr-10">{{ item.nickname }}</span>
+                    <div class="sex d-flex ai-center jc-center"
+                        :style="{ backgroundColor: item.gender === 1 ? '#d2f2f1' : '#f9d0e7' }" v-if="item.gender">
+                        <i class="iconfont icon-nanxing text-male fs-2" v-if="item.gender === 1"></i>
+                        <i class="iconfont icon-nvxing text-female fs-2" v-if="item.gender === 2"></i>
                     </div>
                 </div>
             </template>
-            <template #user-title>
+            <template #user-title v-if="item.description">
                 <div class="user-title fs-2 text-89">
-                    网易音乐人
+                    {{ item.description }}
                 </div>
             </template>
         </CommonItem>
@@ -28,21 +30,36 @@
 
 <script lang="ts" setup>
 import CommonItem from './CommonItem.vue';
-import { Userprofile } from '@/service/api/search/types';
+import { SearchUserResult, Userprofile } from '@/service/api/search/types';
 import { reactive } from 'vue';
+import { useRoute } from 'vue-router';
+import { searchByType } from '@/service/api/search';
+const emits = defineEmits<{
+    (e: "changeTotal", num: number): void
+}>()
+const keywords = useRoute().query.keywords as string
 const userList = reactive({ data: [] as Userprofile[] })
-
+const getSearchUserList = async () => {
+    const r = await searchByType({ keywords, type: 1002 })
+    const _ = r.result as unknown as SearchUserResult
+    emits("changeTotal", _.userprofileCount)
+    userList.data = _.userprofiles
+}
+getSearchUserList()
 </script>
 <style lang="scss" scoped>
 .user-wrapper {
-    // padding: 0 -30px;
-
     .avatar {
         position: relative;
         width: 60px;
         height: 60px;
         border-radius: 50%;
-        background-color: #c3473a;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
 
         .flag {
             position: absolute;
@@ -51,7 +68,13 @@ const userList = reactive({ data: [] as Userprofile[] })
             border-radius: 50%;
             bottom: 2px;
             right: 0px;
-            background-color: aqua;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                height: 100%;
+
+            }
         }
     }
 

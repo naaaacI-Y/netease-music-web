@@ -174,7 +174,7 @@ export interface Userprofile {
     playlistBeSubscribedCount: number;
 }
 export interface SearchUserResult {
-    userProfile: Userprofile[]
+    userprofiles: Userprofile[]
     userprofileCount: number;
 }
 // 1006、歌词
