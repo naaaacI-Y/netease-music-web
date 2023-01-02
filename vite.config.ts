@@ -4,13 +4,14 @@ import path from 'path'
 //@ts-ignore
 import viteCompression from 'vite-plugin-compression'
 import proxy from './build/proxy'
+import VueSetupExtend from 'vite-plugin-vue-setup-extend'
 import { VITE_PORT } from './build/constant'
-
 // https://vitejs.dev/config/
 export default defineConfig({
   base: './', //打包路径
   plugins: [
     vue(),
+    VueSetupExtend(),
     // gzip压缩 生产环境生成 .gz 文件
     viteCompression({
       verbose: true,

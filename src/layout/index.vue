@@ -2,7 +2,7 @@
     <Nav :isChangeBgc='isShowPlayPage'></Nav>
     <div class="main-content" :class="{ isAuto: !isNotVideo }">
         <side-bar v-show="isNotVideo"></side-bar>
-        <div class="content" :class="{ isAuto: isNotVideo }">
+        <div class="content" :class="{ isAuto: isNotVideo && isNotSearch }">
             <slot></slot>
         </div>
     </div>
@@ -25,6 +25,9 @@ const route = useRoute()
 const isNotVideo = computed(() => {
     return !route.path.startsWith('/mv-detail') && !route.path.startsWith('/video-detail')
 })
+const isNotSearch = computed(() => {
+    return !route.path.startsWith('/search-result-detail')
+})
 watch(() => isShowPlayPage.value, (newVal) => {
     if (!newVal) {
         musicId.value = undefined
@@ -42,7 +45,7 @@ const showPlayPage = (id: number) => {
 }
 
 .main-content {
-    height: 100%;
+    height: calc(100% - 110px);
     display: flex;
     justify-content: center;
     // overflow: auto;

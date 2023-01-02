@@ -240,7 +240,7 @@
     "@vue/compiler-core" "3.2.45"
     "@vue/shared" "3.2.45"
 
-"@vue/compiler-sfc@^3.0.5", "@vue/compiler-sfc@3.2.45":
+"@vue/compiler-sfc@^3.0.5", "@vue/compiler-sfc@^3.2.29", "@vue/compiler-sfc@3.2.45":
   "integrity" "sha512-1jXDuWah1ggsnSAOGsec8cFjT/K6TMZ0sPL3o3d84Ft2AYZi2jWJgRMjw4iaK0rBfA89L5gw427H4n1RZQBu6Q=="
   "resolved" "https://registry.npmmirror.com/@vue/compiler-sfc/-/compiler-sfc-3.2.45.tgz"
   "version" "3.2.45"
@@ -3493,6 +3493,14 @@
     "@rollup/pluginutils" "^4.2.1"
     "@types/eslint" "^8.4.5"
     "rollup" "^2.77.2"
+
+"vite-plugin-vue-setup-extend@^0.4.0":
+  "integrity" "sha512-WMbjPCui75fboFoUTHhdbXzu4Y/bJMv5N9QT9a7do3wNMNHHqrk+Tn2jrSJU0LS5fGl/EG+FEDBYVUeWIkDqXQ=="
+  "resolved" "https://registry.npmmirror.com/vite-plugin-vue-setup-extend/-/vite-plugin-vue-setup-extend-0.4.0.tgz"
+  "version" "0.4.0"
+  dependencies:
+    "@vue/compiler-sfc" "^3.2.29"
+    "magic-string" "^0.25.7"
 
 "vite@^2.4.2", "vite@^2.5.10", "vite@>=2", "vite@>=2.0.0":
   "integrity" "sha512-fzMt2jK4vQ3yK56te3Kqpkaeq9DkcZfBbzHwYpobasvgYmP2SoAr6Aic05CsB4CzCZbsDv4sujX3pkEGhLabVQ=="

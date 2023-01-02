@@ -1,35 +1,39 @@
 <template>
-    <div class="song-list-item-wrapper d-flex" :class="{ odd: index % 2 !== 0 }">
-        <div class="left d-flex ai-center fs-2 jc-event" v-if="type !== 3">
-            <div class="index text-c4">{{ paddingLeft(index) }}</div>
-            <slot name="flagInside" v-if="rankType === 1"></slot>
-            <i class="iconfont icon-aixin text-black_13"></i>
-            <i class="iconfont icon-xiazai text-black_13"></i>
-        </div>
-        <div class="rank d-flex ai-center mr-5 pl-8" v-if="type === 3">
-            <div class="index fs-4 mr-8" :class="{ isTop3: index <= 3 }">{{ index }}</div>
-            <slot name="flag"></slot>
-        </div>
-        <div class="main-info fs-2 d-flex ">
-            <div class="song-name d-flex ai-center" :style="{ width: rankType === -1 ? '34.8%' : '42.8%' }">
-                <div class="text-black_3 mr-4">{{ item?.name }}</div>
-                <div class="text-black_13 mr-4" v-if="item?.alia?.length">({{ item?.alia[0] }})</div>
-                <i class="iconfont icon-h-square text-primary_red_4 fs-2" v-if="item?.sq && type !== 3"></i>
-                <i class="iconfont icon-bofang2 text-primary_red_4 ml-4 fs-7" v-if="item?.mv && type !== 3"
-                    @click="goMvDetail"></i>
+    <div class="song-list-item-wrapper d-flex flex-column" :class="{ odd: index % 2 !== 0 }" v-on:dblclick="playMusic">
+        <div class="item-wrap d-flex" style="height:35px">
+            <div class="left d-flex ai-center fs-2 jc-event" v-if="type !== 3">
+                <div class="index text-c4">{{ paddingLeft(index) }}</div>
+                <slot name="flagInside" v-if="rankType === 1"></slot>
+                <i class="iconfont icon-aixin text-black_13"></i>
+                <i class="iconfont icon-xiazai text-black_13"></i>
             </div>
-            <slot name="rate"></slot>
-            <div class="singer  text-black_13" v-if="isShow === 'all' || isShow === 'rank'">
-                {{ item?.ar[0]?.name }}
+            <div class="rank d-flex ai-center mr-5 pl-8" v-if="type === 3">
+                <div class="index fs-4 mr-8" :class="{ isTop3: index <= 3 }">{{ index }}</div>
+                <slot name="flag"></slot>
             </div>
-            <div class="album  text-black_13" v-if="isShow === 'all'">
-                {{ item?.al.name }}
-            </div>
-            <div class="time text-c4 d-flex ai-center" v-if="isShow === 'all' || isShow === 'singer'">{{
+            <div class="main-info fs-2 d-flex ">
+                <div class="song-name d-flex ai-center" :style="{ width: rankType === -1 ? '34.8%' : '42.8%' }">
+                    <div class="text-black_3 mr-4">{{ item?.name }}</div>
+                    <div class="text-black_13 mr-4" v-if="item?.alia?.length">({{ item?.alia[0] }})</div>
+                    <i class="iconfont icon-h-square text-primary_red_4 fs-2" v-if="item?.sq && type !== 3"></i>
+                    <i class="iconfont icon-bofang2 text-primary_red_4 ml-4 fs-7" v-if="item?.mv && type !== 3"
+                        @click="goMvDetail"></i>
+                </div>
+                <slot name="rate"></slot>
+                <div class="singer  text-black_13" v-if="isShow === 'all' || isShow === 'rank'">
+                    {{ item?.ar[0]?.name }}
+                </div>
+                <div class="album  text-black_13" v-if="isShow === 'all'">
+                    {{ item?.al.name }}
+                </div>
+                <div class="time text-c4 d-flex ai-center" v-if="isShow === 'all' || isShow === 'singer'">{{
         formatSongTime(item!.dt)
 }}</div>
-            <div class="count text-c4 d-flex ai-cente" v-if="isShow === 'listen'">7次</div>
+                <div class="count text-c4 d-flex ai-cente" v-if="isShow === 'listen'">7次</div>
+            </div>
         </div>
+        <slot name="lyric"></slot>
+        <slot name="song"></slot>
     </div>
 </template>
 
@@ -40,10 +44,13 @@
 // 排行榜
 import { TrackId } from '@/service/api/music/types';
 import { HotSong } from '@/service/api/singer/types';
+import usePlayerState from '@/store/player';
 import { formatSongTime } from '@/utils';
+import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 const rankType = Number(useRoute().query.rankType)
+const { player } = storeToRefs(usePlayerState())
 const props = withDefaults(defineProps<
     {
         type?: number
@@ -76,12 +83,18 @@ const paddingLeft = (num: number) => {
 }
 // mv详情
 const goMvDetail = () => {
-    router.push(`/video-detail?id=${props.item?.mv}`)
+    router.push(`/mv-detail/${props.item?.mv}`)
+}
+const playMusic = () => {
+    // 添加当前歌单的id列表
+    console.log("dbclick to play music========");
+    player.value.replacePlaylist([props.item!.id], props.item!.id, "song-list", props.item?.id)
+
 }
 </script>
 <style lang="scss" scoped>
 .song-list-item-wrapper {
-    height: 35px;
+    // height: 35px;
     width: 100%;
 
     .left {

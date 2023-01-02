@@ -1,17 +1,22 @@
 <template>
-    <div class="radio-wrapper">
-        <CommonItem :index="item - 1" v-for="item in 20" :key="item">
+    <div class="song-list-wrapper">
+        <CommonItem v-for="item in 10" :index="item - 1" :key="item">
             <template #avatar>
                 <div class="avatar mr-15">
                 </div>
             </template>
             <template #name>
                 <div class="name fs-3 d-flex ai-center">
-                    主播电台名称
+                    歌单名称
+                </div>
+            </template>
+            <template #song-count>
+                <div class="song-count fs-1 text-c7">
+                    188首
                 </div>
             </template>
             <template #author>
-                <div class="author fs-1 d-flex ai-center text-cd">
+                <div class="author fs-1 text-c7">
                     <span class="by mr-5">by</span>
                     <span class="auth">作者</span>
                 </div>
@@ -21,10 +26,10 @@
 </template>
 
 <script lang="ts" setup>
-import { DjRadio } from '@/service/api/search/types';
+import { Album } from '@/service/api/recommend/types';
 import { reactive } from 'vue';
 import CommonItem from './CommonItem.vue';
-const radioList = reactive({ data: [] as DjRadio[] })
+const songList = reactive({ data: [] as Album[] })
 </script>
 <style lang="scss" scoped>
 .avatar {
@@ -34,8 +39,16 @@ const radioList = reactive({ data: [] as DjRadio[] })
     border-radius: 5px;
 }
 
-.author .auth:hover {
-    color: #333;
-    cursor: pointer;
+.song-count {
+    width: 15%;
+}
+
+.author {
+    width: 20%;
+
+    .auth:hover {
+        cursor: pointer;
+        color: #333;
+    }
 }
 </style>
