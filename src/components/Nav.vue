@@ -49,7 +49,8 @@
                     <div class="searchIcon">
                         <i class="iconfont icon-sousuo"></i>
                     </div>
-                    <input type="text" placeholder="搜索" />
+                    <input type="text" placeholder="搜索" @focus="searchBoxFocus" @blur="searchBoxBlur"
+                        v-model="searchKeyWords" />
                 </div>
                 <div class="setting">
                     <i class="iconfont icon-shezhi fs-9"></i>
@@ -68,21 +69,30 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { debounce } from "@/utils"
 const props = withDefaults(defineProps<{
     isChangeBgc: boolean
 }>(), {
     isChangeBgc: false
 })
+const emits = defineEmits<{
+    (e: "inputOnFocus", value: string): void
+    (e: "inputOnBlur", value: string): void
+    (e: "handleKeyWordsChange", keywords: string): void
+}>()
 const route = useRoute()
 const router = useRouter()
 const { dynamicName, focusName, fansName } = route.query  // 动态 关注  粉丝
 const activeIndex = ref(0)
-
+const searchKeyWords = ref("")
 
 const isHasLeft = computed(() => {
     const paths = ["/findMusic", "/video", "/friends", "/prettyCommon", "/unique", "/dynamic", "/focus", "/fans"]
     if (route.path.startsWith("/video-detail") || route.path.startsWith("/mv-detail")) return false
     return paths.some(item => route.path.startsWith(item))
+})
+watch(() => searchKeyWords.value, () => {
+    debounceTextChange()
 })
 watch(activeIndex, () => {
     if (!route.path.startsWith('/find')) return;
@@ -135,7 +145,18 @@ watch(() => route.path, (newVal: string) => {
     }
 })
 
-
+// 输入框值改变 触发搜索
+const handleKeyWordsChange = () => {
+    emits("handleKeyWordsChange", searchKeyWords.value)
+}
+const debounceTextChange = debounce(handleKeyWordsChange, 200)
+const searchBoxFocus = (e: Event) => {
+    console.log("searchBoxFocus value", (e.target as HTMLInputElement).value);
+    emits("inputOnFocus", (e.target as HTMLInputElement).value)
+}
+const searchBoxBlur = (e: Event) => {
+    emits("inputOnBlur", (e.target as HTMLInputElement).value)
+}
 const isActive = (path1: string, path2?: string) => {
     if (props.isChangeBgc) return false
     if (path2) {
@@ -149,6 +170,7 @@ const goInside = (path: string) => {
         router.push(path)
     }
 }
+
 </script>
 <style lang="scss" scoped>
 .nav-wrapper {

@@ -205,6 +205,41 @@ const initPlayer = () => {
     // return player
 
 }
+
+// 获取本地历史搜索记录
+const getSearchHistory = () => {
+    const his = localStorage.getItem("searchHistory")
+    return his ? JSON.parse(his) : ""
+}
+// 设置本地历史搜索记录
+const setSearchHistory = (item: string) => {
+    if (item) {
+        const hisString = localStorage.getItem("searchHistory")
+        const his = hisString ? JSON.parse(hisString) : {}
+        const isExist = his[item]
+        if (!isExist) {
+            his[item] = item
+        }
+        localStorage.setItem("searchHistory", JSON.stringify(his))
+    }
+
+}
+const clearSearchHistory = () => {
+    localStorage.removeItem("searchHistory")
+}
+
+
+const debounce = (fn: Function, wait = 100) => {
+    let timer: number
+    return (...args: any[]) => {
+        if (timer) {
+            clearTimeout(timer)
+        }
+        timer = Number(setTimeout(() => {
+            fn(args)
+        }, wait))
+    }
+}
 export {
     formatTime,
     stringifyParams,
@@ -213,8 +248,12 @@ export {
     formatPlayCount,
     checkLogin,
     getQueryId,
+    debounce,
     throttle,
     shuffleAList,
     updatePlayer,
-    initPlayer
+    initPlayer,
+    getSearchHistory,
+    setSearchHistory,
+    clearSearchHistory
 }
