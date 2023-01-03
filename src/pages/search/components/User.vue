@@ -31,16 +31,24 @@
 <script lang="ts" setup>
 import CommonItem from './CommonItem.vue';
 import { SearchUserResult, Userprofile } from '@/service/api/search/types';
-import { reactive } from 'vue';
+import { computed, reactive, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { searchByType } from '@/service/api/search';
 const emits = defineEmits<{
     (e: "changeTotal", num: number): void
 }>()
-const keywords = useRoute().query.keywords as string
+const keywords = computed(() => {
+    return useRoute().params.keywords as string
+})
+watch(() => keywords.value, () => {
+    console.log("keywords.value 发生改变了", keywords.value);
+
+    getSearchUserList()
+})
+
 const userList = reactive({ data: [] as Userprofile[] })
 const getSearchUserList = async () => {
-    const r = await searchByType({ keywords, type: 1002 })
+    const r = await searchByType({ keywords: keywords.value, type: 1002 })
     const _ = r.result as unknown as SearchUserResult
     emits("changeTotal", _.userprofileCount)
     userList.data = _.userprofiles
@@ -53,11 +61,12 @@ getSearchUserList()
         position: relative;
         width: 60px;
         height: 60px;
-        border-radius: 50%;
-        overflow: hidden;
+
+        // overflow: hidden;
 
         img {
             width: 100%;
+            border-radius: 50%;
             height: 100%;
         }
 

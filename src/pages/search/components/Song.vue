@@ -14,17 +14,23 @@ import SongListItem from '@/components/song/SongListItem.vue';
 import { searchByType } from '@/service/api/search';
 import { SearchSongResult } from '@/service/api/search/types';
 import { Song } from '@/service/api/singer/types';
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import Header from './Header.vue';
+const route = useRoute()
 const songs = reactive({ data: [] as Song[] })
 const total = ref(0)
 const emits = defineEmits<{
     (e: "changeTotal", num: number): void
 }>()
-const keywords = useRoute().query.keywords as string
+const keywords = computed(() => {
+    return route.params.keywords as string
+})
+watch(() => keywords.value, () => {
+    getSongs()
+})
 const getSongs = async () => {
-    const r = await searchByType({ keywords, type: 1 })
+    const r = await searchByType({ keywords: keywords.value, type: 1 })
     const _ = r.result as unknown as SearchSongResult
     songs.data = _.songs
     total.value = _.songCount

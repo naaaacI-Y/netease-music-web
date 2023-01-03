@@ -28,13 +28,18 @@ import Radio from "./components/Radio.vue"
 import SongList from "./components/SongLIst.vue"
 import { searchTypeList } from "@/utils/const"
 import { computed, ref } from "vue";
-import { useRoute } from "vue-router";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
 const tabsComponents = {
     Album, Lyric, Singer, Video, Song, User, Radio, SongList
 }
-const keywords = useRoute().query.keywords || "我们"
+const keywords = ref(useRoute().params.keywords)
 const activeIndex = ref(0)
 const total = ref(50)
+onBeforeRouteUpdate((to, from, next) => {
+    keywords.value = to.params.keywords
+    activeIndex.value = 0
+    next()
+})
 const showWord = computed(() => {
     const type = Object.keys(searchTypeList)[activeIndex.value] as keyof typeof searchTypeList
     return searchTypeList[type].unit + type
@@ -48,8 +53,6 @@ const changeItem = (item: string) => {
     activeIndex.value = index
 }
 const changeTotal = (num: number) => {
-    console.log("changeTotal");
-
     total.value = num
 }
 </script>

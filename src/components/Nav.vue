@@ -49,8 +49,9 @@
                     <div class="searchIcon">
                         <i class="iconfont icon-sousuo"></i>
                     </div>
-                    <input type="text" placeholder="搜索" @focus="searchBoxFocus" @blur="searchBoxBlur"
-                        v-model="searchKeyWords" />
+                    <!-- @focus="searchBoxFocus"
+                    @blur="searchBoxBlur" -->
+                    <input type="text" placeholder="搜索" v-model="searchKeyWords" id="search-box" />
                 </div>
                 <div class="setting">
                     <i class="iconfont icon-shezhi fs-9"></i>
@@ -76,8 +77,8 @@ const props = withDefaults(defineProps<{
     isChangeBgc: false
 })
 const emits = defineEmits<{
-    (e: "inputOnFocus", value: string): void
-    (e: "inputOnBlur", value: string): void
+    // (e: "inputOnFocus", value: string): void
+    // (e: "inputOnBlur", value: string): void
     (e: "handleKeyWordsChange", keywords: string): void
 }>()
 const route = useRoute()
@@ -150,13 +151,13 @@ const handleKeyWordsChange = () => {
     emits("handleKeyWordsChange", searchKeyWords.value)
 }
 const debounceTextChange = debounce(handleKeyWordsChange, 200)
-const searchBoxFocus = (e: Event) => {
-    console.log("searchBoxFocus value", (e.target as HTMLInputElement).value);
-    emits("inputOnFocus", (e.target as HTMLInputElement).value)
-}
-const searchBoxBlur = (e: Event) => {
-    emits("inputOnBlur", (e.target as HTMLInputElement).value)
-}
+// const searchBoxFocus = (e: Event) => {
+//     console.log("searchBoxFocus value", (e.target as HTMLInputElement).value);
+//     emits("inputOnFocus", (e.target as HTMLInputElement).value)
+// }
+// const searchBoxBlur = (e: Event) => {
+//     emits("inputOnBlur", (e.target as HTMLInputElement).value)
+// }
 const isActive = (path1: string, path2?: string) => {
     if (props.isChangeBgc) return false
     if (path2) {
@@ -170,7 +171,9 @@ const goInside = (path: string) => {
         router.push(path)
     }
 }
-
+const handleCclick = () => {
+    console.log("input click");
+}
 </script>
 <style lang="scss" scoped>
 .nav-wrapper {

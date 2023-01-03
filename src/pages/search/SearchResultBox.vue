@@ -1,7 +1,8 @@
 <template>
-    <div class="search-result-box-wrapper">
+    <div class="search-result-box-wrapper" id="search-result-box-wrapper">
         <!--搜索头部-->
-        <div class="result-title fs-1 mb-10 d-flex ai-center" v-if="searchKeywords" @click="goSearchResult">
+        <div class="result-title fs-1 mb-10 d-flex ai-center" v-if="searchKeywords"
+            @click="goSearchResult(searchKeywords)">
             搜“<span class="text-deep_blue">{{ searchKeywords }}</span>”相关结果 >
         </div>
         <!--搜索历史-->
@@ -11,7 +12,8 @@
                 <i class="iconfont icon-delete fs-8 ml-6" @click="clearHistory"></i>
             </div>
             <div class="search-his-wrap d-flex ai-center flex-wrap">
-                <div class="search-item fs-2 text-4b mr-10" v-for="item in Object.keys(searchHistoryList)">{{ item
+                <div class="search-item fs-2 text-4b mr-10 mb-10" v-for="item in Object.keys(searchHistoryList)"
+                    @click="goSearchResult(item)">{{ item
 }}</div>
             </div>
         </div>
@@ -25,9 +27,7 @@
                 </div>
                 <div class="song-content">
                     <div class="item d-flex ai-center" v-for="item in searchResult?.data?.songs" :key="item.id">
-                        <span>{{ item?.name }}</span>
-                        <span>&ensp;-&ensp;</span>
-                        <span>{{ item.artists[0]?.name }}</span>
+                        {{ item?.name }}&ensp;-&ensp;{{ item.artists[0]?.name }}
                     </div>
                 </div>
             </div>
@@ -99,13 +99,20 @@ const router = useRouter()
 const props = defineProps<{
     searchKeywords: string
 }>()
+const emits = defineEmits<{
+    (e: "hideSearchBox"): void
+}>()
 // 监听输入框值改变
-watch(() => props.searchKeywords, async (newVal) => {
-    // 搜索
-    const r = await searchSuggest({ keywords: newVal })
-    searchResult.data = r.result
-    // 添加历史搜索记录
-    setSearchHistory(props.searchKeywords)
+watch(() => props.searchKeywords, async (newVal: string) => {
+    if (newVal) {
+        // 搜索
+        getSuggest(newVal)
+        // 添加历史搜索记录
+        setSearchHistory(props.searchKeywords)
+    } else {
+        getHotSearch()
+    }
+
 })
 const hotSearchList = reactive({ data: [] as HotSearchListRet[] }) // 热搜列表
 const searchResult = reactive({ data: {} as SearchSuggestRet }) // 搜索结果
@@ -113,21 +120,29 @@ const searchHistoryList = ref(getSearchHistory())  // 历史搜索记录
 const goHotItemDetail = (keywords: string) => {
 
 }
-// 清空搜索历史 TODO 点击删除会出现弹窗消失
+// 清空搜索历史
 const clearHistory = () => {
     clearSearchHistory()
     searchHistoryList.value = getSearchHistory()
 }
 // 前往搜索结果详情页
-const goSearchResult = () => {
-    router.push(`/search-result-detail?keywords=${props.searchKeywords}`)
+const goSearchResult = (kwywords: string) => {
+    // 隐藏弹出框
+    emits("hideSearchBox")
+    router.push(`/search-result-detail/${kwywords}`)
+}
+// 搜索
+const getSuggest = async (keywords: string) => {
+    const r = await searchSuggest({ keywords })
+    searchResult.data = r.result
 }
 // 获取热搜列表
 const getHotSearch = async () => {
     const r = await getHotSearchList()
     hotSearchList.data = r.data
 }
-!props.searchKeywords && getHotSearch()
+props.searchKeywords ? getSuggest(props.searchKeywords) : getHotSearch()
+
 </script>
 <style lang="scss" scoped>
 .search-result-box-wrapper {
@@ -208,10 +223,14 @@ const getHotSearch = async () => {
 
         .item {
             height: 30px;
-            padding-left: 30px;
+            padding: 0 30px;
             display: flex;
             align-items: center;
             font-size: 13px;
+            width: 100%;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
 
             &:hover {
                 cursor: pointer;
