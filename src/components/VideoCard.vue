@@ -1,23 +1,26 @@
 <template>
     <div class="recommend-mv-card-wrapper" @click="goVideoDetail">
         <div class="img-wrapper" :style="{}">
-            <img :src="videoItem.data.coverUrl" alt="">
+            <img :src="videoItem.coverUrl" alt="">
             <div class="play-count d-flex ai-center fs-3">
                 <i class="iconfont icon-bofang1 text-white fs-7"></i>
-                {{ formatPlayCount(videoItem.data.playTime) }}
+                {{ formatPlayCount(videoItem.playTime) }}
             </div>
             <div class="play-btn" v-if="isPlayBtn">
                 <div class="trangel"></div>
             </div>
-            <div class="duration fs-2 text-white" v-if="isShowTime">{{ formatSongTime(videoItem.data.durationms) }}
+            <div class="duration fs-2 text-white" v-if="isShowTime">{{ formatSongTime(videoItem.durationms) }}
             </div>
         </div>
         <div class="mv-name mt-5">
-            <div class="line1 fs-3 text-black_2" :class="{ noWrap: !isOneline }">
-                {{ videoItem.data.title }}
+            <div class="line1 fs-3 text-black_2 d-flex ai-center mb-4" :class="{ noWrap: !isOneline }">
+                <slot name="mv-flag"></slot>
+                <span class="title">{{ videoItem.title }}</span>
             </div>
-            <div class="line2 fs-1 text-black_6" v-if="!isOneline">
-                by {{ videoItem.data.creator.nickname }}
+            <div class="line2 fs-1 text-black_6 d-flex" v-if="!isOneline">
+                <span v-if="!Array.isArray(videoItem.creator)">by </span>
+                <span>{{ Array.isArray(videoItem.creator) ? videoItem.creator[0].userName : videoItem.creator.nickname
+}}</span>
             </div>
         </div>
     </div>
@@ -28,13 +31,14 @@ import { computed } from 'vue';
 import { formatSongTime, formatPlayCount } from '@/utils';
 import { VideoByCategoryRet } from '@/service/api/video/types';
 import { useRouter } from 'vue-router';
+import { Video } from '@/service/api/search/types';
 const router = useRouter()
 const props = withDefaults(defineProps<{
     isShowTime?: boolean
     isOneline?: boolean
     isPlayBtn?: boolean
     count?: number
-    videoItem: VideoByCategoryRet
+    videoItem: VideoByCategoryRet["data"] | Video
 }>(), {
     isShowTime: false,
     isOneline: false,
@@ -53,7 +57,7 @@ const goVideoDetail = () => {
     // 区别于mv详情不同 视频的id是字符串要单独处理
     console.log("router.push(`/video-detail/${props.videoItem.data.vid}`)");
 
-    router.push(`/video-detail/${props.videoItem.data.vid}`)
+    router.push(`/video-detail/${props.videoItem.vid}`)
 }
 </script>
 <style lang="scss" scoped >
