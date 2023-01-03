@@ -34,7 +34,7 @@ import Header from './Header.vue';
 const emits = defineEmits<{
     (e: "changeTotal", num: number): void
 }>()
-const keywords = useRoute().query.keywords as string
+const keywords = useRoute().params.keywords as string
 const total = ref(0)
 const LyricList = reactive({ data: [] as Song[] })
 const isFold = ref(false)

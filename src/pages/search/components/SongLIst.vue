@@ -35,7 +35,7 @@ import CommonItem from './CommonItem.vue';
 const emits = defineEmits<{
     (e: "changeTotal", num: number): void
 }>()
-const keywords = useRoute().query.keywords as string
+const keywords = useRoute().params.keywords as string
 const songList = reactive({ data: [] as Playlist[] })
 const getSearchSongList = async () => {
     const r = await searchByType({ keywords: keywords, type: 1000 })

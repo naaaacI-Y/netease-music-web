@@ -32,7 +32,7 @@ const emits = defineEmits<{
     (e: "changeTotal", num: number): void
 }>()
 const total = ref(0)
-const keywords = useRoute().query.keywords as string
+const keywords = useRoute().params.keywords as string
 const albumList = reactive({ data: [] as Album[] })
 const getSearchAlbumList = async () => {
     const r = await searchByType({ keywords: keywords, type: 10 })

@@ -134,7 +134,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/pages/findMusic/personalRecommend/components/DayRecommend.vue'),
   },
   {
-    path: '/search-result-detail',
+    path: '/search-result-detail/:keywords',
     name: 'SearchResultDetail',
     component: () => import('@/pages/search/SearchResultDetail.vue'),
   },

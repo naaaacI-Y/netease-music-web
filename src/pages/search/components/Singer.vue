@@ -31,7 +31,7 @@ const singerList = reactive({ data: [] as Artist[] })
 const emits = defineEmits<{
     (e: "changeTotal", num: number): void
 }>()
-const keywords = useRoute().query.keywords as string
+const keywords = useRoute().params.keywords as string
 const getSearchSinger = async () => {
     const r = await searchByType({ keywords: keywords, type: 100 })
     const _ = r.result as unknown as SearchSingerResult

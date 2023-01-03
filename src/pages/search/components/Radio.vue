@@ -31,7 +31,7 @@ import { searchByType } from '@/service/api/search';
 const emits = defineEmits<{
     (e: "changeTotal", num: number): void
 }>()
-const keywords = useRoute().query.keywords as string
+const keywords = useRoute().params.keywords as string
 const radioList = reactive({ data: [] as DjRadio[] })
 const getSearchRadioLIst = async () => {
     const r = await searchByType({ keywords, type: 1009 })

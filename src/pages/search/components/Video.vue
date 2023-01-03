@@ -19,7 +19,7 @@ import { useRoute } from 'vue-router';
 const emits = defineEmits<{
     (e: "changeTotal", num: number): void
 }>()
-const keywords = useRoute().query.keywords as string
+const keywords = useRoute().params.keywords as string
 const videoList = reactive({ data: [] as Video[] })
 const total = ref(0)
 const getSearchVideoList = async () => {
