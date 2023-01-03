@@ -478,9 +478,11 @@ export interface Song {
     rurl?: any;
     mst: number;
     cp: number;
+    tns?: string[]
     publishTime: number;
     privilege: Privilege;
     lyrics?: string[]
+    isFold?: boolean
 }
 
 export interface SingerTopSongResult {
