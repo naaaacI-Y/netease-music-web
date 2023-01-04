@@ -25,10 +25,13 @@
                 </div>
             </template>
         </CommonItem>
+        <Pagination v-if="pages.total >= pages.size" :total="pages.total" :size="pages.size" :page="pages.page"
+            @page-change="handlePageChange" class="mt-30 mb-30"></Pagination>
     </div>
 </template>
 
 <script lang="ts" setup>
+import Pagination from '@/components/Pagination.vue';
 import CommonItem from './CommonItem.vue';
 import { SearchUserResult, Userprofile } from '@/service/api/search/types';
 import { computed, reactive, watch } from 'vue';
@@ -41,15 +44,22 @@ const keywords = computed(() => {
     return useRoute().params.keywords as string
 })
 watch(() => keywords.value, () => {
-    console.log("keywords.value 发生改变了", keywords.value);
-
     getSearchUserList()
 })
-
+const pages = reactive({
+    page: 1,
+    size: 30,
+    total: 0
+})
 const userList = reactive({ data: [] as Userprofile[] })
+const handlePageChange = (num: number) => {
+    pages.page = num
+    getSearchUserList()
+}
 const getSearchUserList = async () => {
-    const r = await searchByType({ keywords: keywords.value, type: 1002 })
+    const r = await searchByType({ keywords: keywords.value, type: 1002, limit: pages.size, offset: (pages.page - 1) * pages.size })
     const _ = r.result as unknown as SearchUserResult
+    pages.total = _.userprofileCount
     emits("changeTotal", _.userprofileCount)
     userList.data = _.userprofiles
 }

@@ -18,10 +18,14 @@
                 </div>
             </template>
         </CommonItem>
+        <Pagination v-if="pages.total >= pages.size" :total="pages.total" :size="pages.size" :page="pages.page"
+            @page-change="handlePageChange" class="mt-30 mb-30"></Pagination>
     </div>
 </template>
 
 <script lang="ts" setup name="Album">
+import Pagination from '@/components/Pagination.vue';
+
 import { reactive, ref } from 'vue';
 import CommonItem from './CommonItem.vue';
 import { Album } from "@/service/api/recommend/types"
@@ -31,15 +35,23 @@ import { SearchAlbumResult } from '@/service/api/search/types';
 const emits = defineEmits<{
     (e: "changeTotal", num: number): void
 }>()
-const total = ref(0)
+const pages = reactive({
+    page: 1,
+    size: 30,
+    total: 0
+})
 const keywords = useRoute().params.keywords as string
 const albumList = reactive({ data: [] as Album[] })
+const handlePageChange = (num: number) => {
+    pages.page = num
+    getSearchAlbumList()
+}
 const getSearchAlbumList = async () => {
-    const r = await searchByType({ keywords: keywords, type: 10 })
+    const r = await searchByType({ keywords: keywords, type: 10, limit: pages.size, offset: (pages.page - 1) * pages.size })
     const _ = r.result as unknown as SearchAlbumResult
     albumList.data = _.albums
-    total.value = _.albumCount
-    emits("changeTotal", total.value)
+    pages.total = _.albumCount
+    emits("changeTotal", _.albumCount)
 }
 getSearchAlbumList()
 </script>

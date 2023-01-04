@@ -19,29 +19,37 @@
 
             </template>
         </SongListItem>
+        <Pagination v-if="pages.total >= pages.size" :total="pages.total" :size="pages.size" :page="pages.page"
+            @page-change="handlePageChange" class="mt-30 mb-30"></Pagination>
     </div>
 </template>
 
 <script lang="ts" setup>
 import SongListItem from '@/components/song/SongListItem.vue';
+import Pagination from '@/components/Pagination.vue';
 import { searchByType } from '@/service/api/search';
 import { SearchLyricResult } from '@/service/api/search/types';
 import { Song } from '@/service/api/singer/types';
 import Message from "@/components/message"
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
 import { useRoute } from 'vue-router';
 import Header from './Header.vue';
 const emits = defineEmits<{
     (e: "changeTotal", num: number): void
 }>()
 const keywords = useRoute().params.keywords as string
-const total = ref(0)
 const LyricList = reactive({ data: [] as Song[] })
-const isFold = ref(false)
-const unFoldIndex = ref(-1)
-
+const pages = reactive({
+    page: 1,
+    size: 30,
+    total: 0
+})
 const foldLyric = (index: number) => {
     LyricList.data[index].isFold = !LyricList.data[index].isFold
+}
+const handlePageChange = (num: number) => {
+    pages.page = num
+    getLyrics()
 }
 const copyToClipboard = (text: string[]) => {
     const t = text.slice(1).join("\n")
@@ -49,13 +57,13 @@ const copyToClipboard = (text: string[]) => {
     Message.success("已复制到剪切板")
 }
 const getLyrics = async () => {
-    const r = await searchByType({ keywords, type: 1006 })
+    const r = await searchByType({ keywords, type: 1006, limit: pages.size, offset: (pages.page - 1) * pages.size })
     const _ = r.result as unknown as SearchLyricResult
     LyricList.data = _.songs.map(item => {
         item.isFold = true
         return item
     })
-    total.value = _.songCount
+    pages.total = _.songCount
     emits('changeTotal', _.songCount)
 }
 getLyrics()
