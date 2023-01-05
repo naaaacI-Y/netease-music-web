@@ -1,5 +1,5 @@
 <template>
-    <div class="search-result-box-wrapper" id="search-result-box-wrapper">
+    <div class="search-result-box-wrapper" id="search-result-box-wrapper" :class="{ isShowBoxShadow: theme !== 'dark' }">
         <!--搜索头部-->
         <div class="result-title fs-1 mb-10 d-flex ai-center text-33" v-if="searchKeywords"
             @click="goSearchResult(searchKeywords)">
@@ -95,7 +95,9 @@
 <script lang="ts" setup>
 import { getHotSearchList, searchSuggest } from '@/service/api/search';
 import { HotSearchListRet, SearchSuggestRet } from '@/service/api/search/types';
+import useThemeState from '@/store/theme';
 import { getSearchHistory, setSearchHistory, clearSearchHistory } from '@/utils';
+import { storeToRefs } from 'pinia';
 import { reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from "vue-router"
 const route = useRoute()
@@ -106,6 +108,7 @@ const props = defineProps<{
 const emits = defineEmits<{
     (e: "hideSearchBox"): void
 }>()
+const { theme } = storeToRefs(useThemeState())
 // 监听输入框值改变
 watch(() => props.searchKeywords, async (newVal: string) => {
     if (newVal) {
@@ -151,7 +154,6 @@ props.searchKeywords ? getSuggest(props.searchKeywords) : getHotSearch()
 <style lang="scss" scoped>
 .search-result-box-wrapper {
     width: 350px;
-    box-shadow: -5px 0 5px -5px #ccc;
     position: fixed;
     right: 0;
     top: 50px;
@@ -251,5 +253,9 @@ props.searchKeywords ? getSuggest(props.searchKeywords) : getHotSearch()
             cursor: pointer;
         }
     }
+}
+
+.isShowBoxShadow {
+    box-shadow: -5px 0 5px -5px #ccc;
 }
 </style>
