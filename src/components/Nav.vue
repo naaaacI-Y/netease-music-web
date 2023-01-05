@@ -1,6 +1,6 @@
 <template>
     <div class="nav-wrapper d-flex ai-center" :class='{ "active": isChangeBgc }'>
-        <div class="right bg-black_12 d-flex ai-center jc-end" :class='{ "hasLeft": isHasLeft }'>
+        <div class="right d-flex ai-center jc-end" :class='{ "hasLeft": isHasLeft }'>
             <div class="find d-flex" v-if="isActive('/findMusic')">
                 <div :class="{ 'active': activeIndex == 0 }" @click="activeIndex = 0">
                     个性推荐
@@ -45,22 +45,41 @@
                 精彩评论
             </div>
             <div class="set d-flex">
-                <div class="search">
+                <div class="search mr-15 d-flex ai-center jc-center">
                     <div class="searchIcon">
                         <i class="iconfont icon-sousuo"></i>
                     </div>
-                    <!-- @focus="searchBoxFocus"
-                    @blur="searchBoxBlur" -->
                     <input type="text" placeholder="搜索" v-model="searchKeyWords" id="search-box" />
                 </div>
-                <div class="setting">
+                <div class="setting mr-15 d-flex ai-center jc-center">
                     <i class="iconfont icon-shezhi fs-9"></i>
                 </div>
-                <div class="info">
+                <div class="info mr-15 d-flex ai-center jc-center">
                     <i class="iconfont icon-youjian1 fs-9"></i>
                 </div>
-                <div class="skin">
-                    <i class="iconfont icon-icon-pifu fs-9"></i>
+                <div class="skin" @click="showSetTheme">
+                    <i class="iconfont icon-icon-pifu fs-9" :style="{ color: isShowSetTheme ? '#c3473a' : '' }"></i>
+                </div>
+                <div class="set-theme-box fs-1 d-flex jc-around ai-center" v-if="isShowSetTheme"
+                    :class="{ isShowShadow: theme !== 'dark' }">
+                    <div class="white-box" @click="setTheme('white')">
+                        <div class="circle white" :class="{ isWhite: theme == 'white' }">
+                            <i class="iconfont icon-gou- fs-7" style="color:#c3473a" v-if="theme == 'white'"></i>
+                        </div>
+                        <div>浅色</div>
+                    </div>
+                    <div class="red-box" @click="setTheme('red')">
+                        <div class="circle red">
+                            <i class="iconfont icon-gou- fs-7" style="color:white " v-if="theme === 'red'"></i>
+                        </div>
+                        <div>红色</div>
+                    </div>
+                    <div class="dark-box" @click="setTheme('dark')">
+                        <div class="circle dark">
+                            <i class="iconfont icon-gou- fs-7" style="color:white " v-if="theme === 'dark'"></i>
+                        </div>
+                        <div>深色</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -71,6 +90,9 @@
 import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { debounce } from "@/utils"
+import { storeToRefs } from 'pinia';
+import useThemeState from '@/store/theme';
+import { changeTheme } from '@/config/theme';
 const props = withDefaults(defineProps<{
     isChangeBgc: boolean
 }>(), {
@@ -85,9 +107,10 @@ const route = useRoute()
 const router = useRouter()
 const { dynamicName, focusName, fansName } = route.query  // 动态 关注  粉丝
 const activeIndex = ref(0)
-const searchKeyWords = ref("")
-
-const isHasLeft = computed(() => {
+const searchKeyWords = ref("") // 搜索关键字
+const isShowSetTheme = ref(false) // 是否显示主题设置弹窗
+const { theme } = storeToRefs(useThemeState())
+const isHasLeft = computed(() => { // 头部flex横向布局相关
     const paths = ["/findMusic", "/video", "/friends", "/prettyCommon", "/unique", "/dynamic", "/focus", "/fans"]
     if (route.path.startsWith("/video-detail") || route.path.startsWith("/mv-detail")) return false
     return paths.some(item => route.path.startsWith(item))
@@ -150,6 +173,14 @@ watch(() => route.path, (newVal: string) => {
 const handleKeyWordsChange = () => {
     emits("handleKeyWordsChange", searchKeyWords.value)
 }
+// 显示/隐藏主题设置弹窗
+const showSetTheme = () => {
+    isShowSetTheme.value = !isShowSetTheme.value
+}
+const setTheme = (theme: string) => {
+    changeTheme(theme)
+    isShowSetTheme.value = false
+}
 const debounceTextChange = debounce(handleKeyWordsChange, 200)
 // const searchBoxFocus = (e: Event) => {
 //     console.log("searchBoxFocus value", (e.target as HTMLInputElement).value);
@@ -171,14 +202,11 @@ const goInside = (path: string) => {
         router.push(path)
     }
 }
-const handleCclick = () => {
-    console.log("input click");
-}
 </script>
 <style lang="scss" scoped>
 .nav-wrapper {
     height: 50px;
-    background-color: #f8f8f8;
+    background-color: var(--theme-f6);
     width: 100%;
 
     .right {
@@ -197,17 +225,17 @@ const handleCclick = () => {
 
             div {
                 margin-right: 28px;
-                color: #898989;
+                color: var(--theme-89);
 
                 &:hover {
-                    color: #000;
+                    color: var(--theme-00);
                     font-weight: bold;
                     cursor: pointer;
                 }
             }
 
             .active {
-                color: #000;
+                color: var(--theme-00);
                 font-weight: bold;
             }
         }
@@ -227,12 +255,13 @@ const handleCclick = () => {
             // position: ;
             @include flex(row, center, center);
             color: #585858;
+            position: relative;
 
             .search {
                 width: 150px;
                 height: 27px;
                 border-radius: 20px;
-                background-color: #ececec;
+                background-color: var(--theme-ec);
                 @include flex(row, flex-start, center);
                 padding-left: 6px;
 
@@ -240,11 +269,12 @@ const handleCclick = () => {
                     width: calc(100% - 30px);
                     outline: none;
                     border: none;
-                    background-color: #ececec;
+                    color: var(--theme-4c);
+                    background-color: var(--theme-ec);
                 }
 
                 input::placeholder {
-                    color: #cbcbcb;
+                    color: var(--theme-cb);
                 }
             }
 
@@ -260,17 +290,62 @@ const handleCclick = () => {
             .info:hover {
                 width: 25px;
                 height: 25px;
-                background-color: #e9e9e9;
+                background-color: var(--theme-ea);
                 border-radius: 50%;
             }
 
-            >div {
-                margin-right: 16px;
-                @include flex(row, center, center);
+            .set-theme-box {
+                position: absolute;
+                width: 185px;
+                height: 85px;
+                border-radius: 5px;
+                background-color: var(--theme-settheme);
+                top: 40px;
+                right: -5px;
+                z-index: 10;
+
+                .circle {
+                    width: 25px;
+                    height: 25px;
+                    border-radius: 50px;
+                    margin-bottom: 5px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .white {
+                    background-color: white;
+                }
+
+                .red {
+                    background-color: #c3473a;
+                }
+
+                .dark {
+                    background-color: #000;
+                }
+
+                .isWhite {
+                    background-color: #f6f6f6;
+                }
+
+                &::after {
+                    display: block;
+                    content: "";
+                    position: absolute;
+                    width: 0;
+                    height: 0;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-bottom: 10px solid var(--theme-36);
+                    top: -10px;
+                    right: 10px;
+                }
             }
 
-            div:last-child {
-                margin-right: 0;
+            .isShowShadow {
+                box-shadow: 0px -5px 5px -5px #ccc, -5px 0 5px -5px #ccc, 5px 5px 5px -5px #ccc;
             }
         }
     }
@@ -282,12 +357,10 @@ const handleCclick = () => {
 }
 
 .active {
-    background-color: white;
 
     .right {
         justify-content: flex-end;
-        background-color: white !important;
-        ;
+        // background-color: white !important;
     }
 }
 </style>
