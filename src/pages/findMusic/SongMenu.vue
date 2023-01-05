@@ -9,8 +9,9 @@
                     <i class="iconfont icon-huangguan mr-3"></i>
                     <span>精品歌单</span>
                 </div>
-                <div class="main-label text-white mb-6 fs-5">{{ bannerInfo.data.name }}</div>
-                <div class="main-sub-label fs-2 text-c4" v-if="bannerInfo.data.copywriter">{{ bannerInfo.data.copywriter
+                <div class="main-label mb-6 fs-5" style="color:white">{{ bannerInfo.data.name }}</div>
+                <div class="main-sub-label fs-2 text-c4" v-if="bannerInfo.data.copywriter">{{
+                    bannerInfo.data.copywriter
                 }}</div>
             </div>
         </div>

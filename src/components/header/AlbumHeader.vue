@@ -5,12 +5,12 @@
         </div>
         <div class="album-right">
             <div class="base-info d-flex ai-center mb-20">
-                <div class="type mr-10 fs-1 text-primary_red_1">专辑</div>
-                <div class="name fs-9" style="font-weight:bold">{{ albumInfo?.name }}
+                <div class="type mr-10 fs-1 text-primary_red_4">专辑</div>
+                <div class="name fs-9 text-33" style="font-weight:bold">{{ albumInfo?.name }}
                 </div>
             </div>
-            <div class="operate d-flex text-black_3 mb-20">
-                <div class="play-all fs-3 d-flex ai-center text-white mr-10">
+            <div class="operate d-flex text-33 mb-20">
+                <div class="play-all fs-3 d-flex ai-center mr-10" style="color: white;">
                     <i class="iconfont icon-bofang_o  fs-9"></i>
                     播放全部
                 </div>
@@ -30,11 +30,11 @@
                     <span>下载全部</span>
                 </div>
             </div>
-            <div class="singer fs-2 mb-8">
-                <span class="text-black_3" @click="goSingerPage">歌手：</span>
+            <div class="singer fs-1 mb-8">
+                <span class="text-33" @click="goSingerPage">歌手：</span>
                 <span class="text-shadow_blue">{{ albumInfo?.artist?.name }}</span>
             </div>
-            <div class="time fs-2 text-black_3">
+            <div class="time fs-1 text-33">
                 <span>时间：</span>
                 <span>{{ formatTime(albumInfo?.publishTime, "yyyy-MM-dd") }}</span>
             </div>
@@ -98,11 +98,11 @@ const goSingerPage = () => {
             .download-all,
             .collect-count {
                 padding: 4px 12px;
-                border: 1px solid #e5e5e5;
+                border: 1px solid var(--theme-e5); // dark: #4545454
                 border-radius: 18px;
 
                 &:hover {
-                    background-color: #f2f2f2;
+                    background-color: var(--theme-f2);
                     cursor: pointer;
                 }
             }

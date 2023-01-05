@@ -7,23 +7,22 @@
         </div>
         <div class="footer-content d-flex ai-center">
             <div class="left d-flex">
-                <div class="img mr-10">
+                <div class="img mr-10" style="color: white;">
                     <img :src="player.currentTrack?.al?.picUrl" alt="">
                     <div class="mask-show d-flex ai-center jc-center" @click="changePlayPage" v-if="!isShowPlay">
-                        <i class="iconfont icon-quanping3-xianxing text-white"></i>
+                        <i class="iconfont icon-quanping3-xianxing"></i>
                     </div>
                     <div class="mask-hide d-flex ai-center jc-center" v-if="isShowPlay" @click="changePlayPage">
-                        <i class="iconfont icon-quanping4-xianxing text-white"></i>
+                        <i class="iconfont icon-quanping4-xianxing"></i>
                     </div>
                 </div>
                 <div class="song-info d-flex flex-column jc-center">
                     <div class="name">
-                        <span class="fs-3">{{ player.currentTrack?.name }}</span>
-                        <!-- <span class="fs-1 text-black_6"> - {{ player.currentTrack?.ar[0]?.name }}</span> -->
+                        <span class="fs-3 text-33">{{ player.currentTrack?.name }}</span>
+                        <!-- <span class="fs-1 text-97"> - {{ player.currentTrack?.ar[0]?.name }}</span> -->
                     </div>
-                    <div class="time d-flex ai-center fs-1 text-black_6">
+                    <div class="time d-flex ai-center fs-1 text-97">
                         <div class="start mr-4">{{ progress }}</div>
-                        {{ player.progress }}
                         <div class="mr-4">/</div>
                         <div class="total">{{ formatSongTime(player.currentTrack?.dt) }}</div>
                     </div>
@@ -31,14 +30,14 @@
             </div>
             <div class="middle d-flex ai-center">
                 <i class="iconfont icon-24gl-heart fs-9 text-4b mr-30"></i>
-                <i class="iconfont icon-diyiyeshouyeshangyishou text-primary_red_1 fs-10 mr-25"></i>
-                <i class="iconfont icon-zanting2x text-primary_red_1  mr-25" style="font-size: 40px;"
+                <i class="iconfont icon-diyiyeshouyeshangyishou text-primary_red_4 fs-10 mr-25"></i>
+                <i class="iconfont icon-zanting2x text-primary_red_4  mr-25" style="font-size: 40px;"
                     @click="player.playOrPause()" v-if="player.playing"></i>
-                <i class="iconfont icon-zanting1 text-primary_red_1  mr-25" style="font-size: 40px;"
+                <i class="iconfont icon-zanting1 text-primary_red_4  mr-25" style="font-size: 40px;"
                     @click="player.playOrPause()" v-if="!player.playing"></i>
-                <i class="iconfont icon-zuihouyiyemoyexiayishou text-primary_red_1 fs-10 mr-30"></i>
+                <i class="iconfont icon-zuihouyiyemoyexiayishou text-primary_red_4 fs-10 mr-30"></i>
                 <i class="iconfont icon-24gl-trash2 text-4b fs-6" v-if="player.isPersonalFM"></i>
-                <i class="iconfont icon-fenxiang1 text-black_1" v-if="!player.isPersonalFM"></i>
+                <i class="iconfont icon-fenxiang1 text-3a" v-if="!player.isPersonalFM"></i>
             </div>
             <div class="right text-4b d-flex ai-center mr-15">
 
@@ -118,7 +117,7 @@ const changePlayPage = () => {
     left: 0;
     width: 100%;
     z-index: 99;
-    background-color: white;
+    background-color: var(--theme-white);
 
     .progressBar {
         height: 2px;

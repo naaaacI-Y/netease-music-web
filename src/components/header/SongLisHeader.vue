@@ -5,8 +5,8 @@
         </div>
         <div class="right">
             <div class="info d-flex ai-center mb-20">
-                <div class="song-list-type mr-10 fs-1 text-primary_red_1">歌单</div>
-                <div class="name fs-9" style="font-weight:bold">熬夜和想你，我都该戒掉了</div>
+                <div class="song-list-type mr-10 fs-1 text-primary_red_4">歌单</div>
+                <div class="name fs-9 text-00" style="font-weight:bold">熬夜和想你，我都该戒掉了</div>
             </div>
             <div class="creator-info d-flex ai-center mb-20">
                 <div class="creator-avatar mr-7">
@@ -15,11 +15,11 @@
                 <div class="creator-name fs-2 text-shadow_blue mr-6">
                     创作者名称
                 </div>
-                <div class="creator-time fs-2 text-black_13">
+                <div class="creator-time fs-2 text-99">
                     2018-03-30创建
                 </div>
             </div>
-            <div class="operate d-flex text-black_3 mb-8">
+            <div class="operate d-flex text-33 mb-8">
                 <div class="play-all fs-3 d-flex ai-center text-white mr-10">
                     <i class="iconfont icon-bofang_o  fs-9"></i>
                     播放全部
@@ -41,25 +41,25 @@
             </div>
             <div class="other-info">
                 <div class="other-info-label mb-3">
-                    <span class="fs-2 text-black_3">标&emsp;签：</span>
+                    <span class="fs-2 text-33">标&emsp;签：</span>
                     <span class="label-name fs-2 text-shadow_blue mr-3">华语</span>
                     <span class="fs-2 mr-3">/</span>
                     <span class="label-name fs-2 text-shadow_blue">流行</span>
                 </div>
                 <div class="song-about d-flex fs-2 mb-3">
                     <div class="song-count mr-11">
-                        <span class="text-black_3">歌曲数：</span>
-                        <span class="text-black_13">123</span>
+                        <span class="text-33">歌曲数：</span>
+                        <span class="text-99">123</span>
                     </div>
                     <div class="play-count fs-2">
-                        <span class="text-black_3">播放数：</span>
-                        <span class="text-black_13">4000万</span>
+                        <span class="text-33">播放数：</span>
+                        <span class="text-99">4000万</span>
                     </div>
                 </div>
                 <div class="summary fs-2">
-                    <span class="text-black_3">简&emsp;介：</span>
+                    <span class="text-33">简&emsp;介：</span>
                     <span
-                        class="text-black_13">命运似乎是一个轮回，在一次次的偶然下，平行线交叉，再平行，故事始终有"然后"，可后来的我们，都学会如何去爱了吗？如果当时你没走，后来的我们会不会不一样。或许，我们每个人都想回到故事最开始的地方。封面：周冬雨By：朩朩青尘</span>
+                        class="text-99">命运似乎是一个轮回，在一次次的偶然下，平行线交叉，再平行，故事始终有"然后"，可后来的我们，都学会如何去爱了吗？如果当时你没走，后来的我们会不会不一样。或许，我们每个人都想回到故事最开始的地方。封面：周冬雨By：朩朩青尘</span>
                 </div>
             </div>
         </div>

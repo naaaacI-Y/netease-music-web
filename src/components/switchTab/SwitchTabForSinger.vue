@@ -2,7 +2,7 @@
     <div class="switch-tab-wrapper mt-30">
         <div class="head d-flex jc-between">
             <div class="head-item-wrapper d-flex">
-                <div class="head-item mr-30 fs-4 text-black_2" v-for="(item, index) in labelList"
+                <div class="head-item mr-30 fs-4 text-4e" v-for="(item, index) in labelList"
                     :class="{ isActive: activeIndex === index }" @click="activeIndex = index" :key="index">{{ item }}
                 </div>
             </div>
@@ -36,8 +36,8 @@
         </div>
         <div v-if="activeIndex === 2" class="detail">
             <div class="detail-item mb-30 pt-20" v-for="item in singerDetail.data">
-                <div class="detail-title f-2 mb-20">{{ item.ti }}</div>
-                <div class="detail-content fs-1  mb-20" v-for="it in item.txt.split('\n')" style="color:#bcbcbc">
+                <div class="detail-title f-2 mb-20 text-33">{{ item.ti }}</div>
+                <div class="detail-content fs-1 mb-20 text-bc" v-for="it in item.txt.split('\n')">
                     {{ it }}
                 </div>
             </div>
@@ -116,7 +116,7 @@ watchEffect(() => {
 <style lang="scss" scoped>
 .switch-tab-wrapper {
     .head {
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--theme-ee);
 
         .head-item {
             padding-bottom: 10px;
@@ -134,7 +134,7 @@ watchEffect(() => {
             .type2 {
                 width: 25px;
                 height: 20px;
-                background-color: #f2f2f2;
+                background-color: var(--theme-f2);
             }
 
             .type1 {
@@ -148,7 +148,7 @@ watchEffect(() => {
             }
 
             .isBtnActive {
-                background-color: #bfbfbf;
+                background-color: var(--theme-bf);
 
                 i {
                     color: white;

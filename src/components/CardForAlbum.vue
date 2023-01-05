@@ -7,8 +7,11 @@
             </div>
         </div>
         <div class="album-info">
-            <div class="name mb-10 fs-3 text-black_3">{{ albumItem.name }}</div>
-            <div class="time fs-2 text-black_6">{{ formatTime(albumItem.publishTime, "yyyy-MM-dd") }}</div>
+            <div class="name mb-2 fs-3 text-33">
+                <span>{{ albumItem.name }}</span>
+                <span v-if="albumItem.alias?.length" class="fs-2 text-99">({{ albumItem.alias[0] }})</span>
+            </div>
+            <div class="time fs-2 text-97">{{ formatTime(albumItem.publishTime, "yyyy-MM-dd") }}</div>
         </div>
     </div>
 </template>

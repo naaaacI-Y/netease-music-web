@@ -11,11 +11,11 @@
         <div class="index fs-2 mr-12" v-if="isOutSide">{{ paddingIndex(index) }}</div>
         <div class="music-name d-flex flex-column jc-center ai-start flex-1">
             <div class="name fs-3">
-                <span class="mr-4">{{ musicItem.name }}</span>
-                <span v-if="musicItem.song.alias.length" class="text-black_13">({{ musicItem.song.alias[0] }})</span>
+                <span class="mr-4 text-00">{{ musicItem.name }}</span>
+                <span v-if="musicItem.song.alias.length" class="text-93">({{ musicItem.song.alias[0] }})</span>
             </div>
             <div class="music-author" v-if="isOutSide">
-                <span class="text-primary_red_2 fs-1 mr-4 sq" v-if="musicItem.song.sqMusic">SQ</span>
+                <span class="text-primary_red_4 fs-1 mr-4 sq" v-if="musicItem.song.sqMusic">SQ</span>
                 <span class="fs-2">{{ musicItem.song.artists[0].name }}</span>
             </div>
         </div>
@@ -99,7 +99,7 @@ const paddingIndex = (index: number) => {
         width: 185px;
 
         .sq {
-            border: 1px solid #ec7140;
+            border: 1px solid #d33b31;
             border-radius: 4px;
             padding: 0 3px;
         }
@@ -111,13 +111,13 @@ const paddingIndex = (index: number) => {
 
     .music-album,
     .music-author {
-        color: #646464;
+        color: var(--theme-3f);
 
     }
 
     .music-album:hover,
     .music-author:hover {
-        color: #4c4c4c;
+        color: var(--theme-66);
         cursor: pointer;
     }
 

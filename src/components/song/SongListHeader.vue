@@ -5,8 +5,8 @@
         </div>
         <div class="right flex-1">
             <div class="info d-flex ai-center mb-20">
-                <div class="song-list-type mr-10 fs-1 text-primary_red_1">歌单</div>
-                <div class="name fs-9" style="font-weight:bold">{{ headerInfo.name }}</div>
+                <div class="song-list-type mr-10 fs-1 text-primary_red_4">歌单</div>
+                <div class="name fs-9 text-33" style="font-weight:bold">{{ headerInfo.name }}</div>
             </div>
             <div class="creator-info d-flex ai-center mb-20">
                 <div class="creator-avatar mr-7" @click="goPersonCenter">
@@ -18,12 +18,12 @@
                 <div class="creator-name fs-1 text-shadow_blue mr-6" @click="goPersonCenter">
                     {{ headerInfo.creator.nickname }}
                 </div>
-                <div class="creator-time fs-1 text-black_13">
+                <div class="creator-time fs-1 text-99">
                     {{ formatTime(headerInfo.createTime, "yyyy-MM-dd") }}创建
                 </div>
             </div>
-            <div class="operate d-flex text-black_3 mb-8">
-                <div class="play-all fs-2 d-flex ai-center text-white mr-10">
+            <div class="operate d-flex text-33 mb-8">
+                <div class="play-all fs-2 d-flex ai-center mr-10" style="color:white">
                     <i class="iconfont icon-bofang_o  fs-9"></i>
                     播放全部
                 </div>
@@ -44,23 +44,23 @@
             </div>
             <div class="other-info mt-12">
                 <div class="other-info-label mb-3" v-if="headerInfo.tags.length">
-                    <span class="fs-2 text-black_3">标&emsp;签：</span>
+                    <span class="fs-2 text-33">标&emsp;签：</span>
                     <span class="label-name fs-2 text-shadow_blue mr-3" v-for="(item, index) in headerInfo.tags"
                         :key="index">{{ item }}</span>
                 </div>
                 <div class="song-about d-flex fs-1 mb-3">
                     <div class="song-count mr-11">
-                        <span class="text-black_3">歌曲数：</span>
-                        <span class="text-black_13">{{ headerInfo.trackCount }}</span>
+                        <span class="text-33">歌曲数：</span>
+                        <span class="text-99">{{ headerInfo.trackCount }}</span>
                     </div>
                     <div class="play-count fs-1">
-                        <span class="text-black_3">播放数：</span>
-                        <span class="text-black_13">{{ formatPlayCount(headerInfo.playCount) }}</span>
+                        <span class="text-33">播放数：</span>
+                        <span class="text-99">{{ formatPlayCount(headerInfo.playCount) }}</span>
                     </div>
                 </div>
                 <div class="summary fs-1">
-                    <span class="text-black_3">简&emsp;介：</span>
-                    <span class="text-black_13">{{ headerInfo.description }}</span>
+                    <span class="text-33">简&emsp;介：</span>
+                    <span class="text-99">{{ headerInfo.description }}</span>
                 </div>
             </div>
         </div>
@@ -145,11 +145,11 @@ const goPersonCenter = () => {
             .download-all,
             .collect-count {
                 padding: 4px 12px;
-                border: 1px solid #e5e5e5;
+                border: 1px solid var(--theme-e5);
                 border-radius: 18px;
 
                 &:hover {
-                    background-color: #f2f2f2;
+                    background-color: var(--theme-f2);
                     cursor: pointer;
                 }
             }

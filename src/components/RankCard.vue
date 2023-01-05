@@ -21,7 +21,7 @@
                         <i class="iconfont icon-new text-new" v-if="flagDetail.data[index].lr === undefined"></i>
                         <div class="no-change"
                             v-if="flagDetail.data[index].lr === 0 || flagDetail.data[index].lr === index">
-                            <span>-</span>
+                            <span class="text-99">-</span>
                         </div>
                         <i class="iconfont icon-xiangshangjiantou text-primary_red_4"
                             v-if="flagDetail.data[index].lr! > index"></i>

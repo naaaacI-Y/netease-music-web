@@ -4,9 +4,9 @@
             <LazyLoadImg :src="singerItem.picUrl"></LazyLoadImg>
         </div>
         <div class="singer-info d-flex ai-center jc-between">
-            <div class="name fs-2">{{ singerItem.name }}</div>
+            <div class="name fs-2 text-33">{{ singerItem.name }}</div>
             <div class="flag d-flex ai-center jc-center" v-if="isShowSingerFlag && singerItem.accountId">
-                <i class="iconfont text-white icon-iconfontyonghuming"></i>
+                <i class="iconfont icon-iconfontyonghuming" style="color: white"></i>
             </div>
         </div>
     </div>

@@ -1,11 +1,11 @@
 <template>
     <div class="singer-wrapper">
         <div class="filter-wrapper mb-20">
-            <FilterItem :active-type="activeLanguageType" :type-list="Object.keys(languageList)" label="语种"
+            <FilterItem :active-type="languageList[activeLanguageType]" :type-list="languageList" label="语种"
                 @change-active-type="changeLanguageActive"></FilterItem>
-            <FilterItem :active-type="activeCategoryType" :type-list="Object.keys(categoryList)" label="分类"
+            <FilterItem :active-type="categoryList[activeCategoryType]" :type-list="categoryList" label="分类"
                 @change-active-type="changeCategoryActive"></FilterItem>
-            <FilterItem :active-type="activeFilterType" :type-list="Object.keys(filterList)" label="筛选"
+            <FilterItem :active-type="filterList[activeFilterType]" :type-list="filterList" label="筛选"
                 @change-active-type="changeFilterActive"></FilterItem>
         </div>
         <div class="singer-list-wrapper d-flex flex-wrap jc-between">

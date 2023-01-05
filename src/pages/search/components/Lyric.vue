@@ -9,7 +9,7 @@
                         <div class="other" v-for="it in item.lyrics.slice(1, 4)" v-show="item.isFold">{{ it }}</div>
                         <div class="other" v-for="it in item.lyrics.slice(1)" v-show="!item.isFold">{{ it }}</div>
                     </div>
-                    <div class="operate fs-2 text-black_1 d-flex ai-center">
+                    <div class="operate fs-2 text-3a d-flex ai-center">
                         <div class="more d-flex ai-center jc-center mr-10" @click="foldLyric(index)">{{ item.isFold ?
         '展开歌词' : '收起歌词'
 }}</div>

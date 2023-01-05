@@ -6,7 +6,7 @@
                 <i class="iconfont icon-bofang1 text-white fs-9"></i>
             </div>
         </div>
-        <div class="unique-name fs-3 text-black_2">{{ uniqueItem.name }}</div>
+        <div class="unique-name fs-3 text-4e">{{ uniqueItem.name }}</div>
     </div>
 </template>
 
@@ -55,7 +55,7 @@ withDefaults(defineProps<
     }
 
     .unique-name:hover {
-        color: #3a3a3a;
+        color: var(--theme-3a);
         cursor: pointer;
     }
 }

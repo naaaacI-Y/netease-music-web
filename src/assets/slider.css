@@ -3,7 +3,7 @@
   padding: 0 !important;
 }
 .vue-slider-rail {
-  background-color: #eee;
+  background-color: var(--theme-ee);
   border-radius: 15px;
 }
 

@@ -1,4 +1,9 @@
 @import './variables';
+@import './theme-base.scss';
+@import './theme-dark.scss';
+@import './theme-white.scss';
+@import './theme-red.scss';
+
 // reset
 * {
   box-sizing: border-box;
@@ -6,6 +11,29 @@
   margin: 0;
   padding: 0;
 }
+
+@each $themeKey, $themeValue in $themes {
+  [data-theme="#{'' + $themeKey}"] {
+    // @content;
+    @each $colorKey, $color in $themeValue {
+      .text-#{$colorKey} {
+        color: $color;
+      }
+      .bg-#{$colorKey} {
+        background-color: $color;
+      }
+    }
+  }
+}
+
+// @mixin def_all_theme {
+//   @each $themeKey, $themeValue in $themes {
+//     $themeValue: $themeValue!global;
+//     [data-theme="#{'' + $themeKey"]&{
+//       @content;
+//     }
+//   }
+// }
 
 @each $colorKey, $color in $colors {
   .text-#{$colorKey} {
@@ -92,11 +120,11 @@
 }
 
 //borders
-@each $dir in (top, right, bottom, left) {
-  .border-#{$dir} {
-    border-#{$dir}: 1px solid $border-color;
-  }
-}
+// @each $dir in (top, right, bottom, left) {
+//   .border-#{$dir} {
+//     border-#{$dir}: 1px solid $border-color;
+//   }
+// }
 
 // mixins 放在全局的样式文件中 无需引入
 // 文本溢出隐藏

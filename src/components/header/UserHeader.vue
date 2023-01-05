@@ -23,11 +23,11 @@
                         <div class="right d-flex">
                             <div class="edit-info d-flex ai-center fs-3" v-if="isSelf">
                                 <i class="iconfont icon-bianji fs-9"></i>
-                                <span class="text-black_3">编辑个人信息</span>
+                                <span class="text-33">编辑个人信息</span>
                             </div>
                             <div class="focus d-flex ai-center pl-6 fs-3" v-if="!isSelf">
-                                <i class="iconfont icon-jia text-primary_red_1 fs-9 mr-4"></i>
-                                <span class="text-black_3">关注</span>
+                                <i class="iconfont icon-jia text-primary_red_4 fs-9 mr-4"></i>
+                                <span class="text-33">关注</span>
                             </div>
                         </div>
                     </div>

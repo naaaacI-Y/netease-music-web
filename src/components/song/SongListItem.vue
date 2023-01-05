@@ -4,8 +4,8 @@
             <div class="left d-flex ai-center fs-2 jc-event" v-if="type !== 3">
                 <div class="index text-c4">{{ paddingLeft(index) }}</div>
                 <slot name="flagInside" v-if="rankType === 1"></slot>
-                <i class="iconfont icon-aixin text-black_13"></i>
-                <i class="iconfont icon-xiazai text-black_13"></i>
+                <i class="iconfont icon-aixin text-99"></i>
+                <i class="iconfont icon-xiazai text-99"></i>
             </div>
             <div class="rank d-flex ai-center mr-5 pl-8" v-if="type === 3">
                 <div class="index fs-4 mr-8" :class="{ isTop3: index <= 3 }">{{ index }}</div>
@@ -13,22 +13,22 @@
             </div>
             <div class="main-info fs-2 d-flex ">
                 <div class="song-name d-flex ai-center" :style="{ width: rankType === -1 ? '34.8%' : '42.8%' }">
-                    <div class="text-black_3 mr-4">{{ item?.name }}</div>
-                    <div class="text-black_13 mr-4" v-if="item?.alia?.length">({{ item?.alia[0] }})</div>
+                    <div class="text-33 mr-4">{{ item?.name }}</div>
+                    <div class="text-99 mr-4" v-if="item?.alia?.length">({{ item?.alia[0] }})</div>
                     <i class="iconfont icon-h-square text-primary_red_4 fs-2" v-if="item?.sq && type !== 3"></i>
                     <i class="iconfont icon-bofang2 text-primary_red_4 ml-4 fs-7" v-if="item?.mv && type !== 3"
                         @click="goMvDetail"></i>
                 </div>
                 <slot name="rate"></slot>
-                <div class="singer  text-black_13" v-if="isShow === 'all' || isShow === 'rank'">
+                <div class="singer  text-99" v-if="isShow === 'all' || isShow === 'rank'">
                     {{ item?.ar[0]?.name }}
                 </div>
-                <div class="album  text-black_13" v-if="isShow === 'all'">
+                <div class="album  text-99" v-if="isShow === 'all'">
                     {{ item?.al.name }}
                 </div>
                 <div class="time text-c4 d-flex ai-center" v-if="isShow === 'all' || isShow === 'singer'">{{
-        formatSongTime(item!.dt)
-}}</div>
+                    formatSongTime(item!.dt)
+                }}</div>
                 <div class="count text-c4 d-flex ai-cente" v-if="isShow === 'listen'">7次</div>
             </div>
         </div>
@@ -106,7 +106,7 @@ const playMusic = () => {
         }
 
         i:hover {
-            color: #565656;
+            color: var(--theme-56);
             cursor: pointer;
         }
     }
@@ -154,7 +154,7 @@ const playMusic = () => {
 
             &:hover {
                 cursor: pointer;
-                color: #565656;
+                color: var(--theme-56); // dark: #b7b7b7b
             }
         }
 
@@ -172,11 +172,11 @@ const playMusic = () => {
     }
 
     &:hover {
-        background-color: #f2f2f3;
+        background-color: var(--theme-f2); // dark: #323232
     }
 }
 
 .odd {
-    background-color: #fafafa;
+    background-color: var(--theme-fa); // dark: #292929
 }
 </style>

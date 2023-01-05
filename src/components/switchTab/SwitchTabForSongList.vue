@@ -1,13 +1,13 @@
 <template>
     <div class="switch-tab-wrapper mt-30" ref="songListComment">
         <div class="head d-flex">
-            <div class="head-item mr-30 fs-4 text-black_2" v-for="(item, index) in labelListMap"
+            <div class="head-item mr-30 fs-4 text-4e" v-for="(item, index) in labelListMap"
                 :class="{ isActive: activeIndex === index }" @click="activeIndex = index" :key="index">
                 <span>{{ item }}</span>
                 <span v-if="item === '评论'" class="fs-2">({{ commentCount }})</span>
             </div>
         </div>
-        <SongList v-if="activeIndex === 0"></SongList>
+        <SongList v-show="activeIndex === 0"></SongList>
         <SongListComment v-if="activeIndex === 1" :source-type="2"></SongListComment>
         <Collectors v-if="activeIndex === 2"></Collectors>
     </div>
@@ -33,7 +33,7 @@ const activeIndex = ref(0)
 <style lang="scss" scoped>
 .switch-tab-wrapper {
     .head {
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--theme-ee);
 
         .head-item {
             padding-bottom: 10px;

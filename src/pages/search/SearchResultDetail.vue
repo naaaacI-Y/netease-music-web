@@ -6,7 +6,7 @@
                 <div class="total fs-2 text-66">找到&ensp;{{ total }}&ensp;{{ showWord }}</div>
             </div>
             <div class="switch-tab-wrap d-flex">
-                <div class="switch-tab-item mr-30 fs-3 text-black_1 pb-5"
+                <div class="switch-tab-item mr-30 fs-3 text-3a pb-5"
                     v-for="(item, index) in Object.keys(searchTypeList)" @click="changeItem(item)"
                     :class="{ isActive: index === activeIndex }">{{ item }}</div>
             </div>

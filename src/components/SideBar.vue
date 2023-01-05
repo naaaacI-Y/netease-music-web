@@ -1,6 +1,6 @@
 <template>
     <div class="side-bar-wrapper">
-        <div class="left">
+        <div class="left bg-ed">
             <div class="isLoginHeader" v-if="userFile?.userId">
                 <div class="avatar">
                     <img :src="userFile.avatarUrl" alt="">
@@ -19,7 +19,7 @@
                     <i class="iconfont icon-xiangyou fs-1" style="color:#8e8e8e"></i>
                 </div>
             </div>
-            <div class="other mb-20" style="color:#414141">
+            <div class="other mb-20 text-41">
                 <div :class="['find', active('findMusic') ? isActive : '']"
                     @click="go('/findMusic/personal-recommend')">
                     <i class="iconfont icon-wangyiyunyinyuemusic1193417easyiconnet"></i>
@@ -39,19 +39,19 @@
                     <span>朋友</span>
                 </div>
             </div>
-            <div class="myMusic mt-9">
-                <div class="title pl-18">我的音乐</div>
+            <div class="myMusic mt-9 text-41 fs-18">
+                <div class="title pl-18 fs-13">我的音乐</div>
                 <div class="itunes pl-18">
-                    <i class="iconfont icon-itunes"></i>
-                    <span>iTunes音乐</span>
+                    <i class="iconfont icon-itunes text-41"></i>
+                    <span class="fs-13">iTunes音乐</span>
                 </div>
                 <div class="itunes pl-18">
                     <i class="iconfont icon-xiazai"></i>
-                    <span>下载管理</span>
+                    <span class="fs-13">下载管理</span>
                 </div>
                 <div class="itunes pl-18">
                     <i class="iconfont icon-zuijinbofang"></i>
-                    <span>最近播放</span>
+                    <span class="fs-13">最近播放</span>
                 </div>
             </div>
         </div>
@@ -70,6 +70,8 @@ const router = useRouter()
 const isActive = ref('isActive')
 const { userFile } = storeToRefs(userProfile)
 const goPersonalCenter = () => {
+    console.log("登录========");
+
     globalState.isShowLoginBox = true
 }
 const active = (name1: string, name2?: string): boolean => {
@@ -89,7 +91,6 @@ const go = (path: string): void => {
     display: flex;
 
     .left {
-        background-color: #ededed;
         width: 200px;
 
         .isLoginHeader,
@@ -109,6 +110,10 @@ const go = (path: string): void => {
             }
 
             .toLogin {
+                span {
+                    color: var(--theme-e0);
+                }
+
                 @include flex(row, flex-start, center);
             }
         }
@@ -129,12 +134,12 @@ const go = (path: string): void => {
                 }
 
                 &:hover {
-                    background-color: #e1e1e1;
+                    background-color: var(--theme-e6); // dark: #1d1d1d
                 }
             }
 
             .isActive {
-                background-color: #e2e2e2;
+                background-color: var(--theme-e1); // dark: #1b1b1b
                 color: #d6635e;
             }
         }
@@ -147,9 +152,8 @@ const go = (path: string): void => {
             }
 
             i {
-                font-size: 18px;
+                // font-size: 18px;
                 margin-right: 10px;
-                color: #414141;
             }
 
             span {
@@ -162,7 +166,7 @@ const go = (path: string): void => {
                 @include flex(row, flex-start, center);
 
                 &:hover {
-                    background-color: #e1e1e1;
+                    background-color: var(--theme-e1);
                 }
             }
         }

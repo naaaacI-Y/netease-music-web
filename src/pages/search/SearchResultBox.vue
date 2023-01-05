@@ -1,7 +1,7 @@
 <template>
     <div class="search-result-box-wrapper" id="search-result-box-wrapper">
         <!--搜索头部-->
-        <div class="result-title fs-1 mb-10 d-flex ai-center" v-if="searchKeywords"
+        <div class="result-title fs-1 mb-10 d-flex ai-center text-33" v-if="searchKeywords"
             @click="goSearchResult(searchKeywords)">
             搜“<span class="text-deep_blue">{{ searchKeywords }}</span>”相关结果 >
         </div>
@@ -13,8 +13,9 @@
             </div>
             <div class="search-his-wrap d-flex ai-center flex-wrap">
                 <div class="search-item fs-2 text-4b mr-10 mb-10" v-for="item in Object.keys(searchHistoryList)"
-                    @click="goSearchResult(item)">{{ item
-}}</div>
+                    @click="goSearchResult(item)">{{
+                        item
+                    }}</div>
             </div>
         </div>
         <!---搜索结果-->
@@ -26,7 +27,7 @@
                     <span>单曲</span>
                 </div>
                 <div class="song-content">
-                    <div class="item d-flex ai-center" v-for="item in searchResult?.data?.songs" :key="item.id">
+                    <div class="item d-flex ai-center text-33" v-for="item in searchResult?.data?.songs" :key="item.id">
                         {{ item?.name }}&ensp;-&ensp;{{ item.artists[0]?.name }}
                     </div>
                 </div>
@@ -38,7 +39,8 @@
                     <span>歌手</span>
                 </div>
                 <div class="singer-content">
-                    <div class="item" v-for="item in searchResult?.data?.artists" :key="item.id">{{ item.name }}</div>
+                    <div class="item text-33" v-for="item in searchResult?.data?.artists" :key="item.id">{{ item.name }}
+                    </div>
                 </div>
             </div>
             <!--搜索专辑-->
@@ -48,7 +50,7 @@
                     <span>专辑</span>
                 </div>
                 <div class="album-content">
-                    <div class="item" v-for="item in searchResult?.data?.albums" :key="item.id">
+                    <div class="item text-33" v-for="item in searchResult?.data?.albums" :key="item.id">
                         <span>{{ item?.name }}</span>
                         <span>&ensp;-&ensp;</span>
                         <span>{{ item?.artist?.name }}</span>
@@ -62,7 +64,9 @@
                     <span>歌单</span>
                 </div>
                 <div class="song-list-content">
-                    <div class="item" v-for="item in searchResult?.data?.playlists" :key="item.id"> {{ item.name }}
+                    <div class="item text-33" v-for="item in searchResult?.data?.playlists" :key="item.id"> {{
+                        item.name
+                    }}
                     </div>
                 </div>
             </div>
@@ -75,7 +79,7 @@
                 <div class="index mr-20 text-cf" :class="{ isTop: index <= 2 }">{{ index + 1 }}</div>
                 <div class="main-info">
                     <div class="search-word fs-1 d-flex ai-center">
-                        <span :class="{ isTop: index <= 2 }" style="color:#1a1a1a">{{ item.searchWord }}</span>
+                        <span class="text-33" :class="{ isTop: index <= 2 }">{{ item.searchWord }}</span>
                         <div class="icon ml-5" v-if="item.iconUrl">
                             <img :src="item.iconUrl" alt="">
                         </div>
@@ -153,7 +157,7 @@ props.searchKeywords ? getSuggest(props.searchKeywords) : getHotSearch()
     top: 50px;
     height: calc(100vh - 110px);
     z-index: 99;
-    background-color: white;
+    background-color: var(--theme-search);
     overflow-y: auto;
 
     .search-hot {
@@ -168,7 +172,7 @@ props.searchKeywords ? getSuggest(props.searchKeywords) : getHotSearch()
             padding: 0 20px;
 
             &:hover {
-                background-color: #f2f2f2;
+                background-color: var(--theme-f2);
                 cursor: pointer;
             }
 
@@ -185,7 +189,7 @@ props.searchKeywords ? getSuggest(props.searchKeywords) : getHotSearch()
 
                     .isTop {
                         font-weight: bold;
-                        color: #000;
+                        color: var(--theme-31);
                     }
                 }
             }
@@ -196,13 +200,13 @@ props.searchKeywords ? getSuggest(props.searchKeywords) : getHotSearch()
         padding: 15px 20px;
 
         .search-item {
-            border: 1px solid #e5e5e5;
+            border: 1px solid var(--theme-e5);
             padding: 4px 12px;
-            border-radius: 20px;
+            border-radius: 15px;
 
             &:hover {
                 cursor: pointer;
-                background-color: #f2f2f2;
+                background-color: var(--theme-f2);
             }
         }
     }
@@ -213,7 +217,7 @@ props.searchKeywords ? getSuggest(props.searchKeywords) : getHotSearch()
             margin-bottom: 10px;
             display: flex;
             align-items: center;
-            color: #666;
+            color: var(--theme-66);
             font-size: 14px;
 
             &:hover {
@@ -234,7 +238,7 @@ props.searchKeywords ? getSuggest(props.searchKeywords) : getHotSearch()
 
             &:hover {
                 cursor: pointer;
-                background-color: #f2f2f2;
+                background-color: var(--theme-f2);
             }
         }
 

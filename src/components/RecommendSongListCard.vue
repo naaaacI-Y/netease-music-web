@@ -3,16 +3,16 @@
         <div class="img-wrapper mb-6">
             <img :src="songListItem.coverImgUrl" alt="">
             <div class="mask"></div>
-            <div class="play-count d-flex ai-center fs-3">
-                <i class="iconfont icon-bofang1 text-white fs-7"></i>
+            <div class="play-count d-flex ai-center fs-2">
+                <i class="iconfont icon-bofang1 fs-7"></i>
                 {{ formatPlayCount(songListItem.playCount) }}
             </div>
             <div class="play-btn">
                 <div class="trangel"></div>
             </div>
-            <div class="songlist-author" v-if="!isOutSide">
-                <i class="iconfont icon-iconfontyonghuming text-white mr-2 "></i>
-                <div class="author-name fs-2 text-white mr-2 pt-2">{{ songListItem.creator.nickname }}</div>
+            <div class="songlist-author" v-if="!isOutSide" style="color: white;">
+                <i class="iconfont icon-iconfontyonghuming  mr-2 "></i>
+                <div class="author-name fs-2 mr-2 pt-2">{{ songListItem.creator.nickname }}</div>
                 <img :src="songListItem.creator.avatarDetail.identityIconUrl" alt=""
                     v-if="songListItem.creator.avatarDetail" />
                 <!-- <div class="author-flag" >
@@ -21,7 +21,7 @@
             </div>
 
         </div>
-        <div class="songlist-name fs-3 text-black_2" :class="{ isOneLine: isOneline }">{{ songListItem.name }}</div>
+        <div class="songlist-name fs-3 text-4e" :class="{ isOneLine: isOneline }">{{ songListItem.name }}</div>
         <slot name="songCount"></slot>
     </div>
 
@@ -52,7 +52,7 @@ withDefaults(defineProps<{
         overflow: hidden;
         position: relative;
         border-radius: 6px;
-        border: 1px solid #eee;
+        // border: 1px solid #eee;
 
         img {
             width: 100%;
@@ -145,7 +145,7 @@ withDefaults(defineProps<{
 
 
         &:hover {
-            color: #3a3a3a;
+            color: var(--theme-3a);
             cursor: pointer;
         }
     }

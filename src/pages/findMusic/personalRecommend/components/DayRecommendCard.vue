@@ -1,30 +1,38 @@
 <template>
-    <div class="recommend-songlist-card-wrapper">
+    <div class="recommend-songlist-card-wrapper" @click="goSongList">
         <div class="img-wrapper mb-6">
             <slot name="canlender"></slot>
             <img :src="songListItem.picUrl" alt="">
             <div class="mask" v-if="type === 1"></div>
-            <div class="play-count d-flex ai-center fs-3" v-if="type === 1">
-                <i class="iconfont icon-bofang1 text-white fs-7"></i>
+            <div class="play-count d-flex ai-center fs-1" v-if="type === 1">
+                <i class="iconfont icon-bofang1 fs-7" style="color:white"></i>
                 {{ formatPlayCount(songListItem.playCount!) }}
             </div>
             <div class="play-btn">
                 <div class="trangel"></div>
             </div>
         </div>
-        <div class="songlist-name fs-3 text-black_2">{{ songListItem.name }}</div>
+        <div class="songlist-name fs-3 text-4e">{{ songListItem.name }}</div>
     </div>
 
 </template>
 
 <script lang="ts" setup>
 import { RecommendSongListRet } from '@/service/api/music/types';
-import { Recommend } from '@/service/api/recommend/types';
 import { formatPlayCount } from '@/utils';
-defineProps<{
+import { useRouter } from 'vue-router';
+const router = useRouter()
+const props = defineProps<{
     songListItem: RecommendSongListRet
     type: number // 0: 每日歌曲推荐 1： 普通歌单
 }>()
+const goSongList = () => {
+    if (props.type === 1) { // 普通歌单
+        return router.push(`/song-list?id=${props.songListItem.id}`)
+    }
+    // 每日歌曲推荐
+    router.push('/day-recommend')
+}
 </script>
 <style lang="scss" scoped>
 .recommend-songlist-card-wrapper {
@@ -39,7 +47,7 @@ defineProps<{
         overflow: hidden;
         position: relative;
         border-radius: 6px;
-        border: 1px solid #eee;
+        // border: 1px solid #eee;
         background-color: #d33b31;
 
         img {
@@ -107,7 +115,7 @@ defineProps<{
 
 
         &:hover {
-            color: #3a3a3a;
+            color: var(--theme-3a);
             cursor: pointer;
         }
     }

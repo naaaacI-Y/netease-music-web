@@ -9,28 +9,28 @@
             <div class="operate d-flex ai-center mb-20">
                 <div class="collection d-flex ai-center jc-center mr-9">
                     <i class="iconfont icon-xinjianwenjianjia mr-3"></i>
-                    <span class="fs-3 text-black_2">收藏</span>
+                    <span class="fs-3 text-4e">收藏</span>
                 </div>
                 <div class="homepage d-flex ai-center jc-center">
                     <i class="iconfont icon-iconfontyonghuming mr-3 fs-6"></i>
-                    <span class="fs-3 text-black_2">个人主页</span>
+                    <span class="fs-3 text-4e">个人主页</span>
                 </div>
             </div>
             <div class="info d-flex ai-center">
                 <div>
-                    <span class="fs-3 text-black_2">单曲数：</span>
+                    <span class="fs-3 text-4e">单曲数：</span>
                     <span class="fs-2 text-66">{{ singerInfo.musicSize }}</span>
                 </div>
                 <div>
-                    <span class="fs-3 text-black_2">专辑数：</span>
+                    <span class="fs-3 text-4e">专辑数：</span>
                     <span class="fs-2 text-66">{{ singerInfo.albumSize }}</span>
                 </div>
                 <div>
-                    <span class="fs-3 text-black_2">MV数：</span>
+                    <span class="fs-3 text-4e">MV数：</span>
                     <span class="fs-2 text-66">{{ singerInfo.mvSize }}</span>
                 </div>
                 <div>
-                    <span class="fs-3 text-black_2">演出数：</span>
+                    <span class="fs-3 text-4e">演出数：</span>
                     <span class="fs-2 text-66">22</span>
                 </div>
             </div>

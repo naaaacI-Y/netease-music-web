@@ -31,7 +31,7 @@ import { MVItem } from '@/service/api/mv/types';
 import { areaList } from "@/utils/const"
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
-const types = areaList.slice(1)
+const types = Object.keys(areaList).slice(1)
 const activeType = ref(0)
 const router = useRouter()
 const newMvList = reactive({ data: [] as MVItem[] })

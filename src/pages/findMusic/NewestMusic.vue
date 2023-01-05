@@ -1,25 +1,25 @@
 <template>
     <div class="newest-music-wrapper d-flex flex-column">
-        <div class="tab-wrap d-flex jc-center mb-25">
-            <div class="tab d-flex fs-1 text-black_3 jc-between">
+        <!-- <div class="tab-wrap d-flex jc-center mb-25">
+            <div class="tab d-flex fs-1 text-33 jc-between">
                 <div class="song flex-1 d-flex jc-center ai-center" @click="tabType = 0"
-                    :style="{ backgroundColor: `${tabType === 0 ? '#b3b3b3' : ''}`, color: `${tabType === 0 ? 'white' : ''}` }">
+                    :class="{isTabActive: tabType === 0}">
                     新歌速递</div>
                 <div class="disc flex-1 d-flex jc-center ai-center" @click="tabType = 1"
-                    :style="{ backgroundColor: `${tabType === 1 ? '#b3b3b3' : ''}`, color: `${tabType === 1 ? 'white' : ''}` }">
+                    :class="{ isTabActive: tabType === 1 }">
                     新碟上架
                 </div>
             </div>
-        </div>
-        <div class="filter-wrap d-flex ai-center text-black_4 mb-8 jc-between">
+        </div> -->
+        <div class="filter-wrap d-flex ai-center text-7d mb-8 jc-between">
             <div class="filter d-flex ai-center">
                 <div class="filter-item fs-3 mr-30" v-for="(item) in filterList" @click="filterType = Number(item[0])"
-                    :style="{ color: `${filterType === Number(item[0]) ? '#000' : ''}` }" :key="Number(item[0])">{{
-                            item[1]
+                    :class="{ isFilterActive: filterType === Number(item[0]) }" :key="Number(item[0])">{{
+    item[1]
                     }}</div>
             </div>
             <div class="operate d-flex jc-between">
-                <div class="play-all fs-1 d-flex ai-center text-white mr-10">
+                <div class="play-all fs-1 d-flex ai-center mr-10" style="color:white">
                     <i class="iconfont icon-bofang_o  fs-9"></i>
                     播放全部
                 </div>
@@ -62,36 +62,47 @@ getMusic()
     margin: auto;
     padding-top: 25px;
 
-    .tab {
-        width: 230px;
-        height: 32px;
-        border-radius: 20px;
-        border: 1px solid #ccc;
+    // .tab {
+    //     width: 230px;
+    //     height: 32px;
+    //     border-radius: 20px;
+    //     border: 1px solid var(--theme-b3);
 
-        .song,
-        .disc {
-            border-radius: 20px;
+    //     .song,
+    //     .disc {
+    //         border-radius: 20px;
 
-            &:hover {
-                cursor: pointer;
-                background-color: #f5f5f5;
-            }
+    //         &:hover {
+    //             cursor: pointer;
+    //             background-color: var(--theme-f5);
+    //         }
+    //     }
+
+    //     .isTabActive {
+    //         color: white;
+    //         background-color: var(--theme-b3);
+    //     }
+    // }
+
+    .filter-wrap .filter {
+        .isFilterActive {
+            color: var(--theme-3a);
         }
-    }
 
-    .filter-wrap .filter .filter-item:hover {
-        cursor: pointer;
+        .filter-item:hover {
+            cursor: pointer;
+        }
     }
 
     .operate {
 
         .collect {
             padding: 1px 12px;
-            border: 1px solid #e5e5e5;
+            border: 1px solid var(--theme-e5);
             border-radius: 18px;
 
             &:hover {
-                background-color: #f2f2f2;
+                background-color: var(--theme-f2);
                 cursor: pointer;
             }
         }

@@ -7,16 +7,16 @@
                 </div>
                 <div class="info d-flex flex-column jc-center">
                     <div class="name mb-10 d-flex ai-center" :style="{ marginBottom: item.signature ? '10px' : '0' }">
-                        <div class="fs-3 text-black_2 mr-5 nickname" @click="goPersonCenter(item.userId)">{{
-        item.nickname
-}}</div>
+                        <div class="fs-3 text-4e mr-5 nickname" @click="goPersonCenter(item.userId)">{{
+                            item.nickname
+                        }}</div>
                         <div class="sex d-flex ai-center jc-center" v-if="item.gender"
                             :style="{ backgroundColor: item.gender === 1 ? '#d2f2f1' : '#f9d0e7' }">
                             <i class="iconfont icon-nanxing text-male fs-2" v-if="item.gender === 1"></i>
                             <i class="iconfont icon-nvxing text-female fs-2" v-if="item.gender === 2"></i>
                         </div>
                     </div>
-                    <div class="intrucduce fs-2 text-black_13" v-if="item.signature">{{ item.signature }}</div>
+                    <div class="intrucduce fs-2 text-99" v-if="item.signature">{{ item.signature }}</div>
                 </div>
             </div>
         </div>

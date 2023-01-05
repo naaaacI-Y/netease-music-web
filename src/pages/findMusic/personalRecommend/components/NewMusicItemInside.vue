@@ -1,6 +1,6 @@
 <template>
-    <div class="new-music-item-wrapper d-flex ai-center"
-        :style="{ paddingLeft: `${!isOutSide ? '30px' : ''}`, backgroundColor: isShowBackground }">
+    <div class="new-music-item-wrapper d-flex ai-center" :class="{ odd: index % 2 !== 0 }"
+        :style="{ paddingLeft: `${!isOutSide ? '30px' : ''}` }">
         <div class="index mr-12 fs-2" v-if="!isOutSide">{{ paddingIndex(index) }}</div>
         <div class="song-cover mr-12">
             <!-- <img :src="musicItem.album.picUrl" > -->
@@ -12,17 +12,17 @@
         <div class="index fs-2 mr-12" v-if="isOutSide">{{ paddingIndex(index) }}</div>
         <div class="music-name d-flex flex-column jc-center ai-start flex-1">
             <div class="name fs-3">
-                <span class="mr-4">{{ musicItem.name }}</span>
-                <span v-if="musicItem.album.alias.length" class="text-black_13">({{ musicItem.album.alias[0] }})</span>
+                <span class="mr-4 text-33">{{ musicItem.name }}</span>
+                <span v-if="musicItem.album.alias.length" class="text-99">({{ musicItem.album.alias[0] }})</span>
             </div>
             <div class="music-author" v-if="isOutSide">
-                <!-- <span class="text-primary_red_2 fs-1 mr-4 sq" v-if="musicItem.song.sqMusic">SQ</span> -->
+                <!-- <span class="text-primary_red_4 fs-1 mr-4 sq" v-if="musicItem.song.sqMusic">SQ</span> -->
                 <span class="fs-2">{{ musicItem.artists[0].name }}</span>
             </div>
         </div>
-        <div class="music-author fs-2 " v-if="!isOutSide">{{ musicItem.artists[0].name }}</div>
-        <div class="music-album fs-2" v-if="!isOutSide">{{ musicItem.album.name }}</div>
-        <div class="music-time fs-2" v-if="!isOutSide">{{ formatSongTime(musicItem.duration) }}</div>
+        <div class="music-author fs-2 text-64 " v-if="!isOutSide">{{ musicItem.artists[0].name }}</div>
+        <div class="music-album fs-2 text-64" v-if="!isOutSide">{{ musicItem.album.name }}</div>
+        <div class="music-time fs-2 text-96" v-if="!isOutSide">{{ formatSongTime(musicItem.duration) }}</div>
     </div>
 </template>
 
@@ -104,7 +104,7 @@ const paddingIndex = (index: number) => {
         width: 185px;
 
         .sq {
-            border: 1px solid #ec7140;
+            border: 1px solid #d33b31;
             border-radius: 4px;
             padding: 0 3px;
         }
@@ -115,22 +115,19 @@ const paddingIndex = (index: number) => {
         padding-right: 10px;
     }
 
-    .music-album,
-    .music-author {
-        color: #646464;
-
-    }
 
     .music-album:hover,
     .music-author:hover {
-        color: #4c4c4c;
+        color: var(--theme-4c);
         cursor: pointer;
     }
 
     .music-time {
         width: 85px;
-        color: #969696;
     }
+}
 
+.odd {
+    background-color: var(--theme-fa);
 }
 </style>

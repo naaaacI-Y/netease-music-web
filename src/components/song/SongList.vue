@@ -1,6 +1,6 @@
 <template>
     <div class="song-list-wrapper">
-        <div class="head text-black_13 fs-2 d-flex ai-center">
+        <div class="head text-99 fs-2 d-flex ai-center">
             <div class="music-title" :style="{ width: rankType === -1 ? '34.8%' : '42.8%' }">音乐标题</div>
             <div class="rate" v-if="rankType === -1">飙升率</div>
             <div class="music-singer">歌手</div>
@@ -13,7 +13,7 @@
                     <div class="flag d-flex ai-center jc-center" v-if="!info!.data[index].ratio">
                         <i class="iconfont icon-new text-new" v-if="info!.data[index].lr === undefined"></i>
                         <div class="no-change" v-if="info!.data[index].lr === 0 || info!.data[index].lr === index">
-                            <span>-</span>
+                            <span class="text-99">-</span>
                         </div>
                         <i class="iconfont icon-xiangshangjiantou text-primary_red_4"
                             v-if="info!.data[index].lr! > index"></i>

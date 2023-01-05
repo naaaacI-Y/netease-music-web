@@ -30,8 +30,8 @@
         </div>
         <div class="music-right">
             <div class="music-name d-flex mb-10 ai-center">
-                <div class="fs-9 mr-10">{{ player.currentTrack.name }}</div>
-                <div class="mv fs-2">MV</div>
+                <div class="fs-9 mr-10 text-33">{{ player.currentTrack.name }}</div>
+                <div class="mv fs-2 ">MV</div>
             </div>
             <div class="other-info d-flex fs-2 text-66 ai-center mb-20">
                 <div class="album  flex-1">
@@ -43,8 +43,8 @@
                     <span class="text-shadow_blue">{{ player.currentTrack?.ar[0].name }}</span>
                 </div>
                 <div class="from flex-1">
-                    <span>来源：</span>
-                    <span class="text-shadow_blue">来源来源来源来源来源来源来源来源</span>
+                    <!-- <span>来源：</span>
+                    <span class="text-shadow_blue">来源来源来源来源来源来源来源来源</span> -->
                 </div>
             </div>
             <div class="lyric">
@@ -89,7 +89,7 @@ getlyric()
             .pan {
                 width: 335px;
                 // margin-top: 75px;
-                background-color: #e3e3e3;
+                background-color: var(--theme-e3);
                 border-radius: 50%;
                 overflow: hidden;
                 height: 335px;
@@ -145,17 +145,17 @@ getlyric()
             div {
                 @include radius(40px);
                 margin-right: 40px;
-                background-color: #f5f5f5;
+                background-color: var(--theme-f5);
                 display: flex;
                 align-items: center;
                 justify-content: center;
 
                 i {
-                    color: #313131;
+                    color: var(--theme-31);
                 }
 
                 &:hover {
-                    background-color: #ebebeb;
+                    background-color: var(--theme-eb);
                     cursor: pointer;
                 }
 
@@ -188,7 +188,7 @@ getlyric()
             flex: 1;
             height: 365px;
             overflow-y: scroll;
-            border-right: 1px solid #f2f2f2;
+            border-right: 1px solid var(--theme-f2);
         }
 
         /*滚动条整体样式*/

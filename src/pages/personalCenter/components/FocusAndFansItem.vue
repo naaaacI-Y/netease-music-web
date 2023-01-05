@@ -8,13 +8,13 @@
         </div>
         <div class="center d-flex flex-column jc-center">
             <div class="name mb-10 fs-3" @click="goPersonCenter">{{ item.nickname }}</div>
-            <div class="summary fs-2 text-black_4">{{ item.signature }}</div>
-            <div class="other-info d-flex ai-center fs-2 text-black_4">
+            <div class="summary fs-2 text-7d">{{ item.signature }}</div>
+            <div class="other-info d-flex ai-center fs-2 text-7d">
                 <div class="album mr-5">
                     <span>歌单：</span>
                     <span>{{ item.playlistCount }}</span>
                 </div>
-                <div class="text-black_7">丨</div>
+                <div class="text-ee">丨</div>
                 <div class="fans ml-5">
                     <span>粉丝：</span>
                     <span>{{ item.followeds }}</span>
@@ -22,8 +22,8 @@
             </div>
         </div>
         <div class="right ml-2 fs-3 d-flex ai-center jc-center">
-            <i class="iconfont icon-jia text-primary_red_1"></i>
-            <span class="text-black_3">关注</span>
+            <i class="iconfont icon-jia text-primary_red_4"></i>
+            <span class="text-33">关注</span>
         </div>
     </div>
 </template>

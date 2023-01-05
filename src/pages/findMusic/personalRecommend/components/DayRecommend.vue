@@ -8,16 +8,16 @@
                         <i class="iconfont icon-rili text-primary_red_4"></i>
                     </div>
                     <div class="info-des">
-                        <div class="title fs-9">每日歌曲推荐</div>
+                        <div class="title fs-9 text-33">每日歌曲推荐</div>
                         <div class="time text-66 fs-2">根据你的音乐口味生成， 每天6:00更新</div>
                     </div>
                 </div>
                 <div class="btns d-flex mt-20">
-                    <div class="play-all fs-3 d-flex ai-center text-white mr-10">
+                    <div class="play-all fs-3 d-flex ai-center mr-10" style="color: white;">
                         <i class="iconfont icon-bofang_o  fs-9"></i>
                         播放全部
                     </div>
-                    <div class="collect-count mr-15 fs-3 d-flex ai-center">
+                    <div class="collect-count mr-15 fs-3 d-flex ai-center text-33">
                         <i class="iconfont icon-xinjianwenjianjia fs-7 mr-3"></i>
                         <span>收藏全部</span>
                         <!-- <span>已收藏</span> -->
@@ -47,7 +47,7 @@ getSongList()
 .day-recommend-wrapper {
     .day-recommend-head {
         padding: 15px 30px;
-        border-bottom: 1px solid #e5e5e5;
+        border-bottom: 1px solid var(--theme-e5);
 
         .main-info {
             .info-des {
@@ -81,12 +81,12 @@ getSongList()
         .btns {
             .collect-count {
                 padding: 4px 12px;
-                border: 1px solid #e5e5e5;
+                border: 1px solid var(--theme-e5);
                 border-radius: 18px;
                 width: 110px;
 
                 &:hover {
-                    background-color: #f2f2f2;
+                    background-color: var(--theme-f2);
                     cursor: pointer;
                 }
             }

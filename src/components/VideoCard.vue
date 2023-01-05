@@ -1,26 +1,27 @@
 <template>
     <div class="recommend-mv-card-wrapper" @click="goVideoDetail">
-        <div class="img-wrapper" :style="{}">
+        <div class="img-wrapper" style="color: white;">
             <img :src="videoItem.coverUrl" alt="">
-            <div class="play-count d-flex ai-center fs-3">
-                <i class="iconfont icon-bofang1 text-white fs-7"></i>
+            <div class="play-count d-flex ai-center fs-1">
+                <i class="iconfont icon-bofang1  fs-7"></i>
                 {{ formatPlayCount(videoItem.playTime) }}
             </div>
             <div class="play-btn" v-if="isPlayBtn">
                 <div class="trangel"></div>
             </div>
-            <div class="duration fs-2 text-white" v-if="isShowTime">{{ formatSongTime(videoItem.durationms) }}
+            <div class="duration fs-1" v-if="isShowTime">{{ formatSongTime(videoItem.durationms) }}
             </div>
         </div>
         <div class="mv-name mt-5">
-            <div class="line1 fs-3 text-black_2 d-flex ai-center mb-4" :class="{ noWrap: !isOneline }">
+            <div class="line1 fs-3 text-4e d-flex ai-center mb-4" :class="{ noWrap: !isOneline }">
                 <slot name="mv-flag"></slot>
                 <span class="title">{{ videoItem.title }}</span>
             </div>
-            <div class="line2 fs-1 text-black_6 d-flex" v-if="!isOneline">
-                <span v-if="!Array.isArray(videoItem.creator)">by </span>
-                <span>{{ Array.isArray(videoItem.creator) ? videoItem.creator[0].userName : videoItem.creator.nickname
-}}</span>
+            <div class="line2 fs-1 text-c2 d-flex" v-if="!isOneline">
+                <span v-if="!Array.isArray(videoItem.creator)">by&ensp;</span>
+                <span>{{
+                    Array.isArray(videoItem.creator) ? videoItem.creator[0].userName : videoItem.creator.nickname
+                }}</span>
             </div>
         </div>
     </div>
@@ -125,7 +126,7 @@ const goVideoDetail = () => {
     .mv-name {
         .line1 {
             &:hover {
-                color: #3a3a3a;
+                color: var(--theme-3a);
                 cursor: pointer;
             }
         }
@@ -135,7 +136,7 @@ const goVideoDetail = () => {
         }
 
         .line2:hover {
-            color: #747474;
+            color: var(--theme-a9); // 7c
             cursor: pointer;
         }
     }

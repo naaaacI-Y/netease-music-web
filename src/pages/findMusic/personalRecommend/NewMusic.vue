@@ -1,5 +1,6 @@
 <template>
-    <div class="head mb-12 d-flex ai-center " @click="router.push('/findMusic/newest-music')">最新音乐 <i
+    <!-- router.push('/findMusic/newest-music') -->
+    <div class="head mb-12 d-flex ai-center text-00" @click="router.push('/findMusic/newest-music')">最新音乐 <i
             class="iconfont icon-xiangyou1 ml-4"></i></div>
 
     <div class="new-music-wrapper d-flex ai-center jc-between mb-30">
@@ -45,10 +46,10 @@ getRecommendMusic()
         width: 513px;
 
         .new-music-item {
-            border-top: 1px solid #eee;
+            border-top: 1px solid var(--theme-ee);
 
             &:hover {
-                background-color: #f5f5f5;
+                background-color: var(--theme-f5);
             }
         }
 

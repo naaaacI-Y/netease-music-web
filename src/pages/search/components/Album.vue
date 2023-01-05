@@ -13,8 +13,8 @@
             </template>
             <template #author>
                 <div class="author fs-1 d-flex ai-center">
-                    <span class="text-black_5">{{ item.artist.name }}</span>
-                    <span class="alia text-black_6" v-if="item.alias?.length">({{ item.alias[0] }})</span>
+                    <span class="text-74">{{ item.artist.name }}</span>
+                    <span class="alia text-97" v-if="item.alias?.length">({{ item.alias[0] }})</span>
                 </div>
             </template>
         </CommonItem>

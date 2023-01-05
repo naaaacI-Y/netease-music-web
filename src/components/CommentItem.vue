@@ -10,27 +10,28 @@
         </div>
         <div class="commoent-right">
             <div class="right-top fs-2 mb-10">
-                <span class="comment-name text-shadow_blue " @click="goPersonCenter">{{ commentContent?.user?.nickname
+                <span class="comment-name text-shadow_blue " @click="goPersonCenter">{{
+                    commentContent?.user?.nickname
                 }}：</span>
-                <span class="text-black_3">{{ commentContent.content }}</span>
+                <span class="text-33">{{ commentContent.content }}</span>
             </div>
-            <div class="right-middle fs-2   mb-10" style="padding: 9px;" :class="isGrey ? 'bg-black_11' : 'bg-fa'"
+            <div class="right-middle fs-2   mb-10" style="padding: 9px;" :class="isGrey ? 'bg-f6' : 'bg-fa'"
                 v-if="commentContent.beReplied.length">
                 <span class="origin-reply text-shadow_blue">@{{ commentContent?.beReplied[0]?.user?.nickname }}：</span>
-                <span class="text-black_6">{{ commentContent?.beReplied[0]?.content }}</span>
+                <span class="text-97">{{ commentContent?.beReplied[0]?.content }}</span>
             </div>
-            <div class="right-bottom text-black_13 fs-2 d-flex ai-center mb-20">
+            <div class="right-bottom text-99 fs-2 d-flex ai-center mb-20">
                 <div class="comment-time flex-1">{{ calcTime(commentContent.time) }}</div>
                 <div class="comment-reactive d-flex ai-center">
                     <div class="vote d-flex ai-center mr-6">
                         <i class="iconfont icon-dianzan1 mr-4"></i>
                         <span class="vote-count" v-if="commentContent.likedCount">{{ commentContent.likedCount }}</span>
                     </div>
-                    <span class="text-black_7">丨</span>
+                    <span class="text-ee">丨</span>
                     <div class="share mr-6 ml-6" v-if="isGrey">
                         <i class="iconfont icon-fenxiang2 fs-3"></i>
                     </div>
-                    <span class="text-black_7" v-if="isGrey">丨</span>
+                    <span class="text-ee" v-if="isGrey">丨</span>
                     <div class="comment ml-6 mr-4">
                         <i class="iconfont icon-liuyan-duandian"></i>
                     </div>
@@ -93,7 +94,7 @@ const goPersonCenter = () => {
 
     .commoent-right {
         flex: 1;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--theme-f2);
 
         .comment-name:hover,
         .right-middle .origin-reply:hover {

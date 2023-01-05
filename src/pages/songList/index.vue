@@ -20,7 +20,7 @@ import { Creator, HeaderInfo, TrackId } from '@/service/api/music/types';
 import { HotSong } from '@/service/api/singer/types';
 import { getQueryId, throttle } from '@/utils';
 import { provide, reactive, ref } from 'vue';
-const queryId = getQueryId()
+const queryId = getQueryId() as number
 const songList = reactive({ data: [] as HotSong[] })
 const songListInfo = reactive({ data: [] as TrackId[] })
 // const songListComment = ref<HTMLElement | null>()

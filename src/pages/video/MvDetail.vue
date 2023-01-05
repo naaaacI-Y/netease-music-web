@@ -17,8 +17,9 @@
                             </div>
                             <div class="name fs-3 text-66">{{ mvDetailInfo.data.artistName }}</div>
                         </div>
-                        <div class="mv-title mb-10" style="font-size: 22px;font-weight: bold">{{ mvDetailInfo.data.name
-}}</div>
+                        <div class="mv-title mb-10" style="font-size: 22px;font-weight: bold">{{
+                            mvDetailInfo.data.name
+                        }}</div>
                         <div class="count-info d-flex fs-1 text-bc mb-12">
                             <div class="pubtime mr-25">
                                 <span>发布：</span>
@@ -30,11 +31,11 @@
                             </div>
                         </div>
                         <div class="label-list d-flex mb-25" v-if="mvDetailInfo.data.videoGroup?.length">
-                            <div class="label-item fs-1 mr-5 bg-black_11 text-66"
+                            <div class="label-item fs-1 mr-5 bg-f6 text-66"
                                 @click="goVideoByCategory(item.id, item.name)"
                                 v-for="item in mvDetailInfo.data.videoGroup">{{ item.name }}</div>
                         </div>
-                        <div class="operate d-flex ai-center text-black_1">
+                        <div class="operate d-flex ai-center text-3a">
                             <div class="vote d-flex ai-center jc-center fs-3 mr-12">
                                 <i class="iconfont icon-dianzan1 fs-8 mr-4"></i>
                                 赞

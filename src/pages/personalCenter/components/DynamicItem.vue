@@ -11,7 +11,7 @@
                 <span class="text-shadow_blue mr-8">{{ dynamicItem.user.nickname }}</span>
                 <span>{{ map[dynamicItem.type.toString()] }}</span>
             </div>
-            <div class="time fs-2 mb-10 text-black_4">{{ calcTime(dynamicItem.eventTime) }}</div>
+            <div class="time fs-2 mb-10 text-7d">{{ calcTime(dynamicItem.eventTime) }}</div>
             <div class="dynamic-content fs-2 mb-5">{{ info.msg }}</div>
             <div class="quote d-flex ai-center mb-15">
                 <div class="song-img mr-10">
@@ -22,21 +22,21 @@
                 </div>
                 <div class="song-info fs-2">
                     <div class="song-name mb-3">{{ info.song.name }}</div>
-                    <div class="singer text-black_4">{{ info.song.artists[0].name }}</div>
+                    <div class="singer text-7d">{{ info.song.artists[0].name }}</div>
                 </div>
             </div>
             <div class="comment-reactive d-flex ai-center fs-2 jc-end mb-15">
                 <div class="vote d-flex ai-center mr-6">
                     <i class="iconfont icon-dianzan1 mr-4"></i>
                     <span class="vote-count" v-if="dynamicItem.info.commentThread.likedCount">{{
-        dynamicItem.info.commentThread.likedCount
-}}</span>
+                        dynamicItem.info.commentThread.likedCount
+                    }}</span>
                 </div>
-                <span class="text-black_7">丨</span>
+                <span class="text-ee">丨</span>
                 <div class="share mr-6 ml-6">
                     <i class="iconfont icon-fenxiang2 fs-3"></i>
                 </div>
-                <span class="text-black_7">丨</span>
+                <span class="text-ee">丨</span>
                 <div class="comment ml-6 mr-4" @click="isShowCommentDetail = !isShowCommentDetail">
                     <i class="iconfont icon-liuyan-duandian"></i>
                 </div>

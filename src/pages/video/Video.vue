@@ -2,8 +2,8 @@
     <div class="video-wrapper">
         <CommonBtn :types="videoTypes" :active-type="activeType" @change-active-type="changeActiveType"></CommonBtn>
         <div class="video-list-wrap d-flex flex-wrap jc-between">
-            <VideoCard :is-play-btn="true" :is-show-time="true" v-for="item in allVideoLists.data" :video-item="item"
-                :key="item.data.vid"></VideoCard>
+            <VideoCard :is-play-btn="true" :is-show-time="true" v-for="item in allVideoLists.data"
+                :video-item="item.data" :key="item.data.vid"></VideoCard>
         </div>
     </div>
 </template>
@@ -29,11 +29,12 @@ const getVideoLabel = async () => {
 }
 watchEffect(async () => {
     const idx = labelList.data.findIndex(item => item.name === videoTypes[activeType.value])
-    console.log(idx, "idxxxxxxxxxx");
+    if (idx !== -1) {
+        const id = labelList.data[idx].id
+        const r = await getVideoByCategory({ id })
+        allVideoLists.data = r.datas
+    }
 
-    const id = labelList.data[idx].id
-    const r = await getVideoByCategory({ id })
-    allVideoLists.data = r.datas
 })
 // 获取所有视频
 // const getAllVideoLists = async () => {

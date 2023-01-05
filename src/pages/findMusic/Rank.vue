@@ -1,7 +1,7 @@
 <template>
     <div class="rank-wrapper">
         <div class="official">
-            <div class="official-title mb-15">
+            <div class="official-title mb-15 text-33">
                 官方榜
             </div>
             <div class="official-list">
@@ -10,7 +10,7 @@
                     <RankCard :card-width="172" :rank-item="item" :is-show-right="true"
                         :rank-type="index === 0 ? -1 : 1" class="rank-item-official">
                         <template #updateTime>
-                            <div class="update-time text-white fs-2">
+                            <div class="update-time fs-2" style="color: white;">
                                 {{ formatTime(item.updateTime, "MM月dd日") }}更新</div>
                         </template>
 
@@ -19,20 +19,20 @@
             </div>
         </div>
         <div class="global">
-            <div class="global-title mb-15">
+            <div class="global-title mb-15 text-33">
                 全球榜
             </div>
             <div class="global-list d-flex flex-wrap">
                 <RankCard v-for="(item, index) in rankankList.data.slice(4)" :key="item.id" :card-width="158"
                     @click="goGlobalRank(item.id)" :rank-type="1" :rank-item="item" class="rank-card-item">
                     <template #playCount>
-                        <div class="play-count d-flex ai-center fs-1 text-white jc-end ">
-                            <i class="iconfont icon-bofang1 text-white fs-7"></i>
+                        <div class="play-count d-flex ai-center fs-1 jc-end" style="color: white;">
+                            <i class="iconfont icon-bofang1  fs-7"></i>
                             {{ formatPlayCount(item.playCount) }}
                         </div>
                     </template>
                     <template #songListName>
-                        <div class="song-list-name fs-3">{{ item.name }}</div>
+                        <div class="song-list-name fs-3 text-33">{{ item.name }}</div>
                     </template>
                 </RankCard>
             </div>
@@ -116,5 +116,10 @@ getRank()
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+
+    &:hover {
+        cursor: pointer;
+        color: var(--theme-00);
+    }
 }
 </style>

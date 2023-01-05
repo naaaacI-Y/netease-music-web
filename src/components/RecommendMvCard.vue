@@ -1,21 +1,23 @@
 <template>
     <div class="recommend-mv-card-wrapper" @click="goVideoDetail">
         <div class="img-wrapper" :style="{}">
-            <img :src="recommendMvItem.cover || recommendMvItem.picUrl" alt="">
-            <div class="play-count d-flex ai-center fs-3">
-                <i class="iconfont icon-bofang1 text-white fs-7"></i>
+            <img :src="recommendMvItem.cover || recommendMvItem.picUrl || recommendMvItem.imgurl" alt="">
+            <div class="play-count d-flex ai-center fs-1" style="color: white;">
+                <i class="iconfont icon-bofang1 fs-7"></i>
                 {{ formatPlayCount(recommendMvItem.playCount) }}
             </div>
             <div class="play-btn" v-if="isPlayBtn">
                 <div class="trangel"></div>
             </div>
-            <div class="duration fs-2 text-white" v-if="isShowTime">{{ formatSongTime(recommendMvItem.duration) }}</div>
+            <div class="duration fs-1" v-if="isShowTime" style="color: white;">{{
+                formatSongTime(recommendMvItem.duration)
+            }}</div>
         </div>
         <div class="mv-name mt-5">
-            <div class="line1 fs-3 text-black_2" :class="{ noWrap: !isOneline }">
+            <div class="line1 fs-3 text-4e" :class="{ noWrap: !isOneline }">
                 {{ recommendMvItem.name }}
             </div>
-            <div class="line2 fs-1 text-black_6" v-if="!isOneline">
+            <div class="line2 fs-1 text-97" v-if="!isOneline">
                 {{ recommendMvItem.artistName }}
             </div>
         </div>
@@ -76,7 +78,6 @@ const goVideoDetail = () => {
             position: absolute;
             right: 10px;
             top: 5px;
-            color: white;
         }
 
         .play-btn {
@@ -117,7 +118,7 @@ const goVideoDetail = () => {
     .mv-name {
         .line1 {
             &:hover {
-                color: #3a3a3a;
+                color: var(--theme-3a);
                 cursor: pointer;
             }
         }
