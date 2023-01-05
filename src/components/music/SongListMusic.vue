@@ -191,25 +191,6 @@ getlyric()
             border-right: 1px solid var(--theme-f2);
         }
 
-        /*滚动条整体样式*/
-        .lyric::-webkit-scrollbar {
-            width: 8px;
-            height: 1px;
-        }
-
-        /*滚动条滑块*/
-        .lyric::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            // -webkit-box-shadow: inset 0 0 5px white;
-            background: #dfe0df;
-        }
-
-        /*滚动条轨道*/
-        .lyric::-webkit-scrollbar-track {
-            -webkit-box-shadow: inset 0 0 1px white;
-            border-radius: 10px;
-            background: #f8f8f8;
-        }
 
         .other-info {
             div {
