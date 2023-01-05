@@ -76,6 +76,7 @@
                     同意
                     <span>《服务条款》</span>
                     <span> 《隐私政策》 </span>
+                    <!--添加 儿童隐私政策 缩放 TODO-->
                     <!-- <span> 《儿童隐私政策》 </span> -->
                 </div>
             </div>
@@ -99,7 +100,10 @@ import {
 import Registry from './global/Registry.vue';
 import { onUnmounted, reactive, ref, watch } from 'vue';
 import useStore from "@/store"
-const { globalState, userProfile } = useStore()
+const store = useStore()
+
+
+let qrImg = ref("");
 const time = ref<number>()
 const status = reactive({
     overdue: true,
@@ -118,8 +122,6 @@ watch(() => status.isShowModal, (newVal) => {
         }, 500)
     }
 })
-let qrImg = ref("");
-
 const getQrcodeImg = async () => {
     status.overdue = false;
     status.isAuthing = false;
@@ -146,7 +148,7 @@ const getQrcodeImg = async () => {
                 case 803:
                     //授权成功  查看登录状态
                     const statusResult = await checkLoginStatus();
-                    userProfile.setUserProfile(statusResult.data.profile)
+                    store.userProfile.setUserProfile(statusResult.data.profile)
                     status.isAuthing = false;
                     // 窗口关闭
                     closeDialog()
@@ -193,7 +195,7 @@ const goRegistry = () => {
     status.isRegistry = true
 }
 const closeDialog = () => {
-    globalState.isShowLoginBox = false
+    store.globalState.isShowLoginBox = false
     clearInterval(time.value)
     time.value = 0
 }
