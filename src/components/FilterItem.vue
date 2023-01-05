@@ -1,10 +1,10 @@
 <template>
     <div class="filter d-flex mb-10 ai-center ">
-        <div class="filter-label fs-1 mr-8 text-black_3">{{ label }}：</div>
+        <div class="filter-label fs-1 mr-8 text-33">{{ label }}：</div>
         <div class="language-list d-flex ai-center flex-wrap">
-            <div class="filter-item fs-1 mr-30 text-black_4" v-for="(item, index) in typeList"
-                :class="{ isActive: activeType === index }" @click="emit('changeActiveType', index)" :key="index">
-                {{ item }}
+            <div class="filter-item fs-1 mr-30 text-7d" v-for="(item) in Object.entries(typeList)"
+                :class="{ isActive: activeType === item[1] }" @click="emit('changeActiveType', item[0])" :key="item[1]">
+                {{ item[0] }}
             </div>
         </div>
     </div>
@@ -13,12 +13,12 @@
 <script lang="ts" setup>
 defineProps<{
     activeType: number
-    typeList: object
+    typeList: { [key: string]: number }
     label: string
 
 }>()
 const emit = defineEmits<{
-    (e: "changeActiveType", name: number): void
+    (e: "changeActiveType", name: string): void
 }>()
 </script>
 <style lang="scss" scoped>
@@ -31,14 +31,13 @@ const emit = defineEmits<{
     }
 
     &:hover {
-        // color: #000;
         cursor: pointer;
     }
 }
 
 .isActive {
-    background-color: #fcf6f5;
-    color: #d33b31;
+    background-color: var(--theme-fcf6f5);
+    color: #d33b31 !important;
     border-radius: 10px;
 }
 
@@ -46,7 +45,7 @@ const emit = defineEmits<{
     content: "丨";
     display: black;
     font-size: 12px;
-    color: #e4e4e4;
+    color: var(--theme-e5);
     position: absolute;
     right: -20px;
     top: 4px;

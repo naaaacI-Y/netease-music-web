@@ -1,10 +1,10 @@
 <template>
     <div class="all-mv-wrapper">
-        <FilterItem label="地区" :active-type="activeAreaType" :type-list="areaList"
+        <FilterItem label="地区" :active-type="areaList[activeAreaType]" :type-list="areaList"
             @change-active-type="changeAreaActive"></FilterItem>
-        <FilterItem label="类型" :active-type="activeTypeType" :type-list="typeList"
+        <FilterItem label="类型" :active-type="typeList[activeTypeType]" :type-list="typeList"
             @change-active-type="changeTypeActive"></FilterItem>
-        <FilterItem label="排序" :active-type="activeSortType" :type-list="sortList"
+        <FilterItem label="排序" :active-type="sortList[activeSortType]" :type-list="sortList"
             @change-active-type="changeSortActive"></FilterItem>
         <div class="all-mv-list-wrap d-flex flex-wrap jc-between mt-20">
             <RecommendMvCard v-for="item in allMvLists.data" :is-play-btn="true" :key="item.id"
@@ -22,31 +22,31 @@ import { areaList, typeList, sortList } from "@/utils/const"
 import { onMounted, reactive, ref, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 const route = useRoute()
-const activeAreaType = ref(0)
-const activeTypeType = ref(0)
-const activeSortType = ref(0)
+const activeAreaType = ref("全部")
+const activeTypeType = ref("全部")
+const activeSortType = ref("上升最快")
 const allMvLists = reactive({ data: [] as MVItem[] })
-const changeAreaActive = (num: number): void => {
-    activeAreaType.value = num
+const changeAreaActive = (name: string): void => {
+    activeAreaType.value = name
 }
-const changeTypeActive = (num: number): void => {
-    activeTypeType.value = num
+const changeTypeActive = (name: string): void => {
+    activeTypeType.value = name
 }
-const changeSortActive = (num: number): void => {
-    activeSortType.value = num
+const changeSortActive = (name: string): void => {
+    activeSortType.value = name
 }
 watchEffect(async () => {
     const queryInfo = {
-        area: areaList[activeAreaType.value], type: typeList[activeTypeType.value], order: sortList[activeSortType.value]
+        area: activeAreaType.value, type: activeTypeType.value, order: activeSortType.value
     }
     const r = await getAllMv(queryInfo)
     allMvLists.data = r.data
 })
 onMounted(() => {
     const { area, type, sort } = route.query
-    activeAreaType.value = Number(area)
-    activeTypeType.value = Number(type)
-    activeSortType.value = Number(sort)
+    activeAreaType.value = Object.keys(areaList)[Number(area)]
+    activeTypeType.value = Object.keys(typeList)[Number(type)]
+    activeSortType.value = Object.keys(sortList)[Number(sort)]
 })
 </script>
 <style lang="scss" scoped>
