@@ -29,11 +29,11 @@
             <div class="dayRecommend" v-if="isActive('/songlist')"></div>
             <div class="video pl-30 fs-4" v-if="isActive('/video/all-mv')">全部MV</div>
             <div class="video d-flex pl-30 fs-4" v-if="isActive('/video/video-inside', '/video/mv')">
-                <div class="video-inside mr-20 text-black_4" :class="{ isVideo: route.path === '/video/video-inside' }"
+                <div class="video-inside mr-20 text-7d" :class="{ isVideo: route.path === '/video/video-inside' }"
                     @click="goInside('/video/video-inside')">
                     视频
                 </div>
-                <div class="video-mv text-black_4" :class="{ isVideo: route.path === '/video/mv' }"
+                <div class="video-mv text-7d" :class="{ isVideo: route.path === '/video/mv' }"
                     @click="goInside('/video/mv')">
                     MV
                 </div>
@@ -47,7 +47,7 @@
             <div class="set d-flex">
                 <div class="search mr-15 d-flex ai-center jc-center">
                     <div class="searchIcon">
-                        <i class="iconfont icon-sousuo"></i>
+                        <i class="iconfont icon-sousuo "></i>
                     </div>
                     <input type="text" placeholder="搜索" v-model="searchKeyWords" id="search-box" />
                 </div>
@@ -57,13 +57,13 @@
                 <div class="info mr-15 d-flex ai-center jc-center">
                     <i class="iconfont icon-youjian1 fs-9"></i>
                 </div>
-                <div class="skin" @click="showSetTheme">
-                    <i class="iconfont icon-icon-pifu fs-9" :style="{ color: isShowSetTheme ? '#c3473a' : '' }"></i>
+                <div class="skin d-flex ai-center jc-center" @click="showSetTheme">
+                    <i class="iconfont icon-icon-pifu fs-9" :class="{ isSkinActive: isShowSetTheme }"></i>
                 </div>
                 <div class="set-theme-box fs-1 d-flex jc-around ai-center" v-if="isShowSetTheme"
                     :class="{ isShowShadow: theme !== 'dark' }">
                     <div class="white-box" @click="setTheme('white')">
-                        <div class="circle white" :class="{ isWhite: theme == 'white' }">
+                        <div class="circle white" :class="{ isWhite: theme !== 'dark' }">
                             <i class="iconfont icon-gou- fs-7" style="color:#c3473a" v-if="theme == 'white'"></i>
                         </div>
                         <div>浅色</div>
@@ -206,7 +206,7 @@ const goInside = (path: string) => {
 <style lang="scss" scoped>
 .nav-wrapper {
     height: 50px;
-    background-color: var(--theme-f6);
+    background-color: var(--theme-head-f6); // red: ca5b4f
     width: 100%;
 
     .right {
@@ -225,23 +225,23 @@ const goInside = (path: string) => {
 
             div {
                 margin-right: 28px;
-                color: var(--theme-89);
+                color: var(--theme-head-89);
 
                 &:hover {
-                    color: var(--theme-00);
+                    color: var(--theme-head-00);
                     font-weight: bold;
                     cursor: pointer;
                 }
             }
 
             .active {
-                color: var(--theme-00);
+                color: var(--theme-head-00);
                 font-weight: bold;
             }
         }
 
         .isVideo {
-            color: #000
+            color: var(--theme-head-00)
         }
 
         .video-inside,
@@ -261,7 +261,7 @@ const goInside = (path: string) => {
                 width: 150px;
                 height: 27px;
                 border-radius: 20px;
-                background-color: var(--theme-ec);
+                background-color: var(--theme-head-ec);
                 @include flex(row, flex-start, center);
                 padding-left: 6px;
 
@@ -269,12 +269,16 @@ const goInside = (path: string) => {
                     width: calc(100% - 30px);
                     outline: none;
                     border: none;
-                    color: var(--theme-4c);
-                    background-color: var(--theme-ec);
+                    color: var(--theme-head-4c);
+                    background-color: var(--theme-head-ec);
                 }
 
                 input::placeholder {
-                    color: var(--theme-cb);
+                    color: var(--theme-head-cb);
+                }
+
+                .searchIcon i {
+                    color: var(--theme-7a); // 000000 7a7a7a efceca
                 }
             }
 
@@ -283,6 +287,15 @@ const goInside = (path: string) => {
             .info {
                 width: 25px;
                 height: 25px;
+
+                i {
+                    color: var(--theme-4a); // 4a 7f ecc5c1
+                }
+            }
+
+            .isSkinActive {
+                // :style="{ color: isShowSetTheme ? '#c3473a' : '' }"
+                color: var(--theme-c3473a);
             }
 
             .setting:hover,
@@ -290,7 +303,7 @@ const goInside = (path: string) => {
             .info:hover {
                 width: 25px;
                 height: 25px;
-                background-color: var(--theme-ea);
+                background-color: var(--theme-head-ea);
                 border-radius: 50%;
             }
 
@@ -338,7 +351,7 @@ const goInside = (path: string) => {
                     height: 0;
                     border-left: 10px solid transparent;
                     border-right: 10px solid transparent;
-                    border-bottom: 10px solid var(--theme-36);
+                    border-bottom: 10px solid var(--theme-head-36);
                     top: -10px;
                     right: 10px;
                 }

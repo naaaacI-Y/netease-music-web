@@ -4,15 +4,16 @@
         <SongListItem v-for="(item, index) in LyricList.data" :key="item.id" :index="index" :type="0" :item="item">
             <template #lyric>
                 <div class="lyric-wrap d-flex ai-start mt-5" v-if="item.lyrics">
-                    <div class="lyric fs-2 text-89">
+                    <div class="lyric fs-1 text-88">
                         <div class="item mb-8" v-for="it in item.lyrics.slice(0, 1)">{{ it }}</div>
                         <div class="other" v-for="it in item.lyrics.slice(1, 4)" v-show="item.isFold">{{ it }}</div>
                         <div class="other" v-for="it in item.lyrics.slice(1)" v-show="!item.isFold">{{ it }}</div>
                     </div>
-                    <div class="operate fs-2 text-3a d-flex ai-center">
-                        <div class="more d-flex ai-center jc-center mr-10" @click="foldLyric(index)">{{ item.isFold ?
-        '展开歌词' : '收起歌词'
-}}</div>
+                    <div class="operate fs-1 text-33 d-flex ai-center">
+                        <div class="more d-flex ai-center jc-center mr-10" @click="foldLyric(index)">{{
+                            item.isFold ?
+                                '展开歌词' : '收起歌词'
+                        }}</div>
                         <div class="copy d-flex ai-center jc-center" @click="copyToClipboard(item.lyrics!)">复制歌词</div>
                     </div>
                 </div>
@@ -81,12 +82,13 @@ getLyrics()
         }
 
         .operate div {
-            border: 1px solid #ccc;
+            border: 1px solid var(--theme-cc);
             border-radius: 20px;
-            padding: 4px 10px;
+            padding: 2px 12px;
 
             &:hover {
-                background-color: #e4e4e4;
+                background-color: var(--theme-e4);
+                cursor: pointer;
             }
         }
     }

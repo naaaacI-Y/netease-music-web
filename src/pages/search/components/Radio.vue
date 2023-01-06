@@ -7,13 +7,13 @@
                 </div>
             </template>
             <template #name>
-                <div class="name fs-3 d-flex ai-center">
+                <div class="name fs-3 d-flex ai-center text-33">
                     {{ item.name }}
                 </div>
             </template>
             <template #author>
                 <div class="author fs-1 d-flex ai-center text-cd">
-                    <span class="by mr-5">by</span>
+                    <span class="by mr-5 text-bf">by</span>
                     <span class="auth">{{ item.dj.nickname }}</span>
                 </div>
             </template>
@@ -68,7 +68,7 @@ getSearchRadioList()
 }
 
 .author .auth:hover {
-    color: #333;
+    color: var(--theme-61);
     cursor: pointer;
 }
 </style>

@@ -11,7 +11,7 @@
             </template>
             <template #name>
                 <div class="name fs-3 d-flex ai-center">
-                    <span class="mr-10">{{ item.nickname }}</span>
+                    <span class="mr-10 text-33">{{ item.nickname }}</span>
                     <div class="sex d-flex ai-center jc-center"
                         :style="{ backgroundColor: item.gender === 1 ? '#d2f2f1' : '#f9d0e7' }" v-if="item.gender">
                         <i class="iconfont icon-nanxing text-male fs-2" v-if="item.gender === 1"></i>
@@ -20,7 +20,7 @@
                 </div>
             </template>
             <template #user-title v-if="item.description">
-                <div class="user-title fs-2 text-89">
+                <div class="user-title fs-2 text-fd">
                     {{ item.description }}
                 </div>
             </template>
@@ -87,7 +87,7 @@ getSearchUserList()
             border-radius: 50%;
             bottom: 2px;
             right: 0px;
-            overflow: hidden;
+            // overflow: hidden;
 
             img {
                 width: 100%;

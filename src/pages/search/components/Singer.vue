@@ -7,13 +7,13 @@
                 </div>
             </template>
             <template #name>
-                <div class="name fs-3 d-flex ai-center">
+                <div class="name fs-3 d-flex ai-center text-33">
                     {{ item.name }}
                 </div>
             </template>
             <template #singer-flag v-if="item.accountId">
-                <div class="singer-flag fs-3 d-flex ai-center jc-center">
-                    <i class="iconfont icon-iconfontyonghuming text-white"></i>
+                <div class="singer-flag d-flex ai-center jc-center" style="color: white;">
+                    <i class="iconfont icon-iconfontyonghuming fs-2"></i>
                 </div>
             </template>
         </CommonItem>

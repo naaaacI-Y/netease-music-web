@@ -7,7 +7,7 @@
                 </div>
             </template>
             <template #name>
-                <div class="name fs-3 d-flex ai-center">
+                <div class="name fs-3 d-flex ai-center text-33">
                     {{ item.name }}
                 </div>
             </template>

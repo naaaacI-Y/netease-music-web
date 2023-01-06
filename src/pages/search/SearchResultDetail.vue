@@ -2,11 +2,11 @@
     <DefaultLayout>
         <div class="search-result-detail-wrapper">
             <div class="head d-flex ai-center mb-12 pt-20">
-                <div class="keywords mr-5">{{ keywords }}</div>
+                <div class="keywords mr-5 text-33">{{ keywords }}</div>
                 <div class="total fs-2 text-66">找到&ensp;{{ total }}&ensp;{{ showWord }}</div>
             </div>
             <div class="switch-tab-wrap d-flex">
-                <div class="switch-tab-item mr-30 fs-3 text-3a pb-5"
+                <div class="switch-tab-item mr-30 fs-3 text-33 pb-5"
                     v-for="(item, index) in Object.keys(searchTypeList)" @click="changeItem(item)"
                     :class="{ isActive: index === activeIndex }">{{ item }}</div>
             </div>
@@ -71,7 +71,7 @@ const changeTotal = (num: number) => {
     }
 
     .switch-tab-wrap {
-        border-bottom: 1px solid #f2f2f2;
+        border-bottom: 1px solid var(--theme-f2);
         // padding: 0 30px;
         margin: 0 30px;
 

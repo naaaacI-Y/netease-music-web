@@ -54,8 +54,8 @@ onMounted(() => {
             height: 25px;
             line-height: 25px;
             margin: 0 5px;
-            background-color: white;
-            border: 1px solid #f2f2f2;
+            background-color: var(--theme-white);
+            border: 1px solid var(--theme-f2);
             color: #606266;
             min-width: 25px;
             border-radius: 4px;
@@ -66,7 +66,7 @@ onMounted(() => {
         }
 
         li:hover {
-            background-color: #f5f5f5; // dark: #2e2e2e
+            background-color: var(--theme-f5); // dark: #2e2e2e
         }
 
         .number.active {

@@ -25,11 +25,11 @@ defineProps<{
 
     &:hover {
         cursor: pointer;
-        background-color: #f2f2f2;
+        background-color: var(--theme-f2);
     }
 }
 
 .event {
-    background-color: #fafafa;
+    background-color: var(--theme-fa);
 }
 </style>
