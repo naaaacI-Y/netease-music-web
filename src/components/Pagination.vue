@@ -6,17 +6,20 @@
 
 <script lang="ts" setup>
 import Pagination from '@/utils/Pagination';
-import { onMounted } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 const props = defineProps<{
     size: number
     page: number
     total: number
+    index?: number
 }>()
 const emits = defineEmits<{
     (e: "pageChange", num: number): void
 }>()
-onMounted(() => {
-    new Pagination({
+let pagination = ref(null) as any
+const initPagination = () => {
+    pagination.value = null
+    return new Pagination({
         //实例化组件
         wrap: document.getElementById('pagination'), //容器
         page: props.page, // 当前页,默认初始为1
@@ -27,6 +30,12 @@ onMounted(() => {
             emits("pageChange", page)
         }
     })
+}
+watch(() => props.index, () => {
+    initPagination()
+})
+onMounted(() => {
+    initPagination()
 })
 </script>
 <style lang="scss">
