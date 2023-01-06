@@ -29,12 +29,11 @@
             <div class="dayRecommend" v-if="isActive('/songlist')"></div>
             <div class="video pl-30 fs-4" v-if="isActive('/video/all-mv')">全部MV</div>
             <div class="video d-flex pl-30 fs-4" v-if="isActive('/video/video-inside', '/video/mv')">
-                <div class="video-inside mr-20 text-7d" :class="{ isVideo: route.path === '/video/video-inside' }"
+                <div class="video-inside mr-20" :class="{ isVideo: route.path === '/video/video-inside' }"
                     @click="goInside('/video/video-inside')">
                     视频
                 </div>
-                <div class="video-mv text-7d" :class="{ isVideo: route.path === '/video/mv' }"
-                    @click="goInside('/video/mv')">
+                <div class="video-mv" :class="{ isVideo: route.path === '/video/mv' }" @click="goInside('/video/mv')">
                     MV
                 </div>
             </div>
@@ -208,6 +207,14 @@ const goInside = (path: string) => {
     height: 50px;
     background-color: var(--theme-head-f6); // red: ca5b4f
     width: 100%;
+
+    .video {
+        color: var(--theme-head-89);
+
+        &:hover {
+            color: var(--theme-head-00);
+        }
+    }
 
     .right {
         margin-left: 200px;

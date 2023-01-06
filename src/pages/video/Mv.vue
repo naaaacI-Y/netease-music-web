@@ -1,7 +1,8 @@
 <template>
     <div class="mv-wrap">
         <div class="head-wrap d-flex jc-between ai-center">
-            <div class="head mb-12" @click="goAllMv(activeType + 1, 0, 2)">最新MV <i class="iconfont icon-xiangyou1"></i>
+            <div class="head mb-12 text-33" @click="goAllMv(activeType + 1, 0, 2)">最新MV <i
+                    class="iconfont icon-xiangyou1"></i>
             </div>
             <CommonBtn :types="types" :active-type="activeType" @change-active-type="changeActiveType"
                 :is-show-btn="false"></CommonBtn>
@@ -10,12 +11,12 @@
             <RecommendMvCard v-for="item in newMvList.data" :is-play-btn="true" :recommend-mv-item="item"
                 :key="item.id"></RecommendMvCard>
         </div>
-        <div class="head mb-12" @click="goAllMv(0, 0, 1)">热播MV <i class="iconfont icon-xiangyou1"></i></div>
+        <div class="head mb-12 text-33" @click="goAllMv(0, 0, 1)">热播MV <i class="iconfont icon-xiangyou1"></i></div>
         <div class="hot-mv-list-wrap d-flex flex-wrap jc-between">
             <RecommendMvCard v-for="item in hotMvList.data" :is-play-btn="true" :key="item.id"
                 :recommend-mv-item="item"></RecommendMvCard>
         </div>
-        <div class="head mb-12" @click="goAllMv(0, 4, 2)">网易出品 <i class="iconfont icon-xiangyou1"></i></div>
+        <div class="head mb-12 text-33" @click="goAllMv(0, 4, 2)">网易出品 <i class="iconfont icon-xiangyou1"></i></div>
         <div class="wangyi-mv-list-wrap d-flex flex-wrap jc-between">
             <RecommendMvCard v-for="item in netProMvList.data" :is-play-btn="true" :is-oneline="true"
                 :recommend-mv-item="item" :key="item.id"></RecommendMvCard>
