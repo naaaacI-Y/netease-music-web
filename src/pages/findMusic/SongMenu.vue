@@ -20,48 +20,39 @@
             <RecommendSongListCard :is-out-side="false" v-for="item in songList.data" :key="item.id"
                 @click="goSongList(item.id)" :song-list-item="item"></RecommendSongListCard>
         </div>
+        <Pagination v-if="pages.total >= pages.limit" :total="pages.total" :size="pages.limit" :page="pages.page"
+            @page-change="handlePageChange" class="mt-30 mb-30" :index="paginationIndex">
+        </Pagination>
     </div>
 </template>
 
 <script lang="ts" setup>
+import Pagination from '@/components/Pagination.vue';
 import RecommendSongListCard from '@/components/RecommendSongListCard.vue';
 import CommonBtn from '@/components/global/CommonBtn.vue';
 import { songMenuTypes } from "@/utils/const"
-import { reactive, ref, watch } from 'vue';
+import { reactive, ref, watch, watchEffect } from 'vue';
 import { getSongList, getHighqualitySongList } from "@/service/api/music"
-import { Playlist } from '@/service/api/music/types';
+import { Playlist, SongListParams } from '@/service/api/music/types';
 import { useRouter } from 'vue-router';
 const activeType = ref(-1)
 const router = useRouter()
 const total = ref(0)
+const paginationIndex = ref(0)
 const pages = reactive({
     cat: activeType.value === -1 ? "全部" : songMenuTypes[activeType.value],
-    limit: 30,
-    offset: 0
+    limit: 40,
+    offset: 0,
+    total: 0,
+    page: 1
 })
 const songList = reactive({ data: [] as Playlist[] })
 const bannerInfo = reactive({ data: {} as Playlist }) // 歌单banner信息 包括icon、介绍
-watch(activeType, () => {
-    pages.cat = songMenuTypes[activeType.value]
-    getList()
-    getbannerInfo()
-})
-const changeActiveType = (num: number) => {
-    activeType.value = num
-}
-// 前往精品歌单页
-const goHighqualitySongList = () => {
-    router.push(`/high-qualtity-song-list?index=${activeType.value}`)
-}
-// 前往歌单页
-const goSongList = (songListId: number) => {
-    router.push(`/song-list?id=${songListId}`)
-}
 // 获取网友精选歌单
-const getList = async () => {
-    const r = await getSongList(pages)
+const getList = async (params: SongListParams) => {
+    const r = await getSongList(params)
     songList.data = r.playlists
-    total.value = r.total
+    pages.total = r.total
 }
 // 获取歌单头部banner信息
 const getbannerInfo = async () => {
@@ -72,8 +63,36 @@ const getbannerInfo = async () => {
     const r = await getHighqualitySongList(queryInfo)
     bannerInfo.data = r.playlists[0]
 }
-getList()
-getbannerInfo()
+watchEffect(async () => {
+    const queryInfo = {
+        area: activeType.value === -1 ? "全部" : songMenuTypes[activeType.value],
+        limit: pages.limit,
+        page: pages.page,
+        offset: (pages.page - 1) * pages.limit
+    }
+    getList(queryInfo)
+    getbannerInfo()
+})
+const changeActiveType = (num: number) => {
+    activeType.value = num
+    if (pages.page !== 1) {
+        pages.page = 1
+        paginationIndex.value++
+    }
+}
+const handlePageChange = (num: number) => {
+    pages.page = num
+}
+
+// 前往精品歌单页
+const goHighqualitySongList = () => {
+    router.push(`/high-qualtity-song-list?index=${activeType.value}`)
+}
+// 前往歌单页
+const goSongList = (songListId: number) => {
+    router.push(`/song-list?id=${songListId}`)
+}
+
 </script>
 <style lang="scss" scoped>
 .song-menu-wrapper {

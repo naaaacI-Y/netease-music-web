@@ -10,8 +10,8 @@
             <RecommendMvCard v-for="item in allMvLists.data" :is-play-btn="true" :key="item.id"
                 :recommend-mv-item="item"></RecommendMvCard>
         </div>
-        <Pagination v-if="pages.total >= pages.size && paginationSHowFlag" :total="pages.total" :size="pages.size"
-            :page="pages.page" @page-change="handlePageChange" class="mt-30 mb-30" :index="paginationIndex">
+        <Pagination v-if="pages.total >= pages.size" :total="pages.total" :size="pages.size" :page="pages.page"
+            @page-change="handlePageChange" class="mt-30 mb-30" :index="paginationIndex">
         </Pagination>
     </div>
 </template>
@@ -30,7 +30,6 @@ const activeAreaType = ref("全部")
 const activeTypeType = ref("全部")
 const activeSortType = ref("上升最快")
 const allMvLists = reactive({ data: [] as MVItem[] })
-const paginationSHowFlag = ref(true)
 const paginationIndex = ref(0)
 const pages = reactive({
     page: 1,
