@@ -48,22 +48,18 @@ const pages = reactive({
     size: 40,
     total: 0
 })
-// 重新构建分页 从1开始  如果当前页是1就不需要再重新构建了
-const initPagination = () => {
-    pages.page = 1
-    paginationIndex.value++
-}
+
 const changeAreaActive = (name: string): void => {
     activeAreaType.value = name;
-    initPagination()
+    pages.page = 1
 }
 const changeTypeActive = (name: string): void => {
     activeTypeType.value = name;
-    initPagination()
+    pages.page = 1
 }
 const changeSortActive = (name: string): void => {
     activeSortType.value = name;
-    initPagination()
+    pages.page = 1
 }
 watchEffect(async () => {
     const queryInfo = {
@@ -78,7 +74,9 @@ watchEffect(async () => {
     if (queryInfo.area === "全部" && queryInfo.type === "全部" && queryInfo.order === "上升最快") {
         return
     }
-    getMvLists(queryInfo)
+    await getMvLists(queryInfo)
+    // 重新构建分页，并且修改总页码 ==> 从1开始  如果当前页是1就不需要再重新构建了
+    paginationIndex.value++
 })
 
 // 初始化路径查询参数

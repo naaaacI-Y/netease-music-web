@@ -28,11 +28,13 @@ const initPagination = () => {
         callback: function (page: number) {
             // 触发页码更新
             emits("pageChange", page)
+
         }
     })
 }
 watch(() => props.index, () => {
     initPagination()
+    pagination.value.changeTotal(props.total)
 })
 onMounted(() => {
     initPagination()

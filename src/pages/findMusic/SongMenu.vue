@@ -15,8 +15,7 @@
                 }}</div>
             </div>
         </div>
-        <FilterItem :active-type="songMenuTypes[activeType]" :type-list="songMenuTypes"
-            @change-active-type="changeActiveType">
+        <FilterItem :active-type="activeIndex" :type-list="songMenuTypes" @change-active-type="changeActiveType">
             <template #left-label>
                 <div class="category-btn d-flex ai-center jc-center text-66">
                     <span class="fs-3 mr-5 ">{{ !activeType ? "全部歌单" : activeType }}</span>
@@ -39,7 +38,7 @@ import Pagination from '@/components/Pagination.vue';
 import RecommendSongListCard from '@/components/RecommendSongListCard.vue';
 import FilterItem from '@/components/FilterItem.vue';
 import { songMenuTypes } from "@/utils/const"
-import { reactive, ref, watchEffect } from 'vue';
+import { computed, reactive, ref, watchEffect } from 'vue';
 import { getSongList, getHighqualitySongList } from "@/service/api/music"
 import { Playlist, SongListParams } from '@/service/api/music/types';
 import { useRouter } from 'vue-router';
@@ -55,6 +54,10 @@ const pages = reactive({
 })
 const songList = reactive({ data: [] as Playlist[] })
 const bannerInfo = reactive({ data: {} as Playlist }) // 歌单banner信息 包括icon、介绍
+const activeIndex = computed(() => {
+    if (activeType.value === '') return -1
+    return songMenuTypes[activeType.value]
+})
 // 获取网友精选歌单
 const getList = async (params: SongListParams) => {
     const r = await getSongList(params)
@@ -77,15 +80,14 @@ watchEffect(async () => {
         page: pages.page,
         offset: (pages.page - 1) * pages.limit
     }
-    getList(queryInfo)
-    getbannerInfo()
+    await getList(queryInfo)
+    await getbannerInfo()
+    // 重新构建分页，并且修改总页码 ==> 从1开始  如果当前页是1就不需要再重新构建了
+    paginationIndex.value++
 })
 const changeActiveType = (name: string) => {
     activeType.value = name
-    if (pages.page !== 1) {
-        pages.page = 1
-        paginationIndex.value++
-    }
+    pages.page = 1
 }
 const handlePageChange = (num: number) => {
     pages.page = num
