@@ -50,7 +50,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter()
 const rankankList = reactive({ data: [] as RankList[] })
 const goGlobalRank = (id: number) => {
-    router.push(`/song-list?id=${id}&rankType=1`)
+    router.push(`/song-list/${id}?rankType=1`)
 }
 const getRank = async () => {
     const r = await getAllRank()

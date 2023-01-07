@@ -30,13 +30,13 @@ import { getCollectors4SongList } from '@/service/api/music';
 import { getQueryId } from '@/utils';
 import router from '@/router';
 const collectorsList = reactive({ data: [] as Subscriber[] })
-const id = getQueryId()
+const id = getQueryId() as number
 const getCollectors = async () => {
     const r = await getCollectors4SongList({ id })
     collectorsList.data = r.subscribers
 }
 const goPersonCenter = (userId: number) => {
-    router.push(`/personal-center?id=${userId}`)
+    router.push(`/personal-center/${userId}`)
 }
 getCollectors()
 </script>

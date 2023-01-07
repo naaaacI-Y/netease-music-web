@@ -59,7 +59,7 @@ const props = withDefaults(defineProps<{
 const randDetail = reactive({ data: [] as HotSong[] })
 const flagDetail = reactive({ data: [] as TrackId[] })
 const checkAll = () => {
-    router.push(`/song-list?id=${props.rankItem.id}&rankType=${props.rankType}`)
+    router.push(`/song-list/${props.rankItem.id}?rankType=${props.rankType}`)
 }
 const width = computed(() => {
     return props.cardWidth + "px"

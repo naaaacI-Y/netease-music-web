@@ -28,7 +28,7 @@ const props = defineProps<{
 }>()
 const goSongList = () => {
     if (props.type === 1) { // 普通歌单
-        return router.push(`/song-list?id=${props.songListItem.id}`)
+        return router.push(`/song-list/${props.songListItem.id}`)
     }
     // 每日歌曲推荐
     router.push('/day-recommend')

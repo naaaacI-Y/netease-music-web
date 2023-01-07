@@ -42,6 +42,7 @@ import { computed, reactive, ref, watchEffect } from 'vue';
 import { getSongList, getHighqualitySongList } from "@/service/api/music"
 import { Playlist, SongListParams } from '@/service/api/music/types';
 import { useRouter } from 'vue-router';
+import { scrollToTop } from '@/utils';
 const activeType = ref("")
 const router = useRouter()
 const paginationIndex = ref(0)
@@ -63,6 +64,8 @@ const getList = async (params: SongListParams) => {
     const r = await getSongList(params)
     songList.data = r.playlists
     pages.total = r.total
+    // 滚动到顶部
+    scrollToTop()
 }
 // 获取歌单头部banner信息
 const getbannerInfo = async () => {
@@ -99,7 +102,7 @@ const goHighqualitySongList = () => {
 }
 // 前往歌单页
 const goSongList = (songListId: number) => {
-    router.push(`/song-list?id=${songListId}`)
+    router.push(`/song-list/${songListId}`)
 }
 
 </script>

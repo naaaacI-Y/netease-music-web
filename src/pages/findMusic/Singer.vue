@@ -46,7 +46,7 @@ const pages = reactive({
 const singerList = reactive<Record<string, Artist[]>>({ data: [] })
 
 const goSingerPage = (id: number) => {
-    router.push(`/singer-home?id=${id}`)
+    router.push(`/singer-home/${id}`)
 }
 const changeLanguageActive = (name: string) => {
     activeLanguageType.value = name

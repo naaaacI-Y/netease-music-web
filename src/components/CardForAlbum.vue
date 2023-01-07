@@ -27,7 +27,7 @@ const props = defineProps<{
 }>()
 const goAlbum = () => {
     console.log("goAlbum");
-    router.push(`/album?id=${props.albumItem.id}`)
+    router.push(`/album/${props.albumItem.id}`)
 }
 const playAlbum = () => {
     console.log("playAlbum");

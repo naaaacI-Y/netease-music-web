@@ -74,17 +74,17 @@ const routes: RouteRecordRaw[] = [
   //   component: () => import('@/pages/focus/index.vue'),
   // },
   {
-    path: '/personal-center',
+    path: '/personal-center/:id',
     name: 'PersonalCenter',
     component: () => import('@/pages/personalCenter/index.vue'),
   },
   {
-    path: '/song-list',
+    path: '/song-list/:id',
     name: 'SongList',
     component: () => import('@/pages/songList/index.vue'),
   },
   {
-    path: '/singer-home',
+    path: '/singer-home/:id',
     name: 'SingerHome',
     component: () => import('@/pages/singer/index.vue'),
   },
@@ -109,7 +109,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/pages/personalCenter/Dynamic.vue'),
   },
   {
-    path: '/album',
+    path: '/album/:id',
     name: 'Album',
     component: () => import('@/pages/album/index.vue'),
   },
@@ -137,6 +137,11 @@ const routes: RouteRecordRaw[] = [
     path: '/search-result-detail/:keywords',
     name: 'SearchResultDetail',
     component: () => import('@/pages/search/SearchResultDetail.vue'),
+  },
+  {
+    path: '/hot-comment/:id/:type',
+    name: 'HotComment',
+    component: () => import('@/pages/hotComment/index.vue'),
   },
 ]
 
