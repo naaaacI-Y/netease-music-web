@@ -1,8 +1,9 @@
 <template>
-    <div class="recommend-songlist-card-wrapper">
+    <div class="recommend-songlist-card-wrapper" @click="goSongList">
         <div class="img-wrapper mb-6">
             <img :src="songListItem.coverImgUrl" alt="">
-            <div class="mask"></div>
+            <div class="mask-top"></div>
+            <div class="mask-bottom"></div>
             <div class="play-count d-flex ai-center fs-2">
                 <i class="iconfont icon-bofang1 fs-7"></i>
                 {{ formatPlayCount(songListItem.playCount) }}
@@ -28,9 +29,10 @@
 </template>
 
 <script lang="ts" setup>
+import router from '@/router';
 import { Playlist } from '@/service/api/music/types';
 import { formatPlayCount } from '@/utils';
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
     isOutSide?: boolean
     isOneline?: boolean
     songListItem: Playlist
@@ -38,6 +40,9 @@ withDefaults(defineProps<{
     isOutSide: true,
     isOneline: false
 })
+const goSongList = () => {
+    router.push(`/song-list/${props.songListItem.id}`)
+}
 </script>
 <style lang="scss" scoped>
 .recommend-songlist-card-wrapper {
@@ -59,13 +64,22 @@ withDefaults(defineProps<{
             // height: 100%;
         }
 
-        .mask {
+        .mask-top,
+        .mask-bottom {
             position: absolute;
             right: 0px;
-            top: 0px;
             width: 100%;
             height: 30px;
+        }
+
+        .mask-top {
+            top: 0;
             background-image: linear-gradient(rgba(#000, 0.3), rgba(#000, 0));
+        }
+
+        .mask-bottom {
+            bottom: 0;
+            background-image: linear-gradient(rgba(#000, 0), rgba(#000, 0.3));
         }
 
         .play-count {
