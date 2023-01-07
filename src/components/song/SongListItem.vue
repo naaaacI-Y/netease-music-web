@@ -20,10 +20,10 @@
                         @click="goMvDetail"></i>
                 </div>
                 <slot name="rate"></slot>
-                <div class="singer  text-99" v-if="isShow === 'all' || isShow === 'rank'">
+                <div class="singer  text-99" v-if="isShow === 'all' || isShow === 'rank'" @click="goSingerPage">
                     {{ item?.ar[0]?.name }}
                 </div>
-                <div class="album  text-99" v-if="isShow === 'all'">
+                <div class="album  text-99" v-if="isShow === 'all'" @click="goAlbumPage">
                     {{ item?.al.name }}
                 </div>
                 <div class="time text-c4 d-flex ai-center" v-if="isShow === 'all' || isShow === 'singer'">{{
@@ -49,7 +49,9 @@ import { formatSongTime } from '@/utils';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-const rankType = Number(useRoute().query.rankType)
+const route = useRoute()
+const router = useRouter()
+const rankType = Number(route.query.rankType)
 const { player } = storeToRefs(usePlayerState())
 const props = withDefaults(defineProps<
     {
@@ -75,11 +77,21 @@ const isShow = computed(() => {
             break;
     }
 })
-const router = useRouter()
+
 // 序号填充
 const paddingLeft = (num: number) => {
     if (num < 10) return `0${num}`
     return num
+}
+// 前往歌手页
+const goSingerPage = () => {
+    router.push(`/singer-home/${props.item?.ar[0].id}`)
+}
+// 前往专辑页面
+const goAlbumPage = () => {
+    // 如果在当前专辑也就不用跳转
+    if (Number(route.query.id) === props.item?.id) return
+    router.push(`/album/${props.item?.al.id}`)
 }
 // mv详情
 const goMvDetail = () => {

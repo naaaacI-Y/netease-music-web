@@ -70,16 +70,17 @@
 <script lang="ts" setup>
 // 歌单
 
+import router from '@/router';
 import { HeaderInfo } from '@/service/api/music/types';
 import { formatPlayCount, formatTime } from '@/utils';
 
 // 歌手
-defineProps<{
+const props = defineProps<{
     headerInfo: HeaderInfo
 }>()
 // 前往个人中心
 const goPersonCenter = () => {
-
+    router.push(`/personal-center/${props.headerInfo.creator.userId}`)
 }
 </script>
 <style lang="scss" scoped>

@@ -1,7 +1,8 @@
 <template>
-    <div class="singer-card-wrapper mb-30">
+    <div class="singer-card-wrapper mb-30" @click="goSingerPage">
         <div class="img-wrapper">
-            <LazyLoadImg :src="singerItem.picUrl"></LazyLoadImg>
+            <!-- <LazyLoadImg :src="singerItem.picUrl"></LazyLoadImg> -->
+            <img :src="singerItem.picUrl" alt="">
         </div>
         <div class="singer-info d-flex ai-center jc-between">
             <div class="name fs-2 text-33">{{ singerItem.name }}</div>
@@ -15,8 +16,9 @@
 <script lang="ts" setup>
 import { Artist } from '@/service/api/singer/types';
 import LazyLoadImg from "@/components/LazyLoadImg.vue"
+import router from '@/router';
 // 虚拟滚动  TODO
-withDefaults(defineProps<
+const props = withDefaults(defineProps<
     {
         cardWidth?: number,
         cardHeight?: number,
@@ -27,6 +29,11 @@ withDefaults(defineProps<
     cardHeight: 158,
     isShowSingerFlag: true
 })
+const goSingerPage = () => {
+    console.log(props.singerItem.id, "props.singerItem.id");
+
+    router.push(`/singer-home/${props.singerItem.id}`)
+}
 </script>
 <style lang="scss" scoped>
 .singer-card-wrapper {

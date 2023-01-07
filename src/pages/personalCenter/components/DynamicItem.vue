@@ -9,7 +9,7 @@
         <div class="right flex-1">
             <div class="name-info fs-3 mb-5">
                 <span class="text-shadow_blue mr-8">{{ dynamicItem.user.nickname }}</span>
-                <span>{{ map[dynamicItem.type.toString()] }}</span>
+                <span>{{ dynamicMap[dynamicItem.type.toString()] }}</span>
             </div>
             <div class="time fs-2 mb-10 text-7d">{{ calcTime(dynamicItem.eventTime) }}</div>
             <div class="dynamic-content fs-2 mb-5">{{ info.msg }}</div>
@@ -49,23 +49,12 @@
 </template>
 
 <script lang="ts" setup>
+import { dynamicMap } from "@/utils/const"
 import { computed, ref } from 'vue';
 import { Event } from "@/service/api/user/types"
 import SongListComment from '@/components/song/SongListComment.vue';
 import { calcTime, formatTime } from '@/utils';
-const map = {
-    "18": "分享单曲",
-    "19": "分享专辑",
-    "17": "分享电台节目",
-    "28": "分享电台节目",
-    "22": "转发",
-    "39": "发布视频",
-    "35": "分享歌单",
-    "13": "分享歌单",
-    "24": "分享专栏文章",
-    "41": "分享视频",
-    "21": "分享视频"
-}
+
 const props = defineProps<{
     dynamicItem: Event
 }>()
