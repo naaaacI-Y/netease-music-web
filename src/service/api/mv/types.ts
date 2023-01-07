@@ -27,20 +27,21 @@ export interface Artist {
 // 全部mv 最新mv 网易出品mv
 export interface MVItem {
     id: number
-    cover: string
+    cover?: string
     name: string
     playCount: number
-    briefDesc: null
+    briefDesc?: null
     canDislike?: boolean
     alg?: string
     picUrl?: string
     copywriter?: string
     artistName: string
-    artistId: number
+    artistId?: number
     duration: number
-    mark: number
+    mark?: number
     subed: boolean
-    artists: Artist[]
+    imgurl?: string
+    artists?: Artist[]
 }
 
 
@@ -51,6 +52,7 @@ export interface MVResult {
     more: boolean;
     err?: string
     code: number;
+    count?: number
 }
 
 

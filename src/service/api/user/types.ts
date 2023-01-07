@@ -29,6 +29,7 @@ export interface Profile {
     avatarDetail?: any;
     avatarImgIdStr: string;
     backgroundImgIdStr: string;
+    allAuthTypes?: { desc: string, tags: string[], type: number }[]
     description: string;
     nickname: string;
     accountStatus: number;
@@ -94,6 +95,11 @@ export interface ProfileVillageInfo {
 export interface UserDetailByIdResult {
     level: number;
     listenSongs: number;
+    identify?: {
+        actionUrl: any
+        imageDesc: string
+        imageUrl: string
+    },
     userPoint: UserPoint;
     mobileSign: boolean;
     pcSign: boolean;
@@ -478,4 +484,11 @@ export interface UserSongListResult {
 }
 
 
-
+// 关注/取消关注用户
+export interface FocusOrCancelPersonParams {
+    id: number
+    t: number
+}
+export interface FocusOrCancelPersonResult {
+    code: number
+}

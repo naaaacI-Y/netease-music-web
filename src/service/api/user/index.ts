@@ -51,3 +51,15 @@ export const getUserDynamic = (params: T.UserDynamicParams) => {
 export const getSongList = (params: T.UserFocusListParams) => {
     return http.get<T.UserSongListResult>(`/user/playlist${stringifyParams(params)}`)
 }
+
+
+/**
+ * 关注/取消关注用户
+ * @param params
+ * id: number
+ * t: 1 关注 0: 取消关注
+ * @returns
+ */
+export const focusOrCancelPerson = (params: T.FocusOrCancelPersonParams) => {
+    return http.get<T.FocusOrCancelPersonResult>(`/follow${stringifyParams(params)}&timestamp=${Date.now()}`)
+}

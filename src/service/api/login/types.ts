@@ -47,7 +47,7 @@ export interface account {
   paidFee: boolean;
 };
 export interface profile {
-  userId: bigint;
+  userId: number;
   userType: number;
   nickname: string;
   avatarImgId: any;

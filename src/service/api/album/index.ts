@@ -53,6 +53,6 @@ export const getAlbumDynamicInfo = (params: T.AlbumDetailParam) => {
  * before: 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过 5000 条评论的时候需要用到)
  * @returns
  */
-export const getAlbumComment = (params: T.AlbumCommentParams) => {
+export const getComment4Album = (params: T.AlbumCommentParams) => {
     return http.get<T.AlbumCommentResult>(`/comment/album${stringifyParams(params)}`)
 }

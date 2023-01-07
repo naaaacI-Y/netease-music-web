@@ -2,7 +2,7 @@
 const typeList = {
     0: "歌曲", 1: "mv", 2: "歌单", 3: "专辑", 4: "电台节目", 5: "视频", 6: "动态", 7: "电台"
 }
-type list = keyof typeof typeList
+export type list = keyof typeof typeList
 const typeListValue = ["歌曲", "mv", "歌单", "专辑", "电台节目", "视频", "动态", "电台"] as const
 type value = typeof typeListValue[number]
 export interface AllCommentParam {
@@ -233,11 +233,13 @@ export interface VoteCommentResult {
 }
 
 
-// 发送 / 回复 / 删除 评论
+// 发送 / 回复 / 删除 评论  1 发送, 2 回复 0 删除
+const TypeAction = [0, 1, 2] as const
+export type t = typeof TypeAction[number]
 export interface SendOrReplyCommentParam {
-    t: 0 | 1 | 2
+    t: t
     type: list
-    id: number
+    id: number | string
     content?: string
     commentId?: number
 }

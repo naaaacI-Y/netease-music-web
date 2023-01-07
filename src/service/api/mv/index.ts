@@ -99,6 +99,6 @@ export const getMvInfo = (params: T.MvDetailParam) => {
  * before: 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过 5000 条评论的时候需要用到)
  * @returns
  */
-export const getMVComment = (params: T.MVCommentParams) => {
+export const getComment4MV = (params: T.MVCommentParams) => {
     return http.get<T.MVCommentResult>(`/comment/mv${stringifyParams(params)}`)
 }
