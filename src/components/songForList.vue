@@ -25,7 +25,7 @@
             <div class="list-wrap flex-1">
                 <SongListItem v-for="item in 20" :index="item" :type="2"></SongListItem>
                 <div class="check-all d-flex ai-center text-89 jc-end pr-20">
-                    <span class="fs-2">查看全部{{ }}首</span>
+                    <span class="fs-2">查看全部{{}}首</span>
                     <i class="iconfont icon-jiantou_liebiaoxiangyou_o fs-9"></i>
                 </div>
             </div>
@@ -65,7 +65,7 @@ const isShowPlayAndCollect = computed(() => {
             border-radius: 10px;
             width: 100%;
             height: 100%;
-            background-color: #000;
+            background-color: var(--theme-00);
 
             i {
                 font-size: 40px;
@@ -82,7 +82,7 @@ const isShowPlayAndCollect = computed(() => {
         .check-all {
             height: 30px;
 
-            background-color: #fafafa;
+            background-color: var(--theme-fa);
 
             &:hover {
                 cursor: pointer;

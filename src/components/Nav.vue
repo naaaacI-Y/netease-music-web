@@ -2,32 +2,32 @@
     <div class="nav-wrapper d-flex ai-center" :class='{ "active": isChangeBgc }'>
         <div class="right d-flex ai-center jc-end" :class='{ "hasLeft": isHasLeft }'>
             <div class="find d-flex" v-if="isActive('/findMusic')">
-                <div :class="{ 'active': activeIndex == 0 }" @click="activeIndex = 0">
+                <div :class="{ 'active': route.path === firstPagePath[0] }" @click="activeIndex = 0">
                     个性推荐
                 </div>
-                <div :class="{ 'active': activeIndex == 1 }" @click="activeIndex = 1">
+                <div :class="{ 'active': route.path === firstPagePath[1] }" @click="activeIndex = 1">
                     歌单
                 </div>
-                <div :class="{ 'active': activeIndex == 2 }" @click="activeIndex = 2">
+                <div :class="{ 'active': route.path === firstPagePath[2] }" @click="activeIndex = 2">
                     主播电台
                 </div>
-                <div :class="{ 'active': activeIndex == 3 }" @click="activeIndex = 3">
+                <div :class="{ 'active': route.path === firstPagePath[3] }" @click="activeIndex = 3">
                     排行榜
                 </div>
-                <div :class="{ 'active': activeIndex == 4 }" @click="activeIndex = 4">
+                <div :class="{ 'active': route.path === firstPagePath[4] }" @click="activeIndex = 4">
                     歌手
                 </div>
-                <div :class="{ 'active': activeIndex == 5 }" @click="activeIndex = 5">
+                <div :class="{ 'active': route.path === firstPagePath[5] }" @click="activeIndex = 5">
                     最新音乐
                 </div>
             </div>
-            <div class="personalCenter pl-30" v-if="isActive('/dynamic')">{{ dynamicName }}动态</div>
-            <div class="personalCenter pl-30" v-if="isActive('/focus')">{{ focusName }}的关注</div>
-            <div class="personalCenter pl-30" v-if="isActive('/fans')">{{ fansName }}的粉丝</div>
+            <div class="personalCenter pl-30 text-33" v-if="isActive('/dynamic')">{{ dynamicName }}动态</div>
+            <div class="personalCenter pl-30 text-33" v-if="isActive('/focus')">{{ focusName }}的关注</div>
+            <div class="personalCenter pl-30 text-33" v-if="isActive('/fans')">{{ fansName }}的粉丝</div>
             <div class="unique-play pl-30" v-if="isActive('/unique-play')"> 独家放送</div>
             <div class="personalfm" v-if="isActive('/personal-fm')"></div>
             <div class="dayRecommend" v-if="isActive('/songlist')"></div>
-            <div class="video pl-30 fs-4" v-if="isActive('/video/all-mv')">全部MV</div>
+            <div class="video pl-30 fs-4 text-33" v-if="isActive('/video/all-mv')">全部MV</div>
             <div class="video d-flex pl-30 fs-4" v-if="isActive('/video/video-inside', '/video/mv')">
                 <div class="video-inside mr-20" :class="{ isVideo: route.path === '/video/video-inside' }"
                     @click="goInside('/video/video-inside')">
@@ -92,6 +92,7 @@ import { debounce } from "@/utils"
 import { storeToRefs } from 'pinia';
 import useThemeState from '@/store/theme';
 import { changeTheme } from '@/config/theme';
+import { firstPagePath } from '@/utils/const';
 const props = withDefaults(defineProps<{
     isChangeBgc: boolean
 }>(), {
@@ -117,7 +118,10 @@ const isHasLeft = computed(() => { // 头部flex横向布局相关
 watch(() => searchKeyWords.value, () => {
     debounceTextChange()
 })
-watch(activeIndex, () => {
+// watch(() => route.path, (newVal) => {
+//     activeIndex.value = firstPagePath.findIndex(item => item === newVal)
+// })
+watch(() => activeIndex.value, () => {
     if (!route.path.startsWith('/find')) return;
     switch (activeIndex.value) {
         case 0:
@@ -167,7 +171,6 @@ watch(() => route.path, (newVal: string) => {
             break;
     }
 })
-
 // 输入框值改变 触发搜索
 const handleKeyWordsChange = () => {
     emits("handleKeyWordsChange", searchKeyWords.value)
