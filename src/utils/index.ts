@@ -2,6 +2,7 @@
 
 import useStore from "@/store";
 import { useRoute } from "vue-router";
+import cityInfo from "./CITY";
 import Player from "./Player";
 
 /**
@@ -240,6 +241,21 @@ const debounce = (fn: Function, wait = 100) => {
         }, wait))
     }
 }
+// 获取所在地区
+const getArea = (province: number, city: number) => {
+    const index = cityInfo.findIndex(item => item.id === province)
+    if (index === -1) {
+        return ""
+    }
+    const _p = cityInfo[index].name
+    const _c = cityInfo[index].cities[String(city)]
+    return `${_p} ${_c}`
+}
+// 滚动到顶部
+const scrollToTop = () => {
+    const wrap = document.getElementsByClassName("content")[0]
+    wrap.scrollTo(0, 0)
+}
 export {
     formatTime,
     stringifyParams,
@@ -255,5 +271,7 @@ export {
     initPlayer,
     getSearchHistory,
     setSearchHistory,
-    clearSearchHistory
+    clearSearchHistory,
+    getArea,
+    scrollToTop
 }
