@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="center d-flex flex-column jc-center">
-            <div class="name mb-10 fs-3" @click="goPersonCenter">{{ item.nickname }}</div>
+            <div class="name mb-10 fs-3 text-33" @click="goPersonCenter">{{ item.nickname }}</div>
             <div class="summary fs-2 text-7d">{{ item.signature }}</div>
             <div class="other-info d-flex ai-center fs-2 text-7d">
                 <div class="album mr-5">
@@ -29,13 +29,14 @@
 </template>
 
 <script lang="ts" setup>
+import router from '@/router';
 import { Follow } from '@/service/api/user/types';
 
-defineProps<{
+const props = defineProps<{
     item: Follow
 }>()
 const goPersonCenter = () => {
-
+    router.push(`/personal-center/${props.item.userId}`)
 }
 </script>
 <style lang="scss" scoped>
@@ -76,7 +77,7 @@ const goPersonCenter = () => {
     }
 
     &:hover {
-        background-color: #fafafa;
+        background-color: var(--theme-fa);
     }
 
     .center {
@@ -94,7 +95,7 @@ const goPersonCenter = () => {
     }
 
     .right {
-        border: 1px solid #ddd;
+        border: 1px solid var(--theme-dd);
         padding: 2px 7px;
         border-radius: 15px;
 

@@ -13,7 +13,7 @@ import { getUserDynamic } from "@/service/api/user"
 import DynamicItem from './components/DynamicItem.vue'
 import { getQueryId } from '@/utils';
 const dynamicList = reactive({ data: [] as Event[] })
-const id = getQueryId()
+const id = getQueryId() as number
 const getDynamics = async () => {
     const r = await getUserDynamic({ uid: id })
     dynamicList.data = r.events

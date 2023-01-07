@@ -3,19 +3,40 @@
         <div class="home-focus-wrapper d-flex jc-between flex-wrap pt-10">
             <FocusAndFansItem v-for="item in focusList.data" :key="item.userId" :item="item"></FocusAndFansItem>
         </div>
+        <Pagination v-if="pages.total >= pages.size" :total="pages.total" :size="pages.size" :page="pages.page"
+            @page-change="handlePageChange" class="mt-30 mb-30"></Pagination>
     </DefaultLayout>
 </template>
 
 <script lang="ts" setup>
+import Pagination from '@/components/Pagination.vue';
 import { getFocusList } from '@/service/api/user';
 import { Follow } from '@/service/api/user/types';
-import { getQueryId } from '@/utils';
-import { reactive } from 'vue';
+import { getQueryId, scrollToTop } from '@/utils';
+import { reactive, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import FocusAndFansItem from './components/FocusAndFansItem.vue';
 const focusList = reactive({ data: [] as Follow[] })
-const id = getQueryId()
+const pages = reactive({
+    page: 1,
+    size: 30,
+    total: Number(useRoute().query.focus)
+})
+const id = getQueryId() as number
+
+watch(() => pages.page, async () => {
+    await getFocuList()
+    // 滚动到顶部
+    scrollToTop()
+})
+const handlePageChange = (num: number) => {
+    pages.page = num
+}
 const getFocuList = async () => {
-    const r = await getFocusList({ uid: id })
+    const _ = {
+        uid: id, limit: pages.size, offset: (pages.page - 1) * pages.size
+    }
+    const r = await getFocusList(_)
     focusList.data = r.follow
 }
 getFocuList()

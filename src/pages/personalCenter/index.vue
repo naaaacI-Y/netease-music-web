@@ -5,7 +5,7 @@
             <div class="song-list-wrapper mb-30">
                 <div class="head d-flex jc-between mb-15 ai-center">
                     <div class="title">
-                        <span class="fs-5" style="font-weight: bold;">{{ isSelf ? '我创建的歌单' : '歌单' }}</span>
+                        <span class="fs-5 text-33" style="font-weight: bold;">{{ isSelf? '我创建的歌单': '歌单' }}</span>
                         <span class="text-66 fs-2">({{ songList.data.length }})</span>
                     </div>
                     <div class="type-change d-flex">
@@ -29,6 +29,8 @@
                             </template>
                         </RecommendSongListCard>
                     </div>
+                    <!-- <Pagination v-if="pages4Self.total >= pages4Self.size" :total="pages4Self.total" :size="pages4Self.size" :page="pages4Self.page"
+                        @page-change="handlePageChange4Self" class="mt-30 mb-30"></Pagination> -->
                     <!-- <div class="content-type2" v-if="songListShowType === 'table'">
                         <songForList v-for="item in 4"></songForList>
                     </div> -->
@@ -37,7 +39,7 @@
             <div class="song-list-wrapper" v-if="collectSongList.data.length">
                 <div class="head d-flex jc-between mb-15 ai-center">
                     <div class="title">
-                        <span class="fs-5" style="font-weight: bold;">{{ isSelf ? '我收藏的歌单' : '收藏' }}</span>
+                        <span class="fs-5 text-33" style="font-weight: bold;">{{ isSelf? '我收藏的歌单': '收藏' }}</span>
                         <span class="text-66 fs-2">({{ collectSongList.data.length }})</span>
                     </div>
                     <div class="type-change d-flex">
@@ -61,6 +63,8 @@
                             </template>
                         </RecommendSongListCard>
                     </div>
+                    <!-- <Pagination v-if="pages4Collect.total >= pages4Collect.size" :total="pages4Collect.total" :size="pages4Collect.size" :page="pages4Collect.page"
+                        @page-change="handlePageChange4Collection" class="mt-30 mb-30"></Pagination> -->
                     <!-- <div class="content-type2" v-if="songListShowType === 'table'">
                         <songForList v-for="item in 4"></songForList>
                     </div> -->
@@ -71,18 +75,21 @@
 </template>
 
 <script lang="ts" setup>
+import Pagination from '@/components/Pagination.vue';
+
 import UserHeader from '@/components/header/UserHeader.vue';
 import RecommendSongListCard from '@/components/RecommendSongListCard.vue';
 import songForList from '@/components/songForList.vue';
 import { getSongList } from '@/service/api/user';
 import { Playlist_user } from '@/service/api/user/types';
 import useStore from '@/store';
+
 import { checkLogin, getQueryId } from '@/utils';
 import { computed, reactive, ref } from 'vue';
 const songListShowType = ref("card") // card | table
 const songList = reactive({ data: [] as Playlist_user[] }) // 创建的歌单
 const collectSongList = reactive({ data: [] as Playlist_user[] }) // 收藏的歌单
-const id = getQueryId()
+const id = getQueryId() as number
 const isSelf = computed(() => {
     if (!checkLogin()) return false
     const store = useStore()
@@ -90,9 +97,29 @@ const isSelf = computed(() => {
     if (uid === id) return true
     return false
 })
+// 歌单分页 TODO
+const pages4Self = reactive({
+    page: 1,
+    size: 30,
+    total: 0
+})
+const pages4Collect = reactive({
+    page: 1,
+    size: 30,
+    total: 0
+})
+// 自建歌单分页触发
+const handlePageChange4Self = (num: number) => {
+    pages4Self.page = num
+}
+// 收藏歌单分页触发
+const handlePageChange4Collection = (num: number) => {
+    pages4Collect.page = num
+}
 const getList = async () => {
     const r = await getSongList({ uid: id })
     songList.data = r.playlist.filter(item => item.creator.userId === id)
+
     collectSongList.data = r.playlist.filter(item => item.creator.userId !== id)
 }
 getList()
@@ -110,7 +137,7 @@ getList()
             .type2 {
                 width: 25px;
                 height: 20px;
-                background-color: #f2f2f2;
+                background-color: var(--theme-f2);
             }
 
             .type1 {
@@ -124,7 +151,7 @@ getList()
             }
 
             .isActive {
-                background-color: #bfbfbf;
+                background-color: var(--theme-bf);
 
                 i {
                     color: white;
