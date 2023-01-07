@@ -15,7 +15,15 @@
                 }}</div>
             </div>
         </div>
-        <CommonBtn :active-type="activeType" :types="songMenuTypes" @change-active-type="changeActiveType"></CommonBtn>
+        <FilterItem :active-type="songMenuTypes[activeType]" :type-list="songMenuTypes"
+            @change-active-type="changeActiveType">
+            <template #left-label>
+                <div class="category-btn d-flex ai-center jc-center text-66">
+                    <span class="fs-3 mr-5 ">{{ !activeType ? "全部歌单" : activeType }}</span>
+                    <i class="iconfont icon-xiangyou2 fs-3"></i>
+                </div>
+            </template>
+        </FilterItem>
         <div class="song-list d-flex flex-wrap jc-between">
             <RecommendSongListCard :is-out-side="false" v-for="item in songList.data" :key="item.id"
                 @click="goSongList(item.id)" :song-list-item="item"></RecommendSongListCard>
@@ -29,18 +37,17 @@
 <script lang="ts" setup>
 import Pagination from '@/components/Pagination.vue';
 import RecommendSongListCard from '@/components/RecommendSongListCard.vue';
-import CommonBtn from '@/components/global/CommonBtn.vue';
+import FilterItem from '@/components/FilterItem.vue';
 import { songMenuTypes } from "@/utils/const"
-import { reactive, ref, watch, watchEffect } from 'vue';
+import { reactive, ref, watchEffect } from 'vue';
 import { getSongList, getHighqualitySongList } from "@/service/api/music"
 import { Playlist, SongListParams } from '@/service/api/music/types';
 import { useRouter } from 'vue-router';
-const activeType = ref(-1)
+const activeType = ref("")
 const router = useRouter()
-const total = ref(0)
 const paginationIndex = ref(0)
 const pages = reactive({
-    cat: activeType.value === -1 ? "全部" : songMenuTypes[activeType.value],
+    cat: !activeType.value ? "全部" : activeType.value,
     limit: 40,
     offset: 0,
     total: 0,
@@ -57,7 +64,7 @@ const getList = async (params: SongListParams) => {
 // 获取歌单头部banner信息
 const getbannerInfo = async () => {
     const queryInfo = {
-        cat: pages.cat,
+        cat: !activeType.value ? "全部" : activeType.value,
         limit: 1
     }
     const r = await getHighqualitySongList(queryInfo)
@@ -65,7 +72,7 @@ const getbannerInfo = async () => {
 }
 watchEffect(async () => {
     const queryInfo = {
-        area: activeType.value === -1 ? "全部" : songMenuTypes[activeType.value],
+        area: !activeType.value ? "全部" : activeType.value,
         limit: pages.limit,
         page: pages.page,
         offset: (pages.page - 1) * pages.limit
@@ -73,8 +80,8 @@ watchEffect(async () => {
     getList(queryInfo)
     getbannerInfo()
 })
-const changeActiveType = (num: number) => {
-    activeType.value = num
+const changeActiveType = (name: string) => {
+    activeType.value = name
     if (pages.page !== 1) {
         pages.page = 1
         paginationIndex.value++
@@ -99,6 +106,13 @@ const goSongList = (songListId: number) => {
     padding-top: 20px;
     width: 1040px;
     margin: auto;
+
+    .category-btn {
+        border: 1px solid var(--theme-e5);
+        padding: 4px 0;
+        width: 100px;
+        border-radius: 20px;
+    }
 
     .head-card {
         height: 170px;

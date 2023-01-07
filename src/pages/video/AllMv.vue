@@ -1,11 +1,23 @@
 <template>
     <div class="all-mv-wrapper">
-        <FilterItem label="地区" :active-type="areaList[activeAreaType]" :type-list="areaList"
-            @change-active-type="changeAreaActive"></FilterItem>
-        <FilterItem label="类型" :active-type="typeList[activeTypeType]" :type-list="typeList"
-            @change-active-type="changeTypeActive"></FilterItem>
-        <FilterItem label="排序" :active-type="sortList[activeSortType]" :type-list="sortList"
-            @change-active-type="changeSortActive"></FilterItem>
+        <FilterItem label="地区" :active-type="areaList[activeAreaType]" :type-list="areaList" :is-between="false"
+            @change-active-type="changeAreaActive">
+            <template #left-label>
+                <div class="filter-label fs-1 mr-8 text-33">地区：</div>
+            </template>
+        </FilterItem>
+        <FilterItem label="类型" :active-type="typeList[activeTypeType]" :type-list="typeList" :is-between="false"
+            @change-active-type="changeTypeActive">
+            <template #left-label>
+                <div class="filter-label fs-1 mr-8 text-33">类型：</div>
+            </template>
+        </FilterItem>
+        <FilterItem label="排序" :active-type="sortList[activeSortType]" :type-list="sortList" :is-between="false"
+            @change-active-type="changeSortActive">
+            <template #left-label>
+                <div class="filter-label fs-1 mr-8 text-33">排序：</div>
+            </template>
+        </FilterItem>
         <div class="all-mv-list-wrap d-flex flex-wrap jc-between mt-20">
             <RecommendMvCard v-for="item in allMvLists.data" :is-play-btn="true" :key="item.id"
                 :recommend-mv-item="item"></RecommendMvCard>
@@ -36,27 +48,22 @@ const pages = reactive({
     size: 40,
     total: 0
 })
+// 重新构建分页 从1开始  如果当前页是1就不需要再重新构建了
+const initPagination = () => {
+    pages.page = 1
+    paginationIndex.value++
+}
 const changeAreaActive = (name: string): void => {
     activeAreaType.value = name;
-    // 重新构建分页 从1开始  如果当前页是1就不需要再重新构建了
-    if (pages.page !== 1) {
-        pages.page = 1
-        paginationIndex.value++
-    }
+    initPagination()
 }
 const changeTypeActive = (name: string): void => {
     activeTypeType.value = name;
-    if (pages.page !== 1) {
-        pages.page = 1
-        paginationIndex.value++
-    }
+    initPagination()
 }
 const changeSortActive = (name: string): void => {
     activeSortType.value = name;
-    if (pages.page !== 1) {
-        pages.page = 1
-        paginationIndex.value++
-    }
+    initPagination()
 }
 watchEffect(async () => {
     const queryInfo = {
@@ -84,8 +91,10 @@ const initQuery = () => {
 // 获取mv数据
 const getMvLists = async (params: AllMvParam) => {
     const r = await getAllMv(params)
-    pages.total = r.count! ?? pages.total
+    pages.total = r.count ?? pages.total
     allMvLists.data = r.data
+    // 更改总条目 TODO
+
 }
 // 处理分页页码变化
 const handlePageChange = (num: number) => {

@@ -1,11 +1,14 @@
 <template>
     <div class="mv-wrap">
-        <div class="head-wrap d-flex jc-between ai-center">
-            <div class="head mb-12 text-33" @click="goAllMv(activeType + 1, 0, 2)">最新MV <i
-                    class="iconfont icon-xiangyou1"></i>
-            </div>
-            <CommonBtn :types="types" :active-type="activeType" @change-active-type="changeActiveType"
-                :is-show-btn="false"></CommonBtn>
+        <div class="head-wrap d-flex jc-between ai-center mb-2">
+            <FilterItem :type-list="types" :active-type="types[activeType]" @change-active-type="changeActiveType">
+                <template #left-label>
+                    <div class="head text-33" @click="goAllMv(types[activeType] + 1, 0, 2)">
+                        最新MV
+                        <i class="iconfont icon-xiangyou1"></i>
+                    </div>
+                </template>
+            </FilterItem>
         </div>
         <div class="new-mv-list-wrap d-flex flex-wrap jc-between">
             <RecommendMvCard v-for="item in newMvList.data" :is-play-btn="true" :recommend-mv-item="item"
@@ -25,28 +28,32 @@
 </template>
 
 <script lang="ts" setup>
-import CommonBtn from '@/components/global/CommonBtn.vue';
+import FilterItem from '@/components/FilterItem.vue';
 import RecommendMvCard from '@/components/RecommendMvCard.vue';
-import { getAllMv, getNetProdMV, getNewMv, getRecommendMv } from '@/service/api/mv';
+import { getAllMv, getNetProdMV, getNewMv } from '@/service/api/mv';
 import { MVItem } from '@/service/api/mv/types';
 import { areaList } from "@/utils/const"
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-const types = Object.keys(areaList).slice(1)
-const activeType = ref(0)
+const types = Object.fromEntries(Object.entries(areaList).filter(item => item[0] !== '全部'))
+const activeType = ref("内地")
 const router = useRouter()
 const newMvList = reactive({ data: [] as MVItem[] })
 const hotMvList = reactive({ data: [] as MVItem[] })
 const netProMvList = reactive({ data: [] as MVItem[] })
-const changeActiveType = (num: number) => {
-    activeType.value = num
+watch(() => activeType.value, () => {
+    // 重新获取mv数据
+    getNewMvs()
+})
+const changeActiveType = (name: string) => {
+    activeType.value = name
 }
 const goAllMv = (area: number, type: number, sort: number) => {
     router.push(`/video/all-mv?area=${area}&type=${type}&sort=${sort}`)
 }
 // 最新mv
 const getNewMvs = async () => {
-    const r = await getNewMv({ area: types[activeType.value], limit: 8 })
+    const r = await getNewMv({ area: activeType.value, limit: 8 })
     newMvList.data = r.data
 }
 // // 热播mv
@@ -73,7 +80,8 @@ getHotMv()
         cursor: pointer;
     }
 
-    .new-mv-list-wrap {
+    .new-mv-list-wrap,
+    .hot-mv-list-wrap {
         margin-bottom: 60px;
     }
 

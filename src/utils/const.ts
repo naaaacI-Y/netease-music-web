@@ -1,4 +1,4 @@
-type obj = { [key: string]: number | string }
+type obj = { [key: string]: number }
 const alphaString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#".split("").reduce((cur: { [key: string]: number | string }, next) => {
     if (next === "#") {
         cur[next] = 0
@@ -18,10 +18,18 @@ const categoryList: obj = {
 const filterList: obj = {
     "热门": -1, ...alphaString
 }
-const areaList = ["全部", "内地", "港台", "欧美", "日本", "韩国"]
-const typeList = ["全部", "官方版", "原声", "现场版", "网易出品"]
-const videoTypes = ["现场", "翻唱", "舞蹈", "听BGM", "MV", "生活", "游戏", "ACG音乐", "最佳饭制"]
-const sortList = ["上升最快", "最热", "最新"]
+const areaList: obj = {
+    "全部": 0, "内地": 1, "港台": 2, "欧美": 3, "日本": 4, "韩国": 5
+}
+const typeList: obj = {
+    "全部": 0, "官方版": 1, "原声": 2, "现场版": 3, "网易出品": 4
+}
+const videoTypes: obj = {
+    "现场": 0, "翻唱": 1, "舞蹈": 2, "听BGM": 3, "MV": 4, "生活": 5, "游戏": 6, "ACG音乐": 7, "最佳饭制": 8
+}
+const sortList: obj = {
+    "上升最快": 0, "最热": 1, "最新": 2
+}
 const newestMusicType = {
     0: "全部",
     7: "华语",
@@ -29,7 +37,9 @@ const newestMusicType = {
     8: "日本",
     16: "韩国"
 }
-const songMenuTypes = ["华语", "流行", "摇滚", "民谣", "电子", "另类/独立", "轻音乐", "综艺", "影视原声", "ACG"]
+const songMenuTypes: obj = {
+    "华语": 0, "流行": 1, "摇滚": 2, "民谣": 3, "电子": 4, "另类/独立": 5, "轻音乐": 6, "综艺": 7, "影视原声": 8, "ACG": 9
+}
 const labelList = ["专辑", "MV", "歌手详情", "相似歌手", "演出"]
 const tabsComponents = ["Album", "Lyric", "Singer", "Video", "Song", "User", "Radio", "SongList"] as const
 const searchTypeList: { [key: string]: { id: number, unit: string, component: typeof tabsComponents[number] } } = {

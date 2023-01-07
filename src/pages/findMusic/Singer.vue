@@ -1,12 +1,24 @@
 <template>
     <div class="singer-wrapper">
         <div class="filter-wrapper mb-20">
-            <FilterItem :active-type="languageList[activeLanguageType]" :type-list="languageList" label="语种"
-                @change-active-type="changeLanguageActive"></FilterItem>
-            <FilterItem :active-type="categoryList[activeCategoryType]" :type-list="categoryList" label="分类"
-                @change-active-type="changeCategoryActive"></FilterItem>
+            <FilterItem :active-type="languageList[activeLanguageType]" :type-list="languageList" :is-between="false"
+                @change-active-type="changeLanguageActive">
+                <template #left-label>
+                    <div class="filter-label fs-1 mr-8 text-33">语种：</div>
+                </template>
+            </FilterItem>
+            <FilterItem :active-type="categoryList[activeCategoryType]" :type-list="categoryList" :is-between="false"
+                @change-active-type="changeCategoryActive">
+                <template #left-label>
+                    <div class="filter-label fs-1 mr-8 text-33">分类：</div>
+                </template>
+            </FilterItem>
             <FilterItem :active-type="filterList[activeFilterType]" :type-list="filterList" label="筛选"
-                @change-active-type="changeFilterActive"></FilterItem>
+                :is-between="false" @change-active-type="changeFilterActive">
+                <template #left-label>
+                    <div class="filter-label fs-1 mr-8 text-33">筛选：</div>
+                </template>
+            </FilterItem>
         </div>
         <div class="singer-list-wrapper d-flex flex-wrap jc-between">
             <SingerCard v-for="item in singerList.data" @click="goSingerPage(item.id)" :key="item.id"
