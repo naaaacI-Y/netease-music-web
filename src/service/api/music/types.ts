@@ -506,8 +506,8 @@ export interface Song {
     originCoverType: number;
     originSongSimpleData?: any;
     tagPicList?: any;
-    resourceState: boolean;
-    version: number;
+    resourceState?: boolean;
+    version?: number;
     songJumpInfo?: any;
     entertainmentTags?: any;
     awardTags?: any;
@@ -519,7 +519,7 @@ export interface Song {
     cp: number;
     mv: number;
     publishTime: number;
-    tns: string[];
+    tns?: string[];
 }
 
 
@@ -677,4 +677,26 @@ export interface CheckSongAvaliableParams {
 export interface CheckSongAvaliableresult {
     message: string
     success: string
+}
+
+// 最近播放
+
+
+export interface recentPlayList {
+    resourceId: string;
+    playTime: number;
+    resourceType: string;
+    data: Song;
+    banned: boolean;
+}
+
+export interface RecentPlayRet {
+    total: number;
+    list: recentPlayList[];
+}
+
+export interface RecentPlayResult {
+    code: number;
+    data: RecentPlayRet;
+    message: string;
 }

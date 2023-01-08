@@ -34,7 +34,7 @@ import { Song } from '@/service/api/singer/types';
 import Message from "@/components/message"
 import { reactive } from 'vue';
 import { useRoute } from 'vue-router';
-import Header from './Header.vue';
+import Header from '@/components/header/Header.vue';
 const emits = defineEmits<{
     (e: "changeTotal", num: number): void
 }>()

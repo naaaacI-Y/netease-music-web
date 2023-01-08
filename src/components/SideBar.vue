@@ -34,22 +34,22 @@
                     <i class="iconfont icon-shipin"></i>
                     <span>视频</span>
                 </div>
-                <div @click="go('/focus')" :class="['find', active('focus') ? isActive : '']">
+                <!-- <div @click="go('/focus')" :class="['find', active('focus') ? isActive : '']">
                     <i class="iconfont icon-pengyou"></i>
                     <span>朋友</span>
-                </div>
+                </div> -->
             </div>
             <div class="myMusic mt-9 text-41 fs-18">
                 <div class="title pl-18 fs-13">我的音乐</div>
-                <div class="itunes pl-18">
+                <!-- <div class="itunes pl-18">
                     <i class="iconfont icon-itunes text-41"></i>
                     <span class="fs-13">iTunes音乐</span>
                 </div>
                 <div class="itunes pl-18">
                     <i class="iconfont icon-xiazai"></i>
                     <span class="fs-13">下载管理</span>
-                </div>
-                <div class="itunes pl-18">
+                </div> -->
+                <div class="itunes pl-18" @click="go('/recent-play')" :class="{ isActive: active('recent-play') }">
                     <i class="iconfont icon-zuijinbofang"></i>
                     <span class="fs-13">最近播放</span>
                 </div>
@@ -138,10 +138,7 @@ const go = (path: string): void => {
                 }
             }
 
-            .isActive {
-                background-color: var(--theme-e1); // dark: #1b1b1b
-                color: #d6635e;
-            }
+
         }
 
         .myMusic {
@@ -170,6 +167,11 @@ const go = (path: string): void => {
                 }
             }
         }
+    }
+
+    .isActive {
+        background-color: var(--theme-e1); // dark: #1b1b1b
+        color: #d6635e;
     }
 }
 </style>

@@ -43,6 +43,9 @@
             <div class="hot-comment fs-3 pl-30" v-if="isActive('/hot-comment')">
                 精彩评论
             </div>
+            <div class="recent-play fs-3 pl-30" v-if="isActive('/recent-play')">
+                最近播放
+            </div>
             <div class="set d-flex">
                 <div class="search mr-15 d-flex ai-center jc-center">
                     <div class="searchIcon">
@@ -111,7 +114,7 @@ const searchKeyWords = ref("") // 搜索关键字
 const isShowSetTheme = ref(false) // 是否显示主题设置弹窗
 const { theme } = storeToRefs(useThemeState())
 const isHasLeft = computed(() => { // 头部flex横向布局相关
-    const paths = ["/findMusic", "/video", "/friends", "/prettyCommon", "/unique", "/dynamic", "/focus", "/fans", "/hot-comment"]
+    const paths = ["/findMusic", "/video", "/friends", "/prettyCommon", "/unique", "/dynamic", "/focus", "/fans", "/hot-comment", "/recent-play"]
     if (route.path.startsWith("/video-detail") || route.path.startsWith("/mv-detail")) return false
     return paths.some(item => route.path.startsWith(item))
 })
@@ -219,7 +222,8 @@ const goInside = (path: string) => {
         }
     }
 
-    .hot-comment {
+    .hot-comment,
+    .recent-play {
         font-weight: bold;
         color: var(--theme-head-00);
     }

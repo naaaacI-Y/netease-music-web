@@ -173,3 +173,11 @@ export const getComment = (params: T.SongCommentParams) => {
 export const checkMusicAvaliable = (params: T.CheckSongAvaliableParams) => {
     return http.get<T.CheckSongAvaliableresult>(`/check/music${stringifyParams(params)}`)
 }
+
+/**
+ * 最近播放
+ * @returns
+ */
+export const getRecentPlay = () => {
+    return http.get<T.RecentPlayResult>('/record/recent/song')
+}

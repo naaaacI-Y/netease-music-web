@@ -143,6 +143,11 @@ const routes: RouteRecordRaw[] = [
     name: 'HotComment',
     component: () => import('@/pages/hotComment/index.vue'),
   },
+  {
+    path: '/recent-play',
+    name: 'RecentPlay',
+    component: () => import('@/pages/reccentPlay/index.vue'),
+  },
 ]
 
 const router = createRouter({

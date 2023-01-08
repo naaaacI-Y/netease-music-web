@@ -45,7 +45,7 @@
 import { TrackId } from '@/service/api/music/types';
 import { HotSong } from '@/service/api/singer/types';
 import usePlayerState from '@/store/player';
-import { formatSongTime } from '@/utils';
+import { formatSongTime, paddingLeft } from '@/utils';
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -78,11 +78,7 @@ const isShow = computed(() => {
     }
 })
 
-// 序号填充
-const paddingLeft = (num: number) => {
-    if (num < 10) return `0${num}`
-    return num
-}
+
 // 前往歌手页
 const goSingerPage = () => {
     router.push(`/singer-home/${props.item?.ar[0].id}`)

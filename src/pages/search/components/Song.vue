@@ -19,7 +19,7 @@ import { SearchSongResult } from '@/service/api/search/types';
 import { Song } from '@/service/api/singer/types';
 import { computed, reactive, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import Header from './Header.vue';
+import Header from '@/components/header/Header.vue';
 const route = useRoute()
 const songs = reactive({ data: [] as Song[] })
 // const total = ref(0)
