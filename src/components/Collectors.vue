@@ -3,7 +3,10 @@
         <div class="collectors d-flex flex-wrap jc-between mt-20">
             <div class="collector-item d-flex ai-center mb-20" v-for="item in collectorsList.data" :key="item.userId">
                 <div class="avatar mr-10" @click="goPersonCenter(item.userId)">
-                    <img :src="item.avatarUrl" alt="">
+                    <img :src="formatPicUrl(item.avatarUrl, 90, 90)" alt="" class="avatar-img">
+                    <div class="flag" v-if="item.avatarDetail">
+                        <img :src="item.avatarDetail.identityIconUrl" alt="">
+                    </div>
                 </div>
                 <div class="info d-flex flex-column jc-center">
                     <div class="name mb-10 d-flex ai-center" :style="{ marginBottom: item.signature ? '10px' : '0' }">
@@ -27,7 +30,7 @@
 import { reactive } from 'vue';
 import { Subscriber } from '@/service/api/music/types';
 import { getCollectors4SongList } from '@/service/api/music';
-import { getQueryId } from '@/utils';
+import { formatPicUrl, getQueryId } from '@/utils';
 import router from '@/router';
 const collectorsList = reactive({ data: [] as Subscriber[] })
 const id = getQueryId() as number
@@ -46,16 +49,7 @@ getCollectors()
         width: 370px;
 
         .avatar {
-            @include radius(90px);
-
-            img {
-                width: 100%;
-                height: 100%;
-            }
-
-            &:hover {
-                cursor: pointer;
-            }
+            @include creator-avatar(90px, 25px);
         }
 
         .info .name {
@@ -66,6 +60,10 @@ getCollectors()
             .sex {
                 @include radius(15px);
             }
+        }
+
+        .intrucduce {
+            @include no-wrap(270px)
         }
     }
 }

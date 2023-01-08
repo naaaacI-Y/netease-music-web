@@ -76,8 +76,8 @@ const onClose = () => {
     transform: translate(-50%, -50%);
 
     .message-content {
-        background-color: #353535;
-        border-radius: 20px;
+        background-color: var(--theme-23);
+        border-radius: 25px;
         padding: 15px 25px;
         color: white;
 

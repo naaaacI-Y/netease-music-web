@@ -10,7 +10,7 @@
             </div>
             <div class="creator-info d-flex ai-center mb-20">
                 <div class="creator-avatar mr-7" @click="goPersonCenter">
-                    <img :src="headerInfo.creator.avatarUrl" alt="">
+                    <img :src="headerInfo.creator.avatarUrl" alt="" class="avatar-img">
                     <div class="flag" v-if="headerInfo.creator.avatarDetail">
                         <img :src="headerInfo.creator.avatarDetail.identityIconUrl" alt="">
                     </div>
@@ -108,27 +108,7 @@ const goPersonCenter = () => {
 
         .creator-info {
             .creator-avatar {
-                position: relative;
-                width: 25px;
-                height: 25px;
-
-                .flag {
-                    position: absolute;
-                    border-radius: 50%;
-                    width: 10px;
-                    height: 10px;
-                    bottom: 7px;
-                    right: -2px;
-                }
-
-                img {
-                    width: 100%;
-                    border-radius: 50%;
-                }
-
-                &:hover {
-                    cursor: pointer;
-                }
+                @include creator-avatar(25px, 10px, 5px);
             }
 
             .creator-name:hover {
