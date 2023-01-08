@@ -200,7 +200,7 @@ getComments()
                     }
 
                     .play-btn {
-                        @include common-play-btn(20px, 5px, 5px, 8px);
+                        @include common-play-btn(20px, 5px, 8px);
                         top: 50%;
                         left: 50%;
                     }
