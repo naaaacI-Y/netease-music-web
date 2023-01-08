@@ -21,9 +21,8 @@
                 </div>
                 <div class="list-content-wrapper ">
                     <div class="content-type1 d-flex flex-wrap" v-if="songListShowType === 'card'">
-                        <RecommendSongListCard v-for="(item, index) in songList.data" :is-oneline="true"
-                            :song-list-item="item"
-                            :style="{ marginRight: index % 4 === 0 && index !== 0 ? '0' : '18px' }" :key="item.id">
+                        <RecommendSongListCard v-for="(item) in songList.data" :is-oneline="true"
+                            class="recommedn-list-card" :song-list-item="item" :key="item.id">
                             <template #songCount>
                                 <div class="text-66 fs-2">{{ item.trackCount }}首</div>
                             </template>
@@ -55,8 +54,7 @@
                 </div>
                 <div class="list-content-wrapper ">
                     <div class="content-type1 d-flex flex-wrap " v-if="songListShowType === 'card'">
-                        <RecommendSongListCard v-for="(item, index) in collectSongList.data" :is-oneline="true"
-                            :style="{ marginRight: index % 4 === 0 && index !== 0 ? '0' : '18px' }"
+                        <RecommendSongListCard v-for="(item) in collectSongList.data" :is-oneline="true"
                             :song-list-item="item" :key="item.id">
                             <template #songCount>
                                 <div class="text-66 fs-2">{{ item.trackCount }}首</div>
@@ -159,5 +157,9 @@ getList()
             }
         }
     }
+}
+
+.recommedn-list-card:not(:nth-child(5n)) {
+    margin-right: calc(5% / 4);
 }
 </style>

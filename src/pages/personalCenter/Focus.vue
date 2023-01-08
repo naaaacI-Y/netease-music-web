@@ -1,6 +1,6 @@
 <template>
     <DefaultLayout>
-        <div class="home-focus-wrapper d-flex jc-between flex-wrap pt-10">
+        <div class="home-focus-wrapper pt-10">
             <FocusAndFansItem v-for="item in focusList.data" :key="item.userId" :item="item"></FocusAndFansItem>
         </div>
         <Pagination v-if="pages.total >= pages.size" :total="pages.total" :size="pages.size" :page="pages.page"
@@ -42,5 +42,11 @@ const getFocuList = async () => {
 getFocuList()
 </script>
 <style lang="scss" scoped>
-
+.home-focus-wrapper {
+    // display: grid;
+    // justify-content: space-between;
+    // grid-template-columns: repeat(auto-fill, 395px);
+    // grid-gap: 0;
+    @include grid-between(395px);
+}
 </style>

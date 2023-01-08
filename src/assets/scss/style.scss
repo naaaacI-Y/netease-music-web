@@ -169,7 +169,37 @@
   align-items: $align-items;
   flex-wrap: $flex-wrap;
 }
+@mixin creator-avatar($width, $flagWidth, $bottom: 0px) {
+  position: relative;
+  width: $width;
+  height: $width;
 
+  .flag {
+    position: absolute;
+    border-radius: 50%;
+    width: $flagWidth;
+    height: $flagWidth;
+    bottom: $bottom;
+    right: -2px;
+  }
+
+  img {
+    width: 100%;
+    // border-radius: 50%;
+  }
+  .avatar-img {
+    border-radius: 50%;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}
+@mixin grid-between($width) {
+  display: grid;
+  justify-content: space-between;
+  grid-template-columns: repeat(auto-fill, $width);
+  grid-gap: 0;
+}
 .label {
   color: #333;
   font-size: 18px;

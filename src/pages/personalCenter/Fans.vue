@@ -1,6 +1,6 @@
 <template>
     <DefaultLayout>
-        <div class="home-fans-wrapper d-flex jc-between flex-wrap pt-10">
+        <div class="home-fans-wrapper pt-10 ">
             <FocusAndFansItem v-for="item in fansList.data" :key="item.userId" :item="item"></FocusAndFansItem>
 
         </div>
@@ -43,5 +43,7 @@ const getFanList = async () => {
 getFanList()
 </script>
 <style lang="scss" scoped>
-
+.home-fans-wrapper {
+    @include grid-between(395px);
+}
 </style>
