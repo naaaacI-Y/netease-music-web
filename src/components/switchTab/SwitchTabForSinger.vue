@@ -20,7 +20,7 @@
             </div>
         </div>
         <!--专辑--->
-        <div class="album pt-20" v-show="activeIndex === 0">
+        <div class="album pt-20" v-if="activeIndex === 0">
             <div class="album-card-wrap d-flex flex-wrap" v-if="songListShowType === 'card'">
                 <CardForAlbum v-for="item in singerAlbumList.data" :key="item.id" :album-item="item"
                     class="card-for-album"></CardForAlbum>

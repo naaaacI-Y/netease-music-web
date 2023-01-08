@@ -21,8 +21,9 @@ const albumCountInfo = reactive({ data: {} as AlbumDynamicInfoResult }) // 专�
 const commentCount = ref(0) // 评论数量
 const detailInfo = ref("") // 专辑详情
 const albumSongList = reactive({ data: [] as HotSong[] })
-const queryId = getQueryId() // 查询参数id
+const queryId = getQueryId() as number // 查询参数id
 provide("songList", albumSongList)
+provide("songListInfo", [])
 // 获取专辑详情
 const getAlbumDetailInfo = async () => {
     const r = await getAlbumInfo({ id: queryId })

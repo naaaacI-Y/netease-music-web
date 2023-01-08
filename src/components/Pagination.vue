@@ -34,7 +34,10 @@ const initPagination = () => {
 }
 watch(() => props.index, () => {
     initPagination()
-    pagination.value.changeTotal(props.total)
+    if (pagination.value) {
+        pagination.value.changeTotal(props.total)
+
+    }
 })
 onMounted(() => {
     initPagination()

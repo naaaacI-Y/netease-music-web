@@ -249,9 +249,22 @@ export interface SendOrReplyCommentResult {
 }
 
 
+// 热门评论
+export interface HotCommentParams {
+    id: number
+    type: list
+    limit?: number
+    offset?: number
+    before?: number
+}
 
-
-
+export interface HotCommentResult {
+    topComments: any[];
+    hasMore: boolean;
+    hotComments: HotComment[];
+    total: number;
+    code: number;
+}
 
 
 

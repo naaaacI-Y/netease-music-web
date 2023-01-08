@@ -40,7 +40,7 @@
             <div class="friends" v-if="isActive('/friends')">
                 动态 / 发布动态
             </div>
-            <div class="pretty" v-if="isActive('/prettyCommon')">
+            <div class="hot-comment fs-3 pl-30" v-if="isActive('/hot-comment')">
                 精彩评论
             </div>
             <div class="set d-flex">
@@ -111,7 +111,7 @@ const searchKeyWords = ref("") // 搜索关键字
 const isShowSetTheme = ref(false) // 是否显示主题设置弹窗
 const { theme } = storeToRefs(useThemeState())
 const isHasLeft = computed(() => { // 头部flex横向布局相关
-    const paths = ["/findMusic", "/video", "/friends", "/prettyCommon", "/unique", "/dynamic", "/focus", "/fans"]
+    const paths = ["/findMusic", "/video", "/friends", "/prettyCommon", "/unique", "/dynamic", "/focus", "/fans", "/hot-comment"]
     if (route.path.startsWith("/video-detail") || route.path.startsWith("/mv-detail")) return false
     return paths.some(item => route.path.startsWith(item))
 })
@@ -217,6 +217,11 @@ const goInside = (path: string) => {
         &:hover {
             color: var(--theme-head-00);
         }
+    }
+
+    .hot-comment {
+        font-weight: bold;
+        color: var(--theme-head-00);
     }
 
     .right {

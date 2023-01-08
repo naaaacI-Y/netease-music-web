@@ -44,3 +44,7 @@ export const voteComment = (params: T.VoteCommnentParam) => {
 export const sendOrReplyComment = (params: T.SendOrReplyCommentParam) => {
     return http.get<T.SendOrReplyCommentResult>(`/comment${stringifyParams(params)}`)
 }
+
+export const getHotComment = (params: T.HotCommentParams) => {
+    return http.get<T.HotCommentResult>(`/comment/hot${stringifyParams(params)}`)
+}
