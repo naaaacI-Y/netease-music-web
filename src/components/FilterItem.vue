@@ -15,7 +15,7 @@
 withDefaults(defineProps<{
     activeType: number
     typeList: { [key: string]: number }
-    isBetween: boolean // 是否横向左右布局
+    isBetween?: boolean // 是否横向左右布局
 }>(), {
     isBetween: true
 })

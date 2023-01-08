@@ -76,24 +76,10 @@ const goSongList = () => {
         }
 
         .play-btn {
-            display: none;
-            position: absolute;
+            @include common-play-btn(30px, 7px, 10px);
             bottom: 10px;
             right: 10px;
-            @include radius(30px);
-            background-color: rgba($color: #bebebb, $alpha: 0.6);
-
-            .trangel {
-                width: 0;
-                height: 0;
-                position: absolute;
-                border-top: 7px solid transparent;
-                border-bottom: 7px solid transparent;
-                border-left: 10px solid #d33b31;
-                left: 50%;
-                top: 50%;
-                transform: translate(-30%, -50%);
-            }
+            display: none;
         }
 
         .isCenter {

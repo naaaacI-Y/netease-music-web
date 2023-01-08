@@ -1,6 +1,6 @@
 <template>
     <div class="collectors-wrapper">
-        <div class="collectors d-flex flex-wrap jc-between mt-20">
+        <div class="collectors  mt-20">
             <div class="collector-item d-flex ai-center mb-20" v-for="item in collectorsList.data" :key="item.userId">
                 <div class="avatar mr-10" @click="goPersonCenter(item.userId)">
                     <img :src="formatPicUrl(item.avatarUrl, 90, 90)" alt="" class="avatar-img">
@@ -45,6 +45,8 @@ getCollectors()
 </script>
 <style lang="scss" scoped>
 .collectors {
+    @include grid-between(370px);
+
     .collector-item {
         width: 370px;
 

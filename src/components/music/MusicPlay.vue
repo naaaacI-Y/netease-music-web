@@ -200,24 +200,9 @@ getComments()
                     }
 
                     .play-btn {
-                        position: absolute;
+                        @include common-play-btn(20px, 5px, 5px, 8px);
                         top: 50%;
                         left: 50%;
-                        @include radius(20px);
-                        background-color: rgba($color: #bebebb, $alpha: 0.6);
-                        transform: translate(-50%, -50%);
-
-                        .trangel {
-                            width: 0;
-                            height: 0;
-                            position: absolute;
-                            border-top: 5px solid transparent;
-                            border-bottom: 5px solid transparent;
-                            border-left: 8px solid #d33b31;
-                            left: 50%;
-                            top: 50%;
-                            transform: translate(-30%, -50%);
-                        }
                     }
                 }
 

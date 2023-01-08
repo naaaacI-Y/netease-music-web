@@ -200,6 +200,24 @@
   grid-template-columns: repeat(auto-fill, $width);
   grid-gap: 0;
 }
+@mixin common-play-btn($radius, $borderTop, $borderLeft) {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  @include radius($radius);
+  background-color: rgba($color: #bebebb, $alpha: 0.6);
+  .trangel {
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-top: $borderTop solid transparent;
+    border-bottom: $borderTop solid transparent;
+    border-left: $borderLeft solid #d33b31;
+    left: 50%;
+    top: 50%;
+    transform: translate(-30%, -50%);
+  }
+}
+
 .label {
   color: #333;
   font-size: 18px;
