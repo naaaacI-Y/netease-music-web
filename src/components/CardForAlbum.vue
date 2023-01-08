@@ -1,7 +1,7 @@
 <template>
     <div class="card-for-album-wrapper" @click="goAlbum">
         <div class="img-wrap mb-5">
-            <LazyLoadImg :src="albumItem.picUrl"></LazyLoadImg>
+            <LazyLoadImg :src="formatPicUrl(albumItem.picUrl, 375, 375)"></LazyLoadImg>
             <div class="play-btn" @click.stop="playAlbum">
                 <div class="trangel"></div>
             </div>
@@ -21,6 +21,7 @@ import { HotAlbum } from '@/service/api/singer/types';
 import LazyLoadImg from "@/components/LazyLoadImg.vue"
 import { formatTime } from "@/utils/index"
 import { useRouter } from 'vue-router';
+import { formatPicUrl } from '@/utils/index';
 const router = useRouter()
 const props = defineProps<{
     albumItem: HotAlbum
@@ -36,7 +37,7 @@ const playAlbum = () => {
 </script>
 <style lang="scss" scoped>
 .card-for-album-wrapper {
-    width: calc(17% - 15px);
+    width: calc(16%);
     margin-bottom: 35px;
 
     .img-wrap {

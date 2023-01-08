@@ -4,7 +4,7 @@
         <div class="index mr-12 fs-2" v-if="!isOutSide">{{ paddingIndex(index) }}</div>
         <div class="song-cover mr-12">
             <!-- <img :src="musicItem.album.picUrl" > -->
-            <lazy-load-img :src="musicItem.album.picUrl"></lazy-load-img>
+            <lazy-load-img :src="formatPicUrl(musicItem.album.picUrl, 60, 60)"></lazy-load-img>
             <div class="play-btn">
                 <div class="trangel"></div>
             </div>
@@ -28,7 +28,7 @@
 
 <script lang="ts" setup>
 // 图片未加载完成显示默认图片  TODO
-import { formatSongTime } from "@/utils/index"
+import { formatPicUrl, formatSongTime } from "@/utils/index"
 import LazyLoadImg from '@/components/LazyLoadImg.vue';
 import { computed } from 'vue';
 import { NewMusicRet } from '@/service/api/music/types';

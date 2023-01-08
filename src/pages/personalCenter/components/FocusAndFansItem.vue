@@ -1,7 +1,7 @@
 <template>
     <div class="focus-and-fans-item-wrapper d-flex ai-center">
         <div class="avatar mr-10" @click="goPersonCenter">
-            <img :src="item.avatarUrl" alt="" class="avatar-img">
+            <img :src="formatPicUrl(item.avatarUrl, 92, 92)" alt="" class="avatar-img">
             <div class="flag" v-if="item.avatarDetail">
                 <img :src="item.avatarDetail.identityIconUrl" alt="">
             </div>
@@ -31,6 +31,7 @@
 <script lang="ts" setup>
 import router from '@/router';
 import { Follow } from '@/service/api/user/types';
+import { formatPicUrl } from '@/utils';
 
 const props = defineProps<{
     item: Follow
@@ -46,34 +47,7 @@ const goPersonCenter = () => {
     padding: 10px 20px 10px 30px;
 
     .avatar {
-        width: 92px;
-        height: 92px;
-        // border-radius: 50%;
-        position: relative;
-
-        .flag {
-            width: 25px;
-            height: 25px;
-            position: absolute;
-            bottom: 0;
-            right: 0;
-
-            img {
-                width: 100%;
-                height: 100%;
-                border-radius: 50%;
-            }
-        }
-
-        .avatar-img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-        }
-
-        &:hover {
-            cursor: pointer;
-        }
+        @include creator-avatar(92px, 25px);
     }
 
     &:hover {
@@ -87,6 +61,10 @@ const goPersonCenter = () => {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+        }
+
+        .name {
+            @include no-wrap(175px);
         }
 
         .name:hover {

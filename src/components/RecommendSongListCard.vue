@@ -1,7 +1,8 @@
 <template>
     <div class="recommend-songlist-card-wrapper" @click="goSongList">
         <div class="img-wrapper mb-6">
-            <img :src="songListItem.coverImgUrl" alt="">
+            <!-- <img :src="songListItem.coverImgUrl" alt=""> -->
+            <LazyLoadImg :src="formatPicUrl(songListItem.coverImgUrl, 190, 190)"></LazyLoadImg>
             <div class="mask-top"></div>
             <div class="mask-bottom"></div>
             <div class="play-count d-flex ai-center fs-2">
@@ -29,7 +30,9 @@
 </template>
 
 <script lang="ts" setup>
+import { formatPicUrl } from '@/utils';
 import router from '@/router';
+import LazyLoadImg from './LazyLoadImg.vue';
 import { Playlist } from '@/service/api/music/types';
 import { formatPlayCount } from '@/utils';
 const props = withDefaults(defineProps<{
@@ -46,9 +49,8 @@ const goSongList = () => {
 </script>
 <style lang="scss" scoped>
 .recommend-songlist-card-wrapper {
-    width: calc(20% - 18px);
+    width: 19%;
     margin-bottom: 45px;
-
 
     .img-wrapper {
         width: 100%;

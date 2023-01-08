@@ -3,7 +3,7 @@
         :style="{ paddingLeft: `${!isOutSide ? '30px' : ''}`, backgroundColor: isShowBackground }">
         <div class="index mr-12 fs-2" v-if="!isOutSide">{{ paddingIndex(index) }}</div>
         <div class="song-cover mr-12">
-            <img :src="musicItem.picUrl" alt="">
+            <img :src="formatPicUrl(musicItem.picUrl, 60, 60)" alt="">
             <div class="play-btn">
                 <div class="trangel"></div>
             </div>
@@ -28,6 +28,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { RecommendNewMusicRet } from '@/service/api/recommend/types';
+import { formatPicUrl } from '@/utils';
 const props = withDefaults(defineProps<{
     isOutSide?: boolean,
     index?: number

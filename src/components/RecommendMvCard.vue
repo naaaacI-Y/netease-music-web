@@ -1,7 +1,9 @@
 <template>
     <div class="recommend-mv-card-wrapper" @click="goVideoDetail">
-        <div class="img-wrapper" :style="{}">
-            <img :src="recommendMvItem.cover || recommendMvItem.picUrl || recommendMvItem.imgurl" alt="">
+        <div class="img-wrapper">
+            <LazyLoadImg
+                :src="formatPicUrl((recommendMvItem.cover || recommendMvItem.picUrl || recommendMvItem.imgurl) as string, 440, 250)">
+            </LazyLoadImg>
             <div class="play-count d-flex ai-center fs-1" style="color: white;">
                 <i class="iconfont icon-bofang1 fs-7"></i>
                 {{ formatPlayCount(recommendMvItem.playCount) }}
@@ -26,6 +28,8 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
+import { formatPicUrl } from '@/utils';
+import LazyLoadImg from './LazyLoadImg.vue';
 import { MVItem, RecommendItem } from '@/service/api/mv/types';
 import { formatSongTime, formatPlayCount } from '@/utils';
 import { useRouter } from 'vue-router';
@@ -45,9 +49,9 @@ const props = withDefaults(defineProps<{
 })
 const cardWidth = computed(() => {
     if (props.count === 4) {
-        return "calc(25% - 18px)"
+        return "24%"
     }
-    return "calc(20% - 18px)"
+    return "19%"
 })
 // 前往视频详情页
 const goVideoDetail = () => {

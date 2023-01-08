@@ -1,23 +1,27 @@
 <template>
     <div class="comment-item-wrapper d-flex mb-20">
         <div class="commoent-left mr-15">
-            <div class="comment-avatar" @click="goPersonCenter">
-                <LazyLoadImg :src="commentContent?.user?.avatarUrl"></LazyLoadImg>
+            <div class="comment-avatar" @click="goPersonCenter(commentContent?.user?.userId)">
+                <img :src="formatPicUrl(commentContent?.user?.avatarUrl, 35, 35)" alt="" class="avatar"
+                    v-if="commentContent?.user?.avatarUrl">
                 <div class="flag" v-if="commentContent?.user?.avatarDetail">
-                    <LazyLoadImg :src="commentContent?.user?.avatarDetail?.identityIconUrl"></LazyLoadImg>
+                    <img :src="formatPicUrl(commentContent?.user?.avatarDetail?.identityIconUrl, 16, 16)" alt="">
                 </div>
             </div>
         </div>
         <div class="commoent-right">
             <div class="right-top fs-2 mb-10">
-                <span class="comment-name text-shadow_blue " @click="goPersonCenter">{{
+                <span class="comment-name text-shadow_blue " @click="goPersonCenter(commentContent?.user?.userId)">{{
                     commentContent?.user?.nickname
                 }}：</span>
                 <span class="text-33">{{ commentContent.content }}</span>
             </div>
             <div class="right-middle fs-2   mb-10" style="padding: 9px;" :class="isGrey ? 'bg-f6' : 'bg-fa'"
                 v-if="commentContent.beReplied.length">
-                <span class="origin-reply text-shadow_blue">@{{ commentContent?.beReplied[0]?.user?.nickname }}：</span>
+                <span class="origin-reply text-shadow_blue"
+                    @click="goPersonCenter(commentContent?.beReplied[0]?.user?.userId)">@{{
+                        commentContent?.beReplied[0]?.user?.nickname
+                    }}：</span>
                 <span class="text-97">{{ commentContent?.beReplied[0]?.content }}</span>
             </div>
             <div class="right-bottom text-99 fs-2 d-flex ai-center mb-20">
@@ -43,8 +47,8 @@
 
 <script lang="ts" setup>
 import { HotComment } from '@/service/api/comment/types';
-import { calcTime } from "@/utils"
-import LazyLoadImg from "@/components/LazyLoadImg.vue"
+import { calcTime, formatPicUrl } from "@/utils"
+import router from '@/router';
 withDefaults(defineProps<{
     isGrey?: boolean
     commentContent: HotComment
@@ -52,8 +56,8 @@ withDefaults(defineProps<{
     isGrey: true
 })
 // 前往个人中心
-const goPersonCenter = () => {
-
+const goPersonCenter = (id: number) => {
+    router.push(`/personal-center/${id}`)
 }
 </script>
 <style lang="scss" scoped>
@@ -62,32 +66,29 @@ const goPersonCenter = () => {
 
     .commoent-left {
         .comment-avatar {
-            @include radius(35px);
             position: relative;
             overflow: visible;
 
             img {
-                width: 100%;
-                height: 100%;
-                border-radius: 50%;
+                width: 35px;
+                height: 35px;
             }
 
             .flag {
                 position: absolute;
-                bottom: 0;
+                bottom: 5px;
                 right: -2px;
-                // @include radius(15px);
                 width: 15px;
                 height: 15px;
-                border-radius: 50%;
 
-                // overflow: hidden;
-                // overflow: auto;
                 img {
                     width: 100%;
                     height: 100%;
-                    border-radius: 50%;
                 }
+            }
+
+            .avatar {
+                border-radius: 50%;
             }
         }
     }

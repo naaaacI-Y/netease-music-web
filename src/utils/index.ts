@@ -256,6 +256,10 @@ const scrollToTop = () => {
     const wrap = document.getElementsByClassName("content")[0]
     wrap.scrollTo(0, 0)
 }
+
+const formatPicUrl = (url: string, width: number, height: number) => {
+    return `${url}?param=${width}y${height}`
+}
 export {
     formatTime,
     stringifyParams,
@@ -273,5 +277,6 @@ export {
     setSearchHistory,
     clearSearchHistory,
     getArea,
-    scrollToTop
+    scrollToTop,
+    formatPicUrl
 }

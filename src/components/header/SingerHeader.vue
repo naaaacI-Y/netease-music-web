@@ -1,11 +1,13 @@
 <template>
     <div class="singer-header-wrapper d-flex">
         <div class="left mr-30">
-            <LazyLoadImg :src="singerInfo?.img1v1Url" v-if="singerInfo?.img1v1Url"></LazyLoadImg>
+            <!-- <img :src="singerInfo?.img1v1Url" v-if="singerInfo?.img1v1Url"> -->
+            <LazyLoadImg :src="formatPicUrl(singerInfo?.img1v1Url, 200, 200)" v-if="singerInfo?.img1v1Url">
+            </LazyLoadImg>
         </div>
         <div class="right">
             <div class="singer-name mb-10 fs-9 text-33" style="font-weight: bold;">{{ singerInfo.name }}</div>
-            <div class="alias mb-15 text-66 fs-2">{{ singerInfo?.alias.join("; ") }}</div>
+            <div class="alias mb-15 text-66 fs-2">{{ singerInfo?.alias?.join("; ") }}</div>
             <div class="operate d-flex ai-center mb-20 text-4e">
                 <div class="collection d-flex ai-center jc-center mr-9 ">
                     <i class="iconfont icon-xinjianwenjianjia mr-3"></i>
@@ -41,7 +43,8 @@
 <script lang="ts" setup>
 import { Artist } from '@/service/api/singer/types';
 import LazyLoadImg from "@/components/LazyLoadImg.vue"
-defineProps<{
+import { formatPicUrl } from '@/utils';
+const props = defineProps<{
     singerInfo: Artist
 }>()
 </script>

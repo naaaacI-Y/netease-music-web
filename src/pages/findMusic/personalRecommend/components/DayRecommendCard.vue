@@ -1,8 +1,9 @@
 <template>
     <div class="recommend-songlist-card-wrapper" @click="goSongList">
-        <div class="img-wrapper mb-6">
+        <div class="img-wrapper mb-6" :class="{ isNotDayRecomnend: songListItem.picUrl }"
+            :style="{ backgroundColor: type === 0 ? '#d33b31' : '' }">
             <slot name="canlender"></slot>
-            <img :src="songListItem.picUrl" alt="">
+            <LazyLoadImg :src="formatPicUrl(songListItem.picUrl, 190, 190)" v-if="songListItem.picUrl"></LazyLoadImg>
             <div class="mask" v-if="type === 1"></div>
             <div class="play-count d-flex ai-center fs-1" v-if="type === 1">
                 <i class="iconfont icon-bofang1 fs-7" style="color:white"></i>
@@ -18,6 +19,8 @@
 </template>
 
 <script lang="ts" setup>
+import { formatPicUrl } from '@/utils';
+import LazyLoadImg from '@/components/LazyLoadImg.vue';
 import { RecommendSongListRet } from '@/service/api/music/types';
 import { formatPlayCount } from '@/utils';
 import { useRouter } from 'vue-router';
@@ -48,7 +51,7 @@ const goSongList = () => {
         position: relative;
         border-radius: 6px;
         // border: 1px solid #eee;
-        background-color: #d33b31;
+        // background-color: #d33b31;
 
         img {
             width: 100%;
@@ -108,6 +111,10 @@ const goSongList = () => {
             }
         }
 
+    }
+
+    .isNotDayRecomnend {
+        background-color: var(--theme-dc);
     }
 
     .songlist-name {
