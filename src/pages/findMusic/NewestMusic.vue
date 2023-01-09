@@ -14,11 +14,11 @@
         <div class="filter-wrap d-flex ai-center text-7d mb-8 jc-between">
             <div class="filter d-flex ai-center">
                 <div class="filter-item fs-3 mr-30" v-for="(item) in filterList" @click="filterType = Number(item[0])"
-                    :class="{ isFilterActive: filterType === Number(item[0]) }" :key="Number(item[0])">{{
-    item[1]
-                    }}</div>
+                    :class="{ isFilterActive: filterType === Number(item[0]) }" :key="Number(item[0])">
+                    {{ item[1]}}
+                </div>
             </div>
-            <div class="operate d-flex jc-between">
+            <div class="operate d-flex jc-between" v-if="!isShowLoading">
                 <div class="play-all fs-1 d-flex ai-center mr-10" style="color:white">
                     <i class="iconfont icon-bofang_o  fs-9"></i>
                     播放全部
@@ -29,30 +29,37 @@
                 </div>
             </div>
         </div>
-        <div class="song-list-wrap">
+        <div class="song-list-wrap" v-show="!isShowLoading">
             <NewMusicItemInside v-for="(item, index) in musicList.data" :index="Number(index) + 1" :key="index"
                 :is-out-side="false" :music-item="item">
             </NewMusicItemInside>
         </div>
+        <Loading v-show="isShowLoading"></Loading>
     </div>
 </template>
 
 <script lang="ts" setup>
+import Loading from '@/components/Loading.vue';
 import NewMusicItemInside from './personalRecommend/components/NewMusicItemInside.vue';
 import { getNewMusic } from "@/service/api/music/index"
 import { newestMusicType } from "@/utils/const"
 import { reactive, ref, watch } from 'vue';
 import { NewMusicParam, NewMusicRet } from '@/service/api/music/types';
 const filterList = Object.entries(newestMusicType)
-const tabType = ref(0)
+// const tabType = ref(0)
 const filterType = ref(0)
+const isShowLoading = ref(false)
 const musicList = reactive<Record<string, NewMusicRet[]>>({ data: [] })
 watch(filterType, () => {
-    // 重新请求 TODO
+    // 重新请求  如果是频繁切换的话 TODO
+
+    getMusic()
 })
 const getMusic = async () => {
+    isShowLoading.value = true
     const r = await getNewMusic({ type: filterType.value })
     musicList.data = r.data
+    isShowLoading.value = false
 }
 getMusic()
 </script>

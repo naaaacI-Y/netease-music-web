@@ -20,7 +20,8 @@
                 <div class="submit-comment  fs-3 d-flex ai-center jc-center text-66"
                     :class="maxLength === 140 ? 'hasNoContent' : ''" @click="submitContent">评论</div>
             </div>
-            <div class="top-vote-comment mt-30" v-if="hotCommentList.data?.length && pages.page === 1">
+            <div class="top-vote-comment mt-30"
+                v-if="hotCommentList.data?.length && pages.page === 1 && !isShowLoading">
                 <div class="comment-label text-4e mb-15">精彩评论</div>
                 <CommentItem v-for="(item) in hotCommentList.data.slice(0, 10)" :is-grey="isGrey"
                     :comment-content="item" :key="item.commentId"></CommentItem>
@@ -31,26 +32,28 @@
                     </div>
                 </div>
             </div>
-            <div class="new-comment mt-30" v-if="allComment.data?.length">
-                <div class="comment-label text-4e mb-15" id="new-comment-pos">最新评论</div>
+            <div class="new-comment mt-30" v-if="allComment.data?.length" id="new-comment-pos">
+                <div class="comment-label text-4e mb-15">最新评论</div>
                 <CommentItem v-for="(item) in allComment.data" :is-grey="isGrey" :comment-content="item"
                     :key="item.commentId"></CommentItem>
             </div>
-            <div class="no-data text-66 mt-20 fs-3" v-if="!allComment.data?.length">还没有评论，快来抢沙发~</div>
-            <Pagination v-if="pages.total >= pages.size" :total="pages.total" :size="pages.size" :page="pages.page"
-                @page-change="handlePageChange" class="mt-30 mb-30" :index="paginationIndex">
+            <div class="no-data text-66 mt-20 fs-3" v-if="!allComment.data?.length && !isShowLoading">还没有评论，快来抢沙发~</div>
+            <Pagination v-if="pages.total >= pages.size && !isShowLoading" :total="pages.total" :size="pages.size"
+                :page="pages.page" @page-change="handlePageChange" class="mt-30 mb-30" :index="paginationIndex">
             </Pagination>
+            <Loading v-show="isShowLoading"></Loading>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
+import Loading from '@/components/Loading.vue';
 import Pagination from '@/components/Pagination.vue';
 import { computed, reactive, ref, watch } from 'vue';
 import CommentItem from '../CommentItem.vue';
 import useGlobalState from '@/store/globalState';
 import { Comment, HotComment, list, t } from "@/service/api/comment/types"
-import { checkLogin, getQueryId } from "@/utils"
+import { checkLogin, getQueryId, scrollToTop } from "@/utils"
 import Message from "@/components/message"
 import { getComment4Album } from '@/service/api/album';
 import { getComment4MV } from '@/service/api/mv';
@@ -62,6 +65,7 @@ import router from '@/router';
 import { VideoCommentParams } from '@/service/api/video/types';
 import { sendOrReplyComment } from '@/service/api/comment';
 const route = useRoute()
+const isShowLoading = ref(false)
 // 0: 歌曲 1: mv 2: 歌单 3: 专辑 4: 电台节目 5: 视频 6: 动态 7: 电台
 const props = withDefaults(defineProps<{
     isGrey?: boolean
@@ -83,13 +87,20 @@ const paginationIndex = ref(0)
 const id = getQueryId() as number | string // id
 const allComment = reactive({ data: [] as Comment[] }) // 所有评论
 const hotCommentList = reactive({ data: [] as HotComment[] }) // 热门评论
-const commentContent = ref("") //
+const commentContent = ref("") // 评论内容
 const hasMoreHot = ref(false) // 是否有更多热评
 // const hasMore = ref(false) // 是否有更多评论
-watch(() => pages.page, () => {
+watch(() => pages.page, async (newVal) => {
+    if (newVal === 1) {
+        // 滚动到顶部
+        scrollToTop()
+    } else {
+        // 滚动到最新评论处
+        scrollToPos()
+    }
+
     getAllComment(id)
-    // 滚动到指定位置
-    scrollToPos()
+
 })
 const maxLength = computed(() => {
     return 140 - commentContent.value.length
@@ -133,6 +144,7 @@ const goMoreHotComment = () => {
 const handlePageChange = (num: number) => {
     pages.page = num
 }
+// 获取所有评论 根据不同的分类
 const getAllComment = async (id: string | number) => {
     let r: SongListCommentResult;
     const queryInfo: { [key: string]: any } = {
@@ -144,6 +156,7 @@ const getAllComment = async (id: string | number) => {
     // if (pages.total && pages.total > 5000) {
     //     queryInfo.before = allComment.data[allComment.data.length - 1].time
     // }
+    isShowLoading.value = true
     switch (props.sourceType) {
         case 0:
             r = await getComment4Song(queryInfo as SongListCommentParams)
@@ -167,8 +180,9 @@ const getAllComment = async (id: string | number) => {
     }
     allComment.data = r.comments
     pages.total = r.total
-    hotCommentList.data = r.hotComments.length ? r.hotComments : hotCommentList.data
+    hotCommentList.data = r.hotComments?.length ? r.hotComments : hotCommentList.data
     hasMoreHot.value = r.moreHot
+    isShowLoading.value = false
     // hasMore.value = r.more
 }
 getAllComment(id)

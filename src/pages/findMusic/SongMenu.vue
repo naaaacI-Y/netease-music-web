@@ -23,17 +23,21 @@
                 </div>
             </template>
         </FilterItem>
-        <div class="song-list d-flex flex-wrap jc-between">
-            <RecommendSongListCard :is-out-side="false" v-for="item in songList.data" :key="item.id"
-                @click="goSongList(item.id)" :song-list-item="item"></RecommendSongListCard>
+        <div class="content-wrap" v-show="!isShowLoading">
+            <div class="song-list d-flex flex-wrap jc-between">
+                <RecommendSongListCard :is-out-side="false" v-for="item in songList.data" :key="item.id"
+                    @click="goSongList(item.id)" :song-list-item="item"></RecommendSongListCard>
+            </div>
+            <Pagination v-if="pages.total >= pages.limit" :total="pages.total" :size="pages.limit" :page="pages.page"
+                @page-change="handlePageChange" class="mt-30 mb-30" :index="paginationIndex">
+            </Pagination>
         </div>
-        <Pagination v-if="pages.total >= pages.limit" :total="pages.total" :size="pages.limit" :page="pages.page"
-            @page-change="handlePageChange" class="mt-30 mb-30" :index="paginationIndex">
-        </Pagination>
+        <Loading v-show="isShowLoading"></Loading>
     </div>
 </template>
 
 <script lang="ts" setup>
+import Loading from '@/components/Loading.vue';
 import Pagination from '@/components/Pagination.vue';
 import RecommendSongListCard from '@/components/RecommendSongListCard.vue';
 import FilterItem from '@/components/FilterItem.vue';
@@ -45,6 +49,7 @@ import { useRouter } from 'vue-router';
 import { scrollToTop } from '@/utils';
 const activeType = ref("")
 const router = useRouter()
+const isShowLoading = ref(false) // 是否显示loading
 const paginationIndex = ref(0)
 const pages = reactive({
     cat: !activeType.value ? "全部" : activeType.value,
@@ -61,11 +66,14 @@ const activeIndex = computed(() => {
 })
 // 获取网友精选歌单
 const getList = async (params: SongListParams) => {
+    isShowLoading.value = true
+    // 滚动到顶部
+    scrollToTop()
     const r = await getSongList(params)
     songList.data = r.playlists
     pages.total = r.total
-    // 滚动到顶部
-    scrollToTop()
+
+    isShowLoading.value = false
 }
 // 获取歌单头部banner信息
 const getbannerInfo = async () => {

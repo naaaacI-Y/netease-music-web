@@ -20,14 +20,17 @@
                 </template>
             </FilterItem>
         </div>
-        <div class="singer-list-wrapper d-flex flex-wrap jc-between">
+        <div class="singer-list-wrapper d-flex flex-wrap jc-between" v-show="!isShowLoading">
             <SingerCard v-for="item in singerList.data" @click="goSingerPage(item.id)" :key="item.id"
                 :singer-item="item"></SingerCard>
         </div>
+        <Loading v-show="isShowLoading"></Loading>
     </div>
 </template>
 
 <script lang="ts" setup>
+import Loading from '@/components/Loading.vue';
+
 import SingerCard from '@/components/singer/SingerCard.vue';
 import FilterItem from '@/components/FilterItem.vue';
 import { languageList, categoryList, filterList } from "@/utils/const"
@@ -39,6 +42,7 @@ const router = useRouter()
 const activeLanguageType = ref("全部")
 const activeCategoryType = ref("全部")
 const activeFilterType = ref("热门")
+const isShowLoading = ref(false) // 是否显示loading
 const pages = reactive({
     limit: 30,
     offset: 0,
@@ -67,8 +71,10 @@ const getSingerList = async () => {
     const r = await getSingerByCategory(queryInfo)
     singerList.data = r.artists
 }
-watchEffect(() => {
-    getSingerList()
+watchEffect(async () => {
+    isShowLoading.value = true
+    await getSingerList()
+    isShowLoading.value = false
 })
 getSingerList()
 </script>

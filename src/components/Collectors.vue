@@ -1,6 +1,6 @@
 <template>
     <div class="collectors-wrapper">
-        <div class="collectors  mt-20">
+        <div class="collectors  mt-20" v-if="!isShowLoading">
             <div class="collector-item d-flex ai-center mb-20" v-for="item in collectorsList.data" :key="item.userId">
                 <div class="avatar mr-10" @click="goPersonCenter(item.userId)">
                     <img :src="formatPicUrl(item.avatarUrl, 90, 90)" alt="" class="avatar-img">
@@ -23,20 +23,25 @@
                 </div>
             </div>
         </div>
+        <Loading v-show="isShowLoading"></Loading>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
+import Loading from '@/components/Loading.vue';
 import { Subscriber } from '@/service/api/music/types';
 import { getCollectors4SongList } from '@/service/api/music';
 import { formatPicUrl, getQueryId } from '@/utils';
 import router from '@/router';
+const isShowLoading = ref(false)
 const collectorsList = reactive({ data: [] as Subscriber[] })
 const id = getQueryId() as number
 const getCollectors = async () => {
+    isShowLoading.value = true
     const r = await getCollectors4SongList({ id })
     collectorsList.data = r.subscribers
+    isShowLoading.value = false
 }
 const goPersonCenter = (userId: number) => {
     router.push(`/personal-center/${userId}`)
