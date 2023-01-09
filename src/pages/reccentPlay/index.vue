@@ -7,7 +7,7 @@
                     <i class="iconfont icon-bofang_o  fs-9"></i>
                     播放全部
                 </div>
-                <div class="clear-list fs-4 text-deep_blue" @click="clearList">清空列表</div>
+                <!-- <div class="clear-list fs-4 text-deep_blue" @click="clearList">清空列表</div> -->
             </div>
             <div class="list-wrap">
                 <Header :is-show-other-info="false"></Header>
@@ -15,8 +15,9 @@
                     :key="item.resourceId" :class="{ odd: index % 2 === 0 }">
                     <div class="index fs-1 text-66">{{ paddingLeft(index+ 1) }}</div>
                     <div class="title text-33">{{ item.data?.name }}</div>
-                    <div class="singer">{{ item.data?.ar[0]?.name }}</div>
-                    <div class="time">{{ calcTime(item.playTime) }}</div>
+                    <div class="singer text-99" @click="goSinger(item.data?.ar[0]?.id)">{{ item.data?.ar[0]?.name }}
+                    </div>
+                    <div class="time text-c4">{{ calcTime(item.playTime) }}</div>
                 </div>
             </div>
         </div>
@@ -30,12 +31,14 @@ import { calcTime, paddingLeft } from '@/utils';
 import { getRecentPlay } from "@/service/api/music";
 import { recentPlayList } from "@/service/api/music/types"
 import { reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const playList = reactive({ data: [] as recentPlayList[] })
 const total = ref(0)
-// 清空最近播放列表
-const clearList = () => {
-
+const router = useRouter()
+// 前往歌手页
+const goSinger = (id: number) => {
+    router.push(`/singer-home/${id}`)
 }
 const getPlayList = async () => {
     const r = await getRecentPlay()
@@ -73,6 +76,11 @@ getPlayList()
 
             .singer {
                 width: 27.7%;
+
+                &:hover {
+                    cursor: pointer;
+                    color: var(--theme-56); // dark: #b7b7b7b
+                }
             }
 
             .time {
