@@ -2,7 +2,7 @@
     <div class="recommend-mv-card-wrapper" @click="goVideoDetail">
         <div class="img-wrapper" style="color: white;">
             <!-- <img :src="videoItem.coverUrl" alt=""> -->
-            <LazyLoadImg :src="videoItem.coverUrl"></LazyLoadImg>
+            <LazyLoadImg :src="videoItem.coverUrl" :padding-bottom="56"></LazyLoadImg>
             <div class="play-count d-flex ai-center fs-1">
                 <i class="iconfont icon-bofang1  fs-7"></i>
                 {{ formatPlayCount(videoItem.playTime) }}

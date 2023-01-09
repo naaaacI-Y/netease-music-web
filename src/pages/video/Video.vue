@@ -4,7 +4,7 @@
             @change-active-type="changeActiveType">
             <template #left-label>
                 <div class="category-btn d-flex ai-center jc-center text-66">
-                    <span class="fs-3 mr-5 ">{{ videoTypes[activeType] }}</span>
+                    <span class="fs-3 mr-5 ">{{ activeType }}</span>
                     <i class="iconfont icon-xiangyou2 fs-3"></i>
                 </div>
             </template>
@@ -25,7 +25,7 @@ import { videoTypes } from '@/utils/const';
 import { reactive, ref, watchEffect } from 'vue';
 const allVideoLists = reactive({ data: [] as VideoByCategoryRet[] })
 const labelList = reactive({ data: [] as VideoGroupItem[] })
-const activeType = ref('内地')
+const activeType = ref('现场')
 const changeActiveType = (name: string) => {
     activeType.value = name
 }
@@ -33,6 +33,7 @@ const changeActiveType = (name: string) => {
 const getVideoLabel = async () => {
     const r = await getVideoLabelList()
     labelList.data = r.data
+
 }
 watchEffect(async () => {
     const idx = labelList.data.findIndex(item => item.name === activeType.value)
@@ -56,5 +57,12 @@ getVideoLabel()
     padding-top: 25px;
     width: 1040px;
     margin: auto;
+}
+
+.category-btn {
+    border: 1px solid var(--theme-e5);
+    padding: 4px 0;
+    width: 100px;
+    border-radius: 20px;
 }
 </style>
