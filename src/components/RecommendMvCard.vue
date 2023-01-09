@@ -1,7 +1,7 @@
 <template>
     <div class="recommend-mv-card-wrapper" @click="goVideoDetail">
         <div class="img-wrapper">
-            <LazyLoadImg
+            <LazyLoadImg :padding-bottom="56"
                 :src="formatPicUrl((recommendMvItem.cover || recommendMvItem.picUrl || recommendMvItem.imgurl) as string, 440, 250)">
             </LazyLoadImg>
             <div class="play-count d-flex ai-center fs-1" style="color: white;">

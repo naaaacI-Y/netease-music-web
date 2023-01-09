@@ -27,7 +27,7 @@
             <div class="unique-play pl-30" v-if="isActive('/unique-play')"> 独家放送</div>
             <div class="personalfm" v-if="isActive('/personal-fm')"></div>
             <div class="dayRecommend" v-if="isActive('/songlist')"></div>
-            <div class="video pl-30 fs-4 text-33" v-if="isActive('/video/all-mv')">全部MV</div>
+            <div class="all-video pl-30 fs-4 text-33" v-if="isActive('/video/all-mv')">全部MV</div>
             <div class="video d-flex pl-30 fs-4" v-if="isActive('/video/video-inside', '/video/mv')">
                 <div class="video-inside mr-20" :class="{ isVideo: route.path === '/video/video-inside' }"
                     @click="goInside('/video/video-inside')">

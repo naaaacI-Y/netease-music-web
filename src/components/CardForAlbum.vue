@@ -1,6 +1,6 @@
 <template>
     <div class="card-for-album-wrapper" @click="goAlbum">
-        <div class="img-wrap mb-5">
+        <div class="img-wrapper mb-5">
             <LazyLoadImg :src="formatPicUrl(albumItem.picUrl, 375, 375)"></LazyLoadImg>
             <div class="play-btn" @click.stop="playAlbum">
                 <div class="trangel"></div>
@@ -27,24 +27,26 @@ const props = defineProps<{
     albumItem: HotAlbum
 }>()
 const goAlbum = () => {
-    console.log("goAlbum");
     router.push(`/album/${props.albumItem.id}`)
 }
 const playAlbum = () => {
+    // 播放专辑 TODO
     console.log("playAlbum");
 
 }
 </script>
 <style lang="scss" scoped>
 .card-for-album-wrapper {
-    width: calc(16%);
+    width: 16%;
     margin-bottom: 35px;
 
-    .img-wrap {
-        width: 100%;
+    .img-wrapper {
+
         height: 0;
+        width: 100%;
         padding-bottom: 100%;
         position: relative;
+        overflow: hidden;
         border-radius: 10px;
 
         // background-color: aqua;
@@ -70,8 +72,6 @@ const playAlbum = () => {
     }
 
     .album-info {
-        .name {}
-
         &:hover {
             cursor: pointer;
         }

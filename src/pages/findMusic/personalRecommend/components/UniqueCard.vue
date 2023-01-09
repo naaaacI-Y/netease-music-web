@@ -1,7 +1,10 @@
 <template>
     <div class="unique-card-wrapper" :style="{ width: `${cardWidth}px` }">
         <div class="img-wrapper mb-5" :style="{ width: `${cardWidth}px`, height: `${cardHeight}px` }">
-            <img :src="cardWidth === 250 ? uniqueItem.sPicUrl : uniqueItem.picUrl" alt="">
+            <!-- <img :src="cardWidth === 250 ? uniqueItem.sPicUrl : uniqueItem.picUrl" alt=""> -->
+            <LazyLoadImg :padding-bottom="paddingBottom"
+                :src="formatPicUrl(cardWidth === 250 ? uniqueItem.sPicUrl : uniqueItem.picUrl, cardWidth, cardHeight)">
+            </LazyLoadImg>
             <div class="play-btn">
                 <i class="iconfont icon-bofang1 text-white fs-9"></i>
             </div>
@@ -11,9 +14,11 @@
 </template>
 
 <script lang="ts" setup>
+import { formatPicUrl } from '@/utils';
 import { UniqueRecommendRet } from '@/service/api/recommend/types';
-
-withDefaults(defineProps<
+import LazyLoadImg from "@/components/LazyLoadImg.vue"
+import { computed } from 'vue';
+const props = withDefaults(defineProps<
     {
         cardWidth?: number,
         cardHeight?: number
@@ -21,6 +26,12 @@ withDefaults(defineProps<
     }>(), {
     cardWidth: 250,
     cardHeight: 135
+})
+const paddingBottom = computed(() => {
+    if (props.cardWidth) {
+        return (props.cardHeight / props.cardWidth) * 100
+    }
+    return (135 / 250) * 100
 })
 </script>
 <style lang="scss" scoped>
