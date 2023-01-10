@@ -2206,6 +2206,11 @@
   "resolved" "https://registry.npmmirror.com/minimist/-/minimist-1.2.7.tgz"
   "version" "1.2.7"
 
+"mitt@^2.1.0":
+  "integrity" "sha512-ILj2TpLiysu2wkBbWjAmww7TkZb65aiQO+DkVdUTBpBXq+MHYiETENkKFMtsJZX1Lf4pe4QOrTSjIfUwN5lRdg=="
+  "resolved" "https://registry.npmmirror.com/mitt/-/mitt-2.1.0.tgz"
+  "version" "2.1.0"
+
 "mkdirp@>=0.5 0":
   "integrity" "sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw=="
   "resolved" "https://registry.npmmirror.com/mkdirp/-/mkdirp-0.5.6.tgz"
@@ -3532,6 +3537,16 @@
     "lodash" "^4.17.21"
     "semver" "^7.3.5"
 
+"vue-observe-visibility@^2.0.0-alpha.1":
+  "integrity" "sha512-flFbp/gs9pZniXR6fans8smv1kDScJ8RS7rEpMjhVabiKeq7Qz3D9+eGsypncjfIyyU84saU88XZ0zjbD6Gq/g=="
+  "resolved" "https://registry.npmmirror.com/vue-observe-visibility/-/vue-observe-visibility-2.0.0-alpha.1.tgz"
+  "version" "2.0.0-alpha.1"
+
+"vue-resize@^2.0.0-alpha.1":
+  "integrity" "sha512-7+iqOueLU7uc9NrMfrzbG8hwMqchfVfSzpVlCMeJQe4pyibqyoifDNbKTZvwxZKDvGkB+PdFeKvnGZMoEb8esg=="
+  "resolved" "https://registry.npmmirror.com/vue-resize/-/vue-resize-2.0.0-alpha.1.tgz"
+  "version" "2.0.0-alpha.1"
+
 "vue-router@4":
   "integrity" "sha512-DYWYwsG6xNPmLq/FmZn8Ip+qrhFEzA14EI12MsMgVxvHFDYvlr4NXpVF5hrRH1wVcDP8fGi5F4rxuJSl8/r+EQ=="
   "resolved" "https://registry.npmmirror.com/vue-router/-/vue-router-4.1.6.tgz"
@@ -3551,7 +3566,16 @@
   dependencies:
     "unzipper" "0.10.11"
 
-"vue@^2.6.14 || ^3.2.0", "vue@^3.0.0-0 || ^2.6.0", "vue@^3.2.0", "vue@^3.2.2", "vue@3.2.45":
+"vue-virtual-scroller@^2.0.0-beta.7":
+  "integrity" "sha512-OrouVj1i2939jaLjVfu8f5fsDlbzhAb4bOsYZYrAkpcVLylAmMoGtIL7eT3hJrdTiaKbwQpRdnv7DKf9Fn+tHg=="
+  "resolved" "https://registry.npmmirror.com/vue-virtual-scroller/-/vue-virtual-scroller-2.0.0-beta.7.tgz"
+  "version" "2.0.0-beta.7"
+  dependencies:
+    "mitt" "^2.1.0"
+    "vue-observe-visibility" "^2.0.0-alpha.1"
+    "vue-resize" "^2.0.0-alpha.1"
+
+"vue@^2.6.14 || ^3.2.0", "vue@^3.0.0", "vue@^3.0.0-0 || ^2.6.0", "vue@^3.2.0", "vue@^3.2.2", "vue@3.2.45":
   "integrity" "sha512-9Nx/Mg2b2xWlXykmCwiTUCWHbWIj53bnkizBxKai1g61f2Xit700A1ljowpTIM11e3uipOeiPcSqnmBg6gyiaA=="
   "resolved" "https://registry.npmmirror.com/vue/-/vue-3.2.45.tgz"
   "version" "3.2.45"

@@ -19,7 +19,8 @@
     "vfonts": "^0.1.0",
     "vue": "^3.2.2",
     "vue-router": "4",
-    "vue-slider-component": "^4.1.0-beta.7"
+    "vue-slider-component": "^4.1.0-beta.7",
+    "vue-virtual-scroller": "^2.0.0-beta.7"
   },
   "devDependencies": {
     "@babel/types": "^7.16.0",

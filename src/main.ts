@@ -7,12 +7,18 @@ import DefaultLayout from "@/layout/index.vue"
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import message from "@/components/message/index"
 import initApp from './config/init'
+// vue virtual scroller
+import "vue-virtual-scroller/dist/vue-virtual-scroller.css" // 引入它的 css
+import VueVirtualScroller from "vue-virtual-scroller" // 引入它
+
+
 const app = createApp(App)
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 app.use(router)
 app.config.globalProperties.$message = message
 app.use(pinia)
+app.use(VueVirtualScroller) // use 它
 // 初始化注册全局组件 TODO https://www.bilibili.com/video/BV1kG4y1a7n5?p=14&vd_source=2a7f60acdf988ecc8a68c50a69856a9d
 initApp()
 app.component("DefaultLayout", DefaultLayout)

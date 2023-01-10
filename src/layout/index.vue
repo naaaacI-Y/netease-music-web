@@ -4,7 +4,7 @@
     </Nav>
     <div class="main-content" :class="{ isAuto: !isNotVideo }">
         <side-bar v-show="isNotVideo"></side-bar>
-        <div class="content bg-white" :class="{ isAuto: isNotVideo && isNotSearch }">
+        <div class="content bg-white" :class="{ isAuto: isNotVideo && isNotSearch }" id="content">
             <slot></slot>
             <!-- v-if="isShowSearchBox" -->
             <SearchResultBox :search-keywords="searchKeyWords" v-if="isShowSearchBox" @hideSearchBox="hideSearchBox">

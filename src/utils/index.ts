@@ -1,10 +1,14 @@
 
 
+
 import useStore from "@/store";
 import { useRoute } from "vue-router";
 import cityInfo from "./CITY";
 import Player from "./Player";
+import { Artist } from "@/service/api/singer/types"
+import { UniqueRecommendRet } from '@/service/api/recommend/types';
 
+type FormatList<T> = { id: number, dataList: T[] }[]
 /**
  * 日期格式化
  * @param time 时间戳
@@ -232,12 +236,12 @@ const clearSearchHistory = () => {
 
 const debounce = (fn: Function, wait = 100) => {
     let timer: number
-    return (...args: any[]) => {
+    return function (...args: any[]) {
         if (timer) {
             clearTimeout(timer)
         }
         timer = Number(setTimeout(() => {
-            fn(args)
+            fn.apply(null, args)
         }, wait))
     }
 }
@@ -257,9 +261,61 @@ const scrollToTop = () => {
     wrap.scrollTo(0, 0)
 }
 
+// 格式化图片url
 const formatPicUrl = (url: string, width: number, height: number) => {
     return `${url}?param=${width}y${height}`
 }
+
+// 序号填充
+const paddingLeft = (num: number) => {
+    if (num < 10) return `0${num}`
+    return num
+}
+
+// // 监听页面滚动
+// const handleListener = (e: Event, callback: Function ) => {
+//    return () => {
+//     const target = e.target as HTMLElement
+//     const scrollTop = target.scrollTop
+//     const clientHeight = target.clientHeight
+//     const scrollHeight = target.scrollHeight
+//     if (scrollTop + clientHeight >= scrollHeight) {
+//         // 滚动到底部了
+//         callback()
+//     }
+//    }
+// }
+// const listenPageScroll = (wrapperId: string, callback: Function, removeFlag?: boolean) => {
+//     const wrapper = document.getElementById(wrapperId)
+//     wrapper?.addEventListener("scroll", handleListener(e, callback))
+// }
+// // 移除监听
+// const removeListener = () => {
+//     const wrapper = document.getElementById("scroller")
+//     wrapper?.removeEventListener("scroll", handleListener(e, callback))
+// }
+
+
+// 格式化列表数据供RecycleScroller使用
+const formatListData = <T extends UniqueRecommendRet | Artist>(data: T[], len = 4) => {
+    const list: FormatList<T> = Array.from({ length: Math.ceil(data.length / len) }, (_, index) => {
+        return { id: -1, dataList: [] }
+    })
+    for (let i = 0; i < data.length; i++) {
+        const idx = parseInt(String(i / len))
+        if (list[idx].id === -1) {
+            if (!data[i].id) {
+                list[idx].id = Math.round(Math.random() * 20000 + 10000);
+            } else {
+                list[idx].id = data[i].id
+            }
+        }
+
+        list[idx].dataList.push(data[i])
+    }
+    return list
+}
+
 export {
     formatTime,
     stringifyParams,
@@ -278,5 +334,8 @@ export {
     clearSearchHistory,
     getArea,
     scrollToTop,
-    formatPicUrl
+    formatPicUrl,
+    paddingLeft,
+    formatListData,
+    FormatList
 }

@@ -65,9 +65,14 @@ const paddingBottom = computed(() => {
         }
     }
 
-    .unique-name:hover {
-        color: var(--theme-3a);
-        cursor: pointer;
+    .unique-name {
+        @include multiEllipsis;
+
+        &:hover {
+            color: var(--theme-3a);
+            cursor: pointer;
+
+        }
     }
 }
 </style>

@@ -25,7 +25,7 @@ export const getUniquereCommend = () => {
  * @returns
  */
 export const getUniquereCommendList = (params: T.UniqueRecommendListParam) => {
-    return http.get<T.UniqueRecommendListRresult>(`/personalized/privatecontent/list`)
+    return http.get<T.UniqueRecommendListRresult>(`/personalized/privatecontent/list${stringifyParams(params)}`)
 }
 
 
