@@ -1,161 +1,122 @@
 <template>
-    <!-- <div class="slider-container" ref="slider" :style="sliderStyle" @mouseover="pause()" @mouseout="play()">
-        <div class="slider-content" :class="mask ? 'mask' : ''">
-            <div class="slider" v-for="(item, index) in list" :key="index" :class="setClass(index)"
+    <div class="slider-container" ref="slider" :style="sliderStyle" @mouseover="pause()" @mouseout="play()"
+        v-if="bannerList.data.length">
+        <div class="slider-content mask">
+            <div class="slider" v-for="(item, index) in bannerList.data" :key="index" :class="setClass(index)"
                 @click="onClick(index)" style="border-radius:10px;overflow:hidden">
                 <img :src="item.imageUrl" alt="" style="width: 100%; height: 100%;" />
                 <div class="icon" :class="item.typeTitle == '活动' ? 'objClass' : ''">{{ item.typeTitle }}</div>
             </div>
-            <i v-show="arrow" class="iconfont icon-left" @click="prev()"></i>
-            <i v-show="arrow" class="iconfont icon-right" @click="next()"></i>
+            <i class="iconfont icon-left prev-icon" @click="prev()"></i>
+            <i class="iconfont icon-right next-icon" @click="next()"></i>
         </div>
-        <div class="dots" v-if="dots">
-            <span v-for="(item, index) in list" :key="index" :style="setActiveDot(index)"
-                @mouseover="currentIndex = index">
+        <div class="dots">
+            <span v-for="(item) in bannerList.data.length" :key="item" :style="setActiveDot(item - 1)"
+                @mouseover="currentIndex = item - 1">
             </span>
         </div>
-    </div> -->
+    </div>
 </template>
 
-<script>
-export default {
-    name: 'recommendCarousel',
-    data() {
-        return {
-            currentIndex: 0,
-            sliderDomList: [],
-            timer: null,
-        }
-    },
-    props: {
-        list: {
-            required: true,
-            type: Array,
-            default() {
-                return []
-            },
-        },
-        width: {
-            type: Number,
-        },
-        height: {
-            type: Number,
-        },
-        imgType: {
-            type: String,
-            default: 'percentage',
-        },
-        autoPlay: {
-            type: Boolean,
-            default: true,
-        },
-        mask: {
-            type: Boolean,
-            default: true,
-        },
-        interval: {
-            type: Number,
-            default: 4000,
-        },
-        dots: {
-            type: Boolean,
-            default: true,
-        },
-        arrow: {
-            type: Boolean,
-            default: true,
-        },
-        color: {
-            type: String,
-            default: 'rgb(248, 85, 85)',
-        },
-    },
-    created() {
-        console.log(this.list)
-    },
-
-    computed: {
-        sliderStyle() {
-            return {
-                width: this.width ? this.width + 'rem' : '100%',
-                height: this.height ? (this.height + 0.2) * 100 + 'px' : '100%',
-                perspective: this.width * 100 + 'px',
-                backgroundSize:
-                    this.imgType == 'percentage' ? '100% 100%' : this.imgType,
-            }
-        }
-    },
-    mounted() {
-        // this.sliderDomList = this.$refs.slider.querySelectorAll('div.slider')
-        // this.play()
-    },
-    methods: {
-        setClass(i) {
-            let next =
-                this.currentIndex === this.list.length - 1 ? 0 : this.currentIndex + 1
-            let prev =
-                this.currentIndex === 0 ? this.list.length - 1 : this.currentIndex - 1
-            switch (i) {
-                case this.currentIndex:
-                    return 'active'
-                case next:
-                    return 'next'
-                case prev:
-                    return 'prev'
-                default:
-                    return ''
-            }
-        },
-        setBGImg(src) {
-            console.log(src, 'src====')
-            return {
-                backgroundImage: `require(${src})`,
-            }
-        },
-        setActiveDot(index) {
-            return index === this.currentIndex
-                ? {
-                    backgroundColor: this.color,
-                }
-                : {
-                    backgroundColor: '#ccc',
-                }
-        },
-        play() {
-            this.pause()
-            if (this.autoPlay) {
-                this.timer = setInterval(() => {
-                    this.next()
-                }, this.interval)
-            }
-        },
-        pause() {
-            clearInterval(this.timer)
-        },
-        next() {
-            this.currentIndex = ++this.currentIndex % this.list.length
-        },
-        prev() {
-            this.currentIndex =
-                this.currentIndex === 0 ? this.list.length - 1 : this.currentIndex - 1
-        },
-        onClick(i) {
-            if (i === this.currentIndex) {
-                this.$emit('sliderClick', i)
-            } else {
-                let currentClickClassName = this.sliderDomList[i].className.split(
-                    ' ',
-                )[1]
-                console.log(currentClickClassName)
-                if (currentClickClassName === 'next') {
-                    this.next()
-                } else {
-                    this.prev()
-                }
-            }
-        },
-    },
+<script  lang="ts" setup>
+import { getHeadBanner } from '@/service/api/recommend';
+import { Banner } from '@/service/api/recommend/types';
+import { computed, onMounted, reactive, ref } from 'vue';
+const props = withDefaults(defineProps<{
+    color?: string,
+    interval?: number,
+    width?: number
+    height?: number
+    imgType?: string
+}>(), {
+    color: 'rgb(248, 85, 85)',
+    interval: 4000,
+    imgType: "percentage",
+})
+const emits = defineEmits<{
+    (e: "sliderClick", index: number): void
+}>()
+const sliderStyle = computed(() => {
+    return {
+        width: props.width ? props.width : '100%',
+        height: props.height ? (props.height + 20) + 'px' : '100%',
+        perspective: 100 + 'px',
+        backgroundSize:
+            props.imgType == 'percentage' ? '100% 100%' : props.imgType,
+    }
+})
+const sliderDomList = reactive({ data: [] as unknown as HTMLCollectionOf<Element> })
+const currentIndex = ref(0)
+const bannerList = reactive({ data: [] as Banner[] })
+const timer = ref()
+const getBanner = async () => {
+    const r = await getHeadBanner()
+    bannerList.data = r.banners
 }
+const setClass = (i: number) => {
+    let next =
+        currentIndex.value === bannerList.data.length - 1 ? 0 : currentIndex.value + 1
+    let prev =
+        currentIndex.value === 0 ? bannerList.data.length - 1 : currentIndex.value - 1
+    switch (i) {
+        case currentIndex.value:
+            return 'active'
+        case next:
+            return 'next'
+        case prev:
+            return 'prev'
+        default:
+            return ''
+    }
+}
+const setBGImg = (src: string) => {
+    console.log(src, 'src====')
+    return {
+        backgroundImage: `require(${src})`,
+    }
+}
+const setActiveDot = (index: number) => {
+    return index === currentIndex.value
+        ? {
+            backgroundColor: props.color,
+        }
+        : {
+            backgroundColor: '#ccc',
+        }
+}
+const play = () => {
+    pause()
+    timer.value = setInterval(() => {
+        next()
+    }, props.interval)
+}
+const pause = () => {
+    clearInterval(timer.value)
+}
+const next = () => {
+    currentIndex.value = ++currentIndex.value % bannerList.data.length
+}
+const prev = () => {
+    currentIndex.value =
+        currentIndex.value === 0 ? bannerList.data.length - 1 : currentIndex.value - 1
+}
+const onClick = (i: number) => {
+    if (i === currentIndex.value) {
+        emits("sliderClick", i)
+    } else {
+        let currentClickClassName = sliderDomList.data[i].className.split(' ')[1]
+        if (currentClickClassName === 'next') {
+            next()
+        } else {
+            prev()
+        }
+    }
+}
+onMounted(() => {
+    sliderDomList.data = document.getElementsByClassName("slider")
+})
+
+getBanner()
 </script>
 
 <style scoped>
@@ -171,7 +132,7 @@ export default {
     /* padding: .2rem 0; */
     /* box-sizing: border-box; */
     position: relative;
-    margin-top: .2rem;
+    margin: 20px 0 30px;
 }
 
 .slider-container .slider-content {
@@ -191,7 +152,7 @@ export default {
     padding: 0;
     top: 0;
     left: 50%;
-    width: 73%;
+    width: 540px;
     height: 100%;
     transition: 500ms all ease-in-out;
     background-color: #fff;
@@ -237,21 +198,23 @@ export default {
 }
 
 .slider-container .slider-content .slider.prev {
-    transform: translate3d(-78%, 0, -100px);
+    transform: translate3d(-96%, 13%, -100px);
+    height: 80%;
     z-index: 19;
+
 }
 
 .slider-container .slider-content .slider.next {
-    transform: translate3d(-22%, 0, -100px);
+    transform: translate3d(-4%, 13%, -100px);
     z-index: 18;
+    height: 80%;
 }
 
 .slider-container .slider-content i {
-    width: 30%;
     display: none;
     position: absolute;
-    top: 40%;
-
+    top: 50%;
+    transform: translateY(-50%);
     font-size: 22px;
     color: rgba(255, 255, 255, 0.5);
     text-shadow: 0 0 24px rgba(0, 0, 0, 0.3);
@@ -259,11 +222,11 @@ export default {
     z-index: 21;
 }
 
-.slider-container .slider-content i:first-child {
-    left: 100px;
+.slider-container .slider-content .prev-icon {
+    left: 0;
 }
 
-.slider-container .slider-content i:last-child {
+.slider-container .slider-content .next-icon {
     right: 0;
 }
 

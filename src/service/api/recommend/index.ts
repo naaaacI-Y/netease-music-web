@@ -36,3 +36,11 @@ export const getUniquereCommendList = (params: T.UniqueRecommendListParam) => {
 export const getDayRecommendSongList = () => {
     return http.get<T.DayRecommendSongListResult>(`/recommend/resource`)
 }
+
+/**
+ * 获取首页轮播图
+ * @returns
+ */
+export const getHeadBanner = () => {
+    return http.get<T.CarouselResult>('/banner?type=0')
+}

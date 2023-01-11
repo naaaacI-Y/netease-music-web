@@ -1,7 +1,7 @@
 <template>
     <div class="personal-recommend-wrapper d-flex flex-column">
 
-        <RecommendCarousel></RecommendCarousel>
+        <RecommendCarousel :width="540" :height="200"></RecommendCarousel>
         <RecommendSonglist></RecommendSonglist>
         <Unique></Unique>
         <NewMusic></NewMusic>
