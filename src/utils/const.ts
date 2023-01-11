@@ -8,7 +8,14 @@ const alphaString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#".split("").reduce((cur: { [key:
 
     return cur
 }, {})
-
+const firstPagePath = [
+    "/findMusic/personal-recommend",
+    "/findMusic/song-menu",
+    "/findMusic/host-radio",
+    "/findMusic/rank",
+    "/findMusic/singer",
+    "/findMusic/newest-music"
+]
 const languageList: obj = {
     "全部": -1, "华语": 7, "欧美": 96, "日本": 8, "韩国": 16, "其他": 0
 }
@@ -25,7 +32,10 @@ const typeList: obj = {
     "全部": 0, "官方版": 1, "原声": 2, "现场版": 3, "网易出品": 4
 }
 const videoTypes: obj = {
-    "现场": 0, "翻唱": 1, "舞蹈": 2, "听BGM": 3, "MV": 4, "生活": 5, "游戏": 6, "ACG音乐": 7, "最佳饭制": 8
+    "现场": 0, "翻唱": 1, "舞蹈": 2, "听BGM": 3,
+    //  "MV": 4, // mv获取的数据有问题，不知道是不是结构不相同的原因 TODO
+    "生活": 5,
+    "游戏": 6, "ACG音乐": 7, "最佳饭制": 8
 }
 const sortList: obj = {
     "上升最快": 0, "最热": 1, "最新": 2
@@ -40,7 +50,7 @@ const newestMusicType = {
 const songMenuTypes: obj = {
     "华语": 0, "流行": 1, "摇滚": 2, "民谣": 3, "电子": 4, "另类/独立": 5, "轻音乐": 6, "综艺": 7, "影视原声": 8, "ACG": 9
 }
-const labelList = ["专辑", "MV", "歌手详情", "相似歌手", "演出"]
+const labelList = ["专辑", "MV", "歌手详情", "相似歌手"]
 const tabsComponents = ["Album", "Lyric", "Singer", "Video", "Song", "User", "Radio", "SongList"] as const
 const searchTypeList: { [key: string]: { id: number, unit: string, component: typeof tabsComponents[number] } } = {
     "单曲": {
@@ -84,7 +94,19 @@ const searchTypeList: { [key: string]: { id: number, unit: string, component: ty
         component: "User"
     }
 }
-
+const dynamicMap: { [key: string]: string } = {
+    "18": "分享单曲",
+    "19": "分享专辑",
+    "17": "分享电台节目",
+    "28": "分享电台节目",
+    "22": "转发",
+    "39": "发布视频",
+    "35": "分享歌单",
+    "13": "分享歌单",
+    "24": "分享专栏文章",
+    "41": "分享视频",
+    "21": "分享视频"
+}
 export {
     languageList,
     categoryList,
@@ -96,5 +118,7 @@ export {
     newestMusicType,
     songMenuTypes,
     labelList,
-    searchTypeList
+    searchTypeList,
+    dynamicMap,
+    firstPagePath
 }

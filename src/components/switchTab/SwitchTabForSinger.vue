@@ -21,7 +21,8 @@
         </div>
         <!--专辑--->
         <div class="album pt-20" v-if="activeIndex === 0">
-            <div class="album-card-wrap d-flex flex-wrap" v-if="songListShowType === 'card'">
+            <!-- v-if="songListShowType === 'card'" -->
+            <div class="album-card-wrap d-flex flex-wrap">
                 <CardForAlbum v-for="item in singerAlbumList.data" :key="item.id" :album-item="item"
                     class="card-for-album"></CardForAlbum>
             </div>
@@ -30,7 +31,7 @@
             </div> -->
         </div>
         <!--mv--->
-        <div v-if="activeIndex === 1" class="mv">
+        <div v-show="activeIndex === 1" class="mv">
             <div class="mv-wrapper d-flex flex-wrap pt-25" v-if="singerMvList.data.length">
                 <RecommendMvCard :is-show-time="true" v-for="item in singerMvList.data" :is-oneline="true" :count="5"
                     :recommend-mv-item="item" class="recommend-mv-card">
@@ -38,8 +39,8 @@
             </div>
             <div class="no-data text-66 fs-2" v-if="!singerMvList.data.length">没有相关mv</div>
         </div>
-        <!----->
-        <div v-if="activeIndex === 2" class="detail">
+        <!--歌手详情-->
+        <div v-show="activeIndex === 2" class="detail">
             <div class="detail-item mb-30 pt-20" v-for="item in singerDetail.data" v-if="singerDetail.data.length">
                 <div class="detail-title f-2 mb-20 text-33">{{ item.ti }}</div>
                 <div class="detail-content fs-1 mb-20 text-bc" v-for="it in item.txt.split('\n')">
@@ -48,14 +49,15 @@
             </div>
             <div class="no-data text-66 fs-3" v-if="!singerDetail.data.length">暂无介绍</div>
         </div>
-        <div v-if="activeIndex === 3" class="simlary">
+        <!--相似歌手-->
+        <div v-show="activeIndex === 3" class="simlary">
             <div class="simlary-wrapper d-flex flex-wrap pt-25">
                 <SingerCard v-for="item in similarSingerList.data" :is-show-singer-flag="false" :singer-item="item"
                     class="singer-card">
                 </SingerCard>
             </div>
         </div>
-        <div class="performance" v-if="activeIndex === 4">演出信息</div>
+        <!-- <div class="performance" v-if="activeIndex === 4">演出信息</div> -->
 
     </div>
 </template>

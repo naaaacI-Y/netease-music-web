@@ -7,8 +7,9 @@ import cityInfo from "./CITY";
 import Player from "./Player";
 import { Artist } from "@/service/api/singer/types"
 import { UniqueRecommendRet } from '@/service/api/recommend/types';
+import { VideoByCategoryItem } from "@/service/api/video/types";
 
-type FormatList<T> = { id: number, dataList: T[] }[]
+type FormatList<T> = { id: number | string, dataList: T[] }[]
 /**
  * 日期格式化
  * @param time 时间戳
@@ -297,7 +298,7 @@ const paddingLeft = (num: number) => {
 
 
 // 格式化列表数据供RecycleScroller使用
-const formatListData = <T extends UniqueRecommendRet | Artist>(data: T[], len = 4) => {
+const formatListData = <T extends UniqueRecommendRet | Artist | VideoByCategoryItem>(data: T[], len = 4) => {
     const list: FormatList<T> = Array.from({ length: Math.ceil(data.length / len) }, (_, index) => {
         return { id: -1, dataList: [] }
     })
@@ -307,7 +308,7 @@ const formatListData = <T extends UniqueRecommendRet | Artist>(data: T[], len = 
             if (!data[i].id) {
                 list[idx].id = Math.round(Math.random() * 20000 + 10000);
             } else {
-                list[idx].id = data[i].id
+                list[idx].id = data[i].id!
             }
         }
 

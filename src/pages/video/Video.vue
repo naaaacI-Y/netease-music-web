@@ -1,6 +1,6 @@
 <template>
     <RecycleScroller id="scroller" class="pb-30" :items="allVideoLists.data" :item-size="217" key-field="id"
-        :buffer="1038" style="height: 100%;width: 100%;">
+        :buffer="1472" style="height: 100%;width: 100%;">
         <template #before>
             <div class="filter-wrapper mb-20">
                 <FilterItem :active-type="videoTypes[activeType]" :type-list="videoTypes"

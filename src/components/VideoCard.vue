@@ -16,6 +16,7 @@
         <div class="mv-name mt-5">
             <div class="line1 fs-3 text-4e d-flex ai-center mb-4" :class="{ noWrap: !isOneline }">
                 <slot name="mv-flag"></slot>
+                <!--超出一行需要省略，但是有标签，TODO-->
                 <span class="title">{{ videoItem.title }}</span>
             </div>
             <div class="line2 fs-1 text-c2 d-flex" v-if="!isOneline">

@@ -18,7 +18,6 @@ import { Artist } from '@/service/api/singer/types';
 import LazyLoadImg from "@/components/LazyLoadImg.vue"
 import router from '@/router';
 import { formatPicUrl } from "@/utils"
-// 虚拟滚动  TODO
 const props = withDefaults(defineProps<
     {
         cardWidth?: number,
@@ -31,8 +30,6 @@ const props = withDefaults(defineProps<
     isShowSingerFlag: true
 })
 const goSingerPage = () => {
-    console.log(props.singerItem.id, "props.singerItem.id");
-
     router.push(`/singer-home/${props.singerItem.id}`)
 }
 </script>

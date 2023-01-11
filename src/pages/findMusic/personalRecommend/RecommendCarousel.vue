@@ -7,8 +7,8 @@
                 <img :src="item.imageUrl" alt="" style="width: 100%; height: 100%;" />
                 <div class="icon" :class="item.typeTitle == '活动' ? 'objClass' : ''">{{ item.typeTitle }}</div>
             </div>
-            <i class="iconfont icon-left prev-icon" @click="prev()"></i>
-            <i class="iconfont icon-right next-icon" @click="next()"></i>
+            <i class="iconfont icon-jiantou_liebiaoxiangzuo_o prev-icon" @click="prev()"></i>
+            <i class="iconfont icon-jiantou_liebiaoxiangyou_o next-icon" @click="next()"></i>
         </div>
         <div class="dots">
             <span v-for="(item) in bannerList.data.length" :key="item" :style="setActiveDot(item - 1)"
@@ -119,138 +119,142 @@ onMounted(() => {
 getBanner()
 </script>
 
-<style scoped>
-@import './icon.css';
-
+<style scoped lang="scss">
 .slider-container {
     width: 100%;
     height: 100%;
     text-align: center;
-    /* margin-left: .18rem; */
     margin: auto;
     max-width: 1040px;
-    /* padding: .2rem 0; */
-    /* box-sizing: border-box; */
     position: relative;
     margin: 20px 0 30px;
-}
 
-.slider-container .slider-content {
-    position: relative;
-    width: 100%;
-    height: calc(100% - 20px);
-    left: 0%;
-    top: 0%;
-    margin: 0px;
-    padding: 0px;
-    background-size: inherit;
-}
+    .slider-content {
+        position: relative;
+        width: 100%;
+        height: calc(100% - 20px);
+        left: 0%;
+        top: 0%;
+        margin: 0px;
+        padding: 0px;
+        background-size: inherit;
 
-.slider-container .slider-content .slider {
-    position: absolute;
-    margin: 0;
-    padding: 0;
-    top: 0;
-    left: 50%;
-    width: 540px;
-    height: 100%;
-    transition: 500ms all ease-in-out;
-    background-color: #fff;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: inherit;
-    transform: translate3d(-50%, 0, -80px);
-    z-index: 1;
-}
+        .slider {
+            position: absolute;
+            margin: 0;
+            padding: 0;
+            top: 0;
+            left: 50%;
+            width: 540px;
+            height: 100%;
+            transition: 500ms all ease-in-out;
+            background-color: #fff;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: inherit;
+            transform: translate3d(-50%, 0, -80px);
+            z-index: 1;
 
-.slider-container .slider-content .slider:before {
-    position: absolute;
-    content: '';
-    width: 100%;
-    height: 100%;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0);
-    transition-delay: 100ms !important;
-    transition: all 500ms;
-    cursor: pointer;
-}
+            &::before {
+                position: absolute;
+                content: '';
+                width: 100%;
+                height: 100%;
+                top: 50%;
+                left: 0;
+                transform: translateY(-50%);
+                background-color: rgba(0, 0, 0, 0);
+                transition-delay: 100ms !important;
+                transition: all 500ms;
+                cursor: pointer;
+            }
 
-.slider-container .slider-content .slider .icon {
-    padding: .04rem .08rem;
-    background-color: #d33b31;
-    border-top-left-radius: 8px;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    color: white;
-    font-size: 12px;
-}
+            .icon {
+                padding: 4px 8px;
+                background-color: #d33b31;
+                border-top-left-radius: 8px;
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                color: white;
+                font-size: 12px;
+            }
 
-.slider-container .slider-content .slider .objClass {
-    background-color: #4a79cc;
-}
+            .objClass {
+                background-color: #4a79cc;
+            }
+        }
 
-.slider-container .slider-content .slider.active {
-    transform: translate3d(-50%, 0, 0);
-    z-index: 20;
-}
+        .active {
+            transform: translate3d(-50%, 0, 0);
+            z-index: 20;
+        }
 
-.slider-container .slider-content .slider.prev {
-    transform: translate3d(-96%, 13%, -100px);
-    height: 80%;
-    z-index: 19;
+        .prev {
+            transform: translate3d(-96%, 13%, -100px);
+            height: 80%;
+            z-index: 19;
 
-}
+            &::before {
+                background-color: rgba(0, 0, 0, 0.5);
+            }
+        }
 
-.slider-container .slider-content .slider.next {
-    transform: translate3d(-4%, 13%, -100px);
-    z-index: 18;
-    height: 80%;
-}
+        .next {
+            transform: translate3d(-4%, 13%, -100px);
+            z-index: 18;
+            height: 80%;
 
-.slider-container .slider-content i {
-    display: none;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 22px;
-    color: rgba(255, 255, 255, 0.5);
-    text-shadow: 0 0 24px rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-    z-index: 21;
-}
+            &::after {
+                background-color: rgba(0, 0, 0, 0.5);
+            }
 
-.slider-container .slider-content .prev-icon {
-    left: 0;
-}
+            .icon {
+                background-color: rgba($color: #d33b31, $alpha: 0.8);
+                padding: 2px 6px;
+            }
+        }
 
-.slider-container .slider-content .next-icon {
-    right: 0;
-}
+        i {
+            display: none;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 50px;
+            color: rgba(255, 255, 255, 0.5);
+            text-shadow: 0 0 24px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            z-index: 21;
+        }
 
-.slider-container .slider-content:hover i {
-    color: rgba(255, 255, 255, 0.8);
-    display: block;
-}
+        .prev-icon {
+            left: -10px;
+        }
 
-.slider-container .slider-content.mask .slider.prev:before,
-.slider-container .slider-content.mask .slider.next:before {
-    background-color: rgba(0, 0, 0, 0.5);
-}
+        .next-icon {
+            right: -10px;
+        }
 
-.slider-container .dots {
-    width: 100%;
-    height: 20px;
-}
+        &:hover i {
+            color: rgba(255, 255, 255, 0.8);
+            display: block;
+        }
 
-.slider-container .dots span {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    margin: 15px 5px;
-    cursor: pointer;
-    border-radius: 50%;
+
+    }
+
+    .dots {
+        width: 100%;
+        height: 20px;
+
+        span {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            margin: 15px 5px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+    }
 }
 </style>
