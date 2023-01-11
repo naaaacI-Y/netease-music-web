@@ -18,17 +18,19 @@
                 <div class="filter-label fs-1 mr-8 text-33">排序：</div>
             </template>
         </FilterItem>
-        <div class="all-mv-list-wrap d-flex flex-wrap jc-between mt-20">
+        <div class="all-mv-list-wrap d-flex flex-wrap mt-20" v-show="!isShowLoading">
             <RecommendMvCard v-for="item in allMvLists.data" :is-play-btn="true" :key="item.id"
-                :recommend-mv-item="item"></RecommendMvCard>
+                :recommend-mv-item="item" class="recommend-mv-card"></RecommendMvCard>
         </div>
-        <Pagination v-if="pages.total >= pages.size" :total="pages.total" :size="pages.size" :page="pages.page"
-            @page-change="handlePageChange" class="mt-30 mb-30" :index="paginationIndex">
+        <Pagination v-if="pages.total >= pages.size && !isShowLoading" :total="pages.total" :size="pages.size"
+            :page="pages.page" @page-change="handlePageChange" class="mt-30 mb-30" :index="paginationIndex">
         </Pagination>
+        <Loading v-show="isShowLoading"></Loading>
     </div>
 </template>
 
 <script lang="ts" setup>
+import Loading from '@/components/Loading.vue';
 import Pagination from '@/components/Pagination.vue';
 import FilterItem from '@/components/FilterItem.vue';
 import RecommendMvCard from '@/components/RecommendMvCard.vue';
@@ -37,7 +39,9 @@ import { AllMvParam, MVItem } from '@/service/api/mv/types';
 import { areaList, typeList, sortList } from "@/utils/const"
 import { reactive, ref, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
+import { scrollToTop } from '@/utils';
 const route = useRoute()
+const isShowLoading = ref(false)
 const activeAreaType = ref("全部")
 const activeTypeType = ref("全部")
 const activeSortType = ref("上升最快")
@@ -88,10 +92,15 @@ const initQuery = () => {
 }
 // 获取mv数据
 const getMvLists = async (params: AllMvParam) => {
+    isShowLoading.value = true
+    // 如果不是第一页的话就滚动到顶部
+    if (pages.page !== 1) {
+        scrollToTop()
+    }
     const r = await getAllMv(params)
     pages.total = r.count ?? pages.total
     allMvLists.data = r.data
-    // 更改总条目 TODO
+    isShowLoading.value = false
 
 }
 // 处理分页页码变化
@@ -106,5 +115,8 @@ initQuery()
     width: 1040px;
     margin: auto;
 
+    .recommend-mv-card:not(:nth-child(4n)) {
+        margin-right: calc(4% / 3);
+    }
 }
 </style>
