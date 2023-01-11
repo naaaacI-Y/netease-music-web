@@ -61,7 +61,7 @@ export const getVideoPlayUrl = (params: T.RelatedVideoParams) => {
  * @returns
  */
 export const getVideoByCategory = (params: T.VideoByCategoryParam) => {
-    return http.get<T.VideoByCategoryResult>(`/video/group${stringifyParams(params)}`)
+    return http.get<T.VideoByCategoryResult>(`/video/group${stringifyParams(params)}&timestamp=${Date.now()}`)
 }
 
 

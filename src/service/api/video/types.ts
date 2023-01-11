@@ -205,6 +205,8 @@ export interface VideoByCategoryItem {
     scm: string;
     threadId: string;
     coverUrl: string;
+    id?: string // 新增id属性，为了scroller格式化数据
+
     height: number;
     width: number;
     title: string;
