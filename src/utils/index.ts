@@ -8,6 +8,7 @@ import Player from "./Player";
 import { Artist } from "@/service/api/singer/types"
 import { UniqueRecommendRet } from '@/service/api/recommend/types';
 import { VideoByCategoryItem } from "@/service/api/video/types";
+import { Playlist } from "@/service/api/music/types";
 
 type FormatList<T> = { id: number | string, dataList: T[] }[]
 /**
@@ -194,8 +195,6 @@ const updatePlayer = () => {
     localStorage.setItem('player', JSON.stringify(data));
 };
 const initPlayer = () => {
-    console.log("initPlayerinitPlayerinitPlayerinitPlayerinitPlayerinitPlayerinitPlayerinitPlayer");
-
     let parsedData = JSON.parse(localStorage.getItem('player')!);
     let p = new Player();
     let player = new Proxy(p, {
@@ -259,7 +258,7 @@ const getArea = (province: number, city: number) => {
 // 滚动到顶部
 const scrollToTop = () => {
     const wrap = document.getElementsByClassName("content")[0]
-    wrap.scrollTo(0, 0)
+    wrap?.scrollTo(0, 0)
 }
 
 // 格式化图片url
@@ -298,7 +297,7 @@ const paddingLeft = (num: number) => {
 
 
 // 格式化列表数据供RecycleScroller使用
-const formatListData = <T extends UniqueRecommendRet | Artist | VideoByCategoryItem>(data: T[], len = 4) => {
+const formatListData = <T extends UniqueRecommendRet | Artist | VideoByCategoryItem | Playlist>(data: T[], len = 4) => {
     const list: FormatList<T> = Array.from({ length: Math.ceil(data.length / len) }, (_, index) => {
         return { id: -1, dataList: [] }
     })

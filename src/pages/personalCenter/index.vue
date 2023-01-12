@@ -23,6 +23,11 @@
                     <div class="content-type1 d-flex flex-wrap" v-if="songListShowType === 'card'">
                         <RecommendSongListCard v-for="(item) in songList.data" :is-oneline="true"
                             class="recommedn-list-card" :song-list-item="item" :key="item.id">
+                            <template #songlist-name>
+                                <div class="songlist-name fs-3 text-4e isOneLine">
+                                    {{ item.name }}
+                                </div>
+                            </template>
                             <template #songCount>
                                 <div class="text-66 fs-2">{{ item.trackCount }}首</div>
                             </template>
@@ -56,6 +61,11 @@
                     <div class="content-type1 d-flex flex-wrap " v-if="songListShowType === 'card'">
                         <RecommendSongListCard v-for="(item) in collectSongList.data" :is-oneline="true"
                             :song-list-item="item" :key="item.id">
+                            <template #songlist-name>
+                                <div class="songlist-name fs-3 text-4e isOneLine">
+                                    {{ item.name }}
+                                </div>
+                            </template>
                             <template #songCount>
                                 <div class="text-66 fs-2">{{ item.trackCount }}首</div>
                             </template>
@@ -157,6 +167,22 @@ getList()
             }
         }
     }
+}
+
+.songlist-name {
+    word-break: break-all;
+
+    &:hover {
+        color: var(--theme-3a);
+        cursor: pointer;
+    }
+}
+
+.isOneLine {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .recommedn-list-card:not(:nth-child(5n)) {

@@ -26,7 +26,21 @@
         <div class="content-wrap" v-show="!isShowLoading">
             <div class="song-list d-flex flex-wrap jc-between">
                 <RecommendSongListCard :is-out-side="false" v-for="item in songList.data" :key="item.id"
-                    @click="goSongList(item.id)" :song-list-item="item"></RecommendSongListCard>
+                    @click="goSongList(item.id)" :song-list-item="item">
+                    <template #songlist-name>
+                        <div class="songlist-name fs-3 text-4e">
+                            {{ item.name }}
+                        </div>
+                    </template>
+                    <template #songlist-autor>
+                        <div class="songlist-author" style="color: white;">
+                            <i class="iconfont icon-iconfontyonghuming  mr-2 "></i>
+                            <div class="author-name fs-2 mr-2 pt-2">{{ item.creator.nickname }}</div>
+                            <img :src="item.creator.avatarDetail.identityIconUrl" alt=""
+                                v-if="item.creator.avatarDetail" />
+                        </div>
+                    </template>
+                </RecommendSongListCard>
             </div>
             <Pagination v-if="pages.total >= pages.limit" :total="pages.total" :size="pages.limit" :page="pages.page"
                 @page-change="handlePageChange" class="mt-30 mb-30" :index="paginationIndex">
@@ -106,7 +120,7 @@ const handlePageChange = (num: number) => {
 
 // 前往精品歌单页
 const goHighqualitySongList = () => {
-    router.push(`/high-qualtity-song-list?index=${activeType.value}`)
+    router.push(`/high-qualtity-song-list?type=${activeType.value}`)
 }
 // 前往歌单页
 const goSongList = (songListId: number) => {
@@ -159,6 +173,30 @@ const goSongList = (songListId: number) => {
         }
 
         &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .songlist-author {
+        position: absolute;
+        bottom: 10px;
+        display: flex;
+        align-items: center;
+        left: 10px;
+        color: white;
+
+        img {
+            width: 13px;
+            height: 13px;
+        }
+    }
+
+    .songlist-name {
+        word-break: break-all;
+
+
+        &:hover {
+            color: var(--theme-3a);
             cursor: pointer;
         }
     }
