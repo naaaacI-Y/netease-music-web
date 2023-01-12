@@ -67,8 +67,7 @@ import * as T from './types'
  * 获取二维码key
  */
 export function getQrcodeKey() {
-  const timeStamp = new Date().getTime();
-  return http.get<T.getQrcodeKeyResult>(`/login/qr/key?timestamp=${timeStamp}`);
+  return http.get<T.getQrcodeKeyResult>(`/login/qr/key`);
 }
 
 /**
@@ -76,9 +75,8 @@ export function getQrcodeKey() {
  * @returns
  */
 export function getQrImg(key: string) {
-  const timeStamp = new Date().getTime();
   return http.get<T.getQrImgResult>(
-    `/login/qr/create?key=${key}&timeStamp=${timeStamp}&qrimg=1`
+    `/login/qr/create?key=${key}&qrimg=1`
   );
 }
 
@@ -87,9 +85,8 @@ export function getQrImg(key: string) {
  * @returns 800 为二维码过期,801 为等待扫码,802 为待确认,803 为授权登录成功
  */
 export function getQrcodeStatus(key: string) {
-  const timeStamp = new Date().getTime();
   return http.get<T.getQrcodeStatusResult>(
-    `/login/qr/check?key=${key}&timeStamp=${timeStamp}`
+    `/login/qr/check?key=${key}`
   );
 }
 

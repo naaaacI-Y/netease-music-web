@@ -61,5 +61,5 @@ export const getSongList = (params: T.UserFocusListParams) => {
  * @returns
  */
 export const focusOrCancelPerson = (params: T.FocusOrCancelPersonParams) => {
-    return http.get<T.FocusOrCancelPersonResult>(`/follow${stringifyParams(params)}&timestamp=${Date.now()}`)
+    return http.get<T.FocusOrCancelPersonResult>(`/follow${stringifyParams(params)}`)
 }

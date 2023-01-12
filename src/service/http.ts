@@ -1,5 +1,6 @@
 //http.ts
 import axios, { AxiosRequestConfig } from 'axios'
+import whiteList from "./whiteList"
 interface Http {
   get<T>(url: string, params?: unknown): Promise<T>
   post<T>(url: string, params?: unknown): Promise<T>
@@ -23,11 +24,15 @@ const service = axios.create({
 // axios.defaults.withCredentials = true
 service.interceptors.request.use(
   (config): AxiosRequestConfig<any> => {
-    // const token = window.sessionStorage.getItem('token')
-    // if (token) {
-    //   //@ts-ignore
-    //   config.headers.token = token
-    // }
+    //  部分请求不需要缓存，请求url上面添加时间戳
+    if (whiteList.includes(config.url!) || whiteList.includes(config.url!.split("?")[0])) {
+      if (config.url?.includes("?")) {
+        config.url += `&timestamp=${Date.now()}`
+      } else {
+        config.url += `?timestamp=${Date.now()}`
+
+      }
+    }
     return config
   },
   (error) => {
