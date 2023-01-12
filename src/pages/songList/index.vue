@@ -3,7 +3,7 @@
         <div class="song-list-wrapper">
             <!-- <Abbreviation></Abbreviation> -->
             <!-- 歌单 -->
-            <SongListHeader :header-info="headerInfo"></SongListHeader>
+            <SongListHeader :header-info="headerInfo" @change-state="getDetail"></SongListHeader>
             <div class="tab-wrapper mt-30">
                 <SwitchTabForSongList :comment-count="headerInfo.commentCount"></SwitchTabForSongList>
             </div>
@@ -38,7 +38,8 @@ const headerInfo = reactive({
     commentCount: 0,
     creator: {} as Creator,
     tags: [] as string[],
-    playCount: 0
+    playCount: 0,
+    subscribed: false
 })
 // 注入songlist
 provide("songList", songList)
@@ -61,6 +62,7 @@ const getDetail = async () => {
     headerInfo.tags = r.playlist.tags
     headerInfo.playCount = r.playlist.playCount
     headerInfo.shareCount = r.playlist.shareCount
+    headerInfo.subscribed = r.playlist.subscribed
 }
 getDetail()
 </script>

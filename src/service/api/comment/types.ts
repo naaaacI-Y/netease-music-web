@@ -226,6 +226,7 @@ export interface VoteCommnentParam {
     cid: number
     t: 0 | 1
     type: list
+    id: number
 }
 // TODO
 export interface VoteCommentResult {

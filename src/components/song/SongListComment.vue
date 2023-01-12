@@ -6,11 +6,13 @@
                 <span class="fs-1 text-66">(已有{{ pages.total }}条评论)</span>
             </div>
             <div class="comment-input">
-                <textarea id="textArea" rows="4" maxlength="140" v-model="commentContent" class="text-33"
-                    placeholder="输入评论或@朋友"></textarea>
+                <textarea id="textArea" rows="4" maxlength="140" v-model="commentContent" class="text-33" ref="textArea"
+                    placeholder="输入评论或@朋友">
+                </textarea>
             </div>
-            <div class="max-length fs-2 text-99 pr-10" :style="{ top: isShowTitle ? '110px' : '80px' }">{{ maxLength -
-            commentContent.length }}</div>
+            <div class="max-length fs-2 text-99 pr-10" :style="{ top: isShowTitle ? '110px' : '80px' }">
+                {{ maxLength - commentContent.length }}
+            </div>
             <div class="bottom-line mt-6 d-flex ai-center jc-between">
                 <div class="operate text-66">
                     <i class="iconfont icon-Smile fs-7 mr-9 "></i>
@@ -24,7 +26,8 @@
                 v-if="hotCommentList.data?.length && pages.page === 1 && !isShowLoading">
                 <div class="comment-label text-4e mb-15">精彩评论</div>
                 <CommentItem v-for="(item) in hotCommentList.data.slice(0, 10)" :is-grey="isGrey"
-                    :comment-content="item" :key="item.commentId"></CommentItem>
+                    @active-comment="activeComment" :comment-content="item" :key="item.commentId" :type="sourceType">
+                </CommentItem>
                 <div class="more-wrap d-flex ai-center jc-center">
                     <div class="more d-flex ai-center" v-if="hasMoreHot" @click="goMoreHotComment">
                         <span class="fs-2 mr-5 text-33">更多精彩评论</span>
@@ -35,7 +38,8 @@
             <div class="new-comment mt-30" v-if="allComment.data?.length" id="new-comment-pos">
                 <div class="comment-label text-4e mb-15">最新评论</div>
                 <CommentItem v-for="(item) in allComment.data" :is-grey="isGrey" :comment-content="item"
-                    :key="item.commentId"></CommentItem>
+                    @active-comment="activeComment" :key="item.commentId" :type="sourceType">
+                </CommentItem>
             </div>
             <div class="no-data text-66 mt-20 fs-3" v-if="!allComment.data?.length && !isShowLoading">还没有评论，快来抢沙发~</div>
             <Pagination v-if="pages.total >= pages.size && !isShowLoading" :total="pages.total" :size="pages.size"
@@ -52,19 +56,19 @@ import Pagination from '@/components/Pagination.vue';
 import { computed, reactive, ref, watch } from 'vue';
 import CommentItem from '../CommentItem.vue';
 import useGlobalState from '@/store/globalState';
-import { Comment, HotComment, list, t } from "@/service/api/comment/types"
+import { Comment, HotComment, SendOrReplyCommentParam, t } from "@/service/api/comment/types"
 import { checkLogin, getQueryId, scrollToTop } from "@/utils"
 import Message from "@/components/message"
 import { getComment4Album } from '@/service/api/album';
 import { getComment4MV } from '@/service/api/mv';
 import { getComment4Song, getComment4SongList } from "@/service/api/music"
 import { SongListCommentParams, SongListCommentResult } from '@/service/api/music/types';
-import { useRoute } from 'vue-router';
 import { getComment4Video } from '@/service/api/video';
-import router from '@/router';
 import { VideoCommentParams } from '@/service/api/video/types';
 import { sendOrReplyComment } from '@/service/api/comment';
-const route = useRoute()
+import { useRouter } from 'vue-router';
+const router = useRouter()
+const replyPerson = ref("")
 const isShowLoading = ref(false)
 // 0: 歌曲 1: mv 2: 歌单 3: 专辑 4: 电台节目 5: 视频 6: 动态 7: 电台
 const props = withDefaults(defineProps<{
@@ -83,7 +87,8 @@ const pages = reactive({
     total: 0
 })
 const paginationIndex = ref(0)
-
+const commentId = ref<number>()
+const textArea = ref(null) as unknown as HTMLInputElement
 const id = getQueryId() as number | string // id
 const allComment = reactive({ data: [] as Comment[] }) // 所有评论
 const hotCommentList = reactive({ data: [] as HotComment[] }) // 热门评论
@@ -106,22 +111,54 @@ const maxLength = computed(() => {
     return 140 - commentContent.value.length
 })
 
+// 激活评论框
+const activeComment = (info: { name: string, commentId: number }) => {
+    commentContent.value = "回复" + info.name + '：'
+    replyPerson.value = info.name + '：' // 记录被回复用户名
+    // 获取焦点
+    textArea.focus()
+    // 滚动到评论框处
+    scrollToTop()
+    commentId.value = info.commentId
+}
 
+// 检查发布还是回复评论 以及返回评论的内容
+const checkIsPublishOrReply = () => {
+    const splitList = commentContent.value.split(replyPerson.value)
+    if (splitList.length === 1) {
+        // 发表评论
+        return ["publish", splitList[0]]
+    }
+    const idx = splitList.findIndex(item => item === replyPerson.value)
+    if (idx !== -1) {
+        // 如果可以找到被回复用户的昵称也是发表评论
+        return ["publish", splitList.join("")]
+    }
+    // if (!splitList[splitList.length - 1].length) {
+    //     // 如果最后一项是空的
+    //     return ["publish", ""]
+    // }
+    return ["reply", splitList[splitList.length - 1]]
+
+}
 // 提交评论
 const submitContent = async () => {
-    if (!commentContent.value.trim()) {
+    const commentType = checkIsPublishOrReply()
+    if (!commentContent.value.trim() || !commentType[1].trim().length) {
         return Message.error("写点东西吧，内容不能为空哦！")
     }
-
     if (!checkLogin()) {
         // 如果没有登录 显示登录弹窗
         return useGlobalState().isShowLoginBox = true
     }
-    const _ = {
-        t: 1 as t,
+    const _: SendOrReplyCommentParam = {
+        t: commentType[0] === "publish" ? 1 : 2 as t,
         id,
         type: props.sourceType,
-        content: commentContent.value.trim()
+        content: commentType[1],
+    }
+    if (commentType[0] === "reply") {
+        _.commentId = commentId.value
     }
     const r = await sendOrReplyComment(_)
     if (r.code === 200) {
@@ -129,6 +166,7 @@ const submitContent = async () => {
         await getAllComment(id)
         Message.success("评论成功！")
         commentContent.value = ""
+        replyPerson.value = ""
     }
 }
 // 滚动到指定位置

@@ -18,6 +18,7 @@
 // 歌手 ==> 1
 // 专辑 ==> 2
 import { ref } from 'vue';
+import { labelListMap } from "@/utils/const"
 import SongListComment from "../song/SongListComment.vue"
 import Collectors from "@/components/Collectors.vue"
 import SongList from '../song/SongList.vue';
@@ -25,7 +26,6 @@ const props = defineProps<{
     commentCount: number
 }>()
 
-const labelListMap = ["歌曲列表", "评论", "收藏者"]
 const activeIndex = ref(0)
 
 

@@ -50,6 +50,7 @@ const newestMusicType = {
 const songMenuTypes: obj = {
     "华语": 0, "流行": 1, "摇滚": 2, "民谣": 3, "电子": 4, "另类/独立": 5, "轻音乐": 6, "综艺": 7, "影视原声": 8, "ACG": 9
 }
+const labelListMap = ["歌曲列表", "评论", "收藏者"] // 歌单tab
 const labelList = ["专辑", "MV", "歌手详情", "相似歌手"]
 const tabsComponents = ["Album", "Lyric", "Singer", "Video", "Song", "User", "Radio", "SongList"] as const
 const searchTypeList: { [key: string]: { id: number, unit: string, component: typeof tabsComponents[number] } } = {
@@ -94,6 +95,7 @@ const searchTypeList: { [key: string]: { id: number, unit: string, component: ty
         component: "User"
     }
 }
+// 动态部分暂时不做展示，需要屏蔽TODO
 const dynamicMap: { [key: string]: string } = {
     "18": "分享单曲",
     "19": "分享专辑",
@@ -120,5 +122,6 @@ export {
     labelList,
     searchTypeList,
     dynamicMap,
-    firstPagePath
+    firstPagePath,
+    labelListMap
 }

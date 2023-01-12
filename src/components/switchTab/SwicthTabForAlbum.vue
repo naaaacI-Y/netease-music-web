@@ -8,7 +8,7 @@
             </div>
         </div>
         <SongList v-show="activeIndex === 0"></SongList>
-        <SongListComment v-if="activeIndex === 1"></SongListComment>
+        <SongListComment v-if="activeIndex === 1" :source-type="3"></SongListComment>
         <div v-show="activeIndex === 2" class="detail pt-20">
             <div class="title mb-15 text-33 fs-4">专辑介绍</div>
             <div v-for="item in detailInfo" class="fs-1  mb-20 text-bc">{{ item }}</div>

@@ -181,3 +181,14 @@ export const checkMusicAvaliable = (params: T.CheckSongAvaliableParams) => {
 export const getRecentPlay = () => {
     return http.get<T.RecentPlayResult>('/record/recent/song')
 }
+
+/**
+ * 取消/收藏歌单
+ * @param params
+ * t: 1 收藏 2 取消收藏
+ * id: 歌单id
+ * @returns
+ */
+export const collectOrCancelSongList = (params: T.CollectSongListParams) => {
+    return http.get<T.CollectSongListResult>(`/playlist/subscribe${stringifyParams(params)}`)
+}

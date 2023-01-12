@@ -146,8 +146,10 @@ const formatPlayCount = (count: number) => {
 const checkLogin = () => {
     const store = useStore()
     const isLogin = store.userProfile.userFile?.userId
+    console.log(isLogin, "isLogin========");
+
     if (!isLogin) {
-        store.globalState.isShowLoginBox = true
+        // store.globalState.isShowLoginBox = true
         return false
     }
     return true

@@ -27,12 +27,13 @@
                     <i class="iconfont icon-bofang_o  fs-9"></i>
                     播放全部
                 </div>
-                <div class="collect-count mr-15 fs-2 d-flex ai-center">
-                    <i class="iconfont icon-xinjianwenjianjia fs-7 mr-3"></i>
-                    <span>收藏</span>
+                <div class="collect-count mr-15 fs-2 d-flex ai-center" @click="collectSongList">
+                    <i class="iconfont icon-xinjianwenjianjia fs-7 mr-3" v-if="!headerInfo.subscribed"></i>
+                    <i class="iconfont icon-gou- fs-7 mr-3" v-if="headerInfo.subscribed"></i>
+                    <span>{{ headerInfo.subscribed ? "已收藏" : "收藏" }}</span>
                     <span>({{ headerInfo.subscribedCount }})</span>
                 </div>
-                <div class="share mr-15 fs-2 d-flex ai-center">
+                <!-- <div class="share mr-15 fs-2 d-flex ai-center">
                     <i class="iconfont icon-fenxiang2 mr-3"></i>
                     <span>分享</span>
                     <span>({{ headerInfo.shareCount }})</span>
@@ -40,7 +41,7 @@
                 <div class="download-all fs-2 d-flex ai-center">
                     <i class="iconfont icon-xiazai mr-3 fs-6"></i>
                     <span>下载全部</span>
-                </div>
+                </div> -->
             </div>
             <div class="other-info mt-12">
                 <div class="other-info-label mb-3" v-if="headerInfo.tags.length">
@@ -71,9 +72,15 @@
 // 歌单
 
 import router from '@/router';
-import { HeaderInfo } from '@/service/api/music/types';
-import { formatPlayCount, formatTime } from '@/utils';
-
+import { CollectSongListParams, HeaderInfo } from '@/service/api/music/types';
+import useGlobalState from '@/store/globalState';
+import { checkLogin, formatPlayCount, formatTime } from '@/utils';
+import { collectOrCancelSongList } from "@/service/api/music"
+import Message from "@/components/message"
+const emits = defineEmits<{
+    (e: "changeState"): void
+}>()
+const globalState = useGlobalState()
 // 歌手
 const props = defineProps<{
     headerInfo: HeaderInfo
@@ -81,6 +88,23 @@ const props = defineProps<{
 // 前往个人中心
 const goPersonCenter = () => {
     router.push(`/personal-center/${props.headerInfo.creator.userId}`)
+}
+// 歌单收藏 限制点击频次 TODO
+const collectSongList = async () => {
+    if (!checkLogin()) {
+        return globalState.isShowLoginBox = true
+    }
+    const { subscribed, id } = props.headerInfo
+    const _: CollectSongListParams = {
+        t: subscribed ? 2 : 1,
+        id
+    }
+    const r = await collectOrCancelSongList(_)
+    if (r.code === 200) {
+        subscribed ? Message.success("取消收藏成功") : Message.success("收藏成功")
+        // 重新加载数据
+        emits("changeState")
+    }
 }
 </script>
 <style lang="scss" scoped>

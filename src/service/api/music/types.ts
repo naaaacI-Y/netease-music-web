@@ -339,6 +339,7 @@ export interface HeaderInfo {
     creator: Creator
     tags: string[]
     playCount: number
+    subscribed?: boolean
 }
 
 // 歌单评论
@@ -680,8 +681,6 @@ export interface CheckSongAvaliableresult {
 }
 
 // 最近播放
-
-
 export interface recentPlayList {
     resourceId: string;
     playTime: number;
@@ -699,4 +698,13 @@ export interface RecentPlayResult {
     code: number;
     data: RecentPlayRet;
     message: string;
+}
+
+// 歌单收藏/取消收藏
+export interface CollectSongListParams {
+    t: 1 | 2
+    id: number
+}
+export interface CollectSongListResult {
+    code: number
 }
