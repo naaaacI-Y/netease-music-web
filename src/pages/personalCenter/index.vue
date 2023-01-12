@@ -60,7 +60,7 @@
                 <div class="list-content-wrapper ">
                     <div class="content-type1 d-flex flex-wrap " v-if="songListShowType === 'card'">
                         <RecommendSongListCard v-for="(item) in collectSongList.data" :is-oneline="true"
-                            :song-list-item="item" :key="item.id">
+                            class="recommedn-list-card" :song-list-item="item" :key="item.id">
                             <template #songlist-name>
                                 <div class="songlist-name fs-3 text-4e isOneLine">
                                     {{ item.name }}

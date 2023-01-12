@@ -19,7 +19,8 @@
                         <template #right-info>
                             <div class="right-info-wrap ml-10 pt-20">
                                 <div class="song-list-name mb-10 fs-3 text-33">{{ it.name }}</div>
-                                <div class="song-list-author mb-20 fs-1 d-flex text-99">
+                                <div class="song-list-author mb-20 fs-1 d-flex text-99"
+                                    @click.stop="goAuthorPage(it.userId)">
                                     by&nbsp;{{ it.creator.nickname }}
                                     <img :src="it.creator.avatarDetail.identityIconUrl" alt=""
                                         v-if="it.creator.avatarDetail" />
@@ -36,7 +37,7 @@
                 </div>
             </template>
             <template #after>
-                <Loading v-show="isShowLoading"></Loading>
+                <Loading v-if="isShowLoading"></Loading>
             </template>
         </RecycleScroller>
     </DefaultLayout>
@@ -51,6 +52,7 @@ import { getHighqualitySongList } from "@/service/api/music"
 import { onMounted, onUnmounted, reactive, ref } from 'vue';
 import { Playlist } from '@/service/api/music/types';
 import { debounce, FormatList, formatListData } from '@/utils';
+import router from '@/router';
 
 const route = useRoute()
 const type = route.query.type as string
@@ -62,6 +64,10 @@ const pages = reactive({
     page: 1
 })
 const highQualityList = reactive({ data: [] as FormatList<Playlist> })
+// 前往歌单作者界面
+const goAuthorPage = (id: number) => {
+    router.push(`/personal-center/${id}`)
+}
 const getList = async () => {
     if (loaded.value || loading.value) return
     isShowLoading.value = true
