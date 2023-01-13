@@ -1,7 +1,7 @@
 <template>
     <DefaultLayout>
         <div class="hot-comment-wrapper">
-            <CommentItem v-for="item in allHotComment.data" :key="item.commentId" :comment-content="item">
+            <CommentItem v-for="item in allHotComment.data" :key="item.commentId" :comment-content="item" :type="type">
             </CommentItem>
             <Pagination v-if="pages.total >= pages.size" :total="pages.total" :size="pages.size" :page="pages.page"
                 @page-change="handlePageChange" class="mt-30 mb-30"></Pagination>
@@ -17,6 +17,7 @@ import { HotComment, list } from '@/service/api/comment/types';
 import { getQueryId, scrollToTop } from '@/utils';
 import { reactive, watch } from 'vue';
 import { useRoute } from 'vue-router';
+const route = useRoute()
 const pages = reactive({
     page: 1,
     size: 30,
@@ -29,7 +30,7 @@ watch(() => pages.page, async () => {
     scrollToTop()
 })
 const id = getQueryId() as number
-const type = Number(useRoute().params.type) as list
+const type = Number(route.params.type) as list
 const allHotComment = reactive({ data: [] as HotComment[] })
 const handlePageChange = (num: number) => {
     pages.page = num

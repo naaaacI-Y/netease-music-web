@@ -4,11 +4,12 @@
             <div class="head-item mr-30 fs-4 text-4e" v-for="(item, index) in labelListMap"
                 :class="{ isActive: activeIndex === index }" @click="activeIndex = index" :key="index">
                 <span>{{ item }}</span>
-                <span v-if="item === '评论'" class="fs-2">({{ commentCount }})</span>
+                <span v-if="item === '评论'" class="fs-2">({{ commentOfCount }})</span>
             </div>
         </div>
         <SongList v-show="activeIndex === 0"></SongList>
-        <SongListComment v-if="activeIndex === 1" :source-type="2"></SongListComment>
+        <SongListComment v-if="activeIndex === 1" :source-type="2" @change-comment-count="changeCommentCount">
+        </SongListComment>
         <Collectors v-if="activeIndex === 2"></Collectors>
     </div>
 </template>
@@ -17,18 +18,23 @@
 // 歌单 ==> 0
 // 歌手 ==> 1
 // 专辑 ==> 2
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { labelListMap } from "@/utils/const"
 import SongListComment from "../song/SongListComment.vue"
 import Collectors from "@/components/Collectors.vue"
 import SongList from '../song/SongList.vue';
+const commentOfCount = ref(0)
 const props = defineProps<{
     commentCount: number
 }>()
-
+watch(() => props.commentCount, (newVal) => {
+    commentOfCount.value = newVal
+})
 const activeIndex = ref(0)
 
-
+const changeCommentCount = (count: number) => {
+    commentOfCount.value = count
+}
 </script>
 <style lang="scss" scoped>
 .switch-tab-wrapper {

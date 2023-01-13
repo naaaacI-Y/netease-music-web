@@ -52,7 +52,6 @@ import router from '@/router';
 import useGlobalState from '@/store/globalState';
 import { ref } from 'vue';
 import { voteComment } from '@/service/api/comment';
-import { emitKeypressEvents } from 'readline';
 const globalState = useGlobalState()
 const queryId = getQueryId() as number
 const props = withDefaults(defineProps<{
@@ -79,7 +78,7 @@ const vote = async () => {
         type: props.type as list
     }
     const r = await voteComment(_)
-    isLiked ? voteCount.value-- : voteCount.value++
+    isLiked.value ? voteCount.value-- : voteCount.value++
     isLiked.value = !isLiked.value
 }
 

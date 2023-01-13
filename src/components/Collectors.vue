@@ -1,6 +1,6 @@
 <template>
     <div class="collectors-wrapper">
-        <div class="collectors  mt-20" v-if="!isShowLoading">
+        <div class="collectors  mt-20" v-if="!isShowLoading && collectorsList.data.length">
             <div class="collector-item d-flex ai-center mb-20" v-for="item in collectorsList.data" :key="item.userId">
                 <div class="avatar mr-10" @click="goPersonCenter(item.userId)">
                     <img :src="formatPicUrl(item.avatarUrl, 90, 90)" alt="" class="avatar-img">
@@ -23,7 +23,9 @@
                 </div>
             </div>
         </div>
+        <div class="no-data text-66 d-flex jc-center fs-3" v-if="!collectorsList.data.length">暂无收藏者</div>
         <Loading v-show="isShowLoading"></Loading>
+
     </div>
 </template>
 
@@ -73,5 +75,9 @@ getCollectors()
             @include no-wrap(270px)
         }
     }
+}
+
+.no-data {
+    padding-top: 100px;
 }
 </style>

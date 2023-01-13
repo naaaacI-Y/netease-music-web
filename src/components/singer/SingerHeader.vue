@@ -29,10 +29,10 @@
                     <span class="fs-3 text-4e">MV数：</span>
                     <span class="fs-2 text-66">{{ singerInfo.mvSize }}</span>
                 </div>
-                <div>
+                <!-- <div>
                     <span class="fs-3 text-4e">演出数：</span>
                     <span class="fs-2 text-66">22</span>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

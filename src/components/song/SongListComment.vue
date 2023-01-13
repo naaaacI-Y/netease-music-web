@@ -81,6 +81,9 @@ const props = withDefaults(defineProps<{
     sourceType: 3,
     isShowTitle: false
 })
+const emits = defineEmits<{
+    (e: "changeCommentCount", count: number): void
+}>()
 const pages = reactive({
     page: 1,
     size: 30,
@@ -88,7 +91,7 @@ const pages = reactive({
 })
 const paginationIndex = ref(0)
 const commentId = ref<number>()
-const textArea = ref(null) as unknown as HTMLInputElement
+const textArea = ref<HTMLInputElement | null>(null)
 const id = getQueryId() as number | string // id
 const allComment = reactive({ data: [] as Comment[] }) // 所有评论
 const hotCommentList = reactive({ data: [] as HotComment[] }) // 热门评论
@@ -115,11 +118,13 @@ const maxLength = computed(() => {
 const activeComment = (info: { name: string, commentId: number }) => {
     commentContent.value = "回复" + info.name + '：'
     replyPerson.value = info.name + '：' // 记录被回复用户名
-    // 获取焦点
-    textArea.focus()
     // 滚动到评论框处
     scrollToTop()
     commentId.value = info.commentId
+    // 获取焦点
+    textArea.value!.focus()
+
+
 }
 
 // 检查发布还是回复评论 以及返回评论的内容
@@ -129,11 +134,15 @@ const checkIsPublishOrReply = () => {
         // 发表评论
         return ["publish", splitList[0]]
     }
+    if (splitList.length === commentContent.value.length) {
+        return ["publish", commentContent.value]
+    }
     const idx = splitList.findIndex(item => item === replyPerson.value)
     if (idx !== -1) {
         // 如果可以找到被回复用户的昵称也是发表评论
         return ["publish", splitList.join("")]
     }
+
     // if (!splitList[splitList.length - 1].length) {
     //     // 如果最后一项是空的
     //     return ["publish", ""]
@@ -162,7 +171,7 @@ const submitContent = async () => {
     }
     const r = await sendOrReplyComment(_)
     if (r.code === 200) {
-        // 重新获取评论
+        // 重新获取评论 没有实时同步 不知道是不是接口的问题  TODO
         await getAllComment(id)
         Message.success("评论成功！")
         commentContent.value = ""
@@ -221,6 +230,7 @@ const getAllComment = async (id: string | number) => {
     hotCommentList.data = r.hotComments?.length ? r.hotComments : hotCommentList.data
     hasMoreHot.value = r.moreHot
     isShowLoading.value = false
+    emits("changeCommentCount", r.total)
     // hasMore.value = r.more
 }
 getAllComment(id)

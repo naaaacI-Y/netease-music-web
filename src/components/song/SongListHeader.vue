@@ -59,7 +59,7 @@
                         <span class="text-99">{{ formatPlayCount(headerInfo.playCount) }}</span>
                     </div>
                 </div>
-                <div class="summary fs-1">
+                <div class="summary fs-1" v-if="headerInfo.description">
                     <span class="text-33">简&emsp;介：</span>
                     <span class="text-99">{{ headerInfo.description }}</span>
                 </div>

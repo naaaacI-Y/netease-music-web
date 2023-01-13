@@ -1,7 +1,8 @@
 <template>
     <DefaultLayout>
         <div class="album-wrapper">
-            <AlbumHeader :album-info="albumInfo.data" :album-count-info="albumCountInfo.data"></AlbumHeader>
+            <AlbumHeader :album-info="albumInfo.data" :album-count-info="albumCountInfo.data"
+                @change-collection-count="getAlbumCountInfo"></AlbumHeader>
             <SwicthTabForAlbum :comment-count="commentCount" :album-detail-info="detailInfo"></SwicthTabForAlbum>
         </div>
     </DefaultLayout>
