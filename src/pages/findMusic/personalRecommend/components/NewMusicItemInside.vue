@@ -1,7 +1,7 @@
 <template>
     <div class="new-music-item-wrapper d-flex ai-center" :class="{ odd: index % 2 !== 0 }"
         :style="{ paddingLeft: `${!isOutSide ? '30px' : ''}` }">
-        <div class="index mr-12 fs-2" v-if="!isOutSide">{{ paddingIndex(index) }}</div>
+        <div class="index mr-12 fs-2" v-if="!isOutSide">{{ paddingLeft(index) }}</div>
         <div class="song-cover mr-12">
             <!-- <img :src="musicItem.album.picUrl" > -->
             <lazy-load-img :src="formatPicUrl(musicItem.album.picUrl, 60, 60)"></lazy-load-img>
@@ -9,7 +9,7 @@
                 <div class="trangel"></div>
             </div>
         </div>
-        <div class="index fs-2 mr-12" v-if="isOutSide">{{ paddingIndex(index) }}</div>
+        <div class="index fs-2 mr-12" v-if="isOutSide">{{ paddingLeft(index) }}</div>
         <div class="music-name d-flex flex-column jc-center ai-start flex-1">
             <div class="name fs-3">
                 <span class="mr-4 text-33">{{ musicItem.name }}</span>
@@ -20,18 +20,21 @@
                 <span class="fs-2">{{ musicItem.artists[0].name }}</span>
             </div>
         </div>
-        <div class="music-author fs-2 text-64 " v-if="!isOutSide">{{ musicItem.artists[0].name }}</div>
-        <div class="music-album fs-2 text-64" v-if="!isOutSide">{{ musicItem.album.name }}</div>
+        <div class="music-author fs-2 text-64 " v-if="!isOutSide" @click="goAuthor">{{ musicItem.artists[0].name }}
+        </div>
+        <div class="music-album fs-2 text-64" v-if="!isOutSide" @click="goAlbum">{{ musicItem.album.name }}</div>
         <div class="music-time fs-2 text-96" v-if="!isOutSide">{{ formatSongTime(musicItem.duration) }}</div>
     </div>
 </template>
 
 <script lang="ts" setup>
-// 图片未加载完成显示默认图片  TODO
 import { formatPicUrl, formatSongTime } from "@/utils/index"
 import LazyLoadImg from '@/components/LazyLoadImg.vue';
 import { computed } from 'vue';
+import { paddingLeft } from "@/utils";
 import { NewMusicRet } from '@/service/api/music/types';
+import { useRouter } from "vue-router";
+const router = useRouter()
 const props = withDefaults(defineProps<{
     isOutSide?: boolean,
     index?: number
@@ -46,11 +49,14 @@ const isShowBackground = computed(() => {
     }
     return ""
 })
-const paddingIndex = (index: number) => {
-    if (index < 10) return `0${index}`
-    return index
+// 前往作者界面
+const goAuthor = () => {
+    router.push(`/singer-home/${props.musicItem.artists[0].id}`)
 }
-
+// 前往专辑界面
+const goAlbum = () => {
+    router.push(`/album/${props.musicItem.album.id}`)
+}
 </script>
 <style lang="scss" scoped>
 .new-music-item-wrapper {
