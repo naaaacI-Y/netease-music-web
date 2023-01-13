@@ -2,7 +2,7 @@
     <!-- @input-on-focus="inputOnFocus" -->
     <Nav :isChangeBgc='isShowPlayPage' @handle-key-words-change="handleKeyWordsChange">
     </Nav>
-    <div class="main-content" :class="{ isAuto: !isNotVideo }">
+    <div class="main-content" :class="[!isNotVideo ? 'isAuto' : '', !isNotVideo ? 'isVideoPlay' : '']">
         <side-bar v-show="isNotVideo"></side-bar>
         <div class="content bg-white" :class="{ isAuto: isNotVideo && isNotSearch }" id="content">
             <slot></slot>
@@ -82,10 +82,6 @@ onMounted(() => {
 </script>
 
 <style scoped lang='scss'>
-.isAuto {
-    overflow: auto;
-}
-
 .main-content {
     height: calc(100% - 110px);
     display: flex;
@@ -98,6 +94,18 @@ onMounted(() => {
         // overflow: auto;
         // padding-bottom: 100px;
     }
+}
+
+.isAuto {
+    overflow: auto;
+    // background-color: var(--theme-white);
+    // // height: 100vh;
+    // height: 100%;
+}
+
+.isVideoPlay {
+    background-color: var(--theme-white);
+    height: 100vh;
 }
 
 .music-play {
