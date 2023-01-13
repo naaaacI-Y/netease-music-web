@@ -38,7 +38,7 @@ export const getVideoDetail = (params: T.RelatedVideoParams) => {
  * @returns
  */
 export const getVieoCountInfo = (params: T.VideoCountInfoParam) => {
-    return http.get<T.VideoCountInfo>(`/video/detail${stringifyParams(params)}`)
+    return http.get<T.VideoCountInfo>(`/video/detail/info${stringifyParams(params)}`)
 }
 
 
@@ -76,4 +76,43 @@ export const getVideoByCategory = (params: T.VideoByCategoryParam) => {
  */
 export const getComment4Video = (params: T.VideoCommentParams) => {
     return http.get<T.VideoCommentResult>(`/comment/video${stringifyParams(params)}`)
+}
+
+
+// /playlist/mylike // 获取已经点赞过的视频
+
+// 获取收藏的视频  包含mv
+export const getCollectedVideo = () => {
+    return http.get<T.CollectedVideoResult>(`/mv/sublist`)
+}
+
+/**
+ * 视频/mv/动态点赞
+ * @param params
+ * id: 资源id
+ * t: 1点赞 0取消
+ * type: 资源类型
+ * 如给动态点赞，不需要传入 id，需要传入 threadId,可通过 event,/user/event 接口获取，如： /resource/like?t=1&type=6&threadId=A_EV_2_6559519868_32953014
+ * @returns
+ */
+export const voteToVideo = (params: T.VoteToVideoParams) => {
+    return http.get<T.VoteToVideoResult>(`/resource/like${stringifyParams(params)}`)
+}
+
+/**
+ * 视频收藏/取消
+ * @param params
+ * @returns
+ */
+export const collectOrCancelVideo = (params: T.CollectOrCancelVideoParams) => {
+    return http.get<T.CollectOrCancelVideoResult>(`/video/sub${stringifyParams(params)}`)
+}
+
+/**
+ * mv收藏/取消
+ * @param params
+ * @returns
+ */
+export const collectOrCancelMv = (params: T.CollectOrCancelMvParams) => {
+    return http.get<T.CollectOrCancelMvResult>(`/mv/sub${stringifyParams(params)}`)
 }

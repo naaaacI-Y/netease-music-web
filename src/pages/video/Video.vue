@@ -97,7 +97,6 @@ const handleListener = (e: Event) => {
     const scrollHeight = target.scrollHeight
     if (scrollTop + clientHeight >= scrollHeight) {
         // 滚动到底部了 加载更多
-        console.log("触底了======");
         isShowLoading4LoadMore.value = true
         if (!loaded.value && !loading.value) {
             getList()

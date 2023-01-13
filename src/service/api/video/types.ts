@@ -1,4 +1,4 @@
-import { BeReplied, User, Comment, HotComment } from '../comment/types';
+import { BeReplied, User, Comment, HotComment, list } from '../comment/types';
 import { MVItem } from './../mv/types';
 import { getVideoPlayUrl } from './index';
 export interface VideoGroupItem {
@@ -113,7 +113,7 @@ export interface VideoDetailResult {
 
 // 视频点赞转发评论数数据
 export interface VideoCountInfoParam {
-    vid: number
+    vid: string
 }
 export interface VideoCountInfo {
     likedCount: number;
@@ -257,9 +257,6 @@ export interface VideoCommentParams {
     before?: number
 }
 
-
-
-
 export interface VideoCommentResult {
     isMusician: boolean;
     cnum: number;
@@ -272,4 +269,58 @@ export interface VideoCommentResult {
     comments: Comment[];
     total: number;
     more: boolean;
+}
+
+// 获取收藏的视频
+export interface CollectedVideoDataCreator {
+    userId: number;
+    userName: string;
+}
+export interface CollectedVideoData {
+    type: number;
+    title: string;
+    durationms: number;
+    creator: CollectedVideoDataCreator[];
+    playTime: number;
+    coverUrl: string;
+    vid: string;
+    aliaName?: any;
+    transName?: any;
+    alg?: any;
+    markTypes: any[];
+}
+export interface CollectedVideoResult {
+    code: number;
+    data: CollectedVideoData[];
+    hasMore: boolean;
+    count: number;
+}
+
+// 视频点赞
+export interface VoteToVideoParams {
+    id: string | number
+    type: list
+    t: 0 | 1
+
+}
+
+export interface VoteToVideoResult {
+    code: number
+}
+
+// 视频收藏
+export interface CollectOrCancelVideoParams {
+    t: 0 | 1
+    id: string
+}
+export interface CollectOrCancelVideoResult {
+    code: number
+}
+// mv收藏
+export interface CollectOrCancelMvParams {
+    t: 0 | 1
+    mvid: number
+}
+export interface CollectOrCancelMvResult {
+    code: number
 }

@@ -74,6 +74,7 @@ export interface AlbumDetailResult {
 // 收藏/取消收藏专辑
 export interface CollectOrCancelAlbumResult {
     // TODO
+    code: number
 }
 
 // 获取已收藏专辑列表

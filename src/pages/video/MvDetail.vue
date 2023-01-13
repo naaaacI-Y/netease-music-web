@@ -3,7 +3,7 @@
         <div class="video-detail-wrapper d-flex">
             <div class="video-detail-left mr-20">
                 <div class="video-wrap mb-30">
-                    <div class="nav-title mb-15">
+                    <div class="nav-title mb-15 text-33">
                         <i class="iconfont "></i>
                         <span style="font-weight: bold;">MV详情</span>
                     </div>
@@ -17,7 +17,7 @@
                             </div>
                             <div class="name fs-3 text-66">{{ mvDetailInfo.data.artistName }}</div>
                         </div>
-                        <div class="mv-title mb-10" style="font-size: 22px;font-weight: bold">{{
+                        <div class="mv-title mb-10 text-33" style="font-size: 22px;font-weight: bold">{{
                             mvDetailInfo.data.name
                         }}</div>
                         <div class="count-info d-flex fs-1 text-bc mb-12">
@@ -35,44 +35,47 @@
                                 @click="goVideoByCategory(item.id, item.name)"
                                 v-for="item in mvDetailInfo.data.videoGroup">{{ item.name }}</div>
                         </div>
-                        <div class="operate d-flex ai-center text-3a">
-                            <div class="vote d-flex ai-center jc-center fs-3 mr-12">
-                                <i class="iconfont icon-dianzan1 fs-8 mr-4"></i>
-                                赞
-                                <span>({{ mvDetailInfo.data.subCount }})</span>
+                        <div class="operate d-flex ai-center text-33">
+                            <div class="vote d-flex ai-center jc-center fs-3 mr-12" @click="voteVideo">
+                                <i class="iconfont icon-dianzan1 fs-8 mr-4"
+                                    :style="{ color: isLiked ? '#c3473a' : '' }"></i>
+                                <span> {{ isLiked? "已赞": "赞" }}</span>
+                                <span v-if="likeCount">({{ likeCount }})</span>
                             </div>
-                            <div class="collect d-flex ai-center jc-center fs-3 mr-12">
-                                <i class="iconfont icon-xinjianwenjianjia mr-4 fs-8"></i>
-                                收藏
-                                <span>({{ mvDetailInfo.data.subCount }})</span>
+                            <div class="collect d-flex ai-center jc-center fs-3 mr-12" @click="collectVideoOrMv">
+                                <i class="iconfont icon-xinjianwenjianjia mr-4 fs-8" v-if="!isSubscribe"></i>
+                                <i class="iconfont icon-gou- mr-4 fs-8" v-if="isSubscribe"></i>
+                                <span>{{ isSubscribe? "已收藏": "收藏" }}</span>
+                                <span v-if="subsCount">({{ subsCount }})</span>
                             </div>
-                            <div class="share d-flex ai-center jc-center fs-3">
+                            <!-- <div class="share d-flex ai-center jc-center fs-3">
                                 <i class="iconfont icon-fenxiang1 fs-5"></i>
                                 分享
                                 <span>({{ mvDetailInfo.data.shareCount }})</span>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
                 <div class="comment-wrap">
-                    <SongListComment :source-type="1"></SongListComment>
+                    <SongListComment :source-type="1" :is-show-title="true"></SongListComment>
                 </div>
             </div>
             <div class="video-detail-right">
-                <div class="recommend-title mb-15" style="font-weight: bold;">相关推荐</div>
+                <div class="recommend-title mb-15 text-33" style="font-weight: bold;">相关推荐</div>
                 <div class="recommend-list">
                     <div class="recomment-item d-flex mb-10" v-for="item in similarMVList.data" :key="item.id"
                         @click="goVideoDetail(item.id)">
-                        <div class="mv-img mr-8 text-white fs-1">
-                            <LazyLoadImg :src="item.cover" v-if="item.cover"></LazyLoadImg>
+                        <div class="mv-img mr-8 text-white fs-1" style="color: white;">
+                            <LazyLoadImg :src="formatPicUrl(item.cover, 140, 85)" v-if="item.cover"
+                                :padding-bottom="61"></LazyLoadImg>
                             <div class="play-count d-flex ai-center">
-                                <i class="iconfont icon-bofang1 text-white"></i>
+                                <i class="iconfont icon-bofang1"></i>
                                 <span>{{ formatPlayCount(item.playCount) }}</span>
                             </div>
-                            <div class="time text-white">{{ formatSongTime(item.duration) }}</div>
+                            <div class="time">{{ formatSongTime(item.duration) }}</div>
                         </div>
                         <div class="item-info d-flex flex-column jc-center">
-                            <div class="name mb-10 fs-2 text-balck_1">{{ item.name }}</div>
+                            <div class="name mb-10 fs-2 text-33">{{ item.name }}</div>
                             <div class="author fs-1 d-flex">
                                 <span class="text-66 mr-5">by</span>
                                 <span class="text-bc">{{ item.artistName }}</span>
@@ -90,42 +93,46 @@ import SongListComment from '@/components/song/SongListComment.vue';
 import LazyLoadImg from '@/components/LazyLoadImg.vue';
 import { getMvUrl, getMvDetail, getSimilarMv } from "@/service/api/mv"
 import { Mv, MvDetailRet } from '@/service/api/mv/types';
-import { formatPlayCount, formatSongTime } from '@/utils';
+import { formatPicUrl, formatPlayCount, formatSongTime } from '@/utils';
 import { onMounted, reactive, ref } from 'vue';
 import '@/assets/plyr.css';
-import Plyr from 'plyr';
-import usePlayerState from '@/store/player';
-import { storeToRefs } from 'pinia';
-import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router"
-import { getVideoDetail } from '@/service/api/video';
+import { onBeforeRouteUpdate, useRouter } from "vue-router"
+import { useInitVideoPlayer } from '@/hooks/useInitVideoPlayer';
+import { useVideoVoteAndCollect } from '@/hooks/useVideoVoteAndCollect';
+const {
+    getIsSubscribed,
+    subsCount,
+    collectVideoOrMv,
+    voteVideo,
+    getIsVoted,
+    isLiked,
+    likeCount,
+    isSubscribe,
+    queryId
+} = useVideoVoteAndCollect()
+const { videoPlayer, initVideoPlayer } = useInitVideoPlayer()
 const router = useRouter()
-const route = useRoute()
-const queryId = route.params.id as string
 const mvDetailInfo = reactive({ data: {} as MvDetailRet }) // 详情
-
 const similarMVList = reactive({ data: [] as Mv[] }) // 相似mv
-const videoPlayer = reactive({ data: null as unknown as Plyr })
 const videoPlayerEle = ref<HTMLElement>()
-const { player } = storeToRefs(usePlayerState())
 
 // 在当前路由改变，但是该组件被复用时调用
 onBeforeRouteUpdate((to, from, next) => {
-    getDetail4Mv(Number(to.params.id))
+    const id = Number(to.params.id)
+    getDetail4Mv(id)
+    getIsSubscribed(id)
+    getIsVoted(1, id)
     next()
 })
 // 前往mv
 const goVideoByCategory = (id: number, name: string) => {
     // router.push(``)
 }
-// 获取视频详情
-const getDetail4Video = async (id: string) => {
-    const r = await getVideoDetail({ id })
-
-}
 // mv详情
 const getDetail4Mv = async (id: number) => {
     const r = await getMvDetail({ mvid: id })
     mvDetailInfo.data = r.data
+    subsCount.value = r.data.subCount
     const requests = r.data.brs.map(br => {
         return getMvUrl({ id, r: br.br })
     })
@@ -151,31 +158,14 @@ const getSimilar = async (id: number) => {
     const r = await getSimilarMv({ mvid: id })
     similarMVList.data = r.mvs
 }
-// 初始化视频播放器
-const initVideoPlayer = () => {
-    let videoOptions = {
-        settings: ['quality'],
-        autoplay: false,
-        quality: {
-            default: 1080,
-            options: [1080, 720, 480, 240],
-        },
-    };
-    videoOptions.autoplay = true;
-    videoPlayer.data = new Plyr(videoPlayerEle.value!, videoOptions);
-    videoPlayer.data.volume = player.value.volume;
-    videoPlayer.data.on('playing', () => {
-        player.value.pause();
-    });
-
-    Number(queryId) ? getDetail4Mv(Number(queryId)) : getDetail4Video(queryId)
-}
 const goVideoDetail = (id: number) => {
     router.push(`/mv-detail/${id}`)
 }
 onMounted(() => {
-    initVideoPlayer()
+    initVideoPlayer(getDetail4Mv, Number(queryId), videoPlayerEle.value!)
 })
+getIsSubscribed(Number(queryId))
+getIsVoted(1, queryId)
 </script>
 <style lang="scss" scoped>
 .video-detail-wrapper {
@@ -190,13 +180,12 @@ onMounted(() => {
                 width: 620px;
                 height: 350px;
                 border-radius: 10px;
-                background-color: aqua;
+                background-color: #000;
             }
 
             .singer-info-wrap {
                 .avatar {
                     @include radius(50px);
-                    background-color: aqua;
 
                     img {
                         width: 100%;
@@ -218,11 +207,12 @@ onMounted(() => {
                 .operate {
                     div {
                         padding: 5px 20px;
-                        border: 1px solid #eee;
+                        border: 1px solid var(--theme-e5);
                         border-radius: 20px;
 
                         &:hover {
-                            background-color: #f2f2f2;
+                            background-color: var(--theme-f2);
+                            cursor: pointer;
                         }
                     }
                 }
@@ -238,7 +228,7 @@ onMounted(() => {
                 width: 140px;
                 height: 78px;
                 border-radius: 5px;
-                background-color: aqua;
+                // background-color: aqua;
                 position: relative;
                 overflow: hidden;
 
@@ -268,7 +258,7 @@ onMounted(() => {
 
                 .author span:last-child:hover {
                     cursor: pointer;
-                    color: #666;
+                    color: var(--theme-66);
                 }
             }
         }
