@@ -148,6 +148,11 @@ const routes: RouteRecordRaw[] = [
     name: 'RecentPlay',
     component: () => import('@/pages/reccentPlay/index.vue'),
   },
+  {
+    path: '/my-collection/:index',
+    name: 'MyCollection',
+    component: () => import('@/pages/myCollection/index.vue'),
+  },
 ]
 
 const router = createRouter({

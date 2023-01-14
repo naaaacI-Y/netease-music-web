@@ -529,3 +529,26 @@ export interface SingerFansResult {
     message: string;
     data: SingerFansRet[];
 }
+
+
+
+// 收藏的歌手列表
+export interface CollectedSingerRet {
+    info: string;
+    id: number;
+    name: string;
+    trans?: any;
+    alias: string[];
+    albumSize: number;
+    mvSize: number;
+    picId: number;
+    picUrl: string;
+    img1v1Url: string;
+}
+
+export interface CollectedSingerResult {
+    data: CollectedSingerRet[];
+    hasMore: boolean;
+    count: number;
+    code: number;
+}

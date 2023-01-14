@@ -14,7 +14,10 @@ const firstPagePath = [
     "/findMusic/host-radio",
     "/findMusic/rank",
     "/findMusic/singer",
-    "/findMusic/newest-music"
+    "/findMusic/newest-music",
+    "/my-collection/1",
+    "/my-collection/2",
+    "/my-collection/3"
 ]
 const languageList: obj = {
     "全部": -1, "华语": 7, "欧美": 96, "日本": 8, "韩国": 16, "其他": 0

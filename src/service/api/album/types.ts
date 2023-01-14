@@ -82,9 +82,47 @@ export interface CollectedAlbumParams {
     limit?: number
     offset?: number
 }
-export interface CollectedAlbumResult {
-    // 需要登录 TODO
+export interface CollectedAlbumArtist {
+    img1v1Id: number;
+    topicPerson: number;
+    followed: boolean;
+    alias: any[];
+    picId: number;
+    musicSize: number;
+    albumSize: number;
+    briefDesc: string;
+    picUrl: string;
+    trans: string;
+    img1v1Url: string;
+    name: string;
+    id: number;
+    img1v1Id_str: string;
 }
+
+export interface CollectedAlbumRet {
+    subTime: number;
+    msg: any[];
+    alias: any[];
+    artists: CollectedAlbumArtist[];
+    picId: number;
+    picUrl: string;
+    name: string;
+    id: number;
+    size: number;
+    transNames: any[];
+}
+
+export interface CollectedAlbumResult {
+    data: CollectedAlbumRet[];
+    count: number;
+    hasMore: boolean;
+    paidCount: number;
+    code: number;
+}
+
+
+
+
 
 // 获得专辑动态信息,如是否收藏,收藏数,评论数,分享数
 export interface AlbumDynamicInfoResult {

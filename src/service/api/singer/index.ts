@@ -102,3 +102,10 @@ export const getSingerFans = (params: T.SingerFansParam) => {
     return http.get<T.SingerFansResult>(`/artist/fans${stringifyParams(params)}`)
 }
 
+/**
+ * 收藏的歌手列表
+ * @returns
+ */
+export const getCollectedSinger = () => {
+    return http.get<T.CollectedSingerResult>(`/artist/sublist`)
+}

@@ -21,6 +21,23 @@
                     最新音乐
                 </div>
             </div>
+            <div class="collection d-flex" v-if="isActive('/my-collection')">
+                <div :class="{
+                    'active': route.path === firstPagePath[6]
+                }" @click="activeIndex = 6">
+                    专辑
+                </div>
+                <div :class="{
+                    'active': route.path === firstPagePath[7]
+                }" @click="activeIndex = 7">
+                    歌手
+                </div>
+                <div :class="{
+                    'active': route.path === firstPagePath[8]
+                }" @click="activeIndex = 8">
+                    视频
+                </div>
+            </div>
             <div class="personalCenter pl-30 text-33" v-if="isActive('/dynamic')">{{ dynamicName }}动态</div>
             <div class="personalCenter pl-30 text-33" v-if="isActive('/focus')">{{ focusName }}的关注</div>
             <div class="personalCenter pl-30 text-33" v-if="isActive('/fans')">{{ fansName }}的粉丝</div>
@@ -110,6 +127,7 @@ const route = useRoute()
 const router = useRouter()
 const { dynamicName, focusName, fansName } = route.query  // 动态 关注  粉丝
 const activeIndex = ref(0)
+const collectionIndex = ref('1')
 const searchKeyWords = ref("") // 搜索关键字
 const isShowSetTheme = ref(false) // 是否显示主题设置弹窗
 const { theme } = storeToRefs(useThemeState())
@@ -125,7 +143,7 @@ watch(() => searchKeyWords.value, () => {
 //     activeIndex.value = firstPagePath.findIndex(item => item === newVal)
 // })
 watch(() => activeIndex.value, () => {
-    if (!route.path.startsWith('/find')) return;
+    if (!route.path.startsWith('/find') && !route.path.startsWith('/my-collection')) return;
     switch (activeIndex.value) {
         case 0:
             router.push('/findMusic/personal-recommend')
@@ -145,6 +163,15 @@ watch(() => activeIndex.value, () => {
             break;
         case 5:
             router.push('/findMusic/newest-music')
+            break;
+        case 6:
+            router.push('/my-collection/1')
+            break;
+        case 7:
+            router.push('/my-collection/2')
+            break;
+        case 8:
+            router.push('/my-collection/3')
             break;
         default:
             break;
@@ -169,6 +196,15 @@ watch(() => route.path, (newVal: string) => {
             break;
         case "/findMusic/newest-music":
             activeIndex.value = 5
+            break;
+        case "/my-collection/1":
+            activeIndex.value = 6
+            break;
+        case "/my-collection/2":
+            activeIndex.value = 7
+            break;
+        case "/my-collection/3":
+            activeIndex.value = 8
             break;
         default:
             break;
@@ -237,7 +273,8 @@ const goInside = (path: string) => {
         // @include flex(row, flex-end, center);
 
 
-        .find {
+        .find,
+        .collection {
             @include flex(row, flex-start, center);
             font-size: 14px;
             flex: 1;
