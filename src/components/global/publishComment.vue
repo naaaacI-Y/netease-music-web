@@ -1,0 +1,123 @@
+<template>
+    <div class="comment-dialog-wrapper">
+        <div class="comment-dialog-body">
+            <div class="close-btn" @click="emits('close')">
+                <i class="iconfont icon-guanbi fs-9"></i>
+            </div>
+            <div class="head mb-10 text-center">{{ params?.title }}</div>
+            <div class="comment-input">
+                <textarea id="textArea" rows="7" maxlength="140" v-model="commentContent"
+                    :placeholder="params?.replyName ? `回复 ${params?.replyName}：` : '发表评论'"></textarea>
+            </div>
+            <div class="max-length fs-3 text-97 pr-10">{{ maxLength - commentContent.length }}</div>
+            <div class="submit-comment text-white fs-4 bg-primary_red_4 d-flex ai-center jc-center mt-13"
+                :class="maxLength === 140 ? 'hasNoContent' : ''" @click="submitContent">评 论</div>
+        </div>
+    </div>
+</template>
+
+<script lang="ts" setup>import { sendOrReplyComment } from '@/service/api/comment';
+import { list, SendOrReplyCommentParam, t } from '@/service/api/comment/types';
+import { computed, ref } from 'vue';
+import Message from "@/components/message"
+import { ConfigType } from '../message/types';
+const props = defineProps<{
+    params: ConfigType
+}>()
+
+const emits = defineEmits<{
+    (e: "submitComment", content: string): void
+    (e: "close"): void
+}>()
+const commentContent = ref("")
+const maxLength = computed(() => {
+    return 140 - commentContent.value.length
+})
+const submitContent = async () => {
+    if (!commentContent.value.length) return
+    const _: SendOrReplyCommentParam = {
+        t: props.params.t as t,
+        type: props.params.sType as list,
+        content: commentContent.value,
+        id: props.params.queryId!,
+    }
+    if (props.params.t === 2) {
+        _.commentId = props.params.commentId
+    }
+    const r = await sendOrReplyComment(_)
+    if (r.code === 200) {
+        // 关闭弹窗
+        emits("close")
+        // 提示评论成功
+        setTimeout(() => {
+            Message.success("评论成功")
+        }, 15)
+
+    } else {
+        // 网络错误
+        Message.error("网络错误，请检查！")
+    }
+}
+</script>
+<style lang="scss" scoped>
+.comment-dialog-wrapper {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 10;
+
+    .comment-dialog-body {
+        width: 470px;
+        position: absolute;
+        height: 257px;
+        left: 50%;
+        top: 50%;
+        background-color: white;
+        transform: translate(-50%, -65%);
+        border-radius: 10px;
+        box-shadow: 1px 1px 4px #ddd;
+        padding: 15px;
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        #textArea {
+            width: 100%;
+            resize: none;
+            border: 1px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 8px 12px;
+        }
+
+        .max-length {
+            direction: rtl;
+        }
+
+        .submit-comment {
+            width: 85px;
+            height: 30px;
+            border-radius: 20px;
+        }
+
+        .submit-comment {
+            position: relative;
+            left: 355px;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        .hasNoContent {
+            background-color: rgba($color: #d33b31, $alpha: 0.5);
+        }
+    }
+}
+</style>

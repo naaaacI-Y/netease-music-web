@@ -1,3 +1,4 @@
+import { list } from '@/service/api/comment/types';
 import createInstance from './instance';
 import type { ConfigType } from './types';
 
@@ -15,12 +16,24 @@ function renderMsg(conf: ConfigType) {
         albumId,
         singerId,
         mvid,
-        songListId
+        songListId,
+        t,
+        sType,
+        commentId,
+        title,
+        replyName,
+        queryId
+
     } = conf;
 
     // 创建实例
     return createInstance({
         type,
+        t,
+        sType,
+        commentId,
+        title,
+        replyName,
         icon,
         content,
         duration,
@@ -28,7 +41,8 @@ function renderMsg(conf: ConfigType) {
         albumId,
         singerId,
         mvid,
-        songListId
+        songListId,
+        queryId
     });
 }
 
@@ -51,11 +65,29 @@ export default {
         }
         return renderMsg(config);
     },
+
+    /**
+     * 发表评论的弹出框
+     * @param t 0  ==> 删除 1 ==> 发送 2 ==> 回复
+     * @param sType type: 数字,资源类型,对应歌曲,mv,专辑,歌单,电台,视频对应以下类型
+     * @param commentId commentId :回复的评论 id (回复评论时必填)
+     */
+    publishComment(t: number, sType: list, title: string, queryId: number, commentId?: number, replyName?: string) {
+        const config = {
+            type: "publishComment",
+            t,
+            sType,
+            commentId,
+            title,
+            replyName,
+            queryId
+        }
+        return renderMsg(config);
+    },
     cancelCollect(content: string, singerId?: number, mvid?: number, songListId?: number, albumId?: number) {
         const config = {
             type: "cancelCollect",
             content,
-            isCancelCollect: true,
             singerId,
             mvid,
             songListId,

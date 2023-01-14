@@ -160,7 +160,7 @@ const checkLogin = () => {
  */
 const getQueryId = () => {
     const route = useRoute()
-    return Number(route.query.id) || Number(route.params.id) || route.params.id
+    return Number(route?.query.id) || Number(route?.params.id) || route?.params.id
 }
 const shuffleAList = (list: number[]) => {
     let sortsList = list.map(t => t);

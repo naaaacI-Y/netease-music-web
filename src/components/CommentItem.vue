@@ -51,8 +51,11 @@ import { calcTime, checkLogin, formatPicUrl, getQueryId } from "@/utils"
 import router from '@/router';
 import useGlobalState from '@/store/globalState';
 import { ref } from 'vue';
+import Message from "@/components/message"
 import { voteComment } from '@/service/api/comment';
+import { useRoute } from 'vue-router';
 const globalState = useGlobalState()
+const route = useRoute()
 const queryId = getQueryId() as number
 const props = withDefaults(defineProps<{
     isGrey?: boolean
@@ -86,6 +89,12 @@ const vote = async () => {
 const comment = () => {
     if (!checkLogin()) {
         return globalState.isShowLoginBox = true
+    }
+    // 如果是热评或是歌曲播放页面（私人fm）则直接弹出评论框
+    const needShowBox = ["/hot-comment", "/personal-fm"] // 还差一个 播放非私人fm歌曲显示界面的时候 TODO
+    if (needShowBox.some(item => route.path.startsWith(item))) {
+        return Message.publishComment(2, props.type as list, '评论', Number(queryId), props.commentContent.commentId, props.commentContent.user.nickname)
+
     }
     // 评论框显示原评论的用户名，如果改动了用户名则会变成发表评论
     emits("activeComment", { name: props.commentContent.user.nickname, commentId: props.commentContent.commentId })

@@ -9,6 +9,7 @@ const whiteList = [
     "/video/detail", // 视频详情
     "/video/sub", // 视频收藏
     "/mv/sub", // mv收藏
+    "/comment/hot",
     "/resource/like",// 视频/mv/动态点赞
     "/mv/sublist", // 收藏的视频
     "/album", // 获取专辑详情
@@ -20,5 +21,6 @@ const whiteList = [
     "/playlist/subscribe", // 歌单收藏取消
     "/comment/like", // 评论点赞
     "/playlist/detail", // 获取歌单详情，和收藏有关
+    "/comment", // 评论
 ]
 export default whiteList
