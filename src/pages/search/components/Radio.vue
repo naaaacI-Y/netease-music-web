@@ -29,7 +29,7 @@ import { DjRadio, SearchRadioResult } from '@/service/api/search/types';
 import { reactive } from 'vue';
 import { useRoute } from "vue-router"
 import { defineEmits } from 'vue';
-import CommonItem from './CommonItem.vue';
+import CommonItem from '../../../components/CommonItem.vue';
 import { searchByType } from '@/service/api/search';
 const emits = defineEmits<{
     (e: "changeTotal", num: number): void

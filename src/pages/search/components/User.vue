@@ -32,7 +32,7 @@
 
 <script lang="ts" setup>
 import Pagination from '@/components/Pagination.vue';
-import CommonItem from './CommonItem.vue';
+import CommonItem from '../../../components/CommonItem.vue';
 import { SearchUserResult, Userprofile } from '@/service/api/search/types';
 import { computed, reactive, watch } from 'vue';
 import { useRoute } from 'vue-router';

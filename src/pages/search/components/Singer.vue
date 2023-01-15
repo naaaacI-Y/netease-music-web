@@ -28,7 +28,7 @@ import { searchByType } from '@/service/api/search';
 import { useRoute } from "vue-router"
 import { Artist, SearchSingerResult } from '@/service/api/search/types';
 import { reactive } from 'vue';
-import CommonItem from './CommonItem.vue';
+import CommonItem from '@/components/CommonItem.vue';
 const singerList = reactive({ data: [] as Artist[] })
 
 const emits = defineEmits<{

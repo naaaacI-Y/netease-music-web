@@ -34,7 +34,7 @@ import { searchByType } from "@/service/api/search";
 import { Playlist, SearchSongListResult } from "@/service/api/search/types"
 import { reactive } from 'vue';
 import { useRoute } from "vue-router";
-import CommonItem from './CommonItem.vue';
+import CommonItem from '../../../components/CommonItem.vue';
 const emits = defineEmits<{
     (e: "changeTotal", num: number): void
 }>()

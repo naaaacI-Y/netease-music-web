@@ -27,7 +27,7 @@
 import Pagination from '@/components/Pagination.vue';
 
 import { reactive, ref } from 'vue';
-import CommonItem from './CommonItem.vue';
+import CommonItem from '@/components/CommonItem.vue';
 import { Album } from "@/service/api/recommend/types"
 import { useRoute } from 'vue-router';
 import { searchByType } from '@/service/api/search';
