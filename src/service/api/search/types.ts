@@ -198,8 +198,9 @@ export interface Video {
     aliaName?: any;
     transName?: any;
     vid: string;
+    id?: string | number
     markTypes?: any;
-    alg: string;
+    alg?: string;
 }
 export interface SearchVideoResult {
     videoCount: number;

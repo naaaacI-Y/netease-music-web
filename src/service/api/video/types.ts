@@ -279,6 +279,7 @@ export interface CollectedVideoDataCreator {
 export interface CollectedVideoData {
     type: number;
     title: string;
+    id?: string
     durationms: number;
     creator: CollectedVideoDataCreator[];
     playTime: number;
@@ -287,7 +288,7 @@ export interface CollectedVideoData {
     aliaName?: any;
     transName?: any;
     alg?: any;
-    markTypes: any[];
+    markTypes?: any[];
 }
 export interface CollectedVideoResult {
     code: number;

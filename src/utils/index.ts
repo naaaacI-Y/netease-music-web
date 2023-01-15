@@ -9,6 +9,7 @@ import { Artist } from "@/service/api/singer/types"
 import { UniqueRecommendRet } from '@/service/api/recommend/types';
 import { VideoByCategoryItem } from "@/service/api/video/types";
 import { Playlist } from "@/service/api/music/types";
+import { Video } from "@/service/api/search/types";
 
 type FormatList<T> = { id: number | string, dataList: T[] }[]
 /**
@@ -299,7 +300,7 @@ const paddingLeft = (num: number) => {
 
 
 // 格式化列表数据供RecycleScroller使用
-const formatListData = <T extends UniqueRecommendRet | Artist | VideoByCategoryItem | Playlist>(data: T[], len = 4) => {
+const formatListData = <T extends UniqueRecommendRet | Artist | VideoByCategoryItem | Playlist | Video>(data: T[], len = 4) => {
     const list: FormatList<T> = Array.from({ length: Math.ceil(data.length / len) }, (_, index) => {
         return { id: -1, dataList: [] }
     })

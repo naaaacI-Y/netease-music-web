@@ -1,5 +1,6 @@
 import { stringifyParams } from "@/utils"
 import http from "../../http"
+import { CollectedAlbumParams } from "../album/types"
 import * as T from "./types"
 
 
@@ -106,6 +107,6 @@ export const getSingerFans = (params: T.SingerFansParam) => {
  * 收藏的歌手列表
  * @returns
  */
-export const getCollectedSinger = () => {
-    return http.get<T.CollectedSingerResult>(`/artist/sublist`)
+export const getCollectedSinger = (params: CollectedAlbumParams) => {
+    return http.get<T.CollectedSingerResult>(`/artist/sublist${stringifyParams(params)}`)
 }

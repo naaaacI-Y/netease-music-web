@@ -1,5 +1,6 @@
 import { stringifyParams } from "@/utils"
 import http from "../../http"
+import { CollectedAlbumParams } from "../album/types"
 import * as T from "./types"
 
 /**
@@ -79,11 +80,9 @@ export const getComment4Video = (params: T.VideoCommentParams) => {
 }
 
 
-// /playlist/mylike // 获取已经点赞过的视频
-
 // 获取收藏的视频  包含mv
-export const getCollectedVideo = () => {
-    return http.get<T.CollectedVideoResult>(`/mv/sublist`)
+export const getCollectedVideo = (params: CollectedAlbumParams) => {
+    return http.get<T.CollectedVideoResult>(`/mv/sublist${stringifyParams(params)}`)
 }
 
 /**
