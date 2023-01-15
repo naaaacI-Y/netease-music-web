@@ -1,11 +1,13 @@
 <template>
     <DefaultLayout>
-        <div class="song-list-wrapper">
-            <!-- <Abbreviation></Abbreviation> -->
+        <div class="song-list-wrapper" :class="{ isShowPadding: isShowHeadInfo }">
+            <!-- <Abbreviation v-if="isShowHeadInfo" :name="headerInfo.name"></Abbreviation> -->
             <!-- 歌单 -->
             <SongListHeader :header-info="headerInfo" @change-state="getDetail"></SongListHeader>
             <div class="tab-wrapper mt-30">
-                <SwitchTabForSongList :comment-count="headerInfo.commentCount"></SwitchTabForSongList>
+                <SwitchTabForSongList :comment-count="headerInfo.commentCount" :is-show-loading="isShowLoading"
+                    @update-info="getDetail">
+                </SwitchTabForSongList>
             </div>
         </div>
     </DefaultLayout>
@@ -13,16 +15,19 @@
 
 <script lang="ts" setup>
 import SongListHeader from '@/components/song/SongListHeader.vue';
-// import Abbreviation from '@/components/Abbreviation.vue';
+import Abbreviation from '@/components/Abbreviation.vue';
 import SwitchTabForSongList from '@/components/switchTab/SwitchTabForSongList.vue';
 import { getSongListDetail } from '@/service/api/music';
-import { Creator, HeaderInfo, TrackId } from '@/service/api/music/types';
+import { Creator, TrackId } from '@/service/api/music/types';
 import { HotSong } from '@/service/api/singer/types';
-import { getQueryId, throttle } from '@/utils';
+import { getQueryId } from '@/utils';
 import { provide, reactive, ref } from 'vue';
+import { onBeforeRouteUpdate } from 'vue-router';
 const queryId = getQueryId() as number
 const songList = reactive({ data: [] as HotSong[] })
 const songListInfo = reactive({ data: [] as TrackId[] })
+const isShowHeadInfo = ref(true)
+const isShowLoading = ref(false)
 // const songListComment = ref<HTMLElement | null>()
 // TODO 丑陋
 const headerInfo = reactive({
@@ -45,7 +50,8 @@ const headerInfo = reactive({
 provide("songList", songList)
 // 注入榜单信息 上升 下降
 provide("songListInfo", songListInfo)
-const getDetail = async () => {
+const getDetail = async (queryId: number) => {
+    isShowLoading.value = true
     const r = await getSongListDetail({ id: queryId })
     songList.data = r.playlist.tracks
     songListInfo.data = r.playlist.trackIds || []
@@ -63,8 +69,14 @@ const getDetail = async () => {
     headerInfo.playCount = r.playlist.playCount
     headerInfo.shareCount = r.playlist.shareCount
     headerInfo.subscribed = r.playlist.subscribed
+    isShowLoading.value = false
 }
-getDetail()
+onBeforeRouteUpdate((to, from, next) => {
+    getDetail(Number(to.params.id))
+
+    next()
+})
+getDetail(queryId)
 </script>
 <style lang="scss" scoped>
 .song-list-wrapper {

@@ -708,3 +708,22 @@ export interface CollectSongListParams {
 export interface CollectSongListResult {
     code: number
 }
+
+
+// 获取喜欢歌曲列表
+export interface LikesSongResult {
+    ids: number[]
+    checkPoint: number
+    code: number
+}
+
+// 喜欢音乐
+export interface LikeSongPrams {
+    id: number
+    like: boolean
+}
+export interface LikeSongResult {
+    songs: []
+    playlistId: number
+    code: number
+}

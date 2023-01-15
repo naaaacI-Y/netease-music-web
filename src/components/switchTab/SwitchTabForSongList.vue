@@ -7,7 +7,9 @@
                 <span v-if="item === '评论'" class="fs-2">({{ commentOfCount }})</span>
             </div>
         </div>
-        <SongList v-show="activeIndex === 0"></SongList>
+        <SongList v-show="activeIndex === 0" :is-show-loading="isShowLoading"
+            @update-list-info="emits('updateInfo', Number(route.params.id))">
+        </SongList>
         <SongListComment v-if="activeIndex === 1" :source-type="2" @change-comment-count="changeCommentCount">
         </SongListComment>
         <Collectors v-if="activeIndex === 2"></Collectors>
@@ -23,9 +25,15 @@ import { labelListMap } from "@/utils/const"
 import SongListComment from "../song/SongListComment.vue"
 import Collectors from "@/components/Collectors.vue"
 import SongList from '../song/SongList.vue';
+import { useRoute } from 'vue-router';
 const commentOfCount = ref(0)
+const route = useRoute()
 const props = defineProps<{
     commentCount: number
+    isShowLoading: boolean
+}>()
+const emits = defineEmits<{
+    (e: "updateInfo", id: number): void
 }>()
 watch(() => props.commentCount, (newVal) => {
     commentOfCount.value = newVal

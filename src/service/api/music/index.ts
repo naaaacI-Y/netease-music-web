@@ -192,3 +192,24 @@ export const getRecentPlay = () => {
 export const collectOrCancelSongList = (params: T.CollectSongListParams) => {
     return http.get<T.CollectSongListResult>(`/playlist/subscribe${stringifyParams(params)}`)
 }
+
+
+/**
+ * 喜欢音乐列表
+ * @param params uid 用户id
+ * @returns
+ */
+
+export const getLikedSongList = (params: { uid: number }) => {
+    return http.get<T.LikesSongResult>(`/likelist${stringifyParams(params)}`)
+}
+
+/**
+ * 喜欢音乐
+ * @param params id: 歌曲id
+ * @param params like: true: 喜欢  false: 取消喜欢
+ * @returns
+ */
+export const likeSong = (params: T.LikeSongPrams) => {
+    return http.get<T.LikeSongResult>(`/like${stringifyParams(params)}`)
+}

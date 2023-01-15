@@ -472,7 +472,7 @@ export interface Song {
     entertainmentTags?: any;
     awardTags?: any;
     single: number;
-    noCopyrightRcmd?: any;
+    noCopyrightRcmd?: any;  // None表示可以播，非空表示无版权
     mv: number;
     rtype: number;
     rurl?: any;

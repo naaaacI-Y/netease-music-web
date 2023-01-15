@@ -4,7 +4,8 @@
             <div class="left d-flex ai-center fs-2 jc-event" v-if="type !== 3">
                 <div class="index text-c4">{{ paddingLeft(index) }}</div>
                 <slot name="flagInside" v-if="rankType === 1"></slot>
-                <i class="iconfont icon-aixin text-99"></i>
+                <i class="iconfont icon-aixin text-99" @click="like" v-show="!isLike"></i>
+                <i class="iconfont icon-aixin_shixin text-primary_red_4" @click="like" v-show="isLike"></i>
                 <i class="iconfont icon-xiazai text-99"></i>
             </div>
             <div class="rank d-flex ai-center mr-5 pl-8" v-if="type === 3">
@@ -44,25 +45,39 @@
 // 排行榜
 import { TrackId } from '@/service/api/music/types';
 import { HotSong } from '@/service/api/singer/types';
-import usePlayerState from '@/store/player';
 import { formatSongTime, paddingLeft } from '@/utils';
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
+import { likeSong } from "@/service/api/music"
 import { useRoute, useRouter } from 'vue-router';
+import Message from "@/components/message"
+import useStore from '@/store';
+const { usePlayer, useSideSongList } = useStore()
 const route = useRoute()
 const router = useRouter()
+const isLike = ref(false) // 缓存是否喜欢歌曲
 const rankType = Number(route.query.rankType)
-const { player } = storeToRefs(usePlayerState())
+const { player } = storeToRefs(usePlayer)
+const { createdSongList } = storeToRefs(useSideSongList)
+
 const props = withDefaults(defineProps<
     {
         type?: number
         index: number
         item?: HotSong
         info?: TrackId
+        isLiked?: boolean
     }>(), {
     type: 2,
+    isLiked: false
 })
-
+watchEffect(() => {
+    isLike.value = props.isLiked
+})
+const emits = defineEmits<{
+    (e: "updateLikedList"): void
+    (e: "updateSongListInfo"): void
+}>()
 const isShow = computed(() => {
     switch (props.type) {
         case 0:
@@ -78,6 +93,29 @@ const isShow = computed(() => {
     }
 })
 
+// 喜欢音乐
+const like = async () => {
+    const _ = {
+        id: props.item?.id!,
+        like: !isLike.value
+    }
+    const r = await likeSong(_)
+    isLike.value = !isLike.value
+    // 是否是自己喜欢歌单界面
+    // 从store里面取 TODO
+    const idx = createdSongList.value.findIndex(item => item.id == Number(route.params.id))
+    const isInLikePage = idx !== -1
+    if (isInLikePage) {
+        // 更新所有数据
+        emits("updateSongListInfo")
+    }
+    emits("updateLikedList")
+    // 更新状态
+    if (!isLike.value) {
+        return Message.success("取消喜欢成功")
+    }
+    Message.success("已添加到我喜欢的音乐")
+}
 
 // 前往歌手页
 const goSingerPage = () => {
