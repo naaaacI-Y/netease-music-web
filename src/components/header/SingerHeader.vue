@@ -44,10 +44,10 @@
 import { Artist } from '@/service/api/singer/types';
 import LazyLoadImg from "@/components/LazyLoadImg.vue"
 import { checkLogin, formatPicUrl } from '@/utils';
-import useGlobalState from '@/store/globalState';
+import useGlobalStore from '@/store/globalState';
 import { collectOrCancelSinger } from "@/service/api/singer"
 import Message from "@/components/message"
-const globalState = useGlobalState()
+const globalState = useGlobalStore()
 const props = defineProps<{
     singerInfo: Artist
 }>()

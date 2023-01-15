@@ -55,7 +55,7 @@ import Loading from '@/components/Loading.vue';
 import Pagination from '@/components/Pagination.vue';
 import { computed, reactive, ref, watch } from 'vue';
 import CommentItem from '../CommentItem.vue';
-import useGlobalState from '@/store/globalState';
+import useGlobalStore from '@/store/globalState';
 import { Comment, HotComment, SendOrReplyCommentParam, t } from "@/service/api/comment/types"
 import { checkLogin, getQueryId, scrollToTop } from "@/utils"
 import Message from "@/components/message"
@@ -66,8 +66,9 @@ import { SongListCommentParams, SongListCommentResult } from '@/service/api/musi
 import { getComment4Video } from '@/service/api/video';
 import { VideoCommentParams } from '@/service/api/video/types';
 import { sendOrReplyComment } from '@/service/api/comment';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 const router = useRouter()
+const route = useRoute()
 const replyPerson = ref("")
 const isShowLoading = ref(false)
 // 0: 歌曲 1: mv 2: 歌单 3: 专辑 4: 电台节目 5: 视频 6: 动态 7: 电台
@@ -106,9 +107,12 @@ watch(() => pages.page, async (newVal) => {
         // 滚动到最新评论处
         scrollToPos()
     }
-
     getAllComment(id)
-
+})
+watch(() => route.params.id, (newVal) => {
+    allComment.data = []
+    hotCommentList.data = []
+    getAllComment(newVal as string)
 })
 const maxLength = computed(() => {
     return 140 - commentContent.value.length
@@ -158,7 +162,7 @@ const submitContent = async () => {
     }
     if (!checkLogin()) {
         // 如果没有登录 显示登录弹窗
-        return useGlobalState().isShowLoginBox = true
+        return useGlobalStore().isShowLoginBox = true
     }
     const _: SendOrReplyCommentParam = {
         t: commentType[0] === "publish" ? 1 : 2 as t,

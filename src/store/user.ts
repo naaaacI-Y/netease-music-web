@@ -1,7 +1,7 @@
 import { profile } from "@/service/api/login/types"
 import { defineStore } from "pinia"
 
-const useUserProfile = defineStore("user", {
+const useUserProfileStore = defineStore("user", {
     state: () => {
         return {
             userFile: {} as profile
@@ -20,4 +20,4 @@ const useUserProfile = defineStore("user", {
     },
     persist: true
 })
-export default useUserProfile
+export default useUserProfileStore

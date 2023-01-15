@@ -73,14 +73,18 @@
 
 import router from '@/router';
 import { CollectSongListParams, HeaderInfo } from '@/service/api/music/types';
-import useGlobalState from '@/store/globalState';
+import useGlobalStore from '@/store/globalState';
+import useStore from "@/store"
 import { checkLogin, formatPlayCount, formatTime } from '@/utils';
 import { collectOrCancelSongList } from "@/service/api/music"
 import Message from "@/components/message"
+import { Playlist_user } from '@/service/api/user/types';
+import { getPersonSongList } from '@/config/songList';
+const { useSideSongList } = useStore()
 const emits = defineEmits<{
-    (e: "changeState"): void
+    (e: "changeState", id: number): void
 }>()
-const globalState = useGlobalState()
+const globalState = useGlobalStore()
 // 歌手
 const props = defineProps<{
     headerInfo: HeaderInfo
@@ -88,6 +92,23 @@ const props = defineProps<{
 // 前往个人中心
 const goPersonCenter = () => {
     router.push(`/personal-center/${props.headerInfo.creator.userId}`)
+}
+/**
+ * 更新store数据
+ * @param id 歌单id
+ * @param type 1: 收藏 0: 取消收藏
+ */
+const updateSongList = async (id: number, type: number) => {
+    const oldList = JSON.parse(JSON.stringify(useSideSongList.collectedSongList)) as Playlist_user[]
+    if (type === 1) {
+        // 添加新的歌单数据
+        // 获取用户歌单信息
+
+    }
+    // 删除
+    const idx = oldList.findIndex(item => item.id === id)
+    oldList.splice(idx, 1)
+    useSideSongList.updateCollectedSongList(oldList)
 }
 // 歌单收藏 限制点击频次 TODO
 const collectSongList = async () => {
@@ -102,8 +123,9 @@ const collectSongList = async () => {
     const r = await collectOrCancelSongList(_)
     if (r.code === 200) {
         subscribed ? Message.success("取消收藏成功") : Message.success("收藏成功")
+        getPersonSongList(0, 1, 0, 1)
         // 重新加载数据
-        emits("changeState")
+        emits("changeState", props.headerInfo.id)
     }
 }
 </script>

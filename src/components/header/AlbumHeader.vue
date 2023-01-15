@@ -48,10 +48,10 @@ import { HotAlbum } from '@/service/api/singer/types';
 import { checkLogin, formatTime } from '@/utils';
 import { AlbumDynamicInfoResult, Info } from '@/service/api/album/types';
 import Message from "@/components/message"
-import useGlobalState from '@/store/globalState';
+import useGlobalStore from '@/store/globalState';
 import { useRouter } from 'vue-router';
 import { CollectOrCancelAlbum } from "@/service/api/album"
-const globalState = useGlobalState()
+const globalState = useGlobalStore()
 const router = useRouter()
 const props = defineProps<{
     albumInfo: HotAlbum & { info: Info }

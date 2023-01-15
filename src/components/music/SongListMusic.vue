@@ -58,11 +58,11 @@
 
 <script lang="ts" setup>
 import { getLyric } from '@/service/api/music';
-import usePlayerState from '@/store/player';
+import usePlayerStore from '@/store/player';
 import { lyricParser } from '@/utils/lyrics';
 import { storeToRefs } from 'pinia';
 import { reactive, ref } from 'vue';
-const { player } = storeToRefs(usePlayerState())
+const { player } = storeToRefs(usePlayerStore())
 const lyric = reactive({ data: {} as { lyric: any[], tlyric: any[] } })
 const getlyric = async () => {
     const r = await getLyric({ id: player.value.currentTrack.id })

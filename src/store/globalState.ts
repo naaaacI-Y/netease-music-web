@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 
-const useGlobalState = defineStore("globalState", {
+const useGlobalStore = defineStore("globalState", {
     state: () => {
         return {
             isShowLoginBox: false
@@ -14,4 +14,4 @@ const useGlobalState = defineStore("globalState", {
     },
     persist: true
 })
-export default useGlobalState
+export default useGlobalStore

@@ -2,9 +2,9 @@ import { reactive, ref } from "vue";
 import Plyr from 'plyr';
 import { storeToRefs } from "pinia";
 
-import usePlayerState from "@/store/player";
+import usePlayerStore from "@/store/player";
 export const useInitVideoPlayer = () => {
-    const { player } = storeToRefs(usePlayerState())
+    const { player } = storeToRefs(usePlayerStore())
     const videoPlayer = reactive({ data: null as unknown as Plyr })
     // 初始化视频播放器
     const initVideoPlayer = (callback: Function, id: number | string, el: HTMLElement) => {

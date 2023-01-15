@@ -49,12 +49,12 @@
 import { HotComment, list, VoteCommnentParam } from '@/service/api/comment/types';
 import { calcTime, checkLogin, formatPicUrl, getQueryId } from "@/utils"
 import router from '@/router';
-import useGlobalState from '@/store/globalState';
+import useGlobalStore from '@/store/globalState';
 import { ref } from 'vue';
 import Message from "@/components/message"
 import { voteComment } from '@/service/api/comment';
 import { useRoute } from 'vue-router';
-const globalState = useGlobalState()
+const globalState = useGlobalStore()
 const route = useRoute()
 const queryId = getQueryId() as number
 const props = withDefaults(defineProps<{
