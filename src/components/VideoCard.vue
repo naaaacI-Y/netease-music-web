@@ -60,8 +60,11 @@ const cardWidth = computed(() => {
 const goVideoDetail = () => {
     // flag ==> 标识是视频详情还是mv详情
     // 区别于mv详情不同 视频的id是字符串要单独处理
-    console.log("router.push(`/video-detail/${props.videoItem.data.vid}`)");
+    console.log(props.videoItem.vid, "props.videoItem.vid");
 
+    if (Number(props.videoItem.vid)) {
+        return router.push(`/mv-detail/${props.videoItem.vid}`)
+    }
     router.push(`/video-detail/${props.videoItem.vid}`)
 }
 </script>
