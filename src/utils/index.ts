@@ -4,7 +4,6 @@
 import useStore from "@/store";
 import { useRoute } from "vue-router";
 import cityInfo from "./CITY";
-import Player from "./Player";
 import { Artist } from "@/service/api/singer/types"
 import { UniqueRecommendRet } from '@/service/api/recommend/types';
 import { VideoByCategoryItem } from "@/service/api/video/types";
@@ -190,30 +189,6 @@ const throttle = (func: Function, delay: number = 200) => {
 };
 
 
-const updatePlayer = () => {
-    let parsedData = JSON.parse(localStorage.getItem('player')!);
-    const data = {
-        ...parsedData,
-    };
-    localStorage.setItem('player', JSON.stringify(data));
-};
-const initPlayer = () => {
-    let parsedData = JSON.parse(localStorage.getItem('player')!);
-    let p = new Player();
-    let player = new Proxy(p, {
-        set(target, prop, val) {
-            (target as any)[prop] = val;
-            if (prop === '_howler') return true;
-            target.saveSelfToLocalStorage();
-            return true;
-        },
-    });
-    useStore().usePlayer.player = player
-    // localStorage.setItem('player', JSON.stringify(player));
-    // return player
-
-}
-
 // 获取本地历史搜索记录
 const getSearchHistory = () => {
     const his = localStorage.getItem("searchHistory")
@@ -330,8 +305,6 @@ export {
     debounce,
     throttle,
     shuffleAList,
-    updatePlayer,
-    initPlayer,
     getSearchHistory,
     setSearchHistory,
     clearSearchHistory,
