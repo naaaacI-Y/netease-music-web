@@ -1,6 +1,7 @@
-import Player from "@/utils/Player";
-import useGlobalStore from "./globalState";
-import usePlayerStore from "./player";
+
+import useGlobalStore from "./globalStore";
+// import usePlayerStore from "./playerStore";
+import usePlayerStoreTest from "./playerStoreTest";
 import useSideSongListStore from "./sideSongList";
 import useUserProfileStore from "./user";
 
@@ -8,9 +9,11 @@ import useUserProfileStore from "./user";
 
 export default function useStore() {
     return {
-        globalState: useGlobalStore(),
+        // useGlobal
+        useGlobal: useGlobalStore(),
         userProfile: useUserProfileStore(),
-        usePlayer: usePlayerStore(),
-        useSideSongList: useSideSongListStore()
+        // usePlayer: usePlayerStore(),
+        useSideSongList: useSideSongListStore(),
+        usePlayerTest: usePlayerStoreTest()
     }
 }

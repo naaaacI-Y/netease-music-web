@@ -98,7 +98,7 @@ import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import useStore from "@/store"
 import { storeToRefs } from 'pinia';
-const { globalState, userProfile, useSideSongList } = useStore()
+const { useGlobal, userProfile, useSideSongList } = useStore()
 const route = useRoute()
 const router = useRouter()
 const isActive = ref('isActive')
@@ -117,7 +117,7 @@ const goPersonalCenter = () => {
     if (id) {
         return router.push(`/personal-center/${id}`)
     }
-    globalState.isShowLoginBox = true
+    useGlobal.isShowLoginBox = true
 }
 const active = (name1: string, name2?: string): boolean => {
     if (name2) {

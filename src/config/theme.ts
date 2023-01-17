@@ -1,4 +1,4 @@
-import useThemeState from "@/store/theme"
+import useThemeStore from "@/store/theme"
 import { storeToRefs } from "pinia"
 
 const defaultTheme: string = "white" // 默认主题
@@ -13,7 +13,7 @@ const initTheme = () => {
 
 // 切换主题
 const changeTheme = (theme: string) => {
-    useThemeState().changeThemem(theme)
+    useThemeStore().changeThemem(theme)
     currentTheme = theme
     document.documentElement.setAttribute("data-theme", currentTheme)
 
@@ -23,12 +23,11 @@ const getCurrentTheme = () => {
     if (currentTheme) {
         return currentTheme
     }
-    currentTheme = storeToRefs(useThemeState()).theme.value
+    currentTheme = storeToRefs(useThemeStore()).theme.value
     currentTheme = currentTheme || defaultTheme
     return currentTheme
 }
 export {
     initTheme,
-    getCurrentTheme,
     changeTheme
 }

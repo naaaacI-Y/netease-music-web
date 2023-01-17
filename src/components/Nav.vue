@@ -110,9 +110,9 @@ import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { debounce } from "@/utils"
 import { storeToRefs } from 'pinia';
-import useThemeState from '@/store/theme';
+import useThemeStore from '@/store/theme';
 import { changeTheme } from '@/config/theme';
-import { firstPagePath } from '@/utils/const';
+import { firstPagePath, paths } from '@/utils/const';
 const props = withDefaults(defineProps<{
     isChangeBgc: boolean
 }>(), {
@@ -130,9 +130,8 @@ const activeIndex = ref(0)
 const collectionIndex = ref('1')
 const searchKeyWords = ref("") // 搜索关键字
 const isShowSetTheme = ref(false) // 是否显示主题设置弹窗
-const { theme } = storeToRefs(useThemeState())
+const { theme } = storeToRefs(useThemeStore())
 const isHasLeft = computed(() => { // 头部flex横向布局相关
-    const paths = ["/findMusic", "/video", "/friends", "/prettyCommon", "/unique", "/dynamic", "/focus", "/fans", "/hot-comment", "/recent-play"]
     if (route.path.startsWith("/video-detail") || route.path.startsWith("/mv-detail")) return false
     return paths.some(item => route.path.startsWith(item))
 })

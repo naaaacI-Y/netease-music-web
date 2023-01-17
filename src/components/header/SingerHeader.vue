@@ -44,7 +44,7 @@
 import { Artist } from '@/service/api/singer/types';
 import LazyLoadImg from "@/components/LazyLoadImg.vue"
 import { checkLogin, formatPicUrl } from '@/utils';
-import useGlobalStore from '@/store/globalState';
+import useGlobalStore from '@/store/globalStore';
 import { collectOrCancelSinger } from "@/service/api/singer"
 import Message from "@/components/message"
 const globalState = useGlobalStore()

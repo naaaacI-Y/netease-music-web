@@ -100,8 +100,9 @@ import {
 import Registry from './global/Registry.vue';
 import { onUnmounted, reactive, ref, watch } from 'vue';
 import useStore from "@/store"
-const store = useStore()
-
+import { storeToRefs } from "pinia";
+const { useGlobal, userProfile } = useStore()
+const { isShowLoginBox } = storeToRefs(useGlobal)
 
 let qrImg = ref("");
 const time = ref<number>()
@@ -148,7 +149,7 @@ const getQrcodeImg = async () => {
                 case 803:
                     //授权成功  查看登录状态
                     const statusResult = await checkLoginStatus();
-                    store.userProfile.setUserProfile(statusResult.data.profile)
+                    userProfile.setUserProfile(statusResult.data.profile)
                     status.isAuthing = false;
                     // 窗口关闭
                     closeDialog()
@@ -195,7 +196,7 @@ const goRegistry = () => {
     status.isRegistry = true
 }
 const closeDialog = () => {
-    store.globalState.isShowLoginBox = false
+    useGlobal.isShowLoginBox = false
     clearInterval(time.value)
     time.value = 0
 }

@@ -73,7 +73,7 @@
 
 import router from '@/router';
 import { CollectSongListParams, HeaderInfo } from '@/service/api/music/types';
-import useGlobalStore from '@/store/globalState';
+import useGlobalStore from '@/store/globalStore';
 import useStore from "@/store"
 import { checkLogin, formatPlayCount, formatTime } from '@/utils';
 import { collectOrCancelSongList } from "@/service/api/music"
