@@ -13,8 +13,11 @@
     </div>
     <Footer v-show="isNotVideo" @showPlayPage="showPlayPage" :is-show-play="isShowPlayPage">
     </Footer>
-    <MusicPlay play-type="songList" v-if="isShowPlayPage" :music-id="musicId" style="" class="music-play">
-    </MusicPlay>
+    <!--组件切换效果  TODO-->
+    <transition>
+        <MusicPlay play-type="songList" v-if="isShowPlayPage" :music-id="musicId" style="" class="music-play">
+        </MusicPlay>
+    </transition>
     <Login v-if="isShowLoginBox"></Login>
 </template>
 
@@ -29,13 +32,15 @@ import Nav from "@/components/Nav.vue"
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import useGlobalState from '@/store/globalState';
-const isShowPlayPage = ref(false)
+import useStore from '@/store';
+
+const { useGlobal } = useStore()
+const { isShowLoginBox, isShowPlayPage } = storeToRefs(useGlobal)
 const isShowSearchBox = ref(false)
 const searchKeyWords = ref("")
 const musicId = ref<number>()
 const route = useRoute()
-const { isShowLoginBox } = storeToRefs(useGlobalState())
+
 const isNotVideo = computed(() => {
     return !route.path.startsWith('/mv-detail') && !route.path.startsWith('/video-detail')
 })
@@ -49,7 +54,7 @@ watch(() => isShowPlayPage.value, (newVal) => {
 })
 // 是否显示音乐播放界面
 const showPlayPage = (id: number) => {
-    isShowPlayPage.value = !isShowPlayPage.value
+    useGlobal.isShowPlayPage = !useGlobal.isShowPlayPage
     musicId.value = id
 }
 // 隐藏搜索框

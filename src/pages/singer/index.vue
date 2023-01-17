@@ -1,7 +1,7 @@
 <template>
     <DefaultLayout>
         <div class="singer-homepage-wrapper">
-            <SingerHeader :singer-info="singerInfo.data"></SingerHeader>
+            <SingerHeader :singer-info="singerInfo.data" @change-collect-state="getSingeInfo(singerId)"></SingerHeader>
             <div class="tab-wrapper mt-30">
                 <SwitchTabForSinger></SwitchTabForSinger>
             </div>

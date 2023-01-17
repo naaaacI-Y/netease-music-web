@@ -8,10 +8,10 @@
 </template>
 
 <script lang="ts" setup>
-import useThemeState from '@/store/theme';
+import useThemeStore from '@/store/theme';
 import { storeToRefs } from 'pinia';
 
-const { theme } = storeToRefs(useThemeState())
+const { theme } = storeToRefs(useThemeStore())
 withDefaults(defineProps<{
     isNeedShowScroll?: boolean
     isShowPaddingTop?: boolean

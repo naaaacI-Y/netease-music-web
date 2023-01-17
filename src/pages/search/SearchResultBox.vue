@@ -1,5 +1,6 @@
 <template>
-    <div class="search-result-box-wrapper" id="search-result-box-wrapper" :class="{ isShowBoxShadow: theme !== 'dark' }">
+    <div class="search-result-box-wrapper" id="search-result-box-wrapper"
+        :class="{ isShowBoxShadow: theme !== 'dark' }">
         <!--搜索头部-->
         <div class="result-title fs-1 mb-10 d-flex ai-center text-33" v-if="searchKeywords"
             @click="goSearchResult(searchKeywords)">
@@ -95,7 +96,7 @@
 <script lang="ts" setup>
 import { getHotSearchList, searchSuggest } from '@/service/api/search';
 import { HotSearchListRet, SearchSuggestRet } from '@/service/api/search/types';
-import useThemeState from '@/store/theme';
+import useThemeStore from '@/store/theme';
 import { getSearchHistory, setSearchHistory, clearSearchHistory } from '@/utils';
 import { storeToRefs } from 'pinia';
 import { reactive, ref, watch } from 'vue';
@@ -108,7 +109,7 @@ const props = defineProps<{
 const emits = defineEmits<{
     (e: "hideSearchBox"): void
 }>()
-const { theme } = storeToRefs(useThemeState())
+const { theme } = storeToRefs(useThemeStore())
 // 监听输入框值改变
 watch(() => props.searchKeywords, async (newVal: string) => {
     if (newVal) {
