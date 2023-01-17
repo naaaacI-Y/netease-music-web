@@ -350,7 +350,7 @@ const goInside = (path: string) => {
 
             .isSkinActive {
                 // :style="{ color: isShowSetTheme ? '#c3473a' : '' }"
-                color: var(--theme-c3473a);
+                color: var(--theme-c3473a) !important;
             }
 
             .setting:hover,

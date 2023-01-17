@@ -33,7 +33,7 @@
                         </div>
                     </template>
                     <template #songlist-autor>
-                        <div class="songlist-author" style="color: white;">
+                        <div class="songlist-author d-flex ai-center" style="color: white;">
                             <i class="iconfont icon-iconfontyonghuming  mr-2 "></i>
                             <div class="author-name fs-2 mr-2 pt-2">{{ item.creator.nickname }}</div>
                             <img :src="item.creator.avatarDetail.identityIconUrl" alt=""
@@ -180,8 +180,6 @@ const goSongList = (songListId: number) => {
     .songlist-author {
         position: absolute;
         bottom: 10px;
-        display: flex;
-        align-items: center;
         left: 10px;
         color: white;
 

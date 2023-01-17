@@ -93,8 +93,8 @@ const goSongList = () => {
 
             .play-btn {
                 @include common-play-btn(30px, 7px, 10px);
-                bottom: 10px;
-                right: 10px;
+                bottom: -5px;
+                right: -5px;
                 display: none;
             }
 

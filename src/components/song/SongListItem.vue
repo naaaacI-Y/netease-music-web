@@ -54,11 +54,11 @@ import useLikeMusic from "@/hooks/useLikeMusic"
 import { useRoute, useRouter } from 'vue-router';
 import useStore from '@/store';
 const { likeMusic } = useLikeMusic()
-const { useSideSongList, usePlayerTest } = useStore()
+const { useSideSongList, usePlayer } = useStore()
 const route = useRoute()
 const router = useRouter()
 const rankType = Number(route.query.rankType)
-const { likedList } = storeToRefs(usePlayerTest)
+const { likedList } = storeToRefs(usePlayer)
 const { createdSongList } = storeToRefs(useSideSongList)
 
 // fee 0: 免费或无版权  检查是否有版权 如果没有版权 变灰
@@ -127,7 +127,7 @@ const playMusic = async () => {
     // 添加当前歌单的id列表
     console.log("dbclick to play music========");
 
-    usePlayerTest.replacePlaylist([props.item!.id], props.item!.id, "song-list", props.item?.id)
+    usePlayer.replacePlaylist([props.item!.id], props.item!.id, "song-list", props.item?.id)
 
 }
 </script>
