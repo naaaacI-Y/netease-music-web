@@ -77,7 +77,7 @@ export const getComment4SongList = (params: T.SongListCommentParams) => {
  * @returns
  */
 export const getComment4Song = (params: T.SongListCommentParams) => {
-    return http.get<T.SongListCommentResult>(`/comment/playlist${stringifyParams(params)}`)
+    return http.get<T.SongListCommentResult>(`/comment/music${stringifyParams(params)}`)
 }
 
 /**

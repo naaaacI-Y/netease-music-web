@@ -16,11 +16,17 @@
     </div>
 </template>
 
-<script lang="ts" setup>import { sendOrReplyComment } from '@/service/api/comment';
+<script lang="ts" setup>
+import { sendOrReplyComment } from '@/service/api/comment';
 import { list, SendOrReplyCommentParam, t } from '@/service/api/comment/types';
 import { computed, ref } from 'vue';
 import Message from "@/components/message"
 import { ConfigType } from '../message/types';
+import useStore from '@/store';
+import { storeToRefs } from 'pinia';
+import useInsertComment from "@/hooks/useInsertComment"
+const { useGlobal, usePlayer } = useStore()
+const { player } = storeToRefs(usePlayer)
 const props = defineProps<{
     params: ConfigType
 }>()
@@ -39,7 +45,7 @@ const submitContent = async () => {
         t: props.params.t as t,
         type: props.params.sType as list,
         content: commentContent.value,
-        id: props.params.queryId!,
+        id: useGlobal.isShowPlayPage ? player.value.currentTrack.id : props.params.queryId!,
     }
     if (props.params.t === 2) {
         _.commentId = props.params.commentId
@@ -53,6 +59,8 @@ const submitContent = async () => {
             Message.success("评论成功")
         }, 15)
 
+        // 更新评论信息 构造一条数据
+        useGlobal.cContent = useInsertComment(r.comment)
     } else {
         // 网络错误
         Message.error("网络错误，请检查！")

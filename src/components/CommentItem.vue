@@ -32,10 +32,10 @@
                         <span class="vote-count" v-if="voteCount">{{ voteCount }}</span>
                     </div>
                     <span class="text-ee">丨</span>
-                    <!-- <div class="share mr-6 ml-6" v-if="isGrey">
+                    <div class="share mr-6 ml-6" v-if="isGrey" @click="shareComment">
                         <i class="iconfont icon-fenxiang2 fs-3"></i>
                     </div>
-                    <span class="text-ee" v-if="isGrey">丨</span> -->
+                    <span class="text-ee" v-if="isGrey">丨</span>
                     <div class="comment ml-6 mr-4" @click="comment">
                         <i class="iconfont icon-liuyan-duandian"></i>
                     </div>
@@ -49,12 +49,17 @@
 import { HotComment, list, VoteCommnentParam } from '@/service/api/comment/types';
 import { calcTime, checkLogin, formatPicUrl, getQueryId } from "@/utils"
 import router from '@/router';
-import useGlobalStore from '@/store/globalState';
+// import useGlobalStore from '@/store/globalStore';
 import { ref } from 'vue';
 import Message from "@/components/message"
+import useStore from '@/store';
 import { voteComment } from '@/service/api/comment';
 import { useRoute } from 'vue-router';
-const globalState = useGlobalStore()
+import { storeToRefs } from 'pinia';
+// const globalState = useGlobalStore()
+const { usePlayer, useGlobal } = useStore()
+const { player } = storeToRefs(usePlayer)
+const { isShowLoginBox, isShowPlayPage } = storeToRefs(useGlobal)
 const route = useRoute()
 const queryId = getQueryId() as number
 const props = withDefaults(defineProps<{
@@ -69,13 +74,20 @@ const emits = defineEmits<{
 }>()
 const voteCount = ref(props.commentContent.likedCount) // 缓存点赞数量
 const isLiked = ref(props.commentContent.liked) // 缓存是否点赞
+const isVoting = ref(false) // 限制频繁点赞
+// 评论分享  暂不支持
+const shareComment = () => {
+    Message.error("暂不支持")
+}
 // 评论点赞 限制点击频率 TODO
 const vote = async () => {
     if (!checkLogin()) {
-        return globalState.isShowLoginBox = true
+        return isShowLoginBox.value = true
     }
+    if (isVoting.value) return Message.error("请勿频繁操作")
+    isVoting.value = true
     const _: VoteCommnentParam = {
-        id: queryId, // 资源id
+        id: isShowPlayPage.value ? player.value.currentTrack.id : queryId, // 资源id
         cid: props.commentContent.commentId,
         t: isLiked.value ? 0 : 1,
         type: props.type as list
@@ -83,24 +95,30 @@ const vote = async () => {
     const r = await voteComment(_)
     isLiked.value ? voteCount.value-- : voteCount.value++
     isLiked.value = !isLiked.value
+    isVoting.value = false
 }
 
 // 评论
 const comment = () => {
     if (!checkLogin()) {
-        return globalState.isShowLoginBox = true
+        return isShowLoginBox.value = true
     }
-    // 如果是热评或是歌曲播放页面（私人fm）则直接弹出评论框
-    const needShowBox = ["/hot-comment", "/personal-fm"] // 还差一个 播放非私人fm歌曲显示界面的时候 TODO
-    if (needShowBox.some(item => route.path.startsWith(item))) {
+    // 如果是热评或是歌曲播放页面（私人fm以及单曲播放）则直接弹出评论框
+    const needShowBox = ["/hot-comment", "/personal-fm"]
+    if (needShowBox.some(item => route.path.startsWith(item)) || isShowPlayPage) {
+        if (isShowPlayPage) {
+            return Message.publishComment(2, props.type as list, '评论', player.value.currentTrack.id, props.commentContent.commentId, props.commentContent.user.nickname)
+        }
         return Message.publishComment(2, props.type as list, '评论', Number(queryId), props.commentContent.commentId, props.commentContent.user.nickname)
-
     }
     // 评论框显示原评论的用户名，如果改动了用户名则会变成发表评论
     emits("activeComment", { name: props.commentContent.user.nickname, commentId: props.commentContent.commentId })
 }
 // 前往个人中心
 const goPersonCenter = (id: number) => {
+    if (isShowPlayPage) {
+        isShowPlayPage.value = false
+    }
     router.push(`/personal-center/${id}`)
 }
 </script>

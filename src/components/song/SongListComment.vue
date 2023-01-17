@@ -5,15 +5,19 @@
                 <span class="mr-4 text-00">听友评论</span>
                 <span class="fs-1 text-66">(已有{{ pages.total }}条评论)</span>
             </div>
-            <div class="comment-input">
+            <div class="comment-input" v-if="isShowInputBox">
                 <textarea id="textArea" rows="4" maxlength="140" v-model="commentContent" class="text-33" ref="textArea"
                     placeholder="输入评论或@朋友">
                 </textarea>
             </div>
-            <div class="max-length fs-2 text-99 pr-10" :style="{ top: isShowTitle ? '110px' : '80px' }">
+            <div class="max-length fs-2 text-99 pr-10" :style="{ top: isShowTitle ? '110px' : '80px' }"
+                v-if="isShowInputBox">
                 {{ maxLength - commentContent.length }}
             </div>
-            <div class="bottom-line mt-6 d-flex ai-center jc-between">
+            <!--单曲播放界面的评论框-->
+            <slot name="song-box"></slot>
+
+            <div class="bottom-line mt-6 d-flex ai-center jc-between" v-if="isShowInputBox">
                 <div class="operate text-66">
                     <i class="iconfont icon-Smile fs-7 mr-9 "></i>
                     <i class="iconfont icon-aite1 fs-7 mr-9"></i>
@@ -55,7 +59,7 @@ import Loading from '@/components/Loading.vue';
 import Pagination from '@/components/Pagination.vue';
 import { computed, reactive, ref, watch } from 'vue';
 import CommentItem from '../CommentItem.vue';
-import useGlobalStore from '@/store/globalState';
+import useGlobalStore from '@/store/globalStore';
 import { Comment, HotComment, SendOrReplyCommentParam, t } from "@/service/api/comment/types"
 import { checkLogin, getQueryId, scrollToTop } from "@/utils"
 import Message from "@/components/message"
@@ -67,20 +71,27 @@ import { getComment4Video } from '@/service/api/video';
 import { VideoCommentParams } from '@/service/api/video/types';
 import { sendOrReplyComment } from '@/service/api/comment';
 import { useRouter, useRoute } from 'vue-router';
+import useStore from "@/store"
+import { storeToRefs } from 'pinia';
+import useInsertComment from '@/hooks/useInsertComment';
+const { usePlayer, useGlobal } = useStore()
+const { player } = storeToRefs(usePlayer)
+const { cContent, isShowPlayPage } = storeToRefs(useGlobal)
 const router = useRouter()
 const route = useRoute()
-const replyPerson = ref("")
-const isShowLoading = ref(false)
+
 // 0: 歌曲 1: mv 2: 歌单 3: 专辑 4: 电台节目 5: 视频 6: 动态 7: 电台
 const props = withDefaults(defineProps<{
     isGrey?: boolean
     // sourceType: list
     sourceType: 0 | 1 | 2 | 3 | 5
     isShowTitle?: boolean
+    isShowInputBox?: boolean
 }>(), {
-    isGrey: true,
+    isGrey: true, // 用在动态里面
     sourceType: 3,
-    isShowTitle: false
+    isShowTitle: false, // 是否显示 听友评论
+    isShowInputBox: true // 是否显示评论输入框
 })
 const emits = defineEmits<{
     (e: "changeCommentCount", count: number): void
@@ -90,6 +101,8 @@ const pages = reactive({
     size: 30,
     total: 0
 })
+const replyPerson = ref("")
+const isShowLoading = ref(false)
 const paginationIndex = ref(0)
 const commentId = ref<number>()
 const textArea = ref<HTMLInputElement | null>(null)
@@ -107,17 +120,36 @@ watch(() => pages.page, async (newVal) => {
         // 滚动到最新评论处
         scrollToPos()
     }
-    getAllComment(id)
+    getAllComment(cid.value)
 })
 watch(() => route.params.id, (newVal) => {
     allComment.data = []
     hotCommentList.data = []
     getAllComment(newVal as string)
 })
+// 同步弹出窗的评论之后的评论信息同步
+watch(() => cContent.value, async (newVal) => {
+    if (isShowPlayPage.value && newVal) {
+        inserData()
+    }
+})
+// 最大长度
 const maxLength = computed(() => {
     return 140 - commentContent.value.length
 })
+// 计算后的歌曲id 单曲播放界面
+const cid = computed(() => {
+    return useGlobal.isShowPlayPage ? player.value.currentTrack.id : id
+})
 
+// 插入评论数据
+const inserData = () => {
+    // 插入数据
+    const insertData = useInsertComment(useGlobal.cContent)
+    allComment.data.unshift(insertData)
+    // 清空评论内容
+    useGlobal.cContent = "" as unknown as Comment
+}
 // 激活评论框
 const activeComment = (info: { name: string, commentId: number }) => {
     commentContent.value = "回复" + info.name + '：'
@@ -127,8 +159,6 @@ const activeComment = (info: { name: string, commentId: number }) => {
     commentId.value = info.commentId
     // 获取焦点
     textArea.value!.focus()
-
-
 }
 
 // 检查发布还是回复评论 以及返回评论的内容
@@ -146,11 +176,6 @@ const checkIsPublishOrReply = () => {
         // 如果可以找到被回复用户的昵称也是发表评论
         return ["publish", splitList.join("")]
     }
-
-    // if (!splitList[splitList.length - 1].length) {
-    //     // 如果最后一项是空的
-    //     return ["publish", ""]
-    // }
     return ["reply", splitList[splitList.length - 1]]
 
 }
@@ -175,8 +200,8 @@ const submitContent = async () => {
     }
     const r = await sendOrReplyComment(_)
     if (r.code === 200) {
-        // 重新获取评论 没有实时同步 不知道是不是接口的问题  TODO
-        await getAllComment(id)
+        // 插入数据
+        inserData()
         Message.success("评论成功！")
         commentContent.value = ""
         replyPerson.value = ""
@@ -189,6 +214,11 @@ const scrollToPos = () => {
 }
 // 更多热评
 const goMoreHotComment = () => {
+    // 如果当前展示了播放界面
+    if (useGlobal.isShowPlayPage) {
+        useGlobal.isShowPlayPage = false
+        return router.push(`/hot-comment/${player.value.currentTrack.id}/${props.sourceType}`)
+    }
     router.push(`/hot-comment/${id}/${props.sourceType}`)
 }
 // 处理分页页码变化
@@ -237,7 +267,7 @@ const getAllComment = async (id: string | number) => {
     emits("changeCommentCount", r.total)
     // hasMore.value = r.more
 }
-getAllComment(id)
+getAllComment(cid.value)
 </script>
 <style lang="scss" scoped>
 .comment {

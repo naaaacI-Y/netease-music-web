@@ -4,8 +4,10 @@
             <div class="left d-flex ai-center fs-2 jc-event" v-if="type !== 3">
                 <div class="index text-c4">{{ paddingLeft(index) }}</div>
                 <slot name="flagInside" v-if="rankType === 1"></slot>
-                <i class="iconfont icon-aixin text-99" @click="like" v-show="!isLike"></i>
-                <i class="iconfont icon-aixin_shixin text-primary_red_4" @click="like" v-show="isLike"></i>
+                <i class="iconfont icon-aixin text-99" @click="likeMusic(item?.id!, true, updateSongListInfo)"
+                    v-show="!isLike"></i>
+                <i class="iconfont icon-aixin_shixin text-primary_red_4"
+                    @click="likeMusic(item?.id!, false, updateSongListInfo)" v-show="isLike"></i>
                 <i class="iconfont icon-xiazai text-99"></i>
             </div>
             <div class="rank d-flex ai-center mr-5 pl-8" v-if="type === 3">
@@ -48,17 +50,21 @@ import { HotSong } from '@/service/api/singer/types';
 import { formatSongTime, paddingLeft } from '@/utils';
 import { storeToRefs } from 'pinia';
 import { computed, ref, watchEffect } from 'vue';
-import { likeSong } from "@/service/api/music"
+import useLikeMusic from "@/hooks/useLikeMusic"
 import { useRoute, useRouter } from 'vue-router';
-import Message from "@/components/message"
 import useStore from '@/store';
-const { usePlayer, useSideSongList } = useStore()
+const { likeMusic } = useLikeMusic()
+const { useSideSongList, usePlayerTest } = useStore()
 const route = useRoute()
 const router = useRouter()
-const isLike = ref(false) // 缓存是否喜欢歌曲
 const rankType = Number(route.query.rankType)
-const { player } = storeToRefs(usePlayer)
+const { likedList } = storeToRefs(usePlayerTest)
 const { createdSongList } = storeToRefs(useSideSongList)
+
+// fee 0: 免费或无版权  检查是否有版权 如果没有版权 变灰
+// 1: vip歌曲 非vip变灰展示
+// 4:  购买专辑 变灰展示
+// 8: 非会员可播放低音质 正常展示
 
 const props = withDefaults(defineProps<
     {
@@ -70,9 +76,6 @@ const props = withDefaults(defineProps<
     }>(), {
     type: 2,
     isLiked: false
-})
-watchEffect(() => {
-    isLike.value = props.isLiked
 })
 const emits = defineEmits<{
     (e: "updateLikedList"): void
@@ -92,29 +95,16 @@ const isShow = computed(() => {
             break;
     }
 })
-
-// 喜欢音乐
-const like = async () => {
-    const _ = {
-        id: props.item?.id!,
-        like: !isLike.value
-    }
-    const r = await likeSong(_)
-    isLike.value = !isLike.value
+const isLike = computed(() => {
+    return likedList.value.includes(props.item?.id!)
+})
+const updateSongListInfo = () => {
     // 是否是自己喜欢歌单界面
-    // 从store里面取 TODO
     const idx = createdSongList.value.findIndex(item => item.id == Number(route.params.id))
-    const isInLikePage = idx !== -1
-    if (isInLikePage) {
+    if (idx !== -1) {
         // 更新所有数据
         emits("updateSongListInfo")
     }
-    emits("updateLikedList")
-    // 更新状态
-    if (!isLike.value) {
-        return Message.success("取消喜欢成功")
-    }
-    Message.success("已添加到我喜欢的音乐")
 }
 
 // 前往歌手页
@@ -131,10 +121,13 @@ const goAlbumPage = () => {
 const goMvDetail = () => {
     router.push(`/mv-detail/${props.item?.mv}`)
 }
-const playMusic = () => {
+const playMusic = async () => {
+    // 检查歌曲是否可用
+    // const r = await checkMusicAvaliable({id: props.item!.id})
     // 添加当前歌单的id列表
     console.log("dbclick to play music========");
-    player.value.replacePlaylist([props.item!.id], props.item!.id, "song-list", props.item?.id)
+
+    usePlayerTest.replacePlaylist([props.item!.id], props.item!.id, "song-list", props.item?.id)
 
 }
 </script>

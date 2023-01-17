@@ -24,6 +24,7 @@ const whiteList = [
     "/playlist/detail", // 获取歌单详情，和收藏有关
     "/comment", // 评论
     "/likelist", // 用户喜欢音乐列表
-    "/like"  // 喜欢歌曲
+    "/like",  // 喜欢歌曲
+    "/comment/music" // 歌曲评论
 ]
 export default whiteList

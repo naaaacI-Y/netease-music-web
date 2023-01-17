@@ -9,7 +9,6 @@
         </div>
         <div class="song-wrapper" v-if="list?.data?.length && !isShowLoading">
             <SongListItem v-for="(item, index) in list.data" :index="index + 1" :type="0" :item="item" :key="item.id"
-                @update-liked-list="getLikedList" :is-liked="likedList.data?.includes(item.id)"
                 @update-song-list-info="emits('updateListInfo')">
                 <template #flagInside>
                     <div class="flag d-flex ai-center jc-center" v-if="!info!.data[index].ratio">
@@ -39,17 +38,17 @@ import { HotSong } from '@/service/api/singer/types';
 import { inject, reactive, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 import SongListItem from './SongListItem.vue';
-import { storeToRefs } from 'pinia';
+// import { storeToRefs } from 'pinia';
 import useStore from '@/store';
-import { getLikedSongList } from '@/service/api/music';
+// import { getLikedSongList } from '@/service/api/music';
 const { userProfile } = useStore()
-const { userFile } = storeToRefs(userProfile)
+// const { userFile } = storeToRefs(userProfile)
 const injectSongList = inject<{ data: HotSong[] }>("songList")
 const injectSongListInfo = inject<{ data: TrackId[] }>("songListInfo")
 const list = reactive({ data: [] as HotSong[] })
 const info = inject<{ data: TrackId[] }>("songListInfo")
 const rankType = Number(useRoute().query.rankType)
-const likedList = reactive({ data: [] as number[] })
+// const likedList = reactive({ data: [] as number[] })
 defineProps<{
     isShowLoading: boolean
 }>()
@@ -64,11 +63,11 @@ watchEffect(() => {
         info!.data = injectSongListInfo?.data || []
     }
 })
-const getLikedList = async () => {
-    const r = await getLikedSongList({ uid: userFile.value.userId })
-    likedList.data = r.ids
-}
-getLikedList()
+// const getLikedList = async () => {
+//     const r = await getLikedSongList({ uid: userFile.value.userId })
+//     likedList.data = r.ids
+// }
+// getLikedList()
 </script>
 <style lang="scss" scoped>
 .song-list-wrapper {

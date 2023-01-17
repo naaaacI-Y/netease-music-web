@@ -244,11 +244,41 @@ export interface SendOrReplyCommentParam {
     content?: string
     commentId?: number
 }
-// TODO
-export interface SendOrReplyCommentResult {
-    code: number
+export interface SendOrReplyCommentUser {
+    locationInfo?: any;
+    liveInfo?: any;
+    anonym: number;
+    vipRights?: VipRight;
+    avatarDetail?: any;
+    userType: number;
+    nickname: string;
+    authStatus: number;
+    expertTags?: any;
+    vipType: number;
+    remarkName?: any;
+    avatarUrl: string;
+    experts?: any;
+    socialUserId?: any;
+    userId: number;
+    target?: any;
 }
 
+export interface SendOrReplyComment {
+    user: SendOrReplyCommentUser;
+    beRepliedUser?: any;
+    needDisplayTime: boolean;
+    expressionUrl?: any;
+    commentLocationType: number;
+    commentId: number;
+    richContent?: any;
+    time: number;
+    content: string;
+}
+
+export interface SendOrReplyCommentResult {
+    comment: SendOrReplyComment;
+    code: number
+}
 
 // 热门评论
 export interface HotCommentParams {
