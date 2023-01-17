@@ -68,9 +68,11 @@ export default {
 
     /**
      * 发表评论的弹出框
-     * @param t 0  ==> 删除 1 ==> 发送 2 ==> 回复
-     * @param sType type: 数字,资源类型,对应歌曲,mv,专辑,歌单,电台,视频对应以下类型
-     * @param commentId commentId :回复的评论 id (回复评论时必填)
+     * @param t  0==> 删除 1 ==> 发送 2 ==> 回复
+     * @param sType  数字,资源类型,对应歌曲,mv,专辑,歌单,电台,视频对应以下类型
+     * @param queryId 资源id
+     * @param commentId  回复的评论 id (回复评论时必填)
+     * @param replyName 回复用户的用户名
      */
     publishComment(t: number, sType: list, title: string, queryId: number, commentId?: number, replyName?: string) {
         const config = {

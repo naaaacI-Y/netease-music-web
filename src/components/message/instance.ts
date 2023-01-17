@@ -3,7 +3,8 @@ import {
 } from 'vue';
 import Message from './index.vue';
 import type { ConfigType } from './types';
-
+import { createPinia } from "pinia"
+const pinia = createPinia()
 /**
  * Message 实例操作
  * @param {*} conf 实例配置
@@ -29,6 +30,7 @@ const createInstance = (conf: ConfigType) => {
             handleRemove()
         }
     })
+    app.use(pinia)
     // 挂载实例并追加到 Body 结尾
     app.mount(messageNode);
     document.body.appendChild(messageNode);
