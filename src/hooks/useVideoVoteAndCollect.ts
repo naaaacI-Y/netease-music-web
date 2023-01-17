@@ -1,17 +1,21 @@
 import { list } from "@/service/api/comment/types"
 import { collectOrCancelMv, collectOrCancelVideo, getCollectedVideo, getVieoCountInfo, voteToVideo } from "@/service/api/video"
 import { CollectedVideoResult, CollectOrCancelMvParams, CollectOrCancelVideoParams, VideoCountInfo, VoteToVideoParams } from "@/service/api/video/types"
-import useGlobalState from "@/store/globalState"
+import useGlobalStore from "@/store/globalStore"
 import Message from "@/components/message"
 import { checkLogin } from "@/utils"
-import { ref } from "vue"
+import { reactive, ref } from "vue"
 import { useRoute } from "vue-router"
 import { getMvInfo } from "@/service/api/mv"
 
 
 export const useVideoVoteAndCollect = function () {
-    const globalState = useGlobalState()
+    const globalState = useGlobalStore()
     const route = useRoute()
+    const pages = reactive({
+        page: 1,
+        limit: 30
+    })
     const queryId = route.params.id as string
     const isLiked = ref(false) // 是否点赞
     const likeCount = ref(0) // 点赞数量，用作缓存
@@ -19,7 +23,7 @@ export const useVideoVoteAndCollect = function () {
     const isSubscribe = ref(false)  // 是否已收藏
     // 视频/mv是否收藏
     const getIsSubscribed = async (id: string | number) => {
-        const r = await getCollectedVideo()
+        const r = await getCollectedVideo(pages)
         let idx: number
         let susList: CollectedVideoResult["data"]
         if (Number(id)) {

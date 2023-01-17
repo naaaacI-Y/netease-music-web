@@ -1,8 +1,8 @@
-import { reactive, ref } from "vue";
+import { reactive } from "vue";
 import Plyr from 'plyr';
 import { storeToRefs } from "pinia";
 
-import usePlayerStore from "@/store/player";
+import usePlayerStore from "@/store/playerStore";
 export const useInitVideoPlayer = () => {
     const { player } = storeToRefs(usePlayerStore())
     const videoPlayer = reactive({ data: null as unknown as Plyr })
@@ -20,7 +20,7 @@ export const useInitVideoPlayer = () => {
         videoPlayer.data = new Plyr(el, videoOptions);
         videoPlayer.data.volume = player.value?.volume;
         videoPlayer.data.on('playing', () => {
-            player.value.pause();
+            usePlayerStore().pause();
         });
 
         callback(id)
