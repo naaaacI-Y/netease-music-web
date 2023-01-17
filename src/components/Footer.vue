@@ -1,7 +1,7 @@
 <template>
     <div class="footer-wrapper">
         <div class="progressBar">
-            <vue-slider v-model="player.progress" :min="0" :max="player.currentTrackDuration" :interval="1"
+            <vue-slider v-model="player.progress" :min="0" :max="currentTrackDuration" :interval="1"
                 :drag-on-click="true" :duration="0" :dot-size="12" :height="2" tooltip='none' :lazy="true"
                 :silent="true"></vue-slider>
         </div>
@@ -9,10 +9,10 @@
             <div class="left d-flex">
                 <div class="img mr-10" style="color: white;">
                     <img :src="player.currentTrack?.al?.picUrl" alt="">
-                    <div class="mask-show d-flex ai-center jc-center" @click="changePlayPage" v-if="!isShowPlay">
+                    <div class="mask-show d-flex ai-center jc-center" @click="changePlayPage" v-show="!isShowPlayPage">
                         <i class="iconfont icon-quanping3-xianxing"></i>
                     </div>
-                    <div class="mask-hide d-flex ai-center jc-center" v-if="isShowPlay" @click="changePlayPage">
+                    <div class="mask-hide d-flex ai-center jc-center" v-show="isShowPlayPage" @click="changePlayPage">
                         <i class="iconfont icon-quanping4-xianxing"></i>
                     </div>
                 </div>
@@ -29,12 +29,15 @@
                 </div>
             </div>
             <div class="middle d-flex ai-center">
-                <i class="iconfont icon-24gl-heart fs-9 text-4b mr-30"></i>
+                <i class="iconfont icon-24gl-heart fs-9 text-4b mr-30" @click="likeMusic(player.currentTrack.id, true)"
+                    v-show="!isLike"></i>
+                <i class="iconfont icon-aixin_shixin fs-9 text-primary_red_4 mr-30"
+                    @click="likeMusic(player.currentTrack.id, false)" v-show="isLike"></i>
                 <i class="iconfont icon-diyiyeshouyeshangyishou text-primary_red_4 fs-10 mr-25"></i>
                 <i class="iconfont icon-zanting2x text-primary_red_4  mr-25" style="font-size: 40px;"
-                    @click="player.playOrPause()" v-if="player.playing"></i>
+                    @click="usePlayer.playOrPause()" v-if="player.playing"></i>
                 <i class="iconfont icon-zanting1 text-primary_red_4  mr-25" style="font-size: 40px;"
-                    @click="player.playOrPause()" v-if="!player.playing"></i>
+                    @click="usePlayer.playOrPause()" v-if="!player.playing"></i>
                 <i class="iconfont icon-zuihouyiyemoyexiayishou text-primary_red_4 fs-10 mr-30"></i>
                 <i class="iconfont icon-24gl-trash2 text-4b fs-6" v-if="player.isPersonalFM"></i>
                 <i class="iconfont icon-fenxiang1 text-3a" v-if="!player.isPersonalFM"></i>
@@ -48,7 +51,7 @@
 
                 </div>
                 <i class="iconfont icon-24gl-playlist text-4b mr-15 fs-5" v-if="!player.isPersonalFM"></i>
-                <div class="volume" @click="player.mute()">
+                <div class="volume" @click="usePlayer.mute()">
                     <i class="iconfont icon-24gl-volumeZero text-4b fs-7" v-if="player.volume !== 0"></i>
                     <i class="iconfont icon-24gl-volumeDisable fs-7" v-if="player.volume === 0"></i>
 
@@ -60,14 +63,20 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue';
+import { computed } from 'vue';
 import VueSlider from 'vue-slider-component'
 import "@/assets/slider.css";
 import { storeToRefs } from 'pinia';
-import usePlayerState from '@/store/player';
-import { formatSongTime, initPlayer } from '@/utils';
+import { formatSongTime } from '@/utils';
 import { useRoute } from 'vue-router';
 import router from '@/router';
+import useStore from "@/store"
+import useLikeMusic from '@/hooks/useLikeMusic';
+const { usePlayer, useGlobal } = useStore()
+const { likeMusic } = useLikeMusic()
+const { player, currentTrackDuration, likedList } = storeToRefs(usePlayer)
+const { isShowPlayPage } = storeToRefs(useGlobal)
+
 const route = useRoute()
 withDefaults(defineProps<{
     isShowPlay?: boolean
@@ -77,28 +86,34 @@ withDefaults(defineProps<{
 const emits = defineEmits<{
     (e: "showPlayPage", id: number): void
 }>()
-// initPlayer()
-const { player } = storeToRefs(usePlayerState())
-console.log(player, "playerplayerplayerplayer");
 
+// 播放进度
+const progress = computed(() => {
+    return timeCalc(player.value.progress * 1000)
+})
+// 是否喜欢该首歌曲
+const isLike = computed(() => {
+    return likedList.value.includes(player.value.currentTrack.id)
+})
+
+/**
+ * 进度时间格式化
+ * @param time
+ */
 const timeCalc = (time: number) => {
     const min = Math.floor(time / 1000 / 60)
     const sec = Math.floor(time / 1000) % 60
     return (min < 10 ? '0' + min : min) + ':' + (sec < 10 ? '0' + sec : sec)
 }
-const progress = computed(() => {
-    console.log("player.value._progress", player.value.progress);
 
-    return timeCalc(player.value.progress * 1000)
-})
-watch(() => player.value._progress, () => {
-    console.log(player.value.progress, "player.value.progress");
-})
+// 播放模式切换
 const switchMode = () => {
     const list = ["one", "on", "off"]
     let index = list.indexOf(player.value.repeatMode)
     player.value.repeatMode = list[++index > 2 ? 0 : index]
 }
+
+// 更改播放状态
 const changePlayPage = () => {
     if (player.value.isPersonalFM && route.path !== '/personal-fm') {
         // 如果是正在播放私人fm的歌曲 并且当前页面不是私人fm

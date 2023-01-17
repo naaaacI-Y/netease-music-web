@@ -14,16 +14,18 @@
                 </div>
             </div>
             <div class="operate-wrap d-flex ai-center">
-                <div class="collect">
-                    <i class="iconfont icon-aixin fs-9"></i>
+                <div class="like" @click="likeMusic(player.currentTrack.id, !isLike)">
+                    <i class="iconfont icon-aixin fs-9 text-4b" v-show="!isLike"></i>
+                    <i class="iconfont icon-aixin_shixin fs-9 text-primary_red_4" style="color: #c3473a"
+                        v-show="isLike"></i>
                 </div>
-                <div class="delete">
+                <div class="collect" @click="noSupport">
                     <i class="iconfont icon-xinjianwenjianjia fs-9"></i>
                 </div>
-                <div class="next">
+                <div class="donwnload" @click="noSupport">
                     <i class="iconfont icon-xiazai fs-9"></i>
                 </div>
-                <div class="other">
+                <div class="share" @click="noSupport">
                     <i class="iconfont icon-fenxiang fs-9"></i>
                 </div>
             </div>
@@ -48,7 +50,7 @@
                 </div>
             </div>
             <div class="lyric">
-                <div class="lyric-item fs-3 text-66 mb-10" v-for="(item, index) in lyric.data.lyric" :key="index">
+                <div class="lyric-item fs-3 text-66 mb-10" v-for="(item, index) in lyric.data.lyric" :key="item.time">
                     {{ item.content }}
                 </div>
             </div>
@@ -58,16 +60,31 @@
 
 <script lang="ts" setup>
 import { getLyric } from '@/service/api/music';
-import usePlayerStore from '@/store/player';
+import useStore from '@/store';
 import { lyricParser } from '@/utils/lyrics';
 import { storeToRefs } from 'pinia';
-import { reactive, ref } from 'vue';
-const { player } = storeToRefs(usePlayerStore())
+import { computed, reactive } from 'vue';
+
+import Message from "@/components/message"
+import useLikeMusic from '@/hooks/useLikeMusic';
+const { likeMusic } = useLikeMusic()
+
+const { usePlayer } = useStore()
+const { player, likedList } = storeToRefs(usePlayer)
 const lyric = reactive({ data: {} as { lyric: any[], tlyric: any[] } })
+
+const isLike = computed(() => {
+    return likedList.value.includes(player.value.currentTrack.id)
+})
 const getlyric = async () => {
     const r = await getLyric({ id: player.value.currentTrack.id })
     lyric.data = lyricParser(r)
     console.log(JSON.stringify(lyric.data));
+}
+
+// 收藏、下载、分享暂不支持
+const noSupport = () => {
+    Message.error("暂不支持")
 }
 getlyric()
 </script>
@@ -168,6 +185,7 @@ getlyric()
     }
 
     .music-right {
+        padding-top: 50px;
         width: 400px;
         height: 100%;
         display: flex;
@@ -185,8 +203,8 @@ getlyric()
 
         .lyric {
             width: 378px;
-            flex: 1;
-            height: 365px;
+            // flex: 1;
+            height: 320px;
             overflow-y: scroll;
             border-right: 1px solid var(--theme-f2);
         }
