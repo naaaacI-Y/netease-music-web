@@ -39,7 +39,7 @@
                 <i class="iconfont icon-zanting1 text-primary_red_4  mr-25" style="font-size: 40px;"
                     @click="usePlayer.playOrPause()" v-if="!player.playing"></i>
                 <i class="iconfont icon-zuihouyiyemoyexiayishou text-primary_red_4 fs-10 mr-30"></i>
-                <i class="iconfont icon-24gl-trash2 text-4b fs-6" v-if="player.isPersonalFM"></i>
+                <i class="iconfont icon-shanchu text-4b fs-6" v-if="player.isPersonalFM"></i>
                 <i class="iconfont icon-fenxiang1 text-3a" v-if="!player.isPersonalFM"></i>
             </div>
             <div class="right text-4b d-flex ai-center mr-15">

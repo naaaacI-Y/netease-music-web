@@ -1,108 +1,126 @@
 <template>
-    <div class="personal-fm-music-wrapper d-flex">
-        <div class="music-left d-flex flex-column jc-center ai-center">
+    <commonHead play-type="personal">
+        <template #img-wrap>
             <div class="img-wrap">
+                <div class="img">
+                    <img :src="player.personalFMTrack?.al?.picUrl" alt="">
 
+                </div>
+                <div class="playing">
+                    <i class="iconfont icon-zanting01 text-primary_red_4"></i>
+                </div>
+                <div class="pause">
+                    <div class="trangel"></div>
+                </div>
             </div>
-            <div class="operate-wrap d-flex ai-center">
-                <div class="collect">
+        </template>
+        <template #operate-wrap>
+            <div class="operate-wrap d-flex ai-center text-4b">
+                <div class="collect" @click="likeMusic(player.currentTrack.id, !isLike)">
                     <i class="iconfont icon-aixin fs-9"></i>
                 </div>
-                <div class="delete">
-                    <i class="iconfont icon-delete fs-9"></i>
+                <div class="delete" @click="delete2Next">
+                    <i class="iconfont icon-shanchu fs-9"></i>
                 </div>
-                <div class="next">
-                    <i class="iconfont icon-zuihouyiyemoyexiayishou1 fs-10"></i>
+                <div class="next" @click="playNextFmSong">
+                    <i class="iconfont icon-xiayigexiayishou fs-7"></i>
                 </div>
-                <div class="other">
-                    <i class="iconfont icon-qita fs-9"></i>
-                </div>
-            </div>
-        </div>
-        <div class="music-right">
-            <div class="music-name d-flex mb-15 ai-center">
-                <div class="fs-7 mr-10">歌曲名称</div>
-                <div class="mv fs-2">MV</div>
-            </div>
-            <div class="other-info d-flex fs-2 text-66 ai-center mb-30">
-                <div class="album mr-30">
-                    <span>专辑：</span>
-                    <span class="text-shadow_blue">专辑专辑</span>
-                </div>
-                <div class="singer">
-                    <span>歌手：</span>
-                    <span class="text-shadow_blue">歌手名</span>
+                <div class="other" @click="Message.error('暂不支持')">
+                    <i class="iconfont icon-shenglvehao fs-9"></i>
                 </div>
             </div>
-            <div class="lyric">222</div>
-        </div>
-    </div>
+        </template>
+    </commonHead>
 </template>
 
 <script lang="ts" setup>
+import commonHead from './commonHead.vue';
+import Message from "@/components/message"
+import { storeToRefs } from 'pinia';
+import useLikeMusic from '@/hooks/useLikeMusic';
+import useStore from '@/store';
+import { computed } from 'vue';
+const { usePlayer } = useStore()
+const { player } = storeToRefs(usePlayer)
+const { likeMusic, isLike } = useLikeMusic()
 
+// const initPersonalSong = () => {
+//     // 如果当前没有播放歌曲,没有播放私人fm
+//     if (!player.value.playing && !player.value.isPersonalFM) {
+//         // 播放私人fm
+
+//     }
+// }
+// 删除当前播放下一首
+const delete2Next = () => {
+}
+
+// 播放下一首
+const playNextFmSong = () => {
+
+}
 </script>
 <style lang="scss" scoped>
-.personal-fm-music-wrapper {
-    height: 450px;
+.img-wrap {
+    height: 272px;
+    width: 272px;
+    margin-bottom: 50px;
+    position: relative;
 
-    .music-left {
-        width: 310px;
-        margin-right: 50px;
-        // border: 1px solid black;
+    .img {
+        width: 100%;
+        height: 100%;
+        background-color: #313131;
 
-        .img-wrap {
-            height: 272px;
-            width: 310px;
-            border: 1px solid red;
-            margin-bottom: 50px;
+        img {
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
         }
-
-        .operate-wrap {
-            div {
-                @include radius(40px);
-                margin-right: 40px;
-                background-color: #f5f5f5;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-
-                i {
-                    color: #313131;
-                }
-
-                &:hover {
-                    background-color: #ebebeb;
-                    cursor: pointer;
-                }
-
-                &:last-child {
-                    margin-right: 0;
-                }
-            }
-        }
-
     }
 
-    .music-right {
-        width: calc(100% - 360px);
-        height: 100%;
+    .pause {
+        left: 50%;
+        top: 50%;
+        @include common-play-btn(55px, 15px, 22px);
+    }
 
-        // border: 1px solid black;
-        .mv {
-            width: 30px;
-            height: 20px;
-            border: 1px solid #c44c3f;
-            border-radius: 3px;
-            text-align: center;
-            line-height: 20px;
-            color: #c44c3f;
+    .playing {
+        bottom: -10px;
+        right: -10px;
+        @include common-play-btn(40px, 15px, 22px);
+
+        i {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px
+        }
+    }
+
+}
+
+.operate-wrap {
+    div {
+        @include radius(40px);
+        margin-right: 40px;
+        background-color: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        i {
+            color: #313131;
         }
 
-        .lyric {
-            width: 320px;
-            height: 355px;
-            border-right: 1px solid #f2f2f2;
+        &:hover {
+            background-color: #ebebeb;
+            cursor: pointer;
+        }
+
+        &:last-child {
+            margin-right: 0;
         }
     }
 }
