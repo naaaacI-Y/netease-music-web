@@ -38,13 +38,8 @@
 <script lang="ts" setup>
 import commonHead from './commonHead.vue';
 import Message from "@/components/message"
-import useLikeMusic from '@/hooks/useLikeMusic';
-import { storeToRefs } from 'pinia';
-import useStore from '@/store';
-const { usePlayer } = useStore()
-const { player } = storeToRefs(usePlayer)
-const { likeMusic, isLike } = useLikeMusic()
-
+import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
+const { likeMusic, isLike, player } = useMusicPlayRelation()
 // 收藏、下载、分享暂不支持
 const noSupport = () => {
     Message.error("暂不支持")

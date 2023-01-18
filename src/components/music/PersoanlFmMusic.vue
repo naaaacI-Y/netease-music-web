@@ -3,13 +3,13 @@
         <template #img-wrap>
             <div class="img-wrap">
                 <div class="img">
-                    <img :src="player.personalFMTrack?.al?.picUrl" alt="">
+                    <img :src="formatPicUrl(player.personalFMTrack.album.picUrl, 270, 270)" alt="">
 
                 </div>
-                <div class="playing">
+                <div class="playing" v-show="player.playing" @click="musicPlay()">
                     <i class="iconfont icon-zanting01 text-primary_red_4"></i>
                 </div>
-                <div class="pause">
+                <div class="pause" v-show="!player.playing" @click="musicPlay()">
                     <div class="trangel"></div>
                 </div>
             </div>
@@ -17,12 +17,14 @@
         <template #operate-wrap>
             <div class="operate-wrap d-flex ai-center text-4b">
                 <div class="collect" @click="likeMusic(player.currentTrack.id, !isLike)">
-                    <i class="iconfont icon-aixin fs-9"></i>
+                    <i class="iconfont icon-aixin fs-9 text-4b" v-show="!isLike"></i>
+                    <i class="iconfont icon-aixin_shixin fs-9 text-primary_red_4" style="color: #c3473a"
+                        v-show="isLike"></i>
                 </div>
-                <div class="delete" @click="delete2Next">
+                <div class="delete" @click="delete2PlayNext()">
                     <i class="iconfont icon-shanchu fs-9"></i>
                 </div>
-                <div class="next" @click="playNextFmSong">
+                <div class="next" @click="playNextSong">
                     <i class="iconfont icon-xiayigexiayishou fs-7"></i>
                 </div>
                 <div class="other" @click="Message.error('暂不支持')">
@@ -36,29 +38,27 @@
 <script lang="ts" setup>
 import commonHead from './commonHead.vue';
 import Message from "@/components/message"
-import { storeToRefs } from 'pinia';
-import useLikeMusic from '@/hooks/useLikeMusic';
-import useStore from '@/store';
-import { computed } from 'vue';
-const { usePlayer } = useStore()
-const { player } = storeToRefs(usePlayer)
-const { likeMusic, isLike } = useLikeMusic()
-
-// const initPersonalSong = () => {
-//     // 如果当前没有播放歌曲,没有播放私人fm
-//     if (!player.value.playing && !player.value.isPersonalFM) {
-//         // 播放私人fm
-
-//     }
-// }
-// 删除当前播放下一首
-const delete2Next = () => {
+import { onMounted } from 'vue';
+import { formatPicUrl } from '@/utils';
+import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
+const { likeMusic, isLike, player, delete2PlayNext, playPersonalFm, playNextSong, musicPlay } = useMusicPlayRelation()
+const emits = defineEmits<{
+    (e: "getPersonalComment", id: number): void
+}>()
+const initPersonalSong = () => {
+    // 如果当前没有播放歌曲 && 不是私人fm
+    if (!player.value.playing && !player.value.isPersonalFM) {
+        // 播放私人fm
+        playPersonalFm()
+    }
+    // 加载评论
+    emits("getPersonalComment", player.value.personalFMTrack.id)
 }
 
-// 播放下一首
-const playNextFmSong = () => {
-
-}
+// initPersonalSong()
+onMounted(() => {
+    initPersonalSong()
+})
 </script>
 <style lang="scss" scoped>
 .img-wrap {
@@ -70,12 +70,12 @@ const playNextFmSong = () => {
     .img {
         width: 100%;
         height: 100%;
-        background-color: #313131;
+        // background-color: #313131;
 
         img {
             width: 100%;
             height: 100%;
-            border-radius: 5px;
+            border-radius: 10px;
         }
     }
 

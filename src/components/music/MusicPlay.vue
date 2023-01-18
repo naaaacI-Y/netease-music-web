@@ -2,12 +2,14 @@
     <!--播放页面 私人fm以及歌单-->
     <div class="music-play-wrapper bg-white">
         <div class="music-play-info" :class="{ songListWidth: playType === 'songList' }">
-            <PersonalFmMusic v-if="playType === 'personal'"></PersonalFmMusic>
+            <PersonalFmMusic v-if="playType === 'personal'" @get-personal-comment="getPersonalComment">
+            </PersonalFmMusic>
             <SongListMusic v-if="playType === 'songList'"></SongListMusic>
         </div>
         <div class="music-play-body-wrap d-flex" :class="{ songListWidth: playType === 'songList' }">
             <div class="comment-wrap" :class="{ isHaveSide: playType === 'songList' }">
-                <SongListComment :is-show-title="true" :source-type="0" :is-show-input-box="false">
+                <SongListComment :is-show-title="true" :source-type="0" :is-show-input-box="false"
+                    ref="songListComment">
                     <template #song-box>
                         <div class="comment-box d-flex ai-center jc-between mb-30" @click="showCommentBox">
                             <div class="left d-flex ai-center pl-8">
@@ -55,8 +57,7 @@ import { NewMusicRet } from '@/service/api/music/types';
 import useStore from "@/store"
 import { storeToRefs } from 'pinia';
 import { formatPicUrl } from '@/utils';
-const { usePlayer } = useStore()
-const { player } = storeToRefs(usePlayer)
+
 const props = withDefaults(defineProps<
     {
         playType: "personal" | "songList"
@@ -64,11 +65,19 @@ const props = withDefaults(defineProps<
     }>(), {
     playType: "personal"
 })
+const { usePlayer } = useStore()
+const { player } = storeToRefs(usePlayer)
 const similarSongList = reactive({ data: [] as NewMusicRet[] })
+
+const songListComment = ref()
 // 获取相似歌曲
 const getSimilatList = async () => {
     const r = await getSimilatSong({ id: props.musicId! })
     similarSongList.data = r.songs
+}
+
+const getPersonalComment = (id: number) => {
+    songListComment.value.getAllComment(id)
 }
 const showCommentBox = () => {
     Message.publishComment(1, 0, `歌曲: ${player.value.currentTrack.name}`, player.value.currentTrack.id)

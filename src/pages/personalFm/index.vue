@@ -1,7 +1,7 @@
 <template>
     <DefaultLayout>
         <div class="personal d-flex ai-center">
-            <MusicPlay></MusicPlay>
+            <MusicPlay play-type="personal"></MusicPlay>
         </div>
     </DefaultLayout>
 </template>
