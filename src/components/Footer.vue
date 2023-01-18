@@ -24,36 +24,45 @@
                     <div class="time d-flex ai-center fs-1 text-97">
                         <div class="start mr-4">{{ progress }}</div>
                         <div class="mr-4">/</div>
-                        <div class="total">{{ formatSongTime(player.currentTrack?.dt) }}</div>
+                        <div class="total">{{
+                            formatSongTime(player.isPersonalFM ? player.personalFMTrack?.duration
+                                : player.currentTrack?.dt)
+                        }}</div>
                     </div>
                 </div>
             </div>
             <div class="middle d-flex ai-center">
-                <i class="iconfont icon-24gl-heart fs-9 text-4b mr-30" @click="likeMusic(player.currentTrack.id, true)"
+                <i class="iconfont icon-24gl-heart fs-9 text-4b mr-30"
+                    @click="likeMusic(player.isPersonalFM ? player.personalFMTrack.id : player.currentTrack.id, true)"
                     v-show="!isLike"></i>
                 <i class="iconfont icon-aixin_shixin fs-9 text-primary_red_4 mr-30"
-                    @click="likeMusic(player.currentTrack.id, false)" v-show="isLike"></i>
-                <i class="iconfont icon-diyiyeshouyeshangyishou text-primary_red_4 fs-10 mr-25"></i>
-                <i class="iconfont icon-zanting2x text-primary_red_4  mr-25" style="font-size: 40px;"
-                    @click="usePlayer.playOrPause()" v-if="player.playing"></i>
-                <i class="iconfont icon-zanting1 text-primary_red_4  mr-25" style="font-size: 40px;"
-                    @click="usePlayer.playOrPause()" v-if="!player.playing"></i>
-                <i class="iconfont icon-zuihouyiyemoyexiayishou text-primary_red_4 fs-10 mr-30"></i>
-                <i class="iconfont icon-shanchu text-4b fs-6" v-if="player.isPersonalFM"></i>
-                <i class="iconfont icon-fenxiang1 text-3a" v-if="!player.isPersonalFM"></i>
+                    @click="likeMusic(player.isPersonalFM ? player.personalFMTrack.id : player.currentTrack.id, false)"
+                    v-show="isLike"></i>
+                <i class="iconfont icon-diyiyeshouyeshangyishou text-primary_red_4 fs-10 mr-25" @click="playPrevTrack"
+                    v-show="!player.isPersonalFM"></i>
+                <i class="iconfont icon-diyiyeshouyeshangyishou text-fbg fs-10 mr-25" v-show="player.isPersonalFM"></i>
+                <i class="iconfont icon-zanting2x text-primary_red_4  mr-25" style="font-size: 40px;" @click="musicPlay"
+                    v-show="player.playing"></i>
+                <i class="iconfont icon-zanting1 text-primary_red_4  mr-25" style="font-size: 40px;" @click="musicPlay"
+                    v-show="!player.playing"></i>
+                <i class="iconfont icon-zuihouyiyemoyexiayishou text-primary_red_4 fs-10 mr-30"
+                    @click="playNextSong"></i>
+                <i class="iconfont icon-shanchu text-4b fs-6" v-show="player.isPersonalFM" @click="delete2PlayNext"></i>
+                <i class="iconfont icon-fenxiang1 text-3a" v-show="!player.isPersonalFM"></i>
             </div>
             <div class="right text-4b d-flex ai-center mr-15">
 
-                <div class="song-list d-flex ai-center" v-if="!player.isPersonalFM" @click="switchMode">
-                    <i class="iconfont icon-24gl-repeatOnce2 text-4b mr-15 fs-7" v-if="player.repeatMode === 'one'"></i>
-                    <i class="iconfont icon-24gl-indent text-4b mr-15 fs-5" v-if="player.repeatMode === 'off'"></i>
-                    <i class="iconfont icon-24gl-repeat2 text-4b mr-15 fs-7" v-if="player.repeatMode === 'on'"></i>
+                <div class="song-list d-flex ai-center" v-show="!player.isPersonalFM" @click="switchMode">
+                    <i class="iconfont icon-24gl-repeatOnce2 text-4b mr-15 fs-7"
+                        v-show="player.repeatMode === 'one'"></i>
+                    <i class="iconfont icon-24gl-indent text-4b mr-15 fs-5" v-show="player.repeatMode === 'off'"></i>
+                    <i class="iconfont icon-24gl-repeat2 text-4b mr-15 fs-7" v-show="player.repeatMode === 'on'"></i>
 
                 </div>
-                <i class="iconfont icon-24gl-playlist text-4b mr-15 fs-5" v-if="!player.isPersonalFM"></i>
-                <div class="volume" @click="usePlayer.mute()">
-                    <i class="iconfont icon-24gl-volumeZero text-4b fs-7" v-if="player.volume !== 0"></i>
-                    <i class="iconfont icon-24gl-volumeDisable fs-7" v-if="player.volume === 0"></i>
+                <i class="iconfont icon-24gl-playlist text-4b mr-15 fs-5" v-show="!player.isPersonalFM"></i>
+                <div class="volume" @click="mute">
+                    <i class="iconfont icon-24gl-volumeZero text-4b fs-7" v-show="player.volume !== 0"></i>
+                    <i class="iconfont icon-24gl-volumeDisable fs-7" v-show="player.volume === 0"></i>
 
                 </div>
 
@@ -66,16 +75,23 @@
 import { computed } from 'vue';
 import VueSlider from 'vue-slider-component'
 import "@/assets/slider.css";
-import { storeToRefs } from 'pinia';
 import { formatSongTime } from '@/utils';
 import { useRoute } from 'vue-router';
 import router from '@/router';
-import useStore from "@/store"
-import useLikeMusic from '@/hooks/useLikeMusic';
-const { usePlayer, useGlobal } = useStore()
-const { likeMusic } = useLikeMusic()
-const { player, currentTrackDuration, likedList } = storeToRefs(usePlayer)
-const { isShowPlayPage } = storeToRefs(useGlobal)
+import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
+const {
+    isShowPlayPage,
+    isLike,
+    player,
+    currentTrackDuration,
+    likeMusic,
+    delete2PlayNext,
+    playNextSong,
+    mute,
+    musicPlay,
+    switchMode,
+    playPrevTrack
+} = useMusicPlayRelation()
 
 const route = useRoute()
 withDefaults(defineProps<{
@@ -91,10 +107,7 @@ const emits = defineEmits<{
 const progress = computed(() => {
     return timeCalc(player.value.progress * 1000)
 })
-// 是否喜欢该首歌曲
-const isLike = computed(() => {
-    return likedList.value.includes(player.value.currentTrack.id)
-})
+
 
 /**
  * 进度时间格式化
@@ -106,18 +119,12 @@ const timeCalc = (time: number) => {
     return (min < 10 ? '0' + min : min) + ':' + (sec < 10 ? '0' + sec : sec)
 }
 
-// 播放模式切换
-const switchMode = () => {
-    const list = ["one", "on", "off"]
-    let index = list.indexOf(player.value.repeatMode)
-    player.value.repeatMode = list[++index > 2 ? 0 : index]
-}
 
-// 更改播放状态
+// 更改页面展示
 const changePlayPage = () => {
     if (player.value.isPersonalFM && route.path !== '/personal-fm') {
         // 如果是正在播放私人fm的歌曲 并且当前页面不是私人fm
-        router.push(`/personal-fm?id=${player.value.currentTrack.id}`)
+        router.push(`/personal-fm`)
     }
     if (!player.value.isPersonalFM) {
         emits("showPlayPage", player.value.currentTrack.id)
