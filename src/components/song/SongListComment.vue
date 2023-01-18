@@ -79,28 +79,6 @@ const { player } = storeToRefs(usePlayer)
 const { cContent, isShowPlayPage } = storeToRefs(useGlobal)
 const router = useRouter()
 const route = useRoute()
-
-// 0: 歌曲 1: mv 2: 歌单 3: 专辑 4: 电台节目 5: 视频 6: 动态 7: 电台
-const props = withDefaults(defineProps<{
-    isGrey?: boolean
-    // sourceType: list
-    sourceType: 0 | 1 | 2 | 3 | 5
-    isShowTitle?: boolean
-    isShowInputBox?: boolean
-}>(), {
-    isGrey: true, // 用在动态里面
-    sourceType: 3,
-    isShowTitle: false, // 是否显示 听友评论
-    isShowInputBox: true // 是否显示评论输入框
-})
-const emits = defineEmits<{
-    (e: "changeCommentCount", count: number): void
-}>()
-const pages = reactive({
-    page: 1,
-    size: 30,
-    total: 0
-})
 const replyPerson = ref("")
 const isShowLoading = ref(false)
 const paginationIndex = ref(0)
@@ -111,22 +89,49 @@ const allComment = reactive({ data: [] as Comment[] }) // 所有评论
 const hotCommentList = reactive({ data: [] as HotComment[] }) // 热门评论
 const commentContent = ref("") // 评论内容
 const hasMoreHot = ref(false) // 是否有更多热评
-// const hasMore = ref(false) // 是否有更多评论
+const pages = reactive({
+    page: 1,
+    size: 30,
+    total: 0
+})
+// 0: 歌曲 1: mv 2: 歌单 3: 专辑 4: 电台节目 5: 视频 6: 动态 7: 电台
+const props = withDefaults(defineProps<{
+    isGrey?: boolean
+    // sourceType: list
+    sourceType: 0 | 1 | 2 | 3 | 5
+    isShowTitle?: boolean
+    isShowInputBox?: boolean
+}>(), {
+    isGrey: true, // 用在动态里面
+    sourceType: 3,
+    isShowTitle: false, // 是否显示 "听友评论"
+    isShowInputBox: true // 是否显示评论输入框
+})
+const emits = defineEmits<{
+    (e: "changeCommentCount", count: number): void
+}>()
+// 计算后的歌曲id 单曲播放界面/私人fm播放
+const cid = computed(() => {
+    return useGlobal.isShowPlayPage ? player.value.currentTrack.id : (id ? id : player.value.personalFMTrack.id)
+})
+
 watch(() => pages.page, async (newVal) => {
     if (newVal === 1) {
         // 滚动到顶部
         if (route.path === "/personal-fm") {
-            return scrollToTop()
+            scrollToTop()
         }
         if (useGlobal.isShowPlayPage) {
             const el = document.getElementsByClassName("music-play-wrapper")[0]
-            return el?.scrollTo(0, 0)
+            el?.scrollTo(0, 0)
         }
         scrollToTop()
     } else {
         // 滚动到最新评论处
         scrollToPos()
     }
+    console.log("cid发生变化 改变了页码 需要重新获取评论");
+
     getAllComment(cid.value)
 })
 watch(() => route.params.id, (newVal) => {
@@ -140,14 +145,23 @@ watch(() => cContent.value, async (newVal) => {
         inserData()
     }
 })
+
+watch(() => cid.value, (newVal) => {
+    console.log("cid发生变化了=============");
+
+    // 更新评论 有毛病？？？？ TODO
+    pages.page = 1
+    getAllComment(cid.value)
+})
 // 最大长度
 const maxLength = computed(() => {
     return 140 - commentContent.value.length
 })
-// 计算后的歌曲id 单曲播放界面/私人fm播放
-const cid = computed(() => {
-    return useGlobal.isShowPlayPage ? player.value.currentTrack.id : (id ? id : player.value.personalFMTrack.id)
-})
+
+
+
+// const hasMore = ref(false) // 是否有更多评论
+
 
 // 插入评论数据
 const inserData = () => {

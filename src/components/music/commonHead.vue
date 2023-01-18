@@ -24,12 +24,17 @@
                     <span class="text-shadow_blue">来源来源来源来源来源来源来源来源</span> -->
                 </div>
             </div>
-            <div class="lyric" id="lyric">
-                <div class="lyric-item fs-3 text-66 mb-15" v-for="(item, index) in lyric.data.lyric" :key="item.time"
-                    :id="`line${index + 1}`" :class="{ isActive: activeLine === index + 1 }">
-                    <div v-for="it in item.content.split('&&')" class="mb-5">
-                        {{ it }}
+            <div class="lyric-wrapper">
+                <div class="wrap" id="lyric" v-if="lyric.data?.lyric?.length">
+                    <div class="lyric-item fs-3 text-66 mb-15" v-for="(item, index) in lyric.data.lyric"
+                        :key="item.time" :id="`line${index + 1}`" :class="{ isActive: activeLine === index + 1 }">
+                        <div v-for="it in item.content.split('&&')" class="mb-5">
+                            {{ it }}
+                        </div>
                     </div>
+                </div>
+                <div class="pure-music text-33" v-if="!lyric.data?.lyric?.length" style="font-weight: bold;">
+                    纯音乐，请欣赏
                 </div>
             </div>
         </div>
@@ -37,26 +42,32 @@
 </template>
 
 <script lang="ts" setup>
+import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
 import { getLyric } from '@/service/api/music';
-import useStore from '@/store';
 import { binarySearch, lyricParser, ParseResult } from '@/utils/lyrics';
-import { storeToRefs } from 'pinia';
-import { reactive, ref, watch } from 'vue';
-
-const { usePlayer } = useStore()
-const { player, likedList } = storeToRefs(usePlayer)
+import { computed, reactive, ref, watch } from 'vue';
+const { player } = useMusicPlayRelation()
 const lyric = reactive({ data: {} as ParseResult }) // 歌词,
 const activeLine = ref(-1)
 
 defineProps<{
     playType: "personal" | "songList"
 }>()
-
+// 动态获取当前正在播放歌曲的id
+const cId = computed(() => {
+    if (player.value.isPersonalFM) {
+        return player.value.personalFMTrack.id
+    }
+    return player.value.currentTrack.id
+})
 // 当前歌词正在播放的某一行
 watch(() => player.value.progress, () => {
     getActive()
 })
-
+// 监听播放歌曲id的改变，更新歌词
+watch(() => cId.value, () => {
+    getlyric()
+})
 // 监听播放到第几行  歌词滚动
 watch(() => activeLine.value, () => {
     if (player.value.progress > 0) {
@@ -66,18 +77,22 @@ watch(() => activeLine.value, () => {
         lyric?.scrollTo({ top: activeLineOffsetHeight - lyric.offsetTop })
     }
 })
+// 获取当前播放到第几行
 const getActive = () => {
     const active = binarySearch(lyric.data?.lyric, undefined, player.value.progress)
     activeLine.value = active
-
 }
 // 获取歌词 获取进度对应的某一行
 const getlyric = async () => {
-    const r = await getLyric({ id: player.value.currentTrack.id })
+    const id = player.value.isPersonalFM ? player.value.personalFMTrack.id : player.value.currentTrack.id
+    const r = await getLyric({ id })
     lyric.data = lyricParser(r)
+    // 如果没有歌词的音乐 不获取
+    if (!lyric.data.lyric.length) {
+        return
+    }
     getActive()
 }
-
 getlyric()
 
 
@@ -99,12 +114,16 @@ getlyric()
             color: #c44c3f;
         }
 
-        .lyric {
+        .lyric-wrapper {
             width: 378px;
-            // flex: 1;
             height: 320px;
-            overflow-y: scroll;
             border-right: 1px solid var(--theme-f2);
+
+            .wrap {
+                height: 100%;
+                width: 100%;
+                overflow-y: scroll;
+            }
         }
 
         .isActive {

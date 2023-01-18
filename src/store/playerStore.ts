@@ -2,6 +2,7 @@
 import { Howl, Howler } from 'howler';
 import { defineStore } from "pinia"
 import { Song } from '@/service/api/music/types';
+import { Song as PersonalSong } from "@/service/api/recommend/types"
 import { fmTrash, personalFM } from '@/service/api/personalFm';
 import { checkLogin, shuffleAList } from '@/utils';
 import { getAlbumInfo } from '@/service/api/album';
@@ -49,8 +50,8 @@ const usePlayerStore = defineStore("player", {
                 currentTrack: { id: 86827685 } as Song, // 当前播放歌曲的详细信息
                 playNextList: [] as number[], // 当这个list不为空时，会优先播放这个list的歌
                 isPersonalFM: false, // 是否是私人FM模式
-                personalFMTrack: { id: 0 } as Song, // 私人FM当前歌曲
-                personalFMNextTrack: { id: 0 } as Song, // 私人FM下一首歌曲信息（为了快速加载下一首）
+                personalFMTrack: { id: 0 } as PersonalSong, // 私人FM当前歌曲
+                personalFMNextTrack: { id: 0 } as PersonalSong, // 私人FM下一首歌曲信息（为了快速加载下一首）
                 reatedBlobRecords: [] as string[], // The blob records for cleanup.
                 howler: null as unknown as Howl  // 标识播放器 存储的时候把这个属性剔除掉
             }
@@ -85,18 +86,18 @@ const usePlayerStore = defineStore("player", {
 
             this.setIntervals();
 
-            // // 初始化私人FM
-            // if (
-            //     this._personalFMTrack.id === 0 ||
-            //     this._personalFMNextTrack.id === 0 ||
-            //     this._personalFMTrack.id === this._personalFMNextTrack.id
-            // ) {
-            //     personalFM().then(result => {
-            //         this._personalFMTrack = result.data[0] as unknown as Song;
-            //         this._personalFMNextTrack = result.data[1] as unknown as Song;
-            //         return this._personalFMTrack;
-            //     });
-            // }
+            // 初始化私人FM
+            if (
+                this.player.personalFMTrack.id === 0 ||
+                this.player.personalFMNextTrack.id === 0 ||
+                this.player.personalFMTrack.id === this.player.personalFMNextTrack.id
+            ) {
+                personalFM().then(result => {
+                    this.player.personalFMTrack = result.data[0] as unknown as PersonalSong;
+                    this.player.personalFMNextTrack = result.data[1] as unknown as PersonalSong;
+                    return this.player.personalFMTrack;
+                });
+            }
         },
         loadSelfFromLocalStorage() {
             const player = localStorage.getItem('player')
@@ -111,7 +112,6 @@ const usePlayerStore = defineStore("player", {
                 if (excludeSaveKeys.includes(key)) continue;
                 player[key] = value;
             }
-            // console.log(JSON.stringify(player), "============");
             Object.defineProperty(player, 'howler', {
                 enumerable: false,
             });
@@ -211,7 +211,7 @@ const usePlayerStore = defineStore("player", {
         },
 
         /**
-         *
+         * 播放音乐
          * @param source 音歌曲资源
          * @param autoplay 是否自动播放
          */
@@ -231,6 +231,7 @@ const usePlayerStore = defineStore("player", {
                 this.play();
             }
         },
+
         /**
          * 听歌记录
          * @param track 歌曲详情信息
@@ -249,31 +250,38 @@ const usePlayerStore = defineStore("player", {
                 time,
             });
         },
+
         /**
          * 下一首的回调
          */
         nextTrackCallback() {
             this._scrobble(this.player.currentTrack, 0, true);
+            // 如果非私人fm并且循环模式是单曲的继续播放当前歌曲
             if (!this.player.isPersonalFM && this.player.repeatMode === 'one') {
                 this.replaceCurrentTrack(this.player.currentTrack.id);
             } else if (this.player.isPersonalFM) {
+                // 私人fm的下一首
                 this.playNextFMTrack();
             } else {
+                //
                 this.playNextTrack();
             }
         },
+
         /**
          * 下一首 私人fm
          * @returns
          */
         async playNextFMTrack() {
+            console.log(this.player.personalFMLoading, "loading======");
+
             if (this.player.personalFMLoading) {
                 return false;
             }
 
             this.player.isPersonalFM = true;
 
-            if (!this.player.personalFMNextTrack) {
+            if (!this.player.personalFMNextTrack.id) {
                 this.player.personalFMLoading = true;
                 let result = null;
                 let retryCount = 5;
@@ -299,7 +307,7 @@ const usePlayerStore = defineStore("player", {
                     return false;
                 }
                 // 这里只能拿到一条数据
-                this.player.personalFMTrack = result!.data[0] as unknown as Song;
+                this.player.personalFMTrack = result!.data[0] as unknown as PersonalSong;
             } else {
                 if (this.player.personalFMNextTrack.id === this.player.personalFMTrack.id) {
                     return false;
@@ -310,9 +318,10 @@ const usePlayerStore = defineStore("player", {
                 this.replaceCurrentTrack(this.player.personalFMTrack.id);
             }
             this.loadPersonalFMNextTrack();
-            this.saveSelfToLocalStorage()
+
             return true;
         },
+
         /**
          * 加载私人fm下一首
          * @returns
@@ -325,20 +334,23 @@ const usePlayerStore = defineStore("player", {
             return personalFM()
                 .then(result => {
                     if (!result || !result.data) {
-                        this.player.personalFMNextTrack = undefined as unknown as Song;
+                        this.player.personalFMNextTrack = undefined as unknown as PersonalSong;
                     } else {
-                        this.player.personalFMNextTrack = result.data[0] as unknown as Song;
+                        this.player.personalFMNextTrack = result.data[0] as unknown as PersonalSong;
                         this.cacheNextTrack(); // cache next track
                     }
                     this.player.personalFMNextLoading = false;
                     return [true, this.player.personalFMNextTrack];
                 })
                 .catch(() => {
-                    this.player.personalFMNextTrack = undefined as unknown as Song;
+                    this.player.personalFMNextTrack = undefined as unknown as PersonalSong;
                     this.player.personalFMNextLoading = false;
                     return [false, this.player.personalFMNextTrack];
+                }).finally(() => {
+                    this.saveSelfToLocalStorage()
                 });
         },
+
         cacheNextTrack() {
             let nextTrackID = this.player.isPersonalFM
                 ? this.player.personalFMNextTrack?.id ?? 0
@@ -350,6 +362,7 @@ const usePlayerStore = defineStore("player", {
                 this.getAudioSource(track);
             });
         },
+
         /**
          * 更新当前播放歌曲
          * @param id 歌曲id
@@ -409,7 +422,6 @@ const usePlayerStore = defineStore("player", {
          * @returns
          */
         playNextTrack() {
-            // TODO: 切换歌曲时增加加载中的状态
             const [trackID, index] = this.getNextTrack();
             if (trackID === undefined) {
                 this.player.howler?.stop();
@@ -540,6 +552,7 @@ const usePlayerStore = defineStore("player", {
             this.saveSelfToLocalStorage()
             Howler.volume(this.player.volume);
         },
+
         /**
          * 替换当前播放歌曲列表
          * @param trackIDs 歌曲列表 number[]
@@ -577,6 +590,7 @@ const usePlayerStore = defineStore("player", {
         //     this.shuffledList = shuffleAList(list);
         //     if (firstTrackID !== -1) this.shuffledList.unshift(firstTrackID);
         // },
+
         /**
          * 通过id播放专辑
          * @param id 专辑id
