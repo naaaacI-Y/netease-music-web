@@ -49,9 +49,12 @@
                     <span class="text-shadow_blue">来源来源来源来源来源来源来源来源</span> -->
                 </div>
             </div>
-            <div class="lyric">
-                <div class="lyric-item fs-3 text-66 mb-10" v-for="(item, index) in lyric.data.lyric" :key="item.time">
-                    {{ item.content }}
+            <div class="lyric" id="lyric">
+                <div class="lyric-item fs-3 text-66 mb-15" v-for="(item, index) in lyric.data.lyric" :key="item.time"
+                    :id="`line${index + 1}`" :class="{ isActive: activeLine === index + 1 }">
+                    <div v-for="it in item.content.split('&&')" class="mb-5">
+                        {{ it }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -61,25 +64,46 @@
 <script lang="ts" setup>
 import { getLyric } from '@/service/api/music';
 import useStore from '@/store';
-import { lyricParser } from '@/utils/lyrics';
+import { binarySearch, lyricParser, ParseResult } from '@/utils/lyrics';
 import { storeToRefs } from 'pinia';
-import { computed, reactive } from 'vue';
-
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import Message from "@/components/message"
 import useLikeMusic from '@/hooks/useLikeMusic';
-const { likeMusic } = useLikeMusic()
 
+const { likeMusic } = useLikeMusic()
 const { usePlayer } = useStore()
 const { player, likedList } = storeToRefs(usePlayer)
-const lyric = reactive({ data: {} as { lyric: any[], tlyric: any[] } })
-
+const lyric = reactive({ data: {} as ParseResult }) // 歌词,
+const activeLine = ref(-1)
+// 是否喜欢
 const isLike = computed(() => {
     return likedList.value.includes(player.value.currentTrack.id)
 })
+
+// 当前歌词正在播放的某一行
+watch(() => player.value.progress, () => {
+    getActive()
+})
+
+// 监听播放到第几行  歌词滚动
+watch(() => activeLine.value, () => {
+    if (player.value.progress > 0) {
+        const lyric = document.getElementById(`lyric`)
+        const el = document.getElementById(`line${activeLine.value}`)
+        const activeLineOffsetHeight = el?.offsetTop! // 当前播放行滚动的距离
+        lyric?.scrollTo({ top: activeLineOffsetHeight - lyric.offsetTop })
+    }
+})
+const getActive = () => {
+    const active = binarySearch(lyric.data?.lyric, undefined, player.value.progress)
+    activeLine.value = active
+
+}
+// 获取歌词 获取进度对应的某一行
 const getlyric = async () => {
     const r = await getLyric({ id: player.value.currentTrack.id })
     lyric.data = lyricParser(r)
-    console.log(JSON.stringify(lyric.data));
+    getActive()
 }
 
 // 收藏、下载、分享暂不支持
@@ -209,6 +233,10 @@ getlyric()
             border-right: 1px solid var(--theme-f2);
         }
 
+        .isActive {
+            color: vat(--theme-00);
+            font-weight: bold;
+        }
 
         .other-info {
             div {

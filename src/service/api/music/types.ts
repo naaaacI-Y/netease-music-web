@@ -605,6 +605,14 @@ export interface Tlyric {
     lyric: string;
 }
 
+export interface LyricUser {
+    demand: number
+    id: number
+    nickname: string
+    status: number
+    uptime: number
+    userid: number
+}
 export interface LyricsResult {
     sgc: boolean;
     sfy: boolean;
@@ -613,6 +621,8 @@ export interface LyricsResult {
     klyric: Klyric;
     tlyric: Tlyric;
     code: number;
+    transUser?: LyricUser
+    lyricUser?: LyricUser
 }
 
 // 推荐歌单 不需要登录
