@@ -48,19 +48,13 @@
 import { TrackId } from '@/service/api/music/types';
 import { HotSong } from '@/service/api/singer/types';
 import { formatSongTime, paddingLeft } from '@/utils';
-import { storeToRefs } from 'pinia';
-import { computed, ref, watchEffect } from 'vue';
-import useLikeMusic from "@/hooks/useLikeMusic"
+import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import useStore from '@/store';
-const { likeMusic } = useLikeMusic()
-const { useSideSongList, usePlayer } = useStore()
+import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
 const route = useRoute()
 const router = useRouter()
 const rankType = Number(route.query.rankType)
-const { likedList } = storeToRefs(usePlayer)
-const { createdSongList } = storeToRefs(useSideSongList)
-
+const { createdSongList, likedList, likeMusic, usePlayer } = useMusicPlayRelation()
 // fee 0: 免费或无版权  检查是否有版权 如果没有版权 变灰
 // 1: vip歌曲 非vip变灰展示
 // 4:  购买专辑 变灰展示

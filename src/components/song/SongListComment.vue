@@ -3,7 +3,7 @@
         <div class="comment pt-20">
             <div class="comment-title mb-10" v-if="isShowTitle">
                 <span class="mr-4 text-00">听友评论</span>
-                <span class="fs-1 text-66">(已有{{ pages.total }}条评论)</span>
+                <span class="fs-1 text-66">(已有{{ pages.total ?? 0 }}条评论)</span>
             </div>
             <div class="comment-input" v-if="isShowInputBox">
                 <textarea id="textArea" rows="4" maxlength="140" v-model="commentContent" class="text-33" ref="textArea"
@@ -115,6 +115,13 @@ const hasMoreHot = ref(false) // 是否有更多热评
 watch(() => pages.page, async (newVal) => {
     if (newVal === 1) {
         // 滚动到顶部
+        if (route.path === "/personal-fm") {
+            return scrollToTop()
+        }
+        if (useGlobal.isShowPlayPage) {
+            const el = document.getElementsByClassName("music-play-wrapper")[0]
+            return el?.scrollTo(0, 0)
+        }
         scrollToTop()
     } else {
         // 滚动到最新评论处
@@ -137,9 +144,9 @@ watch(() => cContent.value, async (newVal) => {
 const maxLength = computed(() => {
     return 140 - commentContent.value.length
 })
-// 计算后的歌曲id 单曲播放界面
+// 计算后的歌曲id 单曲播放界面/私人fm播放
 const cid = computed(() => {
-    return useGlobal.isShowPlayPage ? player.value.currentTrack.id : id
+    return useGlobal.isShowPlayPage ? player.value.currentTrack.id : (id ? id : player.value.personalFMTrack.id)
 })
 
 // 插入评论数据
@@ -267,6 +274,10 @@ const getAllComment = async (id: string | number) => {
     emits("changeCommentCount", r.total)
     // hasMore.value = r.more
 }
+// 向外暴露获取评论的方法
+defineExpose({
+    getAllComment
+})
 getAllComment(cid.value)
 </script>
 <style lang="scss" scoped>

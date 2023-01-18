@@ -87,7 +87,7 @@ const vote = async () => {
     if (isVoting.value) return Message.error("请勿频繁操作")
     isVoting.value = true
     const _: VoteCommnentParam = {
-        id: isShowPlayPage.value ? player.value.currentTrack.id : queryId, // 资源id
+        id: isShowPlayPage.value ? player.value.currentTrack.id : (queryId ? queryId : player.value.personalFMTrack.id), // 资源id
         cid: props.commentContent.commentId,
         t: isLiked.value ? 0 : 1,
         type: props.type as list
@@ -109,7 +109,7 @@ const comment = () => {
         if (isShowPlayPage) {
             return Message.publishComment(2, props.type as list, '评论', player.value.currentTrack.id, props.commentContent.commentId, props.commentContent.user.nickname)
         }
-        return Message.publishComment(2, props.type as list, '评论', Number(queryId), props.commentContent.commentId, props.commentContent.user.nickname)
+        return Message.publishComment(2, props.type as list, '评论', queryId ? Number(queryId) : player.value.personalFMTrack.id, props.commentContent.commentId, props.commentContent.user.nickname)
     }
     // 评论框显示原评论的用户名，如果改动了用户名则会变成发表评论
     emits("activeComment", { name: props.commentContent.user.nickname, commentId: props.commentContent.commentId })
