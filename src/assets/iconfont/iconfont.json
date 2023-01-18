@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "587336",
+      "name": "暂停01",
+      "font_class": "zanting01",
+      "unicode": "e67f",
+      "unicode_decimal": 59007
+    },
+    {
+      "icon_id": "688128",
+      "name": "下一个 下一首",
+      "font_class": "xiayigexiayishou",
+      "unicode": "e7a6",
+      "unicode_decimal": 59302
+    },
+    {
       "icon_id": "6775641",
       "name": "爱心 _实心",
       "font_class": "aixin_shixin",
@@ -139,32 +153,11 @@
       "unicode_decimal": 60024
     },
     {
-      "icon_id": "7596941",
-      "name": "24gl-trash2",
-      "font_class": "24gl-trash2",
-      "unicode": "eb45",
-      "unicode_decimal": 60229
-    },
-    {
-      "icon_id": "7597947",
-      "name": "24gl-external",
-      "font_class": "24gl-external",
-      "unicode": "eb6e",
-      "unicode_decimal": 60270
-    },
-    {
       "icon_id": "697063",
       "name": "删除",
       "font_class": "shanchu2",
       "unicode": "e64c",
       "unicode_decimal": 58956
-    },
-    {
-      "icon_id": "8430121",
-      "name": "其他",
-      "font_class": "qita1",
-      "unicode": "e6d5",
-      "unicode_decimal": 59093
     },
     {
       "icon_id": "12753746",
@@ -174,46 +167,11 @@
       "unicode_decimal": 58935
     },
     {
-      "icon_id": "6129084",
-      "name": "47最后一页、末页、下一首",
-      "font_class": "zuihouyiyemoyexiayishou1",
-      "unicode": "e76c",
-      "unicode_decimal": 59244
-    },
-    {
-      "icon_id": "658008",
-      "name": "多语言",
-      "font_class": "duoyuyan",
-      "unicode": "e654",
-      "unicode_decimal": 58964
-    },
-    {
       "icon_id": "7629051",
       "name": "皇冠",
       "font_class": "huangguan",
       "unicode": "e6b3",
       "unicode_decimal": 59059
-    },
-    {
-      "icon_id": "7817216",
-      "name": "分类",
-      "font_class": "fenlei",
-      "unicode": "e625",
-      "unicode_decimal": 58917
-    },
-    {
-      "icon_id": "22386339",
-      "name": "风格",
-      "font_class": "fengge",
-      "unicode": "ee26",
-      "unicode_decimal": 60966
-    },
-    {
-      "icon_id": "26212896",
-      "name": "咖啡",
-      "font_class": "kafei",
-      "unicode": "e628",
-      "unicode_decimal": 58920
     },
     {
       "icon_id": "2127147",
@@ -307,46 +265,11 @@
       "unicode_decimal": 58910
     },
     {
-      "icon_id": "14919053",
-      "name": "xia",
-      "font_class": "xia",
-      "unicode": "e617",
-      "unicode_decimal": 58903
-    },
-    {
-      "icon_id": "14919059",
-      "name": "shang",
-      "font_class": "shang",
-      "unicode": "e619",
-      "unicode_decimal": 58905
-    },
-    {
       "icon_id": "570667",
       "name": "jiantouxiangshang",
       "font_class": "jiantouxiangshang",
       "unicode": "e635",
       "unicode_decimal": 58933
-    },
-    {
-      "icon_id": "5042583",
-      "name": "gongzuotai",
-      "font_class": "gongzuotai",
-      "unicode": "e8a8",
-      "unicode_decimal": 59560
-    },
-    {
-      "icon_id": "15995149",
-      "name": "工作台-默认",
-      "font_class": "gongzuotai-moren",
-      "unicode": "e6f7",
-      "unicode_decimal": 59127
-    },
-    {
-      "icon_id": "12905209",
-      "name": "鲸鱼",
-      "font_class": "jingyu",
-      "unicode": "e60b",
-      "unicode_decimal": 58891
     },
     {
       "icon_id": "1494634",
@@ -377,20 +300,6 @@
       "unicode_decimal": 59087
     },
     {
-      "icon_id": "7251835",
-      "name": "画笔",
-      "font_class": "huabi1",
-      "unicode": "e744",
-      "unicode_decimal": 59204
-    },
-    {
-      "icon_id": "7498247",
-      "name": "顺序播放",
-      "font_class": "shunxubofang1",
-      "unicode": "e6f0",
-      "unicode_decimal": 59120
-    },
-    {
       "icon_id": "7674913",
       "name": "右",
       "font_class": "xiangyou1",
@@ -419,20 +328,6 @@
       "unicode_decimal": 58909
     },
     {
-      "icon_id": "14126544",
-      "name": "歌词_24",
-      "font_class": "geci24",
-      "unicode": "e608",
-      "unicode_decimal": 58888
-    },
-    {
-      "icon_id": "14830347",
-      "name": "shanchu",
-      "font_class": "shanchu1",
-      "unicode": "e611",
-      "unicode_decimal": 58897
-    },
-    {
       "icon_id": "14830351",
       "name": "xiangyou",
       "font_class": "xiangyou2",
@@ -454,13 +349,6 @@
       "unicode_decimal": 58940
     },
     {
-      "icon_id": "19532502",
-      "name": "删除",
-      "font_class": "delete",
-      "unicode": "e614",
-      "unicode_decimal": 58900
-    },
-    {
       "icon_id": "22370531",
       "name": "向右-线",
       "font_class": "xiangyou-xian",
@@ -475,13 +363,6 @@
       "unicode_decimal": 58901
     },
     {
-      "icon_id": "24268532",
-      "name": "列表1",
-      "font_class": "liebiao1",
-      "unicode": "e6e9",
-      "unicode_decimal": 59113
-    },
-    {
       "icon_id": "108771",
       "name": "大图",
       "font_class": "datu",
@@ -494,13 +375,6 @@
       "font_class": "dengji",
       "unicode": "e629",
       "unicode_decimal": 58921
-    },
-    {
-      "icon_id": "586715",
-      "name": "4-list",
-      "font_class": "4list",
-      "unicode": "e683",
-      "unicode_decimal": 59011
     },
     {
       "icon_id": "1120964",
@@ -601,27 +475,6 @@
       "unicode_decimal": 58881
     },
     {
-      "icon_id": "14853517",
-      "name": "ym-paixu",
-      "font_class": "ym-paixu",
-      "unicode": "e657",
-      "unicode_decimal": 58967
-    },
-    {
-      "icon_id": "23439670",
-      "name": "jiangxu",
-      "font_class": "jiangxu",
-      "unicode": "e621",
-      "unicode_decimal": 58913
-    },
-    {
-      "icon_id": "23439671",
-      "name": "shengxu",
-      "font_class": "shengxu",
-      "unicode": "e623",
-      "unicode_decimal": 58915
-    },
-    {
       "icon_id": "619704",
       "name": "fenxiang",
       "font_class": "fenxiang1",
@@ -648,20 +501,6 @@
       "font_class": "bofang1",
       "unicode": "e607",
       "unicode_decimal": 58887
-    },
-    {
-      "icon_id": "6776386",
-      "name": "声音_实体",
-      "font_class": "shengyin_shiti",
-      "unicode": "eca5",
-      "unicode_decimal": 60581
-    },
-    {
-      "icon_id": "826104",
-      "name": "播放",
-      "font_class": "bofang",
-      "unicode": "e60a",
-      "unicode_decimal": 58890
     },
     {
       "icon_id": "10341560",
@@ -825,13 +664,6 @@
       "unicode_decimal": 59368
     },
     {
-      "icon_id": "8423784",
-      "name": "心跳心动",
-      "font_class": "huaban",
-      "unicode": "e60d",
-      "unicode_decimal": 58893
-    },
-    {
       "icon_id": "12025959",
       "name": "分享",
       "font_class": "fenxiang",
@@ -872,20 +704,6 @@
       "font_class": "shunxubofang",
       "unicode": "e667",
       "unicode_decimal": 58983
-    },
-    {
-      "icon_id": "18963668",
-      "name": "随机播放",
-      "font_class": "suijibofang",
-      "unicode": "e6a0",
-      "unicode_decimal": 59040
-    },
-    {
-      "icon_id": "28180506",
-      "name": "lib-chuangkouhua",
-      "font_class": "lib-chuangkouhua",
-      "unicode": "e79a",
-      "unicode_decimal": 59290
     }
   ]
 }
