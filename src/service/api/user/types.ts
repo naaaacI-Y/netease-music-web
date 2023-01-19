@@ -447,7 +447,7 @@ export interface Playlist_user {
     subscribedCount: number;
     cloudTrackCount: number;
     userId: number;
-    totalDuration: number;
+    totalDuration?: number;
     coverImgId: number;
     privacy: number;
     trackUpdateTime: number;
@@ -456,7 +456,7 @@ export interface Playlist_user {
     commentThreadId: string;
     coverImgUrl: string;
     specialType: number;
-    anonimous: boolean;
+    anonimous?: boolean;
     createTime: number;
     highQuality: boolean;
     newImported: boolean;

@@ -76,10 +76,9 @@ import { CollectSongListParams, HeaderInfo } from '@/service/api/music/types';
 import useGlobalStore from '@/store/globalStore';
 import useStore from "@/store"
 import { checkLogin, formatPlayCount, formatTime } from '@/utils';
-import { collectOrCancelSongList } from "@/service/api/music"
+import { collectOrCancelSongList, getSongListDetail } from "@/service/api/music"
 import Message from "@/components/message"
 import { Playlist_user } from '@/service/api/user/types';
-import { getPersonSongList } from '@/config/songList';
 import { ref } from 'vue';
 const { useSideSongList } = useStore()
 const loading = ref(false)
@@ -104,15 +103,17 @@ const updateSongList = async (id: number, type: number) => {
     const oldList = JSON.parse(JSON.stringify(useSideSongList.collectedSongList)) as Playlist_user[]
     if (type === 1) {
         // 添加新的歌单数据
-        // 获取用户歌单信息
-
+        const r = await getSongListDetail({ id })
+        oldList.unshift(r.playlist as Playlist_user)
+    } else {
+        // 删除
+        const idx = oldList.findIndex(item => item.id === id)
+        oldList.splice(idx, 1)
     }
-    // 删除
-    const idx = oldList.findIndex(item => item.id === id)
-    oldList.splice(idx, 1)
+
     useSideSongList.updateCollectedSongList(oldList)
 }
-// 歌单收藏 限制点击频次 TODO
+// 歌单收藏 限制点击频次
 const collectSongList = async () => {
     if (!checkLogin()) {
         return globalState.isShowLoginBox = true
@@ -128,9 +129,11 @@ const collectSongList = async () => {
     loading.value = false
     if (r.code === 200) {
         subscribed ? Message.success("取消收藏成功") : Message.success("收藏成功")
-        getPersonSongList(0, 1, 0, 1)
+        // getPersonSongList(0, 1, 0, 1)
+        // 更新侧边栏数据
+        updateSongList(id, subscribed ? 0 : 1)
         // 重新加载数据
-        emits("changeState", { id: props.headerInfo.id })
+        emits("changeState", { id: props.headerInfo.id, flag: true })
     }
 }
 // 播放全部歌曲

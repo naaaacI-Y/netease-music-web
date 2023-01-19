@@ -162,7 +162,7 @@ export interface HotSong {
     m: M;
     name: string;
     id: number;
-    privilege: Privilege;
+    privilege?: Privilege;
     eq?: string;
 
 
