@@ -9,7 +9,7 @@
         </div>
         <div class="song-wrapper" v-if="list?.data?.length && !isShowLoading">
             <SongListItem v-for="(item, index) in list.data" :index="index + 1" :type="0" :item="item" :key="item.id"
-                @update-song-list-info="emits('updateListInfo')">
+                @update-song-list-header-info="emits('updateHeaderInfo')">
                 <template #flagInside>
                     <div class="flag d-flex ai-center jc-center" v-if="!info!.data[index].ratio">
                         <i class="iconfont icon-new text-new" v-if="info!.data[index].lr === undefined"></i>
@@ -35,25 +35,24 @@
 import Loading from '../Loading.vue';
 import { TrackId } from '@/service/api/music/types';
 import { HotSong } from '@/service/api/singer/types';
-import { inject, reactive, watchEffect } from 'vue';
+import { inject, reactive, watch, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 import SongListItem from './SongListItem.vue';
-// import { storeToRefs } from 'pinia';
-import useStore from '@/store';
-// import { getLikedSongList } from '@/service/api/music';
-const { userProfile } = useStore()
-// const { userFile } = storeToRefs(userProfile)
+import { getMusicDetail } from '@/service/api/music';
+import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
 const injectSongList = inject<{ data: HotSong[] }>("songList")
 const injectSongListInfo = inject<{ data: TrackId[] }>("songListInfo")
 const list = reactive({ data: [] as HotSong[] })
 const info = inject<{ data: TrackId[] }>("songListInfo")
-const rankType = Number(useRoute().query.rankType)
-// const likedList = reactive({ data: [] as number[] })
+const route = useRoute()
+const rankType = Number(route.query.rankType)
+const { likedList, player, createdSongList } = useMusicPlayRelation()
 defineProps<{
     isShowLoading: boolean
 }>()
 const emits = defineEmits<{
     (e: "updateListInfo"): void
+    (e: "updateHeaderInfo"): void
 }>()
 watchEffect(() => {
     if (injectSongList?.data?.length) {
@@ -63,11 +62,24 @@ watchEffect(() => {
         info!.data = injectSongListInfo?.data || []
     }
 })
-// const getLikedList = async () => {
-//     const r = await getLikedSongList({ uid: userFile.value.userId })
-//     likedList.data = r.ids
-// }
-// getLikedList()
+// 如果当前界面在我喜欢的界面，喜欢或者取消喜欢都需要更新列表
+watch(() => likedList.value.length, async (newVal, oldVal) => {
+    const idx = createdSongList.value.findIndex(item => item.id == Number(route.params.id))
+    if (idx !== -1) {
+        if (oldVal > newVal) {
+            return list.data = list.data.filter(item => likedList.value.includes(item.id))
+        }
+        // 构建一条新数据插入
+        if (player.value.isPersonalFM) {
+            // 需要重新获取歌曲详情
+            const r = await getMusicDetail(String(player.value.personalFMTrack.id))
+            return list.data.unshift(r.songs[0])
+        }
+        list.data.unshift(player.value.currentTrack)
+    }
+
+})
+
 </script>
 <style lang="scss" scoped>
 .song-list-wrapper {

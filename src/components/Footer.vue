@@ -17,9 +17,12 @@
                     </div>
                 </div>
                 <div class="song-info d-flex flex-column jc-center">
-                    <div class="name">
+                    <div class="name" @click="goSinger">
                         <span class="fs-3 text-33">{{ player.currentTrack?.name }}</span>
-                        <!-- <span class="fs-1 text-97"> - {{ player.currentTrack?.ar[0]?.name }}</span> -->
+                        <span class="fs-1 text-97"> - {{
+                            player.isPersonalFM ?
+                                player.personalFMTrack.artists[0].musicSize : player.currentTrack?.ar[0]?.name
+                        }}</span>
                     </div>
                     <div class="time d-flex ai-center fs-1 text-97">
                         <div class="start mr-4">{{ progress }}</div>
@@ -108,7 +111,6 @@ const progress = computed(() => {
     return timeCalc(player.value.progress * 1000)
 })
 
-
 /**
  * 进度时间格式化
  * @param time
@@ -119,7 +121,6 @@ const timeCalc = (time: number) => {
     return (min < 10 ? '0' + min : min) + ':' + (sec < 10 ? '0' + sec : sec)
 }
 
-
 // 更改页面展示
 const changePlayPage = () => {
     if (player.value.isPersonalFM && route.path !== '/personal-fm') {
@@ -128,6 +129,17 @@ const changePlayPage = () => {
     }
     if (!player.value.isPersonalFM) {
         emits("showPlayPage", player.value.currentTrack.id)
+    }
+}
+
+// 前往歌手页
+const goSinger = () => {
+    if (isShowPlayPage.value) {
+        isShowPlayPage.value = false
+    }
+    const singerId = player.value.isPersonalFM ? player.value.personalFMTrack.artists[0].id : player.value.currentTrack.ar[0].id
+    if (Number(route.params.id) !== singerId) {
+        router.push(`/singer-page/${singerId}`)
     }
 }
 </script>
@@ -187,6 +199,11 @@ const changePlayPage = () => {
                         display: block;
                     }
                 }
+            }
+
+            .song-info .name:hover {
+                cursor: pointer;
+                color: var(--theme-4c);
             }
         }
 

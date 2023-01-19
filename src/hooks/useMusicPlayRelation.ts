@@ -1,7 +1,7 @@
 import { likeSong } from "@/service/api/music"
 import Message from "@/components/message"
 import useStore from "@/store"
-import { computed } from "vue"
+import { computed, watch } from "vue"
 import { storeToRefs } from 'pinia';
 export const useMusicPlayRelation = () => {
     const { usePlayer, useGlobal, useSideSongList, userProfile } = useStore()
@@ -10,8 +10,13 @@ export const useMusicPlayRelation = () => {
     const { createdSongList } = storeToRefs(useSideSongList)
     const { userFile } = storeToRefs(userProfile)
     // 是否喜欢
+    const isLikeMusic = (id: number) => {
+        return likedList.value.includes(id)
+    }
     const isLike = computed(() => {
-        return likedList.value.includes(player.value.currentTrack.id)
+        if (!player.value.enabled) return false
+        const cid = player.value.isPersonalFM ? player.value.personalFMTrack.id : player.value.currentTrack.id
+        return likedList.value.includes(cid)
     })
     // 喜欢音乐
     const likeMusic = async (id: number, like: boolean, callback?: Function) => {
@@ -26,17 +31,22 @@ export const useMusicPlayRelation = () => {
             if (callback) {
                 callback()
             }
-            // 更新状态
-            if (!like) {
-                return Message.success("取消喜欢成功")
-            }
-            Message.success("已添加到我喜欢的音乐")
+            // // 更新状态
+            // if (!like) {
+            //     return Message.success("取消喜欢成功")
+            // }
+            // Message.success("已添加到我喜欢的音乐")
         }
+    }
+    // 播放歌单
+    const playSongList = () => {
+
+        // usePlayer.playPlaylistByID()
     }
     // 下一首
     const playNextSong = () => {
+        // 如果是私人fm
         if (player.value.isPersonalFM) {
-            // 如果是私人fm
             return usePlayer.playNextFMTrack()
         }
         usePlayer.playNextTrack()
@@ -55,9 +65,7 @@ export const useMusicPlayRelation = () => {
     }
     // 切换播放模式
     const switchMode = () => {
-        const list = ["one", "on", "off"]
-        let index = list.indexOf(player.value.repeatMode)
-        player.value.repeatMode = list[++index > 2 ? 0 : index]
+        usePlayer.switchRepeatMode()
     }
     // 播放私人fm
     const playPersonalFm = () => {
@@ -69,22 +77,24 @@ export const useMusicPlayRelation = () => {
     }
 
     return {
+        player,
+        likedList,
+        currentTrackDuration,
+        isLike,
+        useGlobal,
+        usePlayer,
+        isShowPlayPage,
+        userFile,
+        createdSongList, // 创建的歌单
         likeMusic,
         delete2PlayNext,
         playNextSong,
         musicPlay,
         playPrevTrack,
         switchMode,
-        player,
-        likedList,
-        currentTrackDuration,
-        isLike,
+        isLikeMusic,
         mute,
-        useGlobal,
-        usePlayer,
-        isShowPlayPage,
         playPersonalFm,
-        userFile,
-        createdSongList // 创建的歌单
+
     }
 }

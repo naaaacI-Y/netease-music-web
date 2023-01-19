@@ -7,10 +7,10 @@
                 </div>
                 <div class="index text-c4" v-show="!isPlaying">{{ paddingLeft(index) }}</div>
                 <slot name="flagInside" v-if="rankType === 1"></slot>
-                <i class="iconfont icon-aixin text-99" @click="likeMusic(item?.id!, true, updateSongListInfo)"
-                    v-show="!isLike"></i>
+                <i class="iconfont icon-aixin text-99" @click="likeMusic(item?.id!, true)"
+                    v-show="!isLikeMusic(item?.id!)"></i>
                 <i class="iconfont icon-aixin_shixin text-primary_red_4"
-                    @click="likeMusic(item?.id!, false, updateSongListInfo)" v-show="isLike"></i>
+                    @click="likeMusic(item?.id!, false, updateSongListHeadeInfo)" v-show="isLikeMusic(item?.id!)"></i>
                 <i class="iconfont icon-xiazai text-99"></i>
             </div>
             <div class="rank d-flex ai-center mr-5 pl-8" v-if="type === 3">
@@ -29,20 +29,20 @@
                     <div class="sq d-flex ai-center" v-if="item?.sq && type !== 3">
                         <span>SQ</span>
                     </div>
-                    <i class="iconfont icon-bofang2 text-primary_red_4 ml-4 fs-7" v-if="item?.mv && type !== 3"
+                    <i class="iconfont icon-bofang2 text-primary_red_4 ml-4 fs-7" v-if="item.mv && type !== 3"
                         @click="goMvDetail"></i>
                 </div>
                 <slot name="rate"></slot>
                 <div class="singer  text-99" v-if="isShow === 'all' || isShow === 'rank'" @click="goSingerPage">
-                    {{ item?.ar[0]?.name }}
+                    {{ item.ar[0]?.name }}
                 </div>
                 <div class="album  text-99" v-if="isShow === 'all'" @click="goAlbumPage">
-                    {{ item?.al.name }}
+                    {{ item.al.name }}
                 </div>
                 <div class="time text-c4 d-flex ai-center" v-if="isShow === 'all' || isShow === 'singer'">{{
                     formatSongTime(item!.dt)
                 }}</div>
-                <div class="count text-c4 d-flex ai-cente" v-if="isShow === 'listen'">7次</div>
+                <!-- <div class="count text-c4 d-flex ai-cente" v-if="isShow === 'listen'">7次</div> -->
             </div>
         </div>
         <slot name="lyric"></slot>
@@ -68,13 +68,14 @@ const rankType = Number(route.query.rankType)
 const isHaveCopyRight = ref(true) // 是否有版权
 const isNeedVip = ref(false) // 是否需要vip
 const isNeedBuy = ref(false) // 是否需要购买
-const { createdSongList, likeMusic, usePlayer, player, isLike, userFile } = useMusicPlayRelation()
+const isLike = ref(false) // 用来通知父级更新状态，用于底部栏喜欢或取消音乐的时候
+const { createdSongList, likeMusic, usePlayer, player, userFile, isLikeMusic } = useMusicPlayRelation()
 
 const props = withDefaults(defineProps<
     {
         type?: number
         index: number
-        item?: HotSong
+        item: HotSong
         info?: TrackId
         isLiked?: boolean
     }>(), {
@@ -84,6 +85,7 @@ const props = withDefaults(defineProps<
 const emits = defineEmits<{
     (e: "updateLikedList"): void
     (e: "updateSongListInfo"): void
+    (e: "updateSongListHeaderInfo"): void
 }>()
 const isShow = computed(() => {
     switch (props.type) {
@@ -103,13 +105,14 @@ const isPlaying = computed(() => {
     return !player.value.isPersonalFM && player.value.currentTrack.id === props.item?.id
 })
 
-//  如果是自己喜欢歌曲的界面 取消喜欢之后需要更新数据，也可以直接删除列表中的某一项，用户体验更好，待优化TODO
-const updateSongListInfo = () => {
+// // 更新歌单头部信息
+// // 如果是自己喜欢歌曲的界面 取消喜欢之后直接删除列表中的某一项
+const updateSongListHeadeInfo = () => {
     // 是否是自己喜欢歌单界面
     const idx = createdSongList.value.findIndex(item => item.id == Number(route.params.id))
     if (idx !== -1) {
-        // 更新所有数据
-        emits("updateSongListInfo")
+        emits("updateSongListHeaderInfo")
+
     }
 }
 
@@ -131,8 +134,8 @@ const checkMusicCopyright = () => {
             r = false
             break;
         case 1:
-            // 检查用户是否是vip
-            if (userFile.value.vipType === 0) {
+            // 检查用户是否是vip 不需要考虑用户开通会员的问题
+            if (!userFile.value?.vipType) {
                 isNeedVip.value = true
             }
             r = true

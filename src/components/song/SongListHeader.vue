@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="operate d-flex text-33 mb-8">
-                <div class="play-all fs-2 d-flex ai-center mr-10" style="color:white">
+                <div class="play-all fs-2 d-flex ai-center mr-10" style="color:white" @click="playAll">
                     <i class="iconfont icon-bofang_o  fs-9"></i>
                     播放全部
                 </div>
@@ -33,15 +33,15 @@
                     <span>{{ headerInfo.subscribed ? "已收藏" : "收藏" }}</span>
                     <span>({{ headerInfo.subscribedCount }})</span>
                 </div>
-                <!-- <div class="share mr-15 fs-2 d-flex ai-center">
+                <div class="share mr-15 fs-2 d-flex ai-center" @click="Message.error('暂无不支持>_<')">
                     <i class="iconfont icon-fenxiang2 mr-3"></i>
                     <span>分享</span>
                     <span>({{ headerInfo.shareCount }})</span>
                 </div>
-                <div class="download-all fs-2 d-flex ai-center">
+                <div class="download-all fs-2 d-flex ai-center" @click="Message.error('暂无不支持>_<')">
                     <i class="iconfont icon-xiazai mr-3 fs-6"></i>
                     <span>下载全部</span>
-                </div> -->
+                </div>
             </div>
             <div class="other-info mt-12">
                 <div class="other-info-label mb-3" v-if="headerInfo.tags.length">
@@ -80,9 +80,11 @@ import { collectOrCancelSongList } from "@/service/api/music"
 import Message from "@/components/message"
 import { Playlist_user } from '@/service/api/user/types';
 import { getPersonSongList } from '@/config/songList';
+import { ref } from 'vue';
 const { useSideSongList } = useStore()
+const loading = ref(false)
 const emits = defineEmits<{
-    (e: "changeState", id: number): void
+    (e: "changeState", query: { id: number, flag?: boolean }): void
 }>()
 const globalState = useGlobalStore()
 // 歌手
@@ -115,18 +117,25 @@ const collectSongList = async () => {
     if (!checkLogin()) {
         return globalState.isShowLoginBox = true
     }
+    if (loading.value) return Message.error("请勿频繁操作")
+    loading.value = true
     const { subscribed, id } = props.headerInfo
     const _: CollectSongListParams = {
         t: subscribed ? 2 : 1,
         id
     }
     const r = await collectOrCancelSongList(_)
+    loading.value = false
     if (r.code === 200) {
         subscribed ? Message.success("取消收藏成功") : Message.success("收藏成功")
         getPersonSongList(0, 1, 0, 1)
         // 重新加载数据
-        emits("changeState", props.headerInfo.id)
+        emits("changeState", { id: props.headerInfo.id })
     }
+}
+// 播放全部歌曲
+const playAll = () => {
+
 }
 </script>
 <style lang="scss" scoped>
@@ -185,6 +194,10 @@ const collectSongList = async () => {
                 background-color: rgba($color: #d33b31, $alpha: 0.9);
                 padding: 4px 12px;
                 border-radius: 18px;
+
+                &:hover {
+                    cursor: pointer;
+                }
             }
         }
     }

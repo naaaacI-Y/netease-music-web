@@ -8,7 +8,7 @@
             </div>
         </div>
         <SongList v-show="activeIndex === 0" :is-show-loading="isShowLoading"
-            @update-list-info="emits('updateInfo', Number(route.params.id))">
+            @update-header-info="emits('updateInfo', { id: Number(route.params.id), flag: true })">
         </SongList>
         <SongListComment v-if="activeIndex === 1" :source-type="2" @change-comment-count="changeCommentCount">
         </SongListComment>
@@ -33,13 +33,12 @@ const props = defineProps<{
     isShowLoading: boolean
 }>()
 const emits = defineEmits<{
-    (e: "updateInfo", id: number): void
+    (e: "updateInfo", query: { id: number, flag: boolean }): void
 }>()
 watch(() => props.commentCount, (newVal) => {
     commentOfCount.value = newVal
 })
 const activeIndex = ref(0)
-
 const changeCommentCount = (count: number) => {
     commentOfCount.value = count
 }
