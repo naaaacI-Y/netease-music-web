@@ -2,6 +2,7 @@ import { newestMusicType } from "@/utils/const";
 import { HotComment, Comment } from "../comment/types";
 import { Album, Artist, SqMusic } from "../recommend/types";
 import { Al, Ar, H, HotSong, L, M, Privilege, Sq } from "../singer/types";
+import { Playlist_user } from "../user/types";
 export type typeList = keyof typeof newestMusicType
 
 export interface NewMusicParam {
@@ -336,8 +337,10 @@ export interface HeaderInfo {
     trackCount: number
     shareCount: number
     commentCount: number
+    trackIds: number[]
     creator: Creator
     tags: string[]
+    playList: Playlist_user
     playCount: number
     subscribed?: boolean
 }

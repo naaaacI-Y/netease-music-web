@@ -19,19 +19,19 @@
                 </div>
             </div>
             <div class="operate d-flex jc-between" v-if="!isShowLoading">
-                <div class="play-all fs-1 d-flex ai-center mr-10" style="color:white">
+                <div class="play-all fs-1 d-flex ai-center mr-10" style="color:white" @click="playAll">
                     <i class="iconfont icon-bofang_o  fs-9"></i>
                     播放全部
                 </div>
-                <div class="collect fs-1 d-flex ai-center">
+                <!-- <div class="collect fs-1 d-flex ai-center">
                     <i class="iconfont icon-xinjianwenjianjia fs-7 mr-3"></i>
                     <span>收藏全部</span>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="song-list-wrap" v-show="!isShowLoading">
             <NewMusicItemInside v-for="(item, index) in musicList.data" :index="Number(index) + 1" :key="index"
-                :is-out-side="false" :music-item="item">
+                @play-singel-music="playSingle" :is-out-side="false" :music-item="item">
             </NewMusicItemInside>
         </div>
         <Loading v-show="isShowLoading"></Loading>
@@ -44,15 +44,15 @@ import NewMusicItemInside from './personalRecommend/components/NewMusicItemInsid
 import { getNewMusic } from "@/service/api/music/index"
 import { newestMusicType } from "@/utils/const"
 import { reactive, ref, watch } from 'vue';
-import { NewMusicParam, NewMusicRet } from '@/service/api/music/types';
+import { NewMusicRet } from '@/service/api/music/types';
+import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
 const filterList = Object.entries(newestMusicType)
-// const tabType = ref(0)
+const { playSongList, playSingleMusic, messageTip } = useMusicPlayRelation()
 const filterType = ref(0)
 const isShowLoading = ref(false)
 const musicList = reactive<Record<string, NewMusicRet[]>>({ data: [] })
 watch(filterType, () => {
     // 重新请求  如果是频繁切换的话 TODO
-
     getMusic()
 })
 const getMusic = async () => {
@@ -60,6 +60,29 @@ const getMusic = async () => {
     const r = await getNewMusic({ type: filterType.value })
     musicList.data = r.data
     isShowLoading.value = false
+}
+
+/**
+ * 播放单曲
+ * @param id 歌曲id
+ */
+const playSingle = (id: number) => {
+    const ids = musicList.data.map(item => item.id)
+    playSingleMusic(ids, id, filterType.value)
+}
+
+/**
+ * 播放全部
+ * 对应playSourceId,暂时先这么区分
+ * 全部:0
+ * 华语:7
+ * 欧美:96
+ * 日本:8
+ * 韩国:16
+ */
+const playAll = () => {
+    const ids = musicList.data.map(item => item.id)
+    playSongList(JSON.stringify(ids), filterType.value)
 }
 getMusic()
 </script>

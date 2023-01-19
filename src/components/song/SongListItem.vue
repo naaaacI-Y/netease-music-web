@@ -58,18 +58,15 @@
 import { TrackId } from '@/service/api/music/types';
 import { HotSong } from '@/service/api/singer/types';
 import { formatSongTime, paddingLeft } from '@/utils';
-import { computed, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Message from "@/components/message"
 import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
+const injectSongListInfo = inject<{ data: TrackId[] }>("songListInfo")
 const route = useRoute()
 const router = useRouter()
 const rankType = Number(route.query.rankType)
-const isHaveCopyRight = ref(true) // 是否有版权
-const isNeedVip = ref(false) // 是否需要vip
-const isNeedBuy = ref(false) // 是否需要购买
-const isLike = ref(false) // 用来通知父级更新状态，用于底部栏喜欢或取消音乐的时候
-const { createdSongList, likeMusic, usePlayer, player, userFile, isLikeMusic } = useMusicPlayRelation()
+const { createdSongList, likeMusic, player, messageTip, checkMusicCopyright, isLikeMusic, playSingleMusic, isHaveCopyRight } = useMusicPlayRelation()
 
 const props = withDefaults(defineProps<
     {
@@ -116,43 +113,6 @@ const updateSongListHeadeInfo = () => {
     }
 }
 
-/**
- * 检查歌曲版权信息，是否可播放
- * fee === 0 ==> 免费或是无版权的
- * fee === 1 ==> vip歌曲，用户是否是vip
- * fee === 4 ==> 需要购买专辑， 检查是否已购买 暂时不做
- * fee === 8 ==> 非会员可播放低音质 正常展示
- * @return boolean
- */
-const checkMusicCopyright = () => {
-    let r: boolean
-    switch (props.item?.fee) {
-        case 0:
-            if (props.item.noCopyrightRcmd) {
-                isHaveCopyRight.value = false
-            }
-            r = false
-            break;
-        case 1:
-            // 检查用户是否是vip 不需要考虑用户开通会员的问题
-            if (!userFile.value?.vipType) {
-                isNeedVip.value = true
-            }
-            r = true
-            break
-        case 4:
-            r = true
-            isNeedBuy.value = true
-            break
-        case 8:
-            r = true;
-            break
-        default:
-            r = true
-            break;
-    }
-    return r;
-}
 // 前往歌手页
 const goSingerPage = () => {
     router.push(`/singer-home/${props.item?.ar[0].id}`)
@@ -169,18 +129,28 @@ const goMvDetail = () => {
 }
 // 列表歌曲播放
 const playMusic = async () => {
-    if (!isHaveCopyRight.value) {
-        return Message.error("暂无资源>_<")
-    }
-    if (isNeedVip.value) {
-        return Message.error("开通vip可畅听当前歌曲")
-    }
-    if (isNeedBuy.value) {
-        return Message.error("需购买专辑可畅听当前歌曲")
-    }
-    usePlayer.replacePlaylist([props.item!.id], props.item!.id, "song-list", props.item?.id)
+    const isShowTip = messageTip()
+    if (isShowTip) return
+    const trackIds = injectSongListInfo?.data.map(item => item.id)
+    const sourceId = Number(route.params.id)
+    playSingleMusic(trackIds!, props.item!.id, sourceId)
+    // const sourceId = Number(route.params.id)
+    // // 如果当前正在播放 并且歌曲id和点击的一致 什么也不做
+    // if (player.value.currentTrack.id === props.item!.id) {
+    //     if (player.value.playing) return
+    //     return usePlayer.playOrPause()
+    // }
+    // // 如果当前的歌单id和playlistsource的一致
+    // if (player.value.playlistSource.id === sourceId) {
+    //     console.log("play in same song list");
+
+    //     return usePlayer.playTrackOnListByID(props.item!.id)
+    // }
+    // // 如果不一致 播放新的歌单
+
+    // playSongList(JSON.stringify(trackIds), sourceId)
 }
-checkMusicCopyright()
+checkMusicCopyright(props.item.fee, !props.item.noCopyrightRcmd)
 </script>
 <style lang="scss" scoped>
 .song-list-item-wrapper {

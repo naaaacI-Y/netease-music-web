@@ -73,34 +73,34 @@
 
 import router from '@/router';
 import { CollectSongListParams, HeaderInfo } from '@/service/api/music/types';
-import useGlobalStore from '@/store/globalStore';
-import useStore from "@/store"
 import { checkLogin, formatPlayCount, formatTime } from '@/utils';
 import { collectOrCancelSongList, getSongListDetail } from "@/service/api/music"
 import Message from "@/components/message"
 import { Playlist_user } from '@/service/api/user/types';
 import { ref } from 'vue';
-const { useSideSongList } = useStore()
+import { useRoute } from "vue-router"
+
+import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
 const loading = ref(false)
+const route = useRoute()
+const { isShowPlayPage, collectedSongList, useSideSongList, playSongList } = useMusicPlayRelation()
+
 const emits = defineEmits<{
     (e: "changeState", query: { id: number, flag?: boolean }): void
 }>()
-const globalState = useGlobalStore()
+
 // 歌手
 const props = defineProps<{
     headerInfo: HeaderInfo
 }>()
-// 前往个人中心
-const goPersonCenter = () => {
-    router.push(`/personal-center/${props.headerInfo.creator.userId}`)
-}
+
 /**
  * 更新store数据
  * @param id 歌单id
  * @param type 1: 收藏 0: 取消收藏
  */
 const updateSongList = async (id: number, type: number) => {
-    const oldList = JSON.parse(JSON.stringify(useSideSongList.collectedSongList)) as Playlist_user[]
+    const oldList = JSON.parse(JSON.stringify(collectedSongList.value)) as Playlist_user[]
     if (type === 1) {
         // 添加新的歌单数据
         const r = await getSongListDetail({ id })
@@ -116,7 +116,7 @@ const updateSongList = async (id: number, type: number) => {
 // 歌单收藏 限制点击频次
 const collectSongList = async () => {
     if (!checkLogin()) {
-        return globalState.isShowLoginBox = true
+        return isShowPlayPage.value = true
     }
     if (loading.value) return Message.error("请勿频繁操作")
     loading.value = true
@@ -136,9 +136,13 @@ const collectSongList = async () => {
         emits("changeState", { id: props.headerInfo.id, flag: true })
     }
 }
-// 播放全部歌曲
 const playAll = () => {
-
+    const id = Number(route.params.id)
+    playSongList(JSON.stringify(props.headerInfo.trackIds), id)
+}
+// 前往个人中心
+const goPersonCenter = () => {
+    router.push(`/personal-center/${props.headerInfo.creator.userId}`)
 }
 </script>
 <style lang="scss" scoped>

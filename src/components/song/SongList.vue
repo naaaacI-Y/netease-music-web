@@ -42,6 +42,7 @@ import { getMusicDetail } from '@/service/api/music';
 import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
 const injectSongList = inject<{ data: HotSong[] }>("songList")
 const injectSongListInfo = inject<{ data: TrackId[] }>("songListInfo")
+// 为什么又新开空间存储注入的数据 待检查 TODO
 const list = reactive({ data: [] as HotSong[] })
 const info = inject<{ data: TrackId[] }>("songListInfo")
 const route = useRoute()

@@ -48,7 +48,7 @@
 import SongListComment from '../song/SongListComment.vue';
 import SongListMusic from "./SongListMusic.vue"
 import PersonalFmMusic from "./PersoanlFmMusic.vue"
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import Message from "@/components/message"
 import { getSimilatSong } from '@/service/api/music';
 import { NewMusicRet } from '@/service/api/music/types';
@@ -65,15 +65,21 @@ const props = withDefaults(defineProps<
     playType: "personal"
 })
 const similarSongList = reactive({ data: [] as NewMusicRet[] })
+
+// 监听当前播放歌曲的变化，更新相似歌曲
+watch(() => player.value.currentTrack.id, (newVal) => {
+    getSimilatList(newVal)
+})
+
 // 获取相似歌曲
-const getSimilatList = async () => {
-    const r = await getSimilatSong({ id: props.musicId! })
+const getSimilatList = async (id: number) => {
+    const r = await getSimilatSong({ id })
     similarSongList.data = r.songs
 }
 const showCommentBox = () => {
     Message.publishComment(1, 0, `歌曲: ${player.value.currentTrack.name}`, player.value.currentTrack.id)
 }
-props.musicId && getSimilatList()
+props.musicId && getSimilatList(props.musicId)
 </script>
 <style lang="scss" scoped>
 .music-play-wrapper {

@@ -109,6 +109,7 @@ const props = withDefaults(defineProps<{
 })
 const emits = defineEmits<{
     (e: "changeCommentCount", count: number): void
+    (e: "updateSimilarList"): void
 }>()
 // 计算后的歌曲id 单曲播放界面/私人fm播放
 const cid = computed(() => {
@@ -130,8 +131,6 @@ watch(() => pages.page, async (newVal) => {
         // 滚动到最新评论处
         scrollToPos()
     }
-    console.log("cid发生变化 改变了页码 需要重新获取评论");
-
     getAllComment(cid.value)
 })
 watch(() => route.params.id, (newVal) => {
@@ -146,12 +145,14 @@ watch(() => cContent.value, async (newVal) => {
     }
 })
 
-watch(() => cid.value, (newVal) => {
-    console.log("cid发生变化了=============");
-
-    // 更新评论 有毛病？？？？ TODO
+watch(() => cid.value, () => {
+    // 更新评论
     pages.page = 1
+    isShowLoading.value = true
     getAllComment(cid.value)
+    // 更新相似歌曲
+    emits("updateSimilarList")
+
 })
 // 最大长度
 const maxLength = computed(() => {

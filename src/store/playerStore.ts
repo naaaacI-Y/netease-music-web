@@ -46,8 +46,8 @@ const usePlayerStore = defineStore("player", {
                 current: 0, // 当前播放歌曲在播放列表里的index
                 shuffledList: [] as number[], // 被随机打乱的播放列表，随机播放模式下会使用此播放列表
                 shuffledCurrent: 0, // 当前播放歌曲在随机列表里面的index
-                playlistSource: { type: 'album', id: 123 }, // 当前播放列表的信息
-                currentTrack: { id: 86827685 } as Song, // 当前播放歌曲的详细信息
+                playlistSource: {} as { id: number, type: string }, // 当前播放列表的信息
+                currentTrack: {} as Song, // 当前播放歌曲的详细信息
                 playNextList: [] as number[], // 当这个list不为空时，会优先播放这个list的歌
                 isPersonalFM: false, // 是否是私人FM模式
                 personalFMTrack: { id: 0 } as PersonalSong, // 私人FM当前歌曲
@@ -389,7 +389,7 @@ const usePlayerStore = defineStore("player", {
                         // this._cacheNextTrack();
                         // return source;
                     } else {
-                        // store.dispatch('showToast', `无法播放 ${track.name}`);
+                        // 如果获取不到资源
                         if (ifUnplayableThen === 'playNextTrack') {
                             if (this.player.isPersonalFM) {
                                 this.playNextFMTrack();
@@ -400,6 +400,8 @@ const usePlayerStore = defineStore("player", {
                             this.playPrevTrack();
                         }
                     }
+                }).finally(() => {
+                    this.saveSelfToLocalStorage()
                 });
             });
         },
@@ -413,7 +415,7 @@ const usePlayerStore = defineStore("player", {
             if (trackID === undefined) return false;
             this.player.current = index;
             this.replaceCurrentTrack(trackID, true, 'playPrevTrack');
-            this.saveSelfToLocalStorage()
+            // this.saveSelfToLocalStorage()
             return true;
         },
 
@@ -430,7 +432,7 @@ const usePlayerStore = defineStore("player", {
             }
             this.player.current = index!;
             this.replaceCurrentTrack(trackID);
-            this.saveSelfToLocalStorage()
+            // this.saveSelfToLocalStorage()
             return true;
         },
 
@@ -570,19 +572,19 @@ const usePlayerStore = defineStore("player", {
             if (!this.player.enabled) this.player.enabled = true;
             this.player.list = trackIDs;
             this.player.current = 0;
-            // this._progress = 0
             this.player.playlistSource = {
                 type: playlistSourceType,
                 id: playlistSourceID,
             };
             // if (this.shuffle) this.shuffleTheList(autoPlayTrackID);
             if (autoPlayTrackID === -1) {
+                // 播放第一首
                 this.replaceCurrentTrack(this.player.list[0]);
             } else {
+                // 如果传了歌曲 id ==> autoPlayTrackID 播放该首歌
                 this.player.current = trackIDs.indexOf(autoPlayTrackID);
                 this.replaceCurrentTrack(autoPlayTrackID);
             }
-            this.saveSelfToLocalStorage()
         },
         // shuffleTheList(firstTrackID = currentTrack.id) {
         //     let list = this.list.filter(tid => tid !== firstTrackID);
@@ -605,14 +607,11 @@ const usePlayerStore = defineStore("player", {
 
         /**
          * 通过id播放歌单
-         * @param id 歌单id
+         * @param id
          * @param trackID 歌单内某一首歌曲id
          * @param noCache
          */
-        playPlaylistByID(id: number, trackID = -1, noCache = false) {
-            console.debug(
-                `[debug][Player.js] playPlaylistByID 👉 id:${id} trackID:${trackID} noCache:${noCache}`
-            );
+        playPlaylistByID(id: number, trackID = -1) {
             getSongListDetail({ id }).then(data => {
                 let trackIDs = data.playlist.trackIds!.map(t => t.id);
                 this.replacePlaylist(trackIDs, id, 'playlist', trackID);
@@ -632,20 +631,26 @@ const usePlayerStore = defineStore("player", {
         },
 
         /**
-         *
-         * @param id
-         * @param listName
+         * 通过id播放列表中的数据
+         * @param id 歌曲id
+         * @param listName 如果是默认的话说明是同一个歌单，更改当前的播放索引
          */
         playTrackOnListByID(id: number, listName = 'default') {
             if (listName === 'default') {
                 this.player.current = this.player.list.findIndex(t => t === id);
-                this.saveSelfToLocalStorage()
+                // this.saveSelfToLocalStorage()
             }
             this.replaceCurrentTrack(id);
         },
 
 
-        addTrackToPlayNext(trackID: any, playNow = false) {
+        /**
+         * 添加到播放列表 并且播放
+         * @param trackID 歌曲id
+         * @param playNow 是否立即播放
+         * @param type 类型 追加 | 头添加 | 中间添加
+         */
+        addTrackToPlayNext(trackID: any, playNow = false, type: "push" | "unshift" | "splice") {
             this.player.playNextList.push(trackID);
             if (playNow) {
                 if (this.player.isPersonalFM) {
@@ -654,7 +659,7 @@ const usePlayerStore = defineStore("player", {
                     this.playNextTrack();
                 }
             }
-            this.saveSelfToLocalStorage()
+            // this.saveSelfToLocalStorage()
         },
 
         /**
@@ -670,7 +675,7 @@ const usePlayerStore = defineStore("player", {
             } else {
                 this.playOrPause();
             }
-            this.saveSelfToLocalStorage()
+            // this.saveSelfToLocalStorage()
         },
 
         /**
@@ -682,7 +687,7 @@ const usePlayerStore = defineStore("player", {
             if (await this.playNextFMTrack()) {
                 fmTrash({ id });
             }
-            this.saveSelfToLocalStorage()
+            // this.saveSelfToLocalStorage()
         },
 
         /**
@@ -697,9 +702,6 @@ const usePlayerStore = defineStore("player", {
                 this.player.repeatMode = 'on';
             }
             this.saveSelfToLocalStorage()
-            // if (isCreateMpris) {
-            //     ipcRenderer.send('switchRepeatMode', this.repeatMode);
-            // }
         },
 
         switchShuffle() {
@@ -736,11 +738,17 @@ const usePlayerStore = defineStore("player", {
          * @param flag true: 添加， false: 删除
          */
         updateLikedSong(id: number, flag: boolean) {
+            console.log("更新喜欢列表=========");
+
             if (flag) {
                 return this.likedList.push(id)
             }
             const idx = this.likedList.findIndex(item => item === id)
-            this.likedList.splice(idx, 1)
+            console.log(idx, "idxxxxxxxxxx");
+
+            const r = this.likedList.splice(idx, 1)
+            console.log(r, "删除的元素");
+
         }
 
     },

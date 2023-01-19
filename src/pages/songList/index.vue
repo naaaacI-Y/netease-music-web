@@ -23,6 +23,7 @@ import { HotSong } from '@/service/api/singer/types';
 import { getQueryId } from '@/utils';
 import { provide, reactive, ref } from 'vue';
 import { onBeforeRouteUpdate } from 'vue-router';
+import { Playlist_user } from '@/service/api/user/types';
 const queryId = getQueryId() as number
 const songList = reactive({ data: [] as HotSong[] })
 const songListInfo = reactive({ data: [] as TrackId[] })
@@ -39,9 +40,11 @@ const headerInfo = reactive<HeaderInfo>({
     trackCount: 0,
     shareCount: 0,
     commentCount: 0,
+    playList: {} as Playlist_user,
     creator: {} as Creator,
     tags: [],
     playCount: 0,
+    trackIds: [],
     subscribed: false
 })
 // 注入songlist
@@ -61,6 +64,14 @@ const getDetail = async (query: { id: number, flag?: boolean }) => {
     songListInfo.data = r.playlist.trackIds || []
     let key: keyof HeaderInfo
     for (key in headerInfo) {
+        if (key === "trackIds") {
+            (headerInfo[key] as any) = r.playlist[key]?.map(item => item.id)
+            continue
+        }
+        if (key === "playList") {
+            (headerInfo[key] as any) = r.playlist
+            continue
+        }
         (headerInfo[key] as any) = r.playlist[key]
     }
     isShowLoading.value = false

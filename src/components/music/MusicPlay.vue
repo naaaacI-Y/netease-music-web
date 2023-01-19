@@ -9,7 +9,7 @@
         <div class="music-play-body-wrap d-flex" :class="{ songListWidth: playType === 'songList' }">
             <div class="comment-wrap" :class="{ isHaveSide: playType === 'songList' }">
                 <SongListComment :is-show-title="true" :source-type="0" :is-show-input-box="false"
-                    ref="songListComment">
+                    @update-similar-list="getSimilatList" ref="songListComment">
                     <template #song-box>
                         <div class="comment-box d-flex ai-center jc-between mb-30" @click="showCommentBox">
                             <div class="left d-flex ai-center pl-8">
@@ -50,26 +50,32 @@
 import SongListComment from '../song/SongListComment.vue';
 import SongListMusic from "./SongListMusic.vue"
 import PersonalFmMusic from "./PersoanlFmMusic.vue"
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import Message from "@/components/message"
 import { getSimilatSong } from '@/service/api/music';
 import { NewMusicRet } from '@/service/api/music/types';
 import useStore from "@/store"
 import { storeToRefs } from 'pinia';
 import { formatPicUrl } from '@/utils';
-
+const { usePlayer } = useStore()
+const { player } = storeToRefs(usePlayer)
 const props = withDefaults(defineProps<
     {
         playType: "personal" | "songList"
         musicId?: number
     }>(), {
-    playType: "personal"
+    playType: "personal",
+    musicId: player.value.currentTrack.id
 })
-const { usePlayer } = useStore()
-const { player } = storeToRefs(usePlayer)
-const similarSongList = reactive({ data: [] as NewMusicRet[] })
 
+const similarSongList = reactive({ data: [] as NewMusicRet[] })
 const songListComment = ref()
+// 监听当前播放歌曲的变化，更新相似歌曲
+watch(() => player.value.currentTrack.id, () => {
+    console.log(player.value.currentTrack.id, "player.value.currentTrack.idplayer.value.currentTrack.idplayer.value.currentTrack.id");
+
+    getSimilatList()
+})
 // 获取相似歌曲
 const getSimilatList = async () => {
     const r = await getSimilatSong({ id: props.musicId! })
