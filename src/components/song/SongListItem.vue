@@ -105,8 +105,8 @@ const isPlaying = computed(() => {
     return !player.value.isPersonalFM && player.value.currentTrack.id === props.item?.id
 })
 
-// // 更新歌单头部信息
-// // 如果是自己喜欢歌曲的界面 取消喜欢之后直接删除列表中的某一项
+// 更新歌单头部信息
+// 如果是自己喜欢歌曲的界面 取消喜欢之后直接删除列表中的某一项
 const updateSongListHeadeInfo = () => {
     // 是否是自己喜欢歌单界面
     const idx = createdSongList.value.findIndex(item => item.id == Number(route.params.id))
@@ -170,7 +170,7 @@ const goMvDetail = () => {
 // 列表歌曲播放
 const playMusic = async () => {
     if (!isHaveCopyRight.value) {
-        return Message.error("因合作方要求，该资源暂时下架>_<")
+        return Message.error("暂无资源>_<")
     }
     if (isNeedVip.value) {
         return Message.error("开通vip可畅听当前歌曲")

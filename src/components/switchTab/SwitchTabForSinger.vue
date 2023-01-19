@@ -57,8 +57,6 @@
                 </SingerCard>
             </div>
         </div>
-        <!-- <div class="performance" v-if="activeIndex === 4">演出信息</div> -->
-
     </div>
 </template>
 
@@ -67,7 +65,6 @@ import RecommendMvCard from '../RecommendMvCard.vue';
 import SingerCard from '../singer/SingerCard.vue';
 import CardForAlbum from '../CardForAlbum.vue';
 import { getSingerAlbum, getSimilarSinger, getSingerDes, getSingerMv } from "@/service/api/singer"
-import songForList from '../songForList.vue';
 import { computed, reactive, ref, watch, watchEffect } from 'vue';
 import { labelList } from "@/utils/const"
 import { useRoute } from 'vue-router';
@@ -75,23 +72,13 @@ import { Artist, HotAlbum, Introduction, Mv } from '@/service/api/singer/types';
 const route = useRoute()
 const activeIndex = ref(0)
 const songListShowType = ref("card")
-// const { params } = useRoute()
 const singerId = ref(Number(route.params.id)) // 歌手id
 
 const singerAlbumList = reactive<Record<string, HotAlbum[]>>({ data: [] }) // 专辑信息
-// const singerInfo = reactive({ data: {} as Artist }) // 歌手信息
-// const hotSonList = reactive<Record<string, HotSong[]>>({data:[]}) // 热门信息不能通过props传递，项太多
 const singerMvList = reactive<Record<string, Mv[]>>({ data: [] }) // mv
 const similarSingerList = reactive<Record<string, Artist[]>>({ data: [] }) // 相似歌手
 const singerDetail = reactive<Record<string, Introduction[]>>({ data: [] }) // 歌手详情
-// const singerId = computed(() => {
-//     return Number(useRoute().params.id)
-// })
-// watch(() => singerId.value, (newVal, oldVal) => {
-//     console.log(newVal, oldVal, "===============");
 
-//     activeIndex.value = 0
-// })
 watch(() => route.params.id, (newVal) => {
     activeIndex.value = 0
     singerId.value = Number(newVal)

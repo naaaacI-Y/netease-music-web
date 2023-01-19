@@ -10,7 +10,7 @@
         <div class="search-history" v-if="searchHistoryList && !searchKeywords">
             <div class="history-title d-flex ai-center text-66 mb-10">
                 <span class="fs-4">搜索历史</span>
-                <i class="iconfont icon-delete fs-8 ml-6" @click="clearHistory"></i>
+                <i class="iconfont icon-shanchu fs-8 ml-6" @click="clearHistory"></i>
             </div>
             <div class="search-his-wrap d-flex ai-center flex-wrap">
                 <div class="search-item fs-2 text-4b mr-10 mb-10" v-for="item in Object.keys(searchHistoryList)"

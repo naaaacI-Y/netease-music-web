@@ -248,7 +248,7 @@ export interface Playlist_SongList {
     subscribedCount: number;
     cloudTrackCount: number;
     ordered: boolean;
-    description?: string;
+    description: string | undefined;
     tags: string[];
     updateFrequency: string;
     backgroundCoverId: number;
