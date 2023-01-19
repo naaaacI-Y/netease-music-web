@@ -9,13 +9,13 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
 import UniqueCard from './components/UniqueCard.vue';
-import { getUniquereCommend } from "@/service/api/recommend"
+import { getUniquereCommendList } from "@/service/api/recommend"
 import { reactive } from 'vue';
 import { UniqueRecommendRet } from '@/service/api/recommend/types';
 const router = useRouter()
 const recommendList = reactive<Record<string, UniqueRecommendRet[]>>({ data: [] })
 const getRecommend = async () => {
-    const r = await getUniquereCommend()
+    const r = await getUniquereCommendList({ limit: 4, offset: 0 })
     recommendList.data = r.result
 }
 getRecommend()

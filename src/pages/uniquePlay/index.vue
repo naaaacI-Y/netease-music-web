@@ -1,9 +1,5 @@
 <template>
     <DefaultLayout>
-        <!-- <div class="unique-play-wrapper d-flex flex-wrap jc-between">
-            <UniqueCard v-for="(item, index) in  uniqueList.data" :card-width="230" :card-height="86"
-                :unique-item="item" :key="index"></UniqueCard>
-        </div> -->
         <RecycleScroller id="scroller" :items="uniqueList.data" :item-size="170" key-field="id"
             style="height: 100%;width: 100%;" :buffer="680">
             <template v-slot="{ item }">
@@ -12,11 +8,15 @@
                         :unique-item="it" :key="index"></UniqueCard>
                 </div>
             </template>
+            <template #after>
+                <Loading v-show="loading"></Loading>
+            </template>
         </RecycleScroller>
     </DefaultLayout>
 </template>
 
 <script lang="ts" setup>
+import Loading from "@/components/Loading.vue"
 import { formatListData, FormatList, debounce } from "@/utils"
 import UniqueCard from '../findMusic/personalRecommend/components/UniqueCard.vue';
 import { getUniquereCommendList } from "@/service/api/recommend"
@@ -57,11 +57,14 @@ const getList = async () => {
         offset: (pages.page - 1) * pages.limit
     }
     const r = await getUniquereCommendList(queryInfo)
+    loading.value = false
     pages.page++
     const _ = formatListData<UniqueRecommendRet>(r.result)
+
     uniqueList.data = uniqueList.data.concat(..._)
     loaded.value = r.more
-    loading.value = false
+
+
 }
 
 // 初始化滚动监听
