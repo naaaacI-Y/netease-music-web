@@ -1,13 +1,13 @@
 <template>
     <DefaultLayout>
         <div class="personal d-flex ai-center">
-            <MusicPlay play-type="personal"></MusicPlay>
+            <MusicCommon play-type="personal"></MusicCommon>
         </div>
     </DefaultLayout>
 </template>
 
 <script lang="ts" setup>
-import MusicPlay from '@/components/music/MusicPlay.vue';
+import MusicCommon from '@/components/music/MusicCommon.vue';
 </script>
 <style lang="scss" scoped>
 .personal {

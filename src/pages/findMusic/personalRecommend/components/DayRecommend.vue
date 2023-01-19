@@ -25,7 +25,7 @@
                 </div>
             </div>
         </div>
-        <SongList></SongList>
+        <SongList :is-show-loading="showLoading"></SongList>
     </DefaultLayout>
 </template>
 
@@ -33,13 +33,16 @@
 import SongList from '@/components/song/SongList.vue';
 import { getDayRecommend } from '@/service/api/music';
 import { DailySong } from '@/service/api/music/types';
-import { provide, reactive } from 'vue';
+import { provide, reactive, ref } from 'vue';
 const songList = reactive({ data: [] as DailySong[] })
 const day = new Date().getDate()
+const showLoading = ref(true)
 provide("songList", songList)
+provide("songListInfo", [])
 const getSongList = async () => {
     const r = await getDayRecommend()
     songList.data = r.data.dailySongs
+    showLoading.value = false
 }
 getSongList()
 </script>
