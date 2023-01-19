@@ -7,7 +7,7 @@
                 <span v-if="item === '评论'" class="fs-2">({{ commentOfCount }})</span>
             </div>
         </div>
-        <SongList v-show="activeIndex === 0"></SongList>
+        <SongList v-show="activeIndex === 0" :is-show-loading="isShowLoading"></SongList>
         <SongListComment v-if="activeIndex === 1" :source-type="3" @change-comment-count="changeCommentCount">
         </SongListComment>
         <div v-show="activeIndex === 2" class="detail pt-20">
@@ -24,6 +24,7 @@ import { computed, ref, watch } from 'vue';
 const props = defineProps<{
     commentCount: number
     albumDetailInfo: string
+    isShowLoading: boolean
 }>()
 const commentOfCount = ref(0)
 watch(() => props.commentCount, (newVal) => {

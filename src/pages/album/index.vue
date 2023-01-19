@@ -3,7 +3,8 @@
         <div class="album-wrapper">
             <AlbumHeader :album-info="albumInfo.data" :album-count-info="albumCountInfo.data"
                 @change-collection-count="getAlbumCountInfo"></AlbumHeader>
-            <SwicthTabForAlbum :comment-count="commentCount" :album-detail-info="detailInfo"></SwicthTabForAlbum>
+            <SwicthTabForAlbum :comment-count="commentCount" :album-detail-info="detailInfo"
+                :is-show-loading="isShowLoading"></SwicthTabForAlbum>
         </div>
     </DefaultLayout>
 </template>
@@ -23,15 +24,17 @@ const commentCount = ref(0) // 评论数量
 const detailInfo = ref("") // 专辑详情
 const albumSongList = reactive({ data: [] as HotSong[] })
 const queryId = getQueryId() as number // 查询参数id
+const isShowLoading = ref(false)
 provide("songList", albumSongList)
 provide("songListInfo", [])
 // 获取专辑详情
 const getAlbumDetailInfo = async () => {
+    isShowLoading.value = true
     const r = await getAlbumInfo({ id: queryId })
     albumInfo.data = r.album
     detailInfo.value = r.album.description
     albumSongList.data = r.songs
-
+    isShowLoading.value = false
 }
 // 获取专辑数量相关 收藏、分享
 const getAlbumCountInfo = async () => {
