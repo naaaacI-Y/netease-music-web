@@ -2,7 +2,10 @@
     <div class="song-list-item-wrapper d-flex flex-column" :class="{ odd: index % 2 !== 0 }" v-on:dblclick="playMusic">
         <div class="item-wrap d-flex" style="height:35px">
             <div class="left d-flex ai-center fs-2 jc-event" v-if="type !== 3">
-                <div class="index text-c4">{{ paddingLeft(index) }}</div>
+                <div class="index" v-show="isPlaying">
+                    <i class="iconfont icon-yinlianglabashengyin" style="color: #c3473a"></i>
+                </div>
+                <div class="index text-c4" v-show="!isPlaying">{{ paddingLeft(index) }}</div>
                 <slot name="flagInside" v-if="rankType === 1"></slot>
                 <i class="iconfont icon-aixin text-99" @click="likeMusic(item?.id!, true, updateSongListInfo)"
                     v-show="!isLike"></i>
@@ -16,9 +19,16 @@
             </div>
             <div class="main-info fs-2 d-flex ">
                 <div class="song-name d-flex ai-center" :style="{ width: rankType === -1 ? '34.8%' : '42.8%' }">
-                    <div class="text-33 mr-4">{{ item?.name }}</div>
+                    <div class="text-33 mr-4"
+                        :class="[isPlaying ? 'isPlaying' : '', isHaveCopyRight ? '' : 'isNeddCopyRight']">{{
+                            item?.name
+                        }}
+                    </div>
                     <div class="text-99 mr-4" v-if="item?.alia?.length">({{ item?.alia[0] }})</div>
-                    <i class="iconfont icon-h-square text-primary_red_4 fs-2" v-if="item?.sq && type !== 3"></i>
+                    <!-- <i class="iconfont icon-h-square text-primary_red_4 fs-2" v-if="item?.sq && type !== 3"></i> -->
+                    <div class="sq d-flex ai-center" v-if="item?.sq && type !== 3">
+                        <span>SQ</span>
+                    </div>
                     <i class="iconfont icon-bofang2 text-primary_red_4 ml-4 fs-7" v-if="item?.mv && type !== 3"
                         @click="goMvDetail"></i>
                 </div>
@@ -48,17 +58,17 @@
 import { TrackId } from '@/service/api/music/types';
 import { HotSong } from '@/service/api/singer/types';
 import { formatSongTime, paddingLeft } from '@/utils';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import Message from "@/components/message"
 import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
 const route = useRoute()
 const router = useRouter()
 const rankType = Number(route.query.rankType)
-const { createdSongList, likedList, likeMusic, usePlayer } = useMusicPlayRelation()
-// fee 0: 免费或无版权  检查是否有版权 如果没有版权 变灰
-// 1: vip歌曲 非vip变灰展示
-// 4:  购买专辑 变灰展示
-// 8: 非会员可播放低音质 正常展示
+const isHaveCopyRight = ref(true) // 是否有版权
+const isNeedVip = ref(false) // 是否需要vip
+const isNeedBuy = ref(false) // 是否需要购买
+const { createdSongList, likeMusic, usePlayer, player, isLike, userFile } = useMusicPlayRelation()
 
 const props = withDefaults(defineProps<
     {
@@ -89,9 +99,11 @@ const isShow = computed(() => {
             break;
     }
 })
-const isLike = computed(() => {
-    return likedList.value.includes(props.item?.id!)
+const isPlaying = computed(() => {
+    return !player.value.isPersonalFM && player.value.currentTrack.id === props.item?.id
 })
+
+//  如果是自己喜欢歌曲的界面 取消喜欢之后需要更新数据，也可以直接删除列表中的某一项，用户体验更好，待优化TODO
 const updateSongListInfo = () => {
     // 是否是自己喜欢歌单界面
     const idx = createdSongList.value.findIndex(item => item.id == Number(route.params.id))
@@ -101,6 +113,43 @@ const updateSongListInfo = () => {
     }
 }
 
+/**
+ * 检查歌曲版权信息，是否可播放
+ * fee === 0 ==> 免费或是无版权的
+ * fee === 1 ==> vip歌曲，用户是否是vip
+ * fee === 4 ==> 需要购买专辑， 检查是否已购买 暂时不做
+ * fee === 8 ==> 非会员可播放低音质 正常展示
+ * @return boolean
+ */
+const checkMusicCopyright = () => {
+    let r: boolean
+    switch (props.item?.fee) {
+        case 0:
+            if (props.item.noCopyrightRcmd) {
+                isHaveCopyRight.value = false
+            }
+            r = false
+            break;
+        case 1:
+            // 检查用户是否是vip
+            if (userFile.value.vipType === 0) {
+                isNeedVip.value = true
+            }
+            r = true
+            break
+        case 4:
+            r = true
+            isNeedBuy.value = true
+            break
+        case 8:
+            r = true;
+            break
+        default:
+            r = true
+            break;
+    }
+    return r;
+}
 // 前往歌手页
 const goSingerPage = () => {
     router.push(`/singer-home/${props.item?.ar[0].id}`)
@@ -115,15 +164,20 @@ const goAlbumPage = () => {
 const goMvDetail = () => {
     router.push(`/mv-detail/${props.item?.mv}`)
 }
+// 列表歌曲播放
 const playMusic = async () => {
-    // 检查歌曲是否可用
-    // const r = await checkMusicAvaliable({id: props.item!.id})
-    // 添加当前歌单的id列表
-    console.log("dbclick to play music========");
-
+    if (!isHaveCopyRight.value) {
+        return Message.error("因合作方要求，该资源暂时下架>_<")
+    }
+    if (isNeedVip.value) {
+        return Message.error("开通vip可畅听当前歌曲")
+    }
+    if (isNeedBuy.value) {
+        return Message.error("需购买专辑可畅听当前歌曲")
+    }
     usePlayer.replacePlaylist([props.item!.id], props.item!.id, "song-list", props.item?.id)
-
 }
+checkMusicCopyright()
 </script>
 <style lang="scss" scoped>
 .song-list-item-wrapper {
@@ -166,15 +220,20 @@ const playMusic = async () => {
             white-space: nowrap;
 
             .sq {
-                border: 1px solid #ff3133;
-                border-radius: 4px;
-                padding: 0 3px;
-                height: 20px;
+                @include SQ;
             }
 
             .icon-bofang2:hover {
                 cursor: pointer;
             }
+        }
+
+        .isPlaying {
+            color: #c3473a;
+        }
+
+        .isNeddCopyRight {
+            color: var(--theme-d4);
         }
 
         .singer,

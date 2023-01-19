@@ -4,10 +4,11 @@ import useStore from "@/store"
 import { computed } from "vue"
 import { storeToRefs } from 'pinia';
 export const useMusicPlayRelation = () => {
-    const { usePlayer, useGlobal, useSideSongList } = useStore()
+    const { usePlayer, useGlobal, useSideSongList, userProfile } = useStore()
     const { player, likedList, currentTrackDuration } = storeToRefs(usePlayer)
     const { isShowPlayPage } = storeToRefs(useGlobal)
     const { createdSongList } = storeToRefs(useSideSongList)
+    const { userFile } = storeToRefs(userProfile)
     // 是否喜欢
     const isLike = computed(() => {
         return likedList.value.includes(player.value.currentTrack.id)
@@ -83,6 +84,7 @@ export const useMusicPlayRelation = () => {
         usePlayer,
         isShowPlayPage,
         playPersonalFm,
+        userFile,
         createdSongList // 创建的歌单
     }
 }

@@ -14,9 +14,11 @@
                 <span class="mr-4 text-00">{{ musicItem.name }}</span>
                 <span v-if="musicItem.song.alias.length" class="text-93">({{ musicItem.song.alias[0] }})</span>
             </div>
-            <div class="music-author" v-if="isOutSide">
-                <span class="text-primary_red_4 fs-1 mr-4 sq" v-if="musicItem.song.sqMusic">SQ</span>
-                <span class="fs-2">{{ musicItem.song.artists[0].name }}</span>
+            <div class="music-author d-flex ai-center" v-if="isOutSide">
+                <div class="text-primary_red_4  mr-4 sq" v-if="musicItem.song.sqMusic">
+                    <span>SQ</span>
+                </div>
+                <div class="fs-2">{{ musicItem.song.artists[0].name }}</div>
             </div>
         </div>
         <div class="music-author fs-2 " v-if="!isOutSide">歌曲演唱者</div>
@@ -85,9 +87,7 @@ const paddingIndex = (index: number) => {
         width: 185px;
 
         .sq {
-            border: 1px solid #d33b31;
-            border-radius: 4px;
-            padding: 0 3px;
+            @include SQ(0px, 0px, 8px);
         }
     }
 
