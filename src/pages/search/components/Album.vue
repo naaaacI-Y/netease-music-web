@@ -1,7 +1,8 @@
 <template>
     <div class="album-wrapper">
         <div class="wrap" v-show="!isShowLoading && pages.total">
-            <CommonItem v-for="(item, index) in albumList.data" :key="item.id" :index="index">
+            <CommonItem v-for="(item, index) in albumList.data" :key="item.id" :index="index"
+                @click="router.push(`/album/${item.id}`)">
                 <template #avatar>
                     <div class="avatar mr-15">
                         <img :src="item.picUrl" alt="">
@@ -13,7 +14,7 @@
                 </template>
                 <template #author>
                     <div class="author fs-1 d-flex ai-center">
-                        <span class="text-74">{{ item.artist.name }}</span>
+                        <span class="text-74" v-html="keywordsColorful(item.artist.name, keywords)"></span>
                         <span class="alia text-97" v-if="item.alias?.length">({{ item.alias[0] }})</span>
                     </div>
                 </template>
@@ -36,11 +37,13 @@ import { keywordsColorful } from '@/utils';
 import { reactive, ref, watch } from 'vue';
 import CommonItem from '@/components/CommonItem.vue';
 import { Album } from "@/service/api/recommend/types"
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import Loading from '@/components/Loading.vue';
 import { searchByType } from '@/service/api/search';
 import { SearchAlbumResult } from '@/service/api/search/types';
 import { scrollToTop } from '@/utils';
+
+const router = useRouter()
 const isShowLoading = ref(false)
 const emits = defineEmits<{
     (e: "changeTotal", num: number): void

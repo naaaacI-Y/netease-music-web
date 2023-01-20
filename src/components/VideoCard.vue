@@ -17,13 +17,16 @@
             <div class="line1 fs-3 text-4e d-flex ai-center mb-4" :class="{ noWrap: !isOneline }">
                 <slot name="mv-flag"></slot>
                 <!--超出一行需要省略，但是有标签，TODO-->
-                <span class="title">{{ videoItem.title }}</span>
+                <span class="title" v-if="!colorful">{{ videoItem.title }}</span>
+                <span class="title" v-if="colorful" v-html="keywordsColorful(videoItem.title, keywords)"></span>
             </div>
             <div class="line2 fs-1 text-c2 d-flex" v-if="!isOneline">
                 <span v-if="!Array.isArray(videoItem.creator)">by&ensp;</span>
-                <span>{{
+                <span v-if="!colorful">{{
                     Array.isArray(videoItem.creator) ? videoItem.creator[0].userName : videoItem.creator.nickname
                 }}</span>
+                <span v-if="colorful"
+                    v-html="keywordsColorful(Array.isArray(videoItem.creator) ? videoItem.creator[0].userName : videoItem.creator.nickname, keywords)"></span>
             </div>
         </div>
     </div>
@@ -35,21 +38,29 @@ import LazyLoadImg from './LazyLoadImg.vue';
 import { computed } from 'vue';
 import { formatSongTime, formatPlayCount } from '@/utils';
 import { VideoByCategoryRet } from '@/service/api/video/types';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { Video } from '@/service/api/search/types';
+import { keywordsColorful } from "@/utils";
+
 const router = useRouter()
 const props = withDefaults(defineProps<{
     isShowTime?: boolean
     isOneline?: boolean
     isPlayBtn?: boolean
     count?: number
+    colorful?: boolean // 搜索高亮
     videoItem: VideoByCategoryRet["data"] | Video
 }>(), {
     isShowTime: false,
     isOneline: false,
     isPlayBtn: false,
+    colorful: false,
     count: 4,
     // recommendMvItem: []
+})
+
+const keywords = computed(() => {
+    return useRoute().params.keywords as string
 })
 const cardWidth = computed(() => {
     if (props.count === 4) {

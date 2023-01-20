@@ -1,7 +1,8 @@
 <template>
     <div class="song-wrapper">
         <div class="wrap" v-show="!isShowLoading && pages.total">
-            <CommonItem v-for="(item, index) in singerList.data" :key="item.id" :index="index">
+            <CommonItem v-for="(item, index) in singerList.data" :key="item.id" :index="index"
+                @click="router.push(`/singer-home/${item.id}`)">
                 <template #avatar>
                     <div class="avatar mr-15">
                         <img :src="item.picUrl" alt="">
@@ -33,13 +34,14 @@
 import Loading from '@/components/Loading.vue';
 import Pagination from '@/components/Pagination.vue';
 import { searchByType } from '@/service/api/search';
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { Artist, SearchSingerResult } from '@/service/api/search/types';
 import { reactive, ref, watch } from 'vue';
 import CommonItem from '@/components/CommonItem.vue';
 import { scrollToTop } from '@/utils';
 import { keywordsColorful } from '@/utils';
 
+const router = useRouter()
 const singerList = reactive({ data: [] as Artist[] })
 const isShowLoading = ref(false)
 const pages = reactive({

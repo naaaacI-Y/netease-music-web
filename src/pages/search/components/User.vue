@@ -1,7 +1,8 @@
 <template>
     <div class="user-wrapper">
         <div class="wrap" v-show="!isShowLoading && pages.total">
-            <CommonItem v-for="(item, index) in userList.data" :key="item.userId" :index="index">
+            <CommonItem v-for="(item, index) in userList.data" :key="item.userId" :index="index"
+                @click="router.push(`/personal-center/${item.userId}`)">
                 <template #avatar>
                     <div class="avatar mr-15">
                         <img :src="item.avatarUrl" alt="">
@@ -44,11 +45,12 @@ import Loading from '@/components/Loading.vue';
 import CommonItem from '../../../components/CommonItem.vue';
 import { SearchUserResult, Userprofile } from '@/service/api/search/types';
 import { computed, reactive, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { searchByType } from '@/service/api/search';
 import { scrollToTop } from '@/utils';
 import { keywordsColorful } from '@/utils';
 
+const router = useRouter()
 const isShowLoading = ref(false)
 const pages = reactive({
     page: 1,

@@ -1,7 +1,8 @@
 <template>
     <div class="song-list-wrapper">
         <div class="wrap" v-show="!isShowLoading && pages.total">
-            <CommonItem v-for="(item, index) in songList.data" :index="item.id" :key="index">
+            <CommonItem v-for="(item, index) in songList.data" :index="item.id" :key="index"
+                @click="router.push(`/song-list/${item.id}`)">
                 <template #avatar>
                     <div class="avatar mr-15">
                         <img :src="item.coverImgUrl" alt="">
@@ -40,13 +41,10 @@ import Pagination from '@/components/Pagination.vue';
 import { searchByType } from "@/service/api/search";
 import { Playlist, SearchSongListResult } from "@/service/api/search/types"
 import { reactive, ref, watch } from 'vue';
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import CommonItem from '../../../components/CommonItem.vue';
 import Loading from '@/components/Loading.vue';
 import { scrollToTop } from '@/utils';
-const emits = defineEmits<{
-    (e: "changeTotal", num: number): void
-}>()
 
 const isShowLoading = ref(false)
 const keywords = useRoute().params.keywords as string
@@ -56,6 +54,13 @@ const pages = reactive({
     total: 0
 })
 const songList = reactive({ data: [] as Playlist[] })
+const router = useRouter()
+
+const emits = defineEmits<{
+    (e: "changeTotal", num: number): void
+}>()
+
+
 
 watch(() => pages.total, () => {
     emits("changeTotal", pages.total)

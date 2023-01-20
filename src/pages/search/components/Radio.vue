@@ -1,7 +1,8 @@
 <template>
     <div class="radio-wrapper">
         <div class="wrap" v-show="!isShowLoading && pages.total">
-            <CommonItem v-for="(item, index) in radioList.data" :key="item.id" :index="index">
+            <CommonItem v-for="(item, index) in radioList.data" :key="item.id" :index="index"
+                @click="Message.error('暂无不支持>_<')">
                 <template #avatar>
                     <div class="avatar mr-15">
                         <img :src="item.picUrl" alt="">
@@ -30,6 +31,7 @@
 </template>
 
 <script lang="ts" setup>
+import Message from "@/components/message"
 import Pagination from '@/components/Pagination.vue';
 import { DjRadio, SearchRadioResult } from '@/service/api/search/types';
 import { reactive, ref, watch } from 'vue';
