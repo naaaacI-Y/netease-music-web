@@ -2,12 +2,13 @@
     <div class="personal-center-wrapper mb-30">
         <div class="head-info d-flex">
             <div class="info-left mr-30">
-                <img :src="userInfo.data?.profile?.avatarUrl" alt="">
+                <img :src="userInfo.data?.profile?.avatarUrl" alt="" v-if="!isReset">
+                <img src="@/assets/images/defaultAvatar.png" alt="" v-if="isReset">
             </div>
             <div class="info-right">
                 <div class="base-info mb-15 pb-9">
                     <div class="person-name fs-9 mb-5 text-33" style="font-weight: bold;">{{
-                        userInfo.data?.profile?.nickname
+                        isReset? "undefined": userInfo.data?.profile?.nickname
                     }}
                     </div>
                     <div class="person-level d-flex jc-between ai-center">
@@ -25,8 +26,9 @@
                                 </div>
                             </div>
                             <!-- <div class="identify" v-if=""></div> -->
-                            <div class="account-level fs-1 mr-6">Lv{{ userInfo.data?.level }}</div>
-                            <div class="sex d-flex ai-center jc-center" v-if="userInfo.data?.profile?.gender"
+                            <div class="account-level fs-1 mr-6">Lv{{ isReset? 0: userInfo.data?.level }}</div>
+                            <div class="sex d-flex ai-center jc-center"
+                                v-if="userInfo.data?.profile?.gender && !isReset"
                                 :style="{ backgroundColor: userInfo.data?.profile?.gender === 1 ? '#d2f2f1' : '#f9d0e7' }">
                                 <i class="iconfont icon-nanxing text-male fs-2"
                                     v-if="userInfo.data?.profile?.gender === 1"></i>
@@ -53,28 +55,28 @@
                 <div class="account-about">
                     <div class="count d-flex mb-4">
                         <div class="dynamic d-flex flex-column ai-center mr-30" @click="goDynamic">
-                            <div class="fs-9 text-33">{{ userInfo.data?.profile?.eventCount }}</div>
+                            <div class="fs-9 text-33">{{ isReset? 0: userInfo.data?.profile?.eventCount }}</div>
                             <div class="text-66 fs-2">动态</div>
                         </div>
                         <!-- <div>丨</div> -->
                         <div class="focus-count d-flex flex-column ai-center mr-30 ml-30" @click="goFocus">
-                            <div class="fs-9 text-33">{{ userInfo.data?.profile?.follows }}</div>
+                            <div class="fs-9 text-33">{{ isReset? 0: userInfo.data?.profile?.follows }}</div>
                             <div class="text-66 fs-2">关注</div>
                         </div>
                         <!-- <div>丨</div> -->
                         <div class="fans-count d-flex flex-column ai-center ml-30" @click="goFans">
-                            <div class="fs-9 text-33">{{ userInfo.data?.profile?.followeds }}</div>
+                            <div class="fs-9 text-33">{{ isReset? 0: userInfo.data?.profile?.followeds }}</div>
                             <div class="text-66 fs-2">粉丝</div>
                         </div>
                     </div>
                     <div class="address fs-2">
-                        <div class="area d-flex ai-center mb-4" v-if="area">
+                        <div class="area d-flex ai-center mb-4" v-if="area && !isReset">
                             <span class="text-33">所在地区：</span>
                             <span class="text-66">{{ area }}</span>
                         </div>
                         <div class="social d-flex ai-center mb-4">
                             <span class="text-33">社交网络：</span>
-                            <span v-if="userInfo.data?.bindings?.some(item => item.type === 2 && item.url)">
+                            <span v-if="userInfo.data?.bindings?.some(item => item.type === 2 && item.url) && !isReset">
                                 <i class="iconfont icon-weibo text-primary_red_4"></i>
                                 <!-- <i class="iconfont icon-QQ"></i> -->
                                 <!-- <i class="iconfont icon-weixinbg"></i> -->
@@ -83,7 +85,7 @@
                         </div>
                         <div class="introduce">
                             <span class="text-33">个人介绍：</span>
-                            <span class="text-66">{{ userInfo.data?.profile?.signature || "暂无介绍" }}</span>
+                            <span class="text-66">{{ userInfo?.data?.profile?.signature || "暂无介绍" }}</span>
                         </div>
                     </div>
                 </div>
@@ -106,19 +108,32 @@ const props = withDefaults(defineProps<{
     isSelf: false
 })
 const router = useRouter()
+const isReset = ref(false) // 用户是否注销账号
 const area = ref("")
 const userInfo = reactive({ data: {} as UserDetailByIdResult })
-// const userTitle = computed(() => {
-//     const types = userInfo.data.profile.allAuthTypes![0]
-//     return [types.desc,...types.tags].join("、")
-// })
+
 const getUserDetail = async () => {
-    const r = await getUserDetailById({ uid: props.uid })
-    userInfo.data = r
-    area.value = getArea(r.profile.province, r.profile.city)
+    getUserDetailById({ uid: props.uid }).then(res => {
+        userInfo.data = res
+        area.value = getArea(res.profile.province, res.profile.city)
+    }).catch((err) => {
+        console.log(err);
+        if (!err) {
+            isReset.value = true
+        }
+    })
+
+    // if (r.code === 404) {
+    //     // 用户已注销
+    //     return isReset.value = true
+    // }
+
 }
 // 关注/取消关注用户 code:200 ==> TODO
 const focusPerson = async () => {
+    if (isReset.value) {
+        return Message.error("该用户已注销，无法操作~")
+    }
     const _ = {
         id: userInfo.data.profile.userId,
         t: !userInfo.data.profile.followed ? 1 : 0
@@ -130,13 +145,16 @@ const focusPerson = async () => {
     }
 }
 const goFocus = () => {
+    if (isReset.value) return
     // 接口没有关注总数
     router.push(`/focus?focusName=${userInfo.data.profile.nickname}&id=${props.uid}&focus=${userInfo.data.profile.follows}`)
 }
 const goFans = () => {
+    if (isReset.value) return
     router.push(`/fans?fansName=${userInfo.data.profile.nickname}&id=${props.uid}`)
 }
 const goDynamic = () => {
+    if (isReset.value) return
     router.push(`/dynamic?dynamicName=${userInfo.data.profile.nickname}&id=${props.uid}`)
 }
 getUserDetail()
