@@ -11,19 +11,19 @@
             <SongListItem v-for="(item, index) in list.data" :index="index + 1" :type="0" :item="item" :key="item.id"
                 @update-song-list-header-info="emits('updateHeaderInfo')">
                 <template #flagInside>
-                    <div class="flag d-flex ai-center jc-center" v-if="!info!.data[index].ratio">
-                        <i class="iconfont icon-new text-new" v-if="info!.data[index].lr === undefined"></i>
-                        <div class="no-change" v-if="info!.data[index].lr === 0 || info!.data[index].lr === index">
+                    <div class="flag d-flex ai-center jc-center" v-if="!info!.data[index]?.ratio">
+                        <i class="iconfont icon-new text-new" v-if="info!.data[index]?.lr === undefined"></i>
+                        <div class="no-change" v-if="info!.data[index]?.lr === 0 || info!.data[index]?.lr === index">
                             <span class="text-99">-</span>
                         </div>
                         <i class="iconfont icon-xiangshangjiantou text-primary_red_4"
-                            v-if="info!.data[index].lr! > index"></i>
+                            v-if="info!.data[index]?.lr! > index"></i>
                         <i class="iconfont icon-xiangxiajiantou text-deep_blue"
-                            v-if="info!.data[index].lr! < index"></i>
+                            v-if="info!.data[index]?.lr! < index"></i>
                     </div>
                 </template>
                 <template #rate v-if="rankType === -1">
-                    <div class="rate d-flex ai-center">{{ info!.data[index].ratio }}%</div>
+                    <div class="rate d-flex ai-center">{{ info!.data[index]?.ratio }}%</div>
                 </template>
             </SongListItem>
         </div>

@@ -95,8 +95,8 @@ import useStore from '@/store';
 import { checkLogin, getQueryId } from '@/utils';
 import { computed, reactive, ref } from 'vue';
 const songListShowType = ref("card") // card | table
-const songList = reactive({ data: [] as Playlist_user[] }) // 创建的歌单
-const collectSongList = reactive({ data: [] as Playlist_user[] }) // 收藏的歌单
+const songList = reactive({ data: [] as any[] }) // 创建的歌单
+const collectSongList = reactive({ data: [] as any[] }) // 收藏的歌单
 const id = getQueryId() as number
 const isSelf = computed(() => {
     if (!checkLogin()) return false

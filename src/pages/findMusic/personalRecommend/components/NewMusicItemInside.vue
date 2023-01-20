@@ -57,6 +57,7 @@ const isPlaying = computed(() => {
     return !player.value.isPersonalFM && player.value.currentTrack.id === props.musicItem?.id
 })
 
+// 播放单曲
 const playMusic = () => {
     const isShowTip = messageTip()
     if (isShowTip) return

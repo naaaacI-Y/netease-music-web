@@ -1,6 +1,9 @@
 <template>
-    <div class="song-list-item-wrapper d-flex flex-column" :class="{ odd: index % 2 !== 0 }" v-on:dblclick="playMusic">
+    <div class="song-list-item-wrapper d-flex flex-column" :class="{ odd: index % 2 !== 0 }"
+        v-on:dblclick.stop="playMusic">
         <div class="item-wrap d-flex" style="height:35px">
+
+            <!--左侧喜欢相关-->
             <div class="left d-flex ai-center fs-2 jc-event" v-if="type !== 3">
                 <div class="index" v-show="isPlaying">
                     <i class="iconfont icon-yinlianglabashengyin" style="color: #c3473a"></i>
@@ -13,16 +16,24 @@
                     @click="likeMusic(item?.id!, false, updateSongListHeadeInfo)" v-show="isLikeMusic(item?.id!)"></i>
                 <i class="iconfont icon-xiazai text-99"></i>
             </div>
+
+            <!--歌曲标识 上升下架等信息-->
             <div class="rank d-flex ai-center mr-5 pl-8" v-if="type === 3">
                 <div class="index fs-4 mr-8" :class="{ isTop3: index <= 3 }">{{ index }}</div>
                 <slot name="flag"></slot>
             </div>
+
+            <!--主要信息-->
             <div class="main-info fs-2 d-flex ">
                 <div class="song-name d-flex ai-center" :style="{ width: rankType === -1 ? '34.8%' : '42.8%' }">
-                    <div class="text-33 mr-4"
+                    <div class="text-33 mr-4" v-if="!colorful"
                         :class="[isPlaying ? 'isPlaying' : '', isHaveCopyRight ? '' : 'isNeddCopyRight']">{{
                             item?.name
                         }}
+                    </div>
+                    <div class="text-33 mr-4" v-if="colorful"
+                        :class="[isPlaying ? 'isPlaying' : '', isHaveCopyRight ? '' : 'isNeddCopyRight']"
+                        v-html="keywordsColorful(item.name, keywords)">
                     </div>
                     <div class="text-99 mr-4" v-if="item?.alia?.length">({{ item?.alia[0] }})</div>
                     <!-- <i class="iconfont icon-h-square text-primary_red_4 fs-2" v-if="item?.sq && type !== 3"></i> -->
@@ -32,12 +43,20 @@
                     <i class="iconfont icon-bofang2 text-primary_red_4 ml-4 fs-7" v-if="item.mv && type !== 3"
                         @click="goMvDetail"></i>
                 </div>
+                <!--飙升率-->
                 <slot name="rate"></slot>
-                <div class="singer  text-99" v-if="isShow === 'all' || isShow === 'rank'" @click="goSingerPage">
+                <div class="singer  text-99" v-if="(isShow === 'all' || isShow === 'rank') && !colorful"
+                    @click="goSingerPage">
                     {{ item.ar[0]?.name }}
                 </div>
-                <div class="album  text-99" v-if="isShow === 'all'" @click="goAlbumPage">
+                <div class="singer  text-99" v-if="(isShow === 'all' || isShow === 'rank') && colorful"
+                    @click="goSingerPage" v-html="keywordsColorful(item.ar[0]?.name, keywords)">
+                </div>
+                <div class="album  text-99" v-if="isShow === 'all' && !colorful" @click="goAlbumPage">
                     {{ item.al.name }}
+                </div>
+                <div class="album  text-99" v-if="isShow === 'all' && colorful" @click="goAlbumPage"
+                    v-html="keywordsColorful(item.al.name, keywords)">
                 </div>
                 <div class="time text-c4 d-flex ai-center" v-if="isShow === 'all' || isShow === 'singer'">{{
                     formatSongTime(item!.dt)
@@ -57,8 +76,8 @@
 // 排行榜
 import { TrackId } from '@/service/api/music/types';
 import { HotSong } from '@/service/api/singer/types';
-import { formatSongTime, paddingLeft } from '@/utils';
-import { computed, inject, ref } from 'vue';
+import { formatSongTime, paddingLeft, keywordsColorful } from '@/utils';
+import { computed, inject, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Message from "@/components/message"
 import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
@@ -68,6 +87,8 @@ const router = useRouter()
 const rankType = Number(route.query.rankType)
 const { createdSongList, likeMusic, player, messageTip, checkMusicCopyright, isLikeMusic, playSingleMusic, isHaveCopyRight } = useMusicPlayRelation()
 
+
+
 const props = withDefaults(defineProps<
     {
         type?: number
@@ -75,15 +96,20 @@ const props = withDefaults(defineProps<
         item: HotSong
         info?: TrackId
         isLiked?: boolean
+        colorful?: boolean // 歌词高亮
     }>(), {
     type: 2,
-    isLiked: false
+    isLiked: false,
+    colorful: false
 })
 const emits = defineEmits<{
     (e: "updateLikedList"): void
     (e: "updateSongListInfo"): void
     (e: "updateSongListHeaderInfo"): void
 }>()
+const keywords = computed(() => {
+    return route.params.keywords as string
+})
 const isShow = computed(() => {
     switch (props.type) {
         case 0:
@@ -101,6 +127,7 @@ const isShow = computed(() => {
 const isPlaying = computed(() => {
     return !player.value.isPersonalFM && player.value.currentTrack.id === props.item?.id
 })
+
 
 // 更新歌单头部信息
 // 如果是自己喜欢歌曲的界面 取消喜欢之后直接删除列表中的某一项
@@ -131,24 +158,12 @@ const goMvDetail = () => {
 const playMusic = async () => {
     const isShowTip = messageTip()
     if (isShowTip) return
-    const trackIds = injectSongListInfo?.data.map(item => item.id)
-    const sourceId = Number(route.params.id)
-    playSingleMusic(trackIds!, props.item!.id, sourceId)
-    // const sourceId = Number(route.params.id)
-    // // 如果当前正在播放 并且歌曲id和点击的一致 什么也不做
-    // if (player.value.currentTrack.id === props.item!.id) {
-    //     if (player.value.playing) return
-    //     return usePlayer.playOrPause()
-    // }
-    // // 如果当前的歌单id和playlistsource的一致
-    // if (player.value.playlistSource.id === sourceId) {
-    //     console.log("play in same song list");
+    // 在外层过滤
+    const trackIds = injectSongListInfo?.data.map(item => item.id) || []
 
-    //     return usePlayer.playTrackOnListByID(props.item!.id)
-    // }
-    // // 如果不一致 播放新的歌单
-
-    // playSongList(JSON.stringify(trackIds), sourceId)
+    const sourceId = Number(route.params?.id) || (!props.colorful ? 100 : -1) // 每日歌曲推荐没有资源id 写死100目前  900是搜索界面的播放
+    // 如果是搜索界面的话 trackids传空 不新开playlist 在原有基础上添加该首歌曲
+    playSingleMusic(props.colorful ? [] : trackIds!, props.item!.id, sourceId)
 }
 checkMusicCopyright(props.item.fee, !props.item.noCopyrightRcmd)
 </script>

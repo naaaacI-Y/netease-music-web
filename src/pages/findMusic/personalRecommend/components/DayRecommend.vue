@@ -13,7 +13,7 @@
                     </div>
                 </div>
                 <div class="btns d-flex mt-20">
-                    <div class="play-all fs-3 d-flex ai-center mr-10" style="color: white;">
+                    <div class="play-all fs-3 d-flex ai-center mr-10" style="color: white;" @click="playAll">
                         <i class="iconfont icon-bofang_o  fs-9"></i>
                         播放全部
                     </div>
@@ -32,17 +32,38 @@
 <script lang="ts" setup>
 import SongList from '@/components/song/SongList.vue';
 import { getDayRecommend } from '@/service/api/music';
-import { DailySong } from '@/service/api/music/types';
+import { DailySong, TrackId } from '@/service/api/music/types';
+import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
 import { provide, reactive, ref } from 'vue';
+import Message from "@/components/message"
+const { checkMusicCopyright, playSongList } = useMusicPlayRelation()
 const songList = reactive({ data: [] as DailySong[] })
+const songListInfo = reactive({ data: [] as TrackId[] | number[] })
 const day = new Date().getDate()
 const showLoading = ref(true)
 provide("songList", songList)
-provide("songListInfo", [])
+provide("songListInfo", songListInfo)
+// 获取歌单列表
 const getSongList = async () => {
     const r = await getDayRecommend()
     songList.data = r.data.dailySongs
+    songListInfo.data = r.data.dailySongs.map(item => item.id)
+
     showLoading.value = false
+}
+// 播放全部  需要过滤列表
+const playAll = () => {
+    // 资源id？？？？？
+    const ids: number[] = []
+    songList.data.forEach(item => {
+        if (checkMusicCopyright(item.fee, !item.noCopyrightRcmd)) {
+            ids.push(item.id)
+        }
+    })
+    if (!ids.length) {
+        return Message.error("惊不惊喜，一首都不让你听>_<")
+    }
+    playSongList(JSON.stringify(ids), 100)
 }
 getSongList()
 </script>
@@ -99,6 +120,10 @@ getSongList()
                 background-color: rgba($color: #d33b31, $alpha: 0.9);
                 padding: 4px 12px;
                 border-radius: 18px;
+
+                &:hover {
+                    cursor: pointer;
+                }
             }
         }
     }

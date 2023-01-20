@@ -25,7 +25,7 @@
                     <i class="iconfont icon-xinjianwenjianjia fs-9"></i>
                 </div>
                 <div class="donwnload" @click="noSupport">
-                    <i class="iconfont icon-xiazai fs-9"></i>
+                    <i class="iconfont icon-xiazai1 fs-9"></i>
                 </div>
                 <div class="share" @click="noSupport">
                     <i class="iconfont icon-fenxiang fs-9"></i>
@@ -112,17 +112,17 @@ const noSupport = () => {
     div {
         @include radius(40px);
         margin-right: 40px;
-        background-color: #f5f5f5;
+        background-color: var(--theme-f5);
         display: flex;
         align-items: center;
         justify-content: center;
 
         i {
-            color: #313131;
+            color: var(--theme-31);
         }
 
         &:hover {
-            background-color: #ebebeb;
+            background-color: var(--theme-eb);
             cursor: pointer;
         }
 

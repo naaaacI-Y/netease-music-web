@@ -25,7 +25,8 @@
             <div class="side-info" v-if="playType === 'songList'">
                 <div class="similar">
                     <div class="similar-head mb-10 fs-5 text-33">相似歌曲</div>
-                    <div class="similar-item item d-flex" v-for="item in similarSongList.data">
+                    <div class="similar-item item d-flex" v-for="item in similarSongList.data" :key="item.id"
+                        @click="playSingleMusic([], item.id, -1)">
                         <div class="img">
                             <img :src="formatPicUrl(item?.album?.picUrl, 50, 50)" alt="">
                             <div class="play-btn">
@@ -52,11 +53,12 @@ import { reactive, ref, watch } from 'vue';
 import Message from "@/components/message"
 import { getSimilatSong } from '@/service/api/music';
 import { NewMusicRet } from '@/service/api/music/types';
-import useStore from "@/store"
-import { storeToRefs } from 'pinia';
 import { formatPicUrl } from '@/utils';
-const { usePlayer } = useStore()
-const { player } = storeToRefs(usePlayer)
+import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
+
+const { playSingleMusic, player } = useMusicPlayRelation()
+const similarSongList = reactive({ data: [] as NewMusicRet[] })
+
 const props = withDefaults(defineProps<
     {
         playType: "personal" | "songList"
@@ -64,7 +66,7 @@ const props = withDefaults(defineProps<
     }>(), {
     playType: "personal"
 })
-const similarSongList = reactive({ data: [] as NewMusicRet[] })
+
 
 // 监听当前播放歌曲的变化，更新相似歌曲
 watch(() => player.value.currentTrack.id, (newVal) => {
@@ -76,9 +78,12 @@ const getSimilatList = async (id: number) => {
     const r = await getSimilatSong({ id })
     similarSongList.data = r.songs
 }
+
+// 展示评论框
 const showCommentBox = () => {
     Message.publishComment(1, 0, `歌曲: ${player.value.currentTrack.name}`, player.value.currentTrack.id)
 }
+
 props.musicId && getSimilatList(props.musicId)
 </script>
 <style lang="scss" scoped>

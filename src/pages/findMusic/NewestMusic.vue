@@ -44,10 +44,11 @@ import NewMusicItemInside from './personalRecommend/components/NewMusicItemInsid
 import { getNewMusic } from "@/service/api/music/index"
 import { newestMusicType } from "@/utils/const"
 import { reactive, ref, watch } from 'vue';
+import Message from "@/components/message"
 import { NewMusicRet } from '@/service/api/music/types';
 import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
 const filterList = Object.entries(newestMusicType)
-const { playSongList, playSingleMusic, messageTip } = useMusicPlayRelation()
+const { playSongList, playSingleMusic, checkMusicCopyright } = useMusicPlayRelation()
 const filterType = ref(0)
 const isShowLoading = ref(false)
 const musicList = reactive<Record<string, NewMusicRet[]>>({ data: [] })
@@ -81,7 +82,16 @@ const playSingle = (id: number) => {
  * 韩国:16
  */
 const playAll = () => {
-    const ids = musicList.data.map(item => item.id)
+    // 排除不能播放的
+    const ids: number[] = []
+    musicList.data.forEach(item => {
+        if (checkMusicCopyright(item.fee, item.copyrightId)) {
+            ids.push(item.id)
+        }
+    })
+    if (!ids.length) {
+        return Message.error("惊不惊喜，一首都不让你听>_<")
+    }
     playSongList(JSON.stringify(ids), filterType.value)
 }
 getMusic()

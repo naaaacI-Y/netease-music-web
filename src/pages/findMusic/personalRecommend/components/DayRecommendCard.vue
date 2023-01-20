@@ -9,7 +9,7 @@
                 <i class="iconfont icon-bofang1 fs-7" style="color:white"></i>
                 {{ formatPlayCount(songListItem.playCount!) }}
             </div>
-            <div class="play-btn">
+            <div class="play-btn" @click.stop="playAllSongList">
                 <div class="trangel"></div>
             </div>
         </div>
@@ -24,11 +24,38 @@ import LazyLoadImg from '@/components/LazyLoadImg.vue';
 import { RecommendSongListRet } from '@/service/api/music/types';
 import { formatPlayCount } from '@/utils';
 import { useRouter } from 'vue-router';
+import Message from "@/components/message"
+import { getDayRecommend, getSongListDetail } from '@/service/api/music';
+import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
+const { checkMusicCopyright, playSongList } = useMusicPlayRelation()
 const router = useRouter()
 const props = defineProps<{
     songListItem: RecommendSongListRet
     type: number // 0: 每日歌曲推荐 1： 普通歌单
 }>()
+
+// 播放所有歌单歌曲 需要过滤
+const playAllSongList = async () => {
+    // 获取详情
+    // 资源id 如果是每日推荐写死100
+    let ids: number[] = []
+    let sourceId = 100
+    if (props.type === 0) {
+        // 每日歌曲推荐
+        const r = await getDayRecommend()
+        ids = r.data.dailySongs.filter(item => checkMusicCopyright(item.fee, !item.noCopyrightRcmd)).map(it => it.id)
+    }
+    if (props.type === 1) {
+        sourceId = props.songListItem.id!
+        const r = await getSongListDetail({ id: props.songListItem.id! })
+        ids = r.playlist.tracks.filter(item => checkMusicCopyright(item.fee, !item.noCopyrightRcmd)).map(it => it.id)
+    }
+    if (!ids.length) {
+        return Message.error("惊不惊喜，一首都不让你听>_<")
+    }
+    playSongList(JSON.stringify(ids), sourceId)
+}
+// 前往歌单页
 const goSongList = () => {
     if (props.type === 1) { // 普通歌单
         return router.push(`/song-list/${props.songListItem.id}`)

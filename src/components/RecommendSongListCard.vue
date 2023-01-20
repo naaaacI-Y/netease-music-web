@@ -27,12 +27,12 @@
 import { formatPicUrl } from '@/utils';
 import router from '@/router';
 import LazyLoadImg from './LazyLoadImg.vue';
-import { Playlist } from '@/service/api/music/types';
+import { Playlist, Playlist_SongList } from '@/service/api/music/types';
 import { formatPlayCount } from '@/utils';
 const props = withDefaults(defineProps<{
     isOutSide?: boolean
     isOneline?: boolean
-    songListItem: Playlist
+    songListItem: Playlist | Playlist_SongList
     isHighQuality?: boolean // 是否是精品歌单
 }>(), {
     isOutSide: true,

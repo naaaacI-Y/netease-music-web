@@ -27,7 +27,8 @@
                     <i class="iconfont icon-bofang_o  fs-9"></i>
                     播放全部
                 </div>
-                <div class="collect-count mr-15 fs-2 d-flex ai-center" @click="collectSongList">
+                <div class="collect-count mr-15 fs-2 d-flex ai-center" @click="collectSongList"
+                    :class="{ isSelf: isMySelf }">
                     <i class="iconfont icon-xinjianwenjianjia fs-7 mr-3" v-if="!headerInfo.subscribed"></i>
                     <i class="iconfont icon-gou- fs-7 mr-3" v-if="headerInfo.subscribed"></i>
                     <span>{{ headerInfo.subscribed ? "已收藏" : "收藏" }}</span>
@@ -69,30 +70,34 @@
 </template>
 
 <script lang="ts" setup>
-// 歌单
-
 import router from '@/router';
 import { CollectSongListParams, HeaderInfo } from '@/service/api/music/types';
 import { checkLogin, formatPlayCount, formatTime } from '@/utils';
 import { collectOrCancelSongList, getSongListDetail } from "@/service/api/music"
 import Message from "@/components/message"
 import { Playlist_user } from '@/service/api/user/types';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRoute } from "vue-router"
 
 import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
 const loading = ref(false)
 const route = useRoute()
-const { isShowPlayPage, collectedSongList, useSideSongList, playSongList } = useMusicPlayRelation()
+const { isShowPlayPage, collectedSongList, useSideSongList, playSongList, createdSongList } = useMusicPlayRelation()
 
 const emits = defineEmits<{
     (e: "changeState", query: { id: number, flag?: boolean }): void
 }>()
 
-// 歌手
 const props = defineProps<{
     headerInfo: HeaderInfo
 }>()
+
+
+// 是否是自己创建的歌单
+const isMySelf = computed(() => {
+    const idx = createdSongList.value.findIndex(item => item.id === props.headerInfo.id)
+    return idx !== -1
+})
 
 /**
  * 更新store数据
@@ -110,11 +115,12 @@ const updateSongList = async (id: number, type: number) => {
         const idx = oldList.findIndex(item => item.id === id)
         oldList.splice(idx, 1)
     }
-
     useSideSongList.updateCollectedSongList(oldList)
 }
+
 // 歌单收藏 限制点击频次
 const collectSongList = async () => {
+    if (isMySelf.value) return
     if (!checkLogin()) {
         return isShowPlayPage.value = true
     }
@@ -136,10 +142,17 @@ const collectSongList = async () => {
         emits("changeState", { id: props.headerInfo.id, flag: true })
     }
 }
+
+// 播放全部
 const playAll = () => {
     const id = Number(route.params.id)
-    playSongList(JSON.stringify(props.headerInfo.trackIds), id)
+    const ids = props.headerInfo.trackIds.map(item => item.id)
+    if (!ids.length) {
+        return Message.error("惊不惊喜，一首都不让你听>_<")
+    }
+    playSongList(JSON.stringify(ids), id)
 }
+
 // 前往个人中心
 const goPersonCenter = () => {
     router.push(`/personal-center/${props.headerInfo.creator.userId}`)
@@ -195,6 +208,10 @@ const goPersonCenter = () => {
                     background-color: var(--theme-f2);
                     cursor: pointer;
                 }
+            }
+
+            .isSelf {
+                color: var(--theme-d4);
             }
 
             .play-all {

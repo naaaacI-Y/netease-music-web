@@ -281,13 +281,13 @@ export interface Playlist_SongList {
 
 export interface TrackId {
     id: number;
-    v: number;
-    t: number;
-    at: number;
-    alg: string;
+    v?: number;
+    t?: number;
+    at?: number;
+    alg?: string;
     lr?: number
-    uid: number;
-    rcmdReason: string;
+    uid?: number;
+    rcmdReason?: string;
     sc?: any;
     ratio?: number
     f?: any;
@@ -337,7 +337,7 @@ export interface HeaderInfo {
     trackCount: number
     shareCount: number
     commentCount: number
-    trackIds: number[]
+    trackIds: TrackId[]
     creator: Creator
     tags: string[]
     playList: Playlist_user

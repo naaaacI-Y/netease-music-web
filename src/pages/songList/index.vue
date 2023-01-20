@@ -24,6 +24,8 @@ import { getQueryId } from '@/utils';
 import { provide, reactive, ref } from 'vue';
 import { onBeforeRouteUpdate } from 'vue-router';
 import { Playlist_user } from '@/service/api/user/types';
+import { useMusicPlayRelation } from "@/hooks/useMusicPlayRelation"
+const { checkMusicCopyright } = useMusicPlayRelation()
 const queryId = getQueryId() as number
 const songList = reactive({ data: [] as HotSong[] })
 const songListInfo = reactive({ data: [] as TrackId[] })
@@ -52,7 +54,7 @@ provide("songList", songList)
 // 注入榜单信息 上升 下降
 provide("songListInfo", songListInfo)
 /**
- *
+ * 获取歌单详情
  * @param query {id: 歌单id, flag: 是否需要loading}
  */
 const getDetail = async (query: { id: number, flag?: boolean }) => {
@@ -60,12 +62,19 @@ const getDetail = async (query: { id: number, flag?: boolean }) => {
         isShowLoading.value = true
     }
     const r = await getSongListDetail({ id: query.id })
-    songList.data = r.playlist.tracks
-    songListInfo.data = r.playlist.trackIds || []
+    songList.data = r.playlist.tracks // 这里的音乐列表可能会比实际的少，不想在发起多次请求获取实际的列表
     let key: keyof HeaderInfo
     for (key in headerInfo) {
         if (key === "trackIds") {
-            (headerInfo[key] as any) = r.playlist[key]?.map(item => item.id)
+            const result: TrackId[] = []
+            r.playlist.trackIds?.slice(0, songList.data.length).map((item, index) => {
+                const _ = songList.data[index]
+                if (checkMusicCopyright(_.fee, !_.noCopyrightRcmd)) {
+                    result.push(item)
+                }
+            })
+            headerInfo[key] = result
+            songListInfo.data = result
             continue
         }
         if (key === "playList") {
