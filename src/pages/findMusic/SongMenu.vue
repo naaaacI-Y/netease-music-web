@@ -120,7 +120,11 @@ const handlePageChange = (num: number) => {
 
 // 前往精品歌单页
 const goHighqualitySongList = () => {
-    router.push(`/high-qualtity-song-list?type=${activeType.value}`)
+    if (activeType.value) {
+        return router.push(`/high-qualtity-song-list?type=${activeType.value}`)
+    }
+    router.push(`/high-qualtity-song-list`)
+
 }
 // 前往歌单页
 const goSongList = (songListId: number) => {

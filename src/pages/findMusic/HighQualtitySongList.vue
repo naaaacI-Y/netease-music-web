@@ -1,7 +1,7 @@
 <template>
     <DefaultLayout>
-        <RecycleScroller id="scroller" class="pb-30" :items="highQualityList.data" :item-size="155" key-field="id"
-            :buffer="1240" style="height: 100%;width: 100%;">
+        <RecycleScroller id="scroller" :items="highQualityList.data" :item-size="155" key-field="id" :buffer="1550"
+            style="height: 100%;width: 100%;">
             <template #before>
                 <div class="title mb-10 fs-5 text-33 mt-10">精品歌单 - {{ type === "" ? '全部' : type }}</div>
             </template>
@@ -37,7 +37,7 @@
                 </div>
             </template>
             <template #after>
-                <Loading v-if="isShowLoading"></Loading>
+                <Loading v-show="isShowLoading"></Loading>
             </template>
         </RecycleScroller>
     </DefaultLayout>
@@ -55,7 +55,7 @@ import { debounce, FormatList, formatListData } from '@/utils';
 import router from '@/router';
 
 const route = useRoute()
-const type = route.query.type as string
+const type = route.query.type ?? "全部"
 const isShowLoading = ref(false)
 const loaded = ref(false)
 const loading = ref(false)
@@ -96,8 +96,9 @@ const handleListener = (e: Event) => {
     const scrollTop = target.scrollTop
     const clientHeight = target.clientHeight
     const scrollHeight = target.scrollHeight
-    if (scrollTop + clientHeight >= scrollHeight) {
-        // 滚动到底部了 加载更多
+
+    if (Math.ceil(scrollTop + clientHeight) >= scrollHeight) {
+        // 滚动到底部 加载更多
         if (!loaded.value && !loading.value) {
             getList()
         }
