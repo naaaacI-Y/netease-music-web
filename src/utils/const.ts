@@ -19,6 +19,10 @@ const firstPagePath = [
     "/my-collection/2",
     "/my-collection/3"
 ]
+
+// 头部导航栏左侧相关路径
+const paths = ["/findMusic", "/video", "/friends", "/prettyCommon", "/unique", "/dynamic", "/focus", "/fans", "/hot-comment", "/recent-play"]
+
 const languageList: obj = {
     "全部": -1, "华语": 7, "欧美": 96, "日本": 8, "韩国": 16, "其他": 0
 }
@@ -126,5 +130,7 @@ export {
     searchTypeList,
     dynamicMap,
     firstPagePath,
-    labelListMap
+    labelListMap,
+    paths
+
 }

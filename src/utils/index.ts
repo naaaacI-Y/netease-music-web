@@ -234,8 +234,8 @@ const getArea = (province: number, city: number) => {
     return `${_p} ${_c}`
 }
 // 滚动到顶部
-const scrollToTop = () => {
-    const wrap = document.getElementsByClassName("content")[0]
+const scrollToTop = (wrapClass = "content") => {
+    const wrap = document.getElementsByClassName(wrapClass)[0]
     wrap?.scrollTo(0, 0)
 }
 
@@ -294,6 +294,17 @@ const formatListData = <T extends UniqueRecommendRet | Artist | VideoByCategoryI
     return list
 }
 
+// 匹配颜色高亮
+function keywordsColorful(str: string, key: string) {
+    var reg = new RegExp("(" + key + ")", "g");
+    var newstr = str.replace(reg, "<font style='color:#2757aa;'>$1</font>");
+    return newstr;
+}
+
+
+
+
+
 export {
     formatTime,
     stringifyParams,
@@ -313,5 +324,6 @@ export {
     formatPicUrl,
     paddingLeft,
     formatListData,
+    keywordsColorful,
     FormatList
 }

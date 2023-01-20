@@ -10,7 +10,7 @@
                     v-for="(item, index) in Object.keys(searchTypeList)" @click="changeItem(item)"
                     :class="{ isActive: index === activeIndex }">{{ item }}</div>
             </div>
-            <div class="result-wrapper">
+            <div class="search-result-wrapper">
                 <component :is="tabsComponents[showWhichComponent]" @changeTotal="changeTotal"></component>
             </div>
         </div>
@@ -25,7 +25,7 @@ import Video from "./components/Video.vue"
 import Song from "./components/Song.vue"
 import User from "./components/User.vue"
 import Radio from "./components/Radio.vue"
-import SongList from "./components/SongLIst.vue"
+import SongList from "./components/SongList.vue"
 import { searchTypeList } from "@/utils/const"
 import { computed, ref } from "vue";
 import { onBeforeRouteUpdate, useRoute } from "vue-router";
@@ -88,7 +88,7 @@ const changeTotal = (num: number) => {
         }
     }
 
-    .result-wrapper {
+    .search-result-wrapper {
         overflow: auto;
         height: calc(100% - 90px);
     }
