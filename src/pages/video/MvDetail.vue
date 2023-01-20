@@ -164,6 +164,7 @@ const goVideoDetail = (id: number) => {
 onMounted(() => {
     initVideoPlayer(getDetail4Mv, Number(queryId), videoPlayerEle.value!)
 })
+// 没有登陆就不请求 TODO
 getIsSubscribed(Number(queryId))
 getIsVoted(1, queryId)
 </script>

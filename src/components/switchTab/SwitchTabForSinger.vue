@@ -6,7 +6,8 @@
                     :class="{ isActive: activeIndex === index }" @click="activeIndex = index" :key="index">{{ item }}
                 </div>
             </div>
-            <div class="change-radio" v-if="activeIndex === 0">
+            <!--展示类型切换  后面再做-->
+            <!-- <div class="change-radio" v-if="activeIndex === 0">
                 <div class="type-change d-flex">
                     <div class="type1 mr-2 d-flex ai-center jc-center"
                         :class="{ isBtnActive: songListShowType === 'card' }" @click="songListShowType = 'card'">
@@ -17,7 +18,7 @@
                         <i class="iconfont icon-liebiao fs-5 text-66"></i>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <!--专辑--->
         <div class="album pt-20" v-if="activeIndex === 0">
@@ -41,21 +42,24 @@
         </div>
         <!--歌手详情-->
         <div v-show="activeIndex === 2" class="detail">
-            <div class="detail-item mb-30 pt-20" v-for="item in singerDetail.data" v-if="singerDetail.data.length">
-                <div class="detail-title f-2 mb-20 text-33">{{ item.ti }}</div>
-                <div class="detail-content fs-1 mb-20 text-bc" v-for="it in item.txt.split('\n')">
-                    {{ it }}
+            <div class="detail-wrap mb-30 pt-20" v-if="singerDetail.data.length">
+                <div class="detail-item " v-for="item in singerDetail.data">
+                    <div class="detail-title f-2 mb-20 text-33">{{ item.ti }}</div>
+                    <div class="detail-content fs-1 mb-20 text-bc" v-for="it in item.txt.split('\n')">
+                        {{ it }}
+                    </div>
                 </div>
             </div>
             <div class="no-data text-66 fs-3" v-if="!singerDetail.data.length">暂无介绍</div>
         </div>
         <!--相似歌手-->
         <div v-show="activeIndex === 3" class="simlary">
-            <div class="simlary-wrapper d-flex flex-wrap pt-25">
+            <div class="simlary-wrapper d-flex flex-wrap pt-25" v-if="similarSingerList.data.length">
                 <SingerCard v-for="item in similarSingerList.data" :is-show-singer-flag="false" :singer-item="item"
                     class="singer-card">
                 </SingerCard>
             </div>
+            <div class="no-data text-66 fs-3" v-if="!similarSingerList.data.length">没有相关歌手</div>
         </div>
     </div>
 </template>

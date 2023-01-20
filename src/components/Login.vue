@@ -256,7 +256,7 @@ onUnmounted(() => {
                 // border: 1px solid red;
                 width: 50px;
                 height: 50px;
-                background-image: url("../../assets/images/erweima.png");
+                background-image: url("@/assets/images/erweima.png");
                 background-size: 100% 100%;
 
                 &:hover {
