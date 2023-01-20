@@ -139,7 +139,7 @@ const goSinger = () => {
     }
     const singerId = player.value.isPersonalFM ? player.value.personalFMTrack.artists[0].id : player.value.currentTrack.ar[0].id
     if (Number(route.params.id) !== singerId) {
-        router.push(`/singer-page/${singerId}`)
+        router.push(`/singer-home/${singerId}`)
     }
 }
 </script>
