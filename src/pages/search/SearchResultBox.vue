@@ -23,35 +23,38 @@
         <div class="search-result" v-if="searchKeywords">
             <!--搜索单曲-->
             <div class="song mb-10" v-if="searchResult?.data?.songs?.length">
-                <div class="label-title ">
+                <div class="label-title" @click="goSearchResult()">
                     <i class="iconfont icon-yinle mr-5 text-66"></i>
                     <span>单曲</span>
                 </div>
                 <div class="song-content">
-                    <div class="item d-flex ai-center text-33" v-for="item in searchResult?.data?.songs" :key="item.id">
+                    <div class="item d-flex ai-center text-33" v-for="item in searchResult?.data?.songs" :key="item.id"
+                        @click="playSong(item.id)">
                         {{ item?.name }}&ensp;-&ensp;{{ item.artists[0]?.name }}
                     </div>
                 </div>
             </div>
             <!--搜索歌手-->
             <div class="singer mb-10" v-if="searchResult?.data?.artists?.length">
-                <div class="label-title">
+                <div class="label-title" @click="goSearchResult()">
                     <i class="iconfont icon-iconfontyonghuming mr-5"></i>
                     <span>歌手</span>
                 </div>
                 <div class="singer-content">
-                    <div class="item text-33" v-for="item in searchResult?.data?.artists" :key="item.id">{{ item.name }}
+                    <div class="item text-33" v-for="item in searchResult?.data?.artists" :key="item.id"
+                        @click="router.push(`/singer-home/${item.id}`)">{{ item.name }}
                     </div>
                 </div>
             </div>
             <!--搜索专辑-->
             <div class="album mb-10" v-if="searchResult?.data?.albums?.length">
-                <div class="label-title">
+                <div class="label-title" @click="goSearchResult()">
                     <i class="iconfont icon-yinle1 mr-5"></i>
                     <span>专辑</span>
                 </div>
                 <div class="album-content">
-                    <div class="item text-33" v-for="item in searchResult?.data?.albums" :key="item.id">
+                    <div class="item text-33" v-for="item in searchResult?.data?.albums" :key="item.id"
+                        @click="router.push(`/album/${item.id}`)">
                         <span>{{ item?.name }}</span>
                         <span>&ensp;-&ensp;</span>
                         <span>{{ item?.artist?.name }}</span>
@@ -60,14 +63,15 @@
             </div>
             <!--搜索歌单-->
             <div class="song-list" v-if="searchResult?.data?.playlists?.length">
-                <div class="label-title">
+                <div class="label-title" @click="goSearchResult()">
                     <i class="iconfont icon-gedan mr-5"></i>
                     <span>歌单</span>
                 </div>
                 <div class="song-list-content">
-                    <div class="item text-33" v-for="item in searchResult?.data?.playlists" :key="item.id"> {{
-                        item.name
-                    }}
+                    <div class="item text-33" v-for="item in searchResult?.data?.playlists" :key="item.id"
+                        @click="router.push(`/song-list/${item.id}`)"> {{
+                            item.name
+                        }}
                     </div>
                 </div>
             </div>
@@ -76,7 +80,7 @@
         <div class="search-hot" v-show="!searchKeywords">
             <div class="hot-title fs-3 text-66 mb-10">热搜榜</div>
             <div class="hot-item d-flex ai-center" v-for="(item, index) in hotSearchList.data" :key="item.searchWord"
-                @click="goHotItemDetail(item.searchWord)">
+                @click="goSearchResult(item.searchWord)">
                 <div class="index mr-20 text-cf" :class="{ isTop: index <= 2 }">{{ index + 1 }}</div>
                 <div class="main-info">
                     <div class="search-word fs-1 d-flex ai-center">
@@ -95,21 +99,28 @@
 
 <script lang="ts" setup>
 import { getHotSearchList, searchSuggest } from '@/service/api/search';
-import { HotSearchListRet, SearchSuggestRet } from '@/service/api/search/types';
+import { HotSearchListRet, SearchSuggestRet, SearchSuggestSong } from '@/service/api/search/types';
 import useThemeStore from '@/store/theme';
 import { getSearchHistory, setSearchHistory, clearSearchHistory } from '@/utils';
 import { storeToRefs } from 'pinia';
 import { reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from "vue-router"
+import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
+
+const { playSingleMusic } = useMusicPlayRelation()
 const route = useRoute()
 const router = useRouter()
+const hotSearchList = reactive({ data: [] as HotSearchListRet[] }) // 热搜列表
+const searchResult = reactive({ data: {} as SearchSuggestRet }) // 搜索结果
+const searchHistoryList = ref(getSearchHistory())  // 历史搜索记录
+const { theme } = storeToRefs(useThemeStore())
+
 const props = defineProps<{
     searchKeywords: string
 }>()
 const emits = defineEmits<{
     (e: "hideSearchBox"): void
 }>()
-const { theme } = storeToRefs(useThemeStore())
 // 监听输入框值改变
 watch(() => props.searchKeywords, async (newVal: string) => {
     if (newVal) {
@@ -122,33 +133,45 @@ watch(() => props.searchKeywords, async (newVal: string) => {
     }
 
 })
-const hotSearchList = reactive({ data: [] as HotSearchListRet[] }) // 热搜列表
-const searchResult = reactive({ data: {} as SearchSuggestRet }) // 搜索结果
-const searchHistoryList = ref(getSearchHistory())  // 历史搜索记录
-const goHotItemDetail = (keywords: string) => {
 
+// 点击单曲播放
+const playSong = (id: number) => {
+    // 应该可以直接播放 不用检查
+    // 隐藏弹出框
+    emits("hideSearchBox")
+    playSingleMusic([], id, -1)
 }
+
 // 清空搜索历史
 const clearHistory = () => {
     clearSearchHistory()
     searchHistoryList.value = getSearchHistory()
 }
-// 前往搜索结果详情页
-const goSearchResult = (kwywords: string) => {
+// 前往搜索结果详情页 包括点击热搜、title、搜索结果的label
+const goSearchResult = (keywords?: string) => {
     // 隐藏弹出框
     emits("hideSearchBox")
-    router.push(`/search-result-detail/${kwywords}`)
+    // 如果已经在当前页就不再改变
+    if (route.params.keywords === keywords) return
+    if (keywords) {
+        return router.push(`/search-result-detail/${keywords}`)
+    }
+    router.push(`/search-result-detail/${props.searchKeywords}`)
 }
+
+
 // 搜索
 const getSuggest = async (keywords: string) => {
     const r = await searchSuggest({ keywords })
     searchResult.data = r.result
 }
+
 // 获取热搜列表
 const getHotSearch = async () => {
     const r = await getHotSearchList()
     hotSearchList.data = r.data
 }
+
 props.searchKeywords ? getSuggest(props.searchKeywords) : getHotSearch()
 
 </script>

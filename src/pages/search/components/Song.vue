@@ -30,8 +30,12 @@ import Loading from '@/components/Loading.vue';
 import { useRoute } from 'vue-router';
 import Header from '@/components/header/Header.vue';
 import { scrollToTop } from '@/utils';
+import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
+import { TrackId } from '@/service/api/music/types';
 
+const { checkMusicCopyright } = useMusicPlayRelation()
 const route = useRoute()
+const songListInfo = reactive({ data: [] as TrackId[] })
 const songs = reactive({ data: [] as Song[] })
 const isShowLoading = ref(false)
 const pages = reactive({
@@ -40,7 +44,7 @@ const pages = reactive({
     total: 0
 })
 
-provide("songListInfo", [])
+provide("songListInfo", songListInfo)
 const emits = defineEmits<{
     (e: "changeTotal", num: number): void
 }>()
@@ -60,7 +64,6 @@ const handlePageChange = (num: number) => {
     pages.page = num
     getSongs()
 }
-
 const getSongs = async () => {
     scrollToTop("search-result-wrapper")
     isShowLoading.value = true
@@ -69,6 +72,12 @@ const getSongs = async () => {
     songs.data = _.songs
     pages.total = _.songCount
     isShowLoading.value = false
+    // 构造songListInfo信息
+    songListInfo.data = songs.data.filter(item => {
+        return checkMusicCopyright(item.fee, !item.noCopyrightRcmd)
+    }).map(item => {
+        return { id: item.id }
+    })
     if (pages.total === 0) {
         emits("changeTotal", pages.total)
     }
