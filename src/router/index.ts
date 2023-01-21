@@ -1,5 +1,6 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
+import useGlobalStore from '@/store/globalStore';
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -159,5 +160,12 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 })
-
+router.beforeEach((to, from, next) => {
+  // router starts its navigation after the router is installed and pinia will be installed too
+  const globalstate = useGlobalStore()
+  if (globalstate.isShowPlayPage) {
+    globalstate.isShowPlayPage = false
+  }
+  next()
+})
 export default router
