@@ -17,7 +17,11 @@
 import { Artist } from '@/service/api/singer/types';
 import LazyLoadImg from "@/components/LazyLoadImg.vue"
 import router from '@/router';
-import { formatPicUrl } from "@/utils"
+import { useRoute } from 'vue-router';
+import { formatPicUrl, scrollToTop } from "@/utils"
+
+const route = useRoute()
+
 const props = withDefaults(defineProps<
     {
         cardWidth?: number,
@@ -30,6 +34,10 @@ const props = withDefaults(defineProps<
     isShowSingerFlag: true
 })
 const goSingerPage = () => {
+    // 如果是歌手页面 滚动到顶部
+    if (route.path.startsWith("/singer-home")) {
+        scrollToTop()
+    }
     router.push(`/singer-home/${props.singerItem.id}`)
 }
 </script>

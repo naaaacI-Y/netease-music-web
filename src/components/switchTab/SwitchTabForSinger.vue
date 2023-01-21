@@ -103,6 +103,31 @@ watch(() => route.params.id, (newVal) => {
     singerDetail.data = []
     singerId.value = Number(newVal)
 })
+watch(() => activeIndex.value, (newVal) => {
+    switch (newVal) {
+        case 0:
+            if (!singerAlbumList.data.length) {
+                getAlbum()
+            }
+            break
+        case 1:
+            if (!singerMvList.data.length) {
+                getMv()
+            }
+            break
+        case 2:
+            if (!singerDetail.data.length) {
+                getSingerDetail()
+            }
+            break
+        case 3:
+            if (!similarSingerList.data.length) {
+                getSimilar()
+            }
+            break
+
+    }
+})
 // 获取专辑  分页TODO
 const getAlbum = async () => {
     isShowLaoding.value = true
@@ -132,31 +157,32 @@ const getSingerDetail = async () => {
     singerDetail.data = r.introduction
     isShowLaoding.value = false
 }
-watchEffect(() => {
-    switch (activeIndex.value) {
-        case 0:
-            if (!singerAlbumList.data.length) {
-                getAlbum()
-            }
-            break
-        case 1:
-            if (!singerMvList.data.length) {
-                getMv()
-            }
-            break
-        case 2:
-            if (!singerDetail.data.length) {
-                getSingerDetail()
-            }
-            break
-        case 3:
-            if (!similarSingerList.data.length) {
-                getSimilar()
-            }
-            break
+// watchEffect(() => {
+//     switch (activeIndex.value) {
+//         case 0:
+//             if (!singerAlbumList.data.length) {
+//                 getAlbum()
+//             }
+//             break
+//         case 1:
+//             if (!singerMvList.data.length) {
+//                 getMv()
+//             }
+//             break
+//         case 2:
+//             if (!singerDetail.data.length) {
+//                 getSingerDetail()
+//             }
+//             break
+//         case 3:
+//             if (!similarSingerList.data.length) {
+//                 getSimilar()
+//             }
+//             break
 
-    }
-})
+//     }
+// })
+getAlbum()
 </script>
 <style lang="scss" scoped>
 .switch-tab-wrapper {
