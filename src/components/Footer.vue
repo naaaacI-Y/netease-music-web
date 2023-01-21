@@ -9,10 +9,12 @@
             <div class="left d-flex">
                 <div class="img mr-10" style="color: white;" v-if="player.enabled">
                     <img :src="player.currentTrack?.al?.picUrl" alt="">
+                    <!--歌曲封面遮罩-->
                     <div class="mask-show d-flex ai-center jc-center" @click="changePlayPage" v-show="!isShowPlayPage">
                         <i class="iconfont icon-quanping3-xianxing"></i>
                     </div>
-                    <div class="mask-hide d-flex ai-center jc-center" v-show="isShowPlayPage" @click="changePlayPage">
+                    <div class="mask-hide d-flex ai-center jc-center" v-show="isShowPlayPage" @click="changePlayPage"
+                        :class="{ isShowMask }">
                         <i class="iconfont icon-quanping4-xianxing"></i>
                     </div>
                 </div>
@@ -122,6 +124,11 @@ const emits = defineEmits<{
 const progress = computed(() => {
     return timeCalc(player.value.progress * 1000)
 })
+// 是否显示遮罩
+const isShowMask = computed(() => {
+    return isShowPlayPage.value
+})
+
 
 /**
  * 进度时间格式化
@@ -195,6 +202,10 @@ const goSinger = () => {
                     i {
                         font-size: 35px;
                     }
+                }
+
+                .isShowMask {
+                    display: block;
                 }
 
                 img {

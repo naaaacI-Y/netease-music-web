@@ -1,5 +1,5 @@
 <template>
-    <commonHead play-type="personal">
+    <CommonHead play-type="personal">
         <template #img-wrap>
             <div class="img-wrap">
                 <div class="img">
@@ -32,11 +32,11 @@
                 </div>
             </div>
         </template>
-    </commonHead>
+    </CommonHead>
 </template>
 
 <script lang="ts" setup>
-import commonHead from './commonHead.vue';
+import CommonHead from './CommonHead.vue';
 import Message from "@/components/message"
 import { onMounted } from 'vue';
 import { formatPicUrl } from '@/utils';
@@ -51,6 +51,8 @@ const initPersonalSong = () => {
         // 播放私人fm
         playPersonalFm()
     }
+    // 如果当前正在播放
+
     // 加载评论
     emits("getPersonalComment", player.value.personalFMTrack.id)
 }
@@ -105,17 +107,17 @@ onMounted(() => {
     div {
         @include radius(40px);
         margin-right: 40px;
-        background-color: #f5f5f5;
+        background-color: var(--theme-f5);
         display: flex;
         align-items: center;
         justify-content: center;
 
         i {
-            color: #313131;
+            color: var(--theme-31);
         }
 
         &:hover {
-            background-color: #ebebeb;
+            background-color: var(--theme-eb);
             cursor: pointer;
         }
 
