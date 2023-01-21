@@ -33,7 +33,7 @@ const usePlayerStore = defineStore("player", {
                 playing: false, // 是否正在播放中
                 progress: 0, // 当前播放歌曲的进度
                 enabled: false, // 是否启用Player
-                repeatMode: "one", // off | on | one
+                repeatMode: "one", // off:列表播放，最后一首播放完成了就暂停 | on: 列表循环 | one:单曲循环
                 shuffle: false,// true | false
                 reversed: false,
                 volume: 0.5, // 0 to 1
@@ -171,15 +171,16 @@ const usePlayerStore = defineStore("player", {
         },
         /**
          * 获取下一首歌
-         * @returns [trackID, index]
+         * @returns [trackID, index] 下一首的id和索引
          */
         getNextTrack(): [number, number] {
             const next = this.player.reversed ? this.player.current - 1 : this.player.current + 1;
-            if (this.player.playNextList.length > 0) {
-                let trackID = this.player.playNextList.shift();
-                return [trackID || 0, this.player.current];
-            }
+            // if (this.player.playNextList.length > 0) {
+            //     let trackID = this.player.playNextList.shift();
+            //     return [trackID || 0, this.player.current];
+            // }
             // 循环模式开启，则重新播放当前模式下的相对的下一首
+            //
             if (this.player.repeatMode === 'on') {
                 if (this.player.reversed && this.player.current === 0) {
                     // 倒序模式，当前歌曲是第一首，则重新播放列表最后一首
@@ -189,6 +190,7 @@ const usePlayerStore = defineStore("player", {
                     return [this.player.list[0], 0];
                 }
             }
+
             return [this.player.list[next], next];
         },
         /**
@@ -375,9 +377,10 @@ const usePlayerStore = defineStore("player", {
             autoplay = true,
             ifUnplayableThen = 'playNextTrack'
         ) {
-            if (autoplay && this.player.currentTrack.name) {
-                this._scrobble(this.player.currentTrack, this.player.howler?.seek());
-            }
+            // 听歌打卡  TODO
+            // if (autoplay && this.player.currentTrack.name) {
+            //     this._scrobble(this.player.currentTrack, this.player.howler?.seek());
+            // }
             return getMusicDetail(String(id)).then(data => {
                 let track = data.songs[0];
                 this.player.currentTrack = track;
@@ -560,18 +563,18 @@ const usePlayerStore = defineStore("player", {
          * @param trackIDs 歌曲列表 number[]
          * @param playlistSourceID 播放列表中的某一首的id
          * @param playlistSourceType 播放歌曲类型
-         * @param autoPlayTrackID
+         * @param autoPlayTrackID 如果传入autoPlayTrackID表示开始播放这首歌  否则从第一首开始
          */
         replacePlaylist(
             trackIDs: number[],
             playlistSourceID: number,
             playlistSourceType: string,
-            autoPlayTrackID = -1
+            autoPlayTrackID = -1,
         ) {
             this.player.isPersonalFM = false;
             if (!this.player.enabled) this.player.enabled = true;
             this.player.list = trackIDs;
-            this.player.current = 0;
+            this.player.current = 0; // 这里不应是0 应该根据具体点击的是哪首歌对应的索引 TODO
             this.player.playlistSource = {
                 type: playlistSourceType,
                 id: playlistSourceID,
@@ -660,6 +663,25 @@ const usePlayerStore = defineStore("player", {
                 }
             }
             // this.saveSelfToLocalStorage()
+        },
+
+        /**
+         * 插入单首歌曲到播放列表中 并且播放
+         * @param trackID
+         */
+        addTrackToPlay(trackID: number) {
+            // 如果当前列表能找到这个歌曲就不用往里面插入了，找到索引直接播放即可
+            const idx = this.player.list.findIndex(item => item === trackID)
+            if (idx === -1) {
+                this.player.list.splice(this.player.current + 1, 0, trackID)
+                // this.playNextTrack()
+                // 下一首id和索引
+                this.player.current = this.player.current + 1!;
+            } else {
+                this.player.current = idx
+            }
+
+            this.replaceCurrentTrack(trackID);
         },
 
         /**

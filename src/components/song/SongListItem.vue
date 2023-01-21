@@ -81,13 +81,11 @@ import { computed, inject, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Message from "@/components/message"
 import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
-const injectSongListInfo = inject<{ data: TrackId[] }>("songListInfo")
+const injectSongListInfo = inject<{ data: TrackId[] }>("songListInfo") // 这里注入的信息是过滤之后有版权可以播放的
 const route = useRoute()
 const router = useRouter()
 const rankType = Number(route.query.rankType)
 const { createdSongList, likeMusic, player, messageTip, checkMusicCopyright, isLikeMusic, playSingleMusic, isHaveCopyRight } = useMusicPlayRelation()
-
-
 
 const props = withDefaults(defineProps<
     {
@@ -128,7 +126,6 @@ const isPlaying = computed(() => {
     return !player.value.isPersonalFM && player.value.currentTrack.id === props.item?.id
 })
 
-
 // 更新歌单头部信息
 // 如果是自己喜欢歌曲的界面 取消喜欢之后直接删除列表中的某一项
 const updateSongListHeadeInfo = () => {
@@ -144,17 +141,20 @@ const updateSongListHeadeInfo = () => {
 const goSingerPage = () => {
     router.push(`/singer-home/${props.item?.ar[0].id}`)
 }
+
 // 前往专辑页面
 const goAlbumPage = () => {
     // 如果在当前专辑也就不用跳转
     if (Number(route.query.id) === props.item?.id) return
     router.push(`/album/${props.item?.al.id}`)
 }
+
 // mv详情
 const goMvDetail = () => {
     router.push(`/mv-detail/${props.item?.mv}`)
 }
-// 列表歌曲播放
+
+// 歌曲播放
 const playMusic = async () => {
     const isShowTip = messageTip()
     if (isShowTip) return
@@ -165,6 +165,7 @@ const playMusic = async () => {
     // 如果是搜索界面的话 trackids传空 不新开playlist 在原有基础上添加该首歌曲
     playSingleMusic(props.colorful ? [] : trackIds!, props.item!.id, sourceId)
 }
+
 checkMusicCopyright(props.item.fee, !props.item.noCopyrightRcmd)
 </script>
 <style lang="scss" scoped>

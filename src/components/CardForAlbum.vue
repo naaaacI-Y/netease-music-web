@@ -22,17 +22,34 @@ import LazyLoadImg from "@/components/LazyLoadImg.vue"
 import { formatTime } from "@/utils/index"
 import { useRouter } from 'vue-router';
 import { formatPicUrl } from '@/utils/index';
+import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
+import { getAlbumInfo } from '@/service/api/album';
+import Message from "@/components/message"
+const { player, checkMusicCopyright, playSongList } = useMusicPlayRelation()
+
 const router = useRouter()
 const props = defineProps<{
     albumItem: HotAlbum
 }>()
+
+// 前往专辑页
 const goAlbum = () => {
     router.push(`/album/${props.albumItem.id}`)
 }
-const playAlbum = () => {
-    // 播放专辑 TODO
-    console.log("playAlbum");
 
+// 播放专辑所有歌曲
+const playAlbum = async () => {
+    // 获取专辑详情
+    const albumId = props.albumItem.id
+    if (player.value.playing && player.value.playlistSource.id === albumId) return
+    const r = await getAlbumInfo({ id: albumId })
+    const ids = r.songs?.filter((item) => {
+        return checkMusicCopyright(item.fee, !item.noCopyrightRcmd)
+    }).map(item => item.id)
+    if (!ids?.length) {
+        return Message.error("惊不惊喜，一首都不让你听>_<")
+    }
+    playSongList(JSON.stringify(ids), albumId)
 }
 </script>
 <style lang="scss" scoped>

@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div class="operate d-flex text-33 mb-20">
-                <div class="play-all fs-3 d-flex ai-center mr-10" style="color: white;">
+                <div class="play-all fs-3 d-flex ai-center mr-10" style="color: white;" @click="playAllAlbumSong">
                     <i class="iconfont icon-bofang_o  fs-9"></i>
                     播放全部
                 </div>
@@ -20,15 +20,15 @@
                     <span>{{ albumCountInfo.isSub ? "已收藏" : "收藏" }}</span>
                     <span>({{ albumCountInfo?.subCount }})</span>
                 </div>
-                <!-- <div class="share mr-15 fs-3 d-flex ai-center" @click="share">
+                <div class="share mr-15 fs-3 d-flex ai-center" @click="Message.error('暂不支持>_<')">
                     <i class="iconfont icon-fenxiang2 mr-3"></i>
                     <span>分享</span>
                     <span>({{ albumCountInfo?.shareCount }})</span>
                 </div>
-                <div class="download-all fs-3 d-flex ai-center">
+                <div class="download-all fs-3 d-flex ai-center" @click="Message.error('暂不支持>_<')">
                     <i class="iconfont icon-xiazai mr-3 fs-6"></i>
                     <span>下载全部</span>
-                </div> -->
+                </div>
             </div>
             <div class="singer fs-1 mb-8">
                 <span class="text-33">歌手：</span>
@@ -44,15 +44,22 @@
 
 <script lang="ts" setup>
 import LazyLoadImg from '../LazyLoadImg.vue';
-import { HotAlbum } from '@/service/api/singer/types';
+import { HotAlbum, HotSong } from '@/service/api/singer/types';
 import { checkLogin, formatTime } from '@/utils';
 import { AlbumDynamicInfoResult, Info } from '@/service/api/album/types';
 import Message from "@/components/message"
 import useGlobalStore from '@/store/globalStore';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { CollectOrCancelAlbum } from "@/service/api/album"
+import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
+
+
+const { playSongList, checkMusicCopyright } = useMusicPlayRelation()
 const globalState = useGlobalStore()
 const router = useRouter()
+const route = useRoute()
+const songList = inject<{ data: HotSong[] }>("songList")
+
 const props = defineProps<{
     albumInfo: HotAlbum & { info: Info }
     albumCountInfo: AlbumDynamicInfoResult
@@ -60,6 +67,7 @@ const props = defineProps<{
 const emits = defineEmits<{
     (e: "changeCollectionCount"): void
 }>()
+
 // 收藏
 const collect = async () => {
     if (!checkLogin()) {
@@ -76,6 +84,19 @@ const collect = async () => {
         emits("changeCollectionCount")
     }
 }
+
+// 播放所有专辑歌曲
+const playAllAlbumSong = () => {
+    const id = Number(route.params.id)
+    const ids = songList?.data.filter(item => {
+        return checkMusicCopyright(item.fee, !item.noCopyrightRcmd)
+    }).map(item => item.id)
+    if (!ids?.length) {
+        return Message.error("惊不惊喜，一首都不让你听>_<")
+    }
+    playSongList(JSON.stringify(ids), id)
+}
+
 // 前往歌手页
 const goSingerPage = () => {
     router.push(`/singer-home/${props.albumInfo.artist.id}`)

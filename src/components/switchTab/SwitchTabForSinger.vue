@@ -21,46 +21,57 @@
             </div> -->
         </div>
         <!--专辑--->
-        <div class="album pt-20" v-if="activeIndex === 0">
-            <!-- v-if="songListShowType === 'card'" -->
-            <div class="album-card-wrap d-flex flex-wrap">
-                <CardForAlbum v-for="item in singerAlbumList.data" :key="item.id" :album-item="item"
-                    class="card-for-album"></CardForAlbum>
+        <keep-alive>
+            <div class="album pt-20" v-show="activeIndex === 0">
+                <div class="album-card-wrap d-flex flex-wrap" v-show="singerAlbumList.data.length && !isShowLaoding">
+                    <CardForAlbum v-for="item in singerAlbumList.data" :key="item.id" :album-item="item"
+                        class="card-for-album"></CardForAlbum>
+                </div>
+                <div class="no-data text-66 fs-2" v-if="!singerAlbumList.data.length && !isShowLaoding">没有相关专辑</div>
+                <Loading v-show="isShowLaoding"></Loading>
             </div>
-            <!-- <div class="album-list-wrap" v-show="songListShowType === 'list'">
-                <songForList type="singer" :index="0"></songForList>
-            </div> -->
-        </div>
+        </keep-alive>
         <!--mv--->
-        <div v-show="activeIndex === 1" class="mv">
-            <div class="mv-wrapper d-flex flex-wrap pt-25" v-if="singerMvList.data.length">
-                <RecommendMvCard :is-show-time="true" v-for="item in singerMvList.data" :is-oneline="true" :count="5"
-                    :recommend-mv-item="item" class="recommend-mv-card">
-                </RecommendMvCard>
+        <keep-alive>
+            <div v-show="activeIndex === 1" class="mv">
+                <div class="mv-wrapper d-flex flex-wrap pt-25" v-show="singerMvList.data.length && !isShowLaoding">
+                    <RecommendMvCard :is-show-time="true" v-for="item in singerMvList.data" :is-oneline="true"
+                        :count="5" :recommend-mv-item="item" class="recommend-mv-card">
+                    </RecommendMvCard>
+                </div>
+                <div class="no-data text-66 fs-2" v-if="!singerMvList.data.length && !isShowLaoding">没有相关mv</div>
+                <Loading v-show="isShowLaoding"></Loading>
             </div>
-            <div class="no-data text-66 fs-2" v-if="!singerMvList.data.length">没有相关mv</div>
-        </div>
+        </keep-alive>
         <!--歌手详情-->
-        <div v-show="activeIndex === 2" class="detail">
-            <div class="detail-wrap mb-30 pt-20" v-if="singerDetail.data.length">
-                <div class="detail-item " v-for="item in singerDetail.data">
-                    <div class="detail-title f-2 mb-20 text-33">{{ item.ti }}</div>
-                    <div class="detail-content fs-1 mb-20 text-bc" v-for="it in item.txt.split('\n')">
-                        {{ it }}
+        <keep-alive>
+            <div v-show="activeIndex === 2" class="detail">
+                <div class="detail-wrap mb-30 pt-20" v-if="singerDetail.data.length && !isShowLaoding">
+                    <div class="detail-item " v-for="item in singerDetail.data">
+                        <div class="detail-title f-2 mb-20 text-33">{{ item.ti }}</div>
+                        <div class="detail-content fs-1 mb-20 text-bc" v-for="it in item.txt.split('\n')">
+                            {{ it }}
+                        </div>
                     </div>
                 </div>
+                <div class="no-data text-66 fs-3" v-if="!singerDetail.data.length && !isShowLaoding">暂无介绍</div>
+                <Loading v-show="isShowLaoding"></Loading>
             </div>
-            <div class="no-data text-66 fs-3" v-if="!singerDetail.data.length">暂无介绍</div>
-        </div>
+        </keep-alive>
         <!--相似歌手-->
-        <div v-show="activeIndex === 3" class="simlary">
-            <div class="simlary-wrapper d-flex flex-wrap pt-25" v-if="similarSingerList.data.length">
-                <SingerCard v-for="item in similarSingerList.data" :is-show-singer-flag="false" :singer-item="item"
-                    class="singer-card">
-                </SingerCard>
+        <keep-alive>
+            <div v-show="activeIndex === 3" class="simlary">
+                <div class="simlary-wrapper d-flex flex-wrap pt-25"
+                    v-if="similarSingerList.data.length && !isShowLaoding">
+                    <SingerCard v-for="item in similarSingerList.data" :is-show-singer-flag="false" :singer-item="item"
+                        class="singer-card">
+                    </SingerCard>
+                </div>
+                <div class="no-data text-66 fs-3" v-if="!similarSingerList.data.length && !isShowLaoding">
+                    没有相关歌手</div>
+                <Loading v-show="isShowLaoding"></Loading>
             </div>
-            <div class="no-data text-66 fs-3" v-if="!similarSingerList.data.length">没有相关歌手</div>
-        </div>
+        </keep-alive>
     </div>
 </template>
 
@@ -69,58 +80,79 @@ import RecommendMvCard from '../RecommendMvCard.vue';
 import SingerCard from '../singer/SingerCard.vue';
 import CardForAlbum from '../CardForAlbum.vue';
 import { getSingerAlbum, getSimilarSinger, getSingerDes, getSingerMv } from "@/service/api/singer"
-import { computed, reactive, ref, watch, watchEffect } from 'vue';
 import { labelList } from "@/utils/const"
 import { useRoute } from 'vue-router';
 import { Artist, HotAlbum, Introduction, Mv } from '@/service/api/singer/types';
+import Loading from '../Loading.vue';
+
 const route = useRoute()
 const activeIndex = ref(0)
-const songListShowType = ref("card")
+// const songListShowType = ref("card")  // 暂时用不到
 const singerId = ref(Number(route.params.id)) // 歌手id
-
 const singerAlbumList = reactive<Record<string, HotAlbum[]>>({ data: [] }) // 专辑信息
 const singerMvList = reactive<Record<string, Mv[]>>({ data: [] }) // mv
 const similarSingerList = reactive<Record<string, Artist[]>>({ data: [] }) // 相似歌手
 const singerDetail = reactive<Record<string, Introduction[]>>({ data: [] }) // 歌手详情
+const isShowLaoding = ref(false)
 
 watch(() => route.params.id, (newVal) => {
     activeIndex.value = 0
+    singerAlbumList.data = []
+    singerMvList.data = []
+    similarSingerList.data = []
+    singerDetail.data = []
     singerId.value = Number(newVal)
 })
 // 获取专辑  分页TODO
 const getAlbum = async () => {
+    isShowLaoding.value = true
     const r = await getSingerAlbum({ id: singerId.value })
     singerAlbumList.data = r.hotAlbums
+    isShowLaoding.value = false
 }
 
 // mv
 const getMv = async () => {
+    isShowLaoding.value = true
     const r = await getSingerMv({ id: singerId.value })
     singerMvList.data = r.mvs
+    isShowLaoding.value = false
 }
 // 相似歌手
 const getSimilar = async () => {
+    isShowLaoding.value = true
     const r = await getSimilarSinger({ id: singerId.value })
     similarSingerList.data = r.artists
+    isShowLaoding.value = false
 }
 // 歌手详情
 const getSingerDetail = async () => {
+    isShowLaoding.value = true
     const r = await getSingerDes({ id: singerId.value })
     singerDetail.data = r.introduction
+    isShowLaoding.value = false
 }
 watchEffect(() => {
     switch (activeIndex.value) {
         case 0:
-            getAlbum()
+            if (!singerAlbumList.data.length) {
+                getAlbum()
+            }
             break
         case 1:
-            getMv()
+            if (!singerMvList.data.length) {
+                getMv()
+            }
             break
         case 2:
-            getSingerDetail()
+            if (!singerDetail.data.length) {
+                getSingerDetail()
+            }
             break
         case 3:
-            getSimilar()
+            if (!similarSingerList.data.length) {
+                getSimilar()
+            }
             break
 
     }
