@@ -1,5 +1,5 @@
 <template>
-    <commonHead play-type="songList">
+    <CommonHead play-type="songList">
         <template #img-wrap>
             <div class="img-wrap">
                 <div class="niddle" :class="player.playing ? '' : 'no-play'"></div>
@@ -32,11 +32,11 @@
                 </div>
             </div>
         </template>
-    </commonHead>
+    </CommonHead>
 </template>
 
 <script lang="ts" setup>
-import commonHead from './commonHead.vue';
+import CommonHead from './CommonHead.vue';
 import Message from "@/components/message"
 import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
 const { likeMusic, isLike, player } = useMusicPlayRelation()

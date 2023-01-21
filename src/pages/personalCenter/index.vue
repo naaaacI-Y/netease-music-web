@@ -36,7 +36,7 @@
                     <!-- <Pagination v-if="pages4Self.total >= pages4Self.size" :total="pages4Self.total" :size="pages4Self.size" :page="pages4Self.page"
                         @page-change="handlePageChange4Self" class="mt-30 mb-30"></Pagination> -->
                     <!-- <div class="content-type2" v-if="songListShowType === 'table'">
-                        <songForList v-for="item in 4"></songForList>
+                        <SongForList v-for="item in 4"></SongForList>
                     </div> -->
                 </div>
             </div>
@@ -74,7 +74,7 @@
                     <!-- <Pagination v-if="pages4Collect.total >= pages4Collect.size" :total="pages4Collect.total" :size="pages4Collect.size" :page="pages4Collect.page"
                         @page-change="handlePageChange4Collection" class="mt-30 mb-30"></Pagination> -->
                     <!-- <div class="content-type2" v-if="songListShowType === 'table'">
-                        <songForList v-for="item in 4"></songForList>
+                        <SongForList v-for="item in 4"></SongForList>
                     </div> -->
                 </div>
             </div>
@@ -87,7 +87,7 @@ import Pagination from '@/components/Pagination.vue';
 
 import UserHeader from '@/components/header/UserHeader.vue';
 import RecommendSongListCard from '@/components/RecommendSongListCard.vue';
-import songForList from '@/components/songForList.vue';
+import SongForList from '@/components/SongForList.vue';
 import { getSongList } from '@/service/api/user';
 import { Playlist_user } from '@/service/api/user/types';
 import useStore from '@/store';

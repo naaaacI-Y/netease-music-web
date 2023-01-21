@@ -9,7 +9,7 @@
                     <i class="iconfont icon-bofang1 fs-7"></i>
                     {{ formatPlayCount(songListItem.playCount) }}
                 </div>
-                <div class="play-btn">
+                <div class="play-btn" @click.stop="playAllList">
                     <div class="trangel"></div>
                 </div>
                 <slot name="songlist-autor"></slot>
@@ -29,6 +29,11 @@ import router from '@/router';
 import LazyLoadImg from './LazyLoadImg.vue';
 import { Playlist, Playlist_SongList } from '@/service/api/music/types';
 import { formatPlayCount } from '@/utils';
+import Message from "@/components/message"
+import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
+import { getSongListDetail } from '@/service/api/music';
+import { HotSong } from '@/service/api/singer/types';
+const { player, playSongList, checkMusicCopyright } = useMusicPlayRelation()
 const props = withDefaults(defineProps<{
     isOutSide?: boolean
     isOneline?: boolean
@@ -39,6 +44,25 @@ const props = withDefaults(defineProps<{
     isOneline: false,
     isHighQuality: false
 })
+
+// 播放全部歌单歌曲
+const playAllList = async () => {
+    const songListId = props.songListItem.id
+    if (player.value.playing && player.value.playlistSource.id === songListId) return
+    // 获取歌单详情
+    const r = await getSongListDetail({ id: songListId })
+    const ids = r.playlist.trackIds?.slice(0, r.playlist.tracks.length).filter((_item, index) => {
+        const _: HotSong = r.playlist.tracks[index]
+        return checkMusicCopyright(_.fee, !_.noCopyrightRcmd)
+    }).map(item => item.id)
+
+    if (!ids?.length) {
+        return Message.error("惊不惊喜，一首都不让你听>_<")
+    }
+    playSongList(JSON.stringify(ids), songListId)
+}
+
+// 前往歌单页
 const goSongList = () => {
     router.push(`/song-list/${props.songListItem.id}`)
 }

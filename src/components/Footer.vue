@@ -7,7 +7,7 @@
         </div>
         <div class="footer-content d-flex ai-center">
             <div class="left d-flex">
-                <div class="img mr-10" style="color: white;">
+                <div class="img mr-10" style="color: white;" v-if="player.enabled">
                     <img :src="player.currentTrack?.al?.picUrl" alt="">
                     <div class="mask-show d-flex ai-center jc-center" @click="changePlayPage" v-show="!isShowPlayPage">
                         <i class="iconfont icon-quanping3-xianxing"></i>
@@ -16,12 +16,12 @@
                         <i class="iconfont icon-quanping4-xianxing"></i>
                     </div>
                 </div>
-                <div class="song-info d-flex flex-column jc-center">
+                <div class="song-info d-flex flex-column jc-center" v-if="player.enabled">
                     <div class="name" @click="goSinger">
                         <span class="fs-3 text-33">{{ player.currentTrack?.name }}</span>
                         <span class="fs-1 text-97"> - {{
                             player.isPersonalFM ?
-                                player.personalFMTrack.artists[0].musicSize : player.currentTrack?.ar[0]?.name
+                                player.personalFMTrack?.artists[0]?.musicSize : player.currentTrack?.ar[0]?.name
                         }}</span>
                     </div>
                     <div class="time d-flex ai-center fs-1 text-97">
@@ -35,23 +35,34 @@
                 </div>
             </div>
             <div class="middle d-flex ai-center">
+                <!--喜欢-->
                 <i class="iconfont icon-24gl-heart fs-9 text-4b mr-30"
-                    @click="likeMusic(player.isPersonalFM ? player.personalFMTrack.id : player.currentTrack.id, true)"
-                    v-show="!isLike"></i>
+                    @click="likeMusic(player.isPersonalFM ? player.personalFMTrack?.id : player.currentTrack?.id, true)"
+                    v-show="!isLike">
+                </i>
                 <i class="iconfont icon-aixin_shixin fs-9 text-primary_red_4 mr-30"
                     @click="likeMusic(player.isPersonalFM ? player.personalFMTrack.id : player.currentTrack.id, false)"
-                    v-show="isLike"></i>
+                    v-show="isLike">
+                </i>
+                <!--上一首-->
                 <i class="iconfont icon-diyiyeshouyeshangyishou text-primary_red_4 fs-10 mr-25" @click="playPrevTrack"
                     v-show="!player.isPersonalFM"></i>
                 <i class="iconfont icon-diyiyeshouyeshangyishou text-fbg fs-10 mr-25" v-show="player.isPersonalFM"></i>
+                <!--播放中-->
                 <i class="iconfont icon-zanting2x text-primary_red_4  mr-25" style="font-size: 40px;" @click="musicPlay"
-                    v-show="player.playing"></i>
+                    v-show="player.playing">
+                </i>
+                <!--暂停-->
                 <i class="iconfont icon-zanting1 text-primary_red_4  mr-25" style="font-size: 40px;" @click="musicPlay"
                     v-show="!player.playing"></i>
-                <i class="iconfont icon-zuihouyiyemoyexiayishou text-primary_red_4 fs-10 mr-30"
-                    @click="playNextSong"></i>
+                <!--下一首-->
+                <i class="iconfont icon-zuihouyiyemoyexiayishou text-primary_red_4 fs-10 mr-30" @click="playNextSong">
+                </i>
+                <!--删除-->
                 <i class="iconfont icon-shanchu text-4b fs-6" v-show="player.isPersonalFM" @click="delete2PlayNext"></i>
-                <i class="iconfont icon-fenxiang1 text-3a" v-show="!player.isPersonalFM"></i>
+                <!--分享-->
+                <i class="iconfont icon-fenxiang1 text-3a" v-show="!player.isPersonalFM"
+                    @click="Message.error('暂不支持>_<')"></i>
             </div>
             <div class="right text-4b d-flex ai-center mr-15">
 
@@ -81,6 +92,7 @@ import "@/assets/slider.css";
 import { formatSongTime } from '@/utils';
 import { useRoute } from 'vue-router';
 import router from '@/router';
+import Message from "@/components/message"
 import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
 const {
     isShowPlayPage,

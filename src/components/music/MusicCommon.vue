@@ -25,19 +25,22 @@
             <div class="side-info" v-if="playType === 'songList'">
                 <div class="similar">
                     <div class="similar-head mb-10 fs-5 text-33">相似歌曲</div>
-                    <div class="similar-item item d-flex" v-for="item in similarSongList.data" :key="item.id"
-                        @click="playSingleMusic([], item.id, -1)">
-                        <div class="img">
-                            <img :src="formatPicUrl(item?.album?.picUrl, 50, 50)" alt="">
-                            <div class="play-btn">
-                                <div class="trangel"></div>
+                    <div class="simi-item-wrap" v-if="!isShowSimiLoading">
+                        <div class="similar-item item d-flex" v-for="item in similarSongList.data" :key="item.id"
+                            @click="playSingleMusic([], item.id, -1)">
+                            <div class="img">
+                                <img :src="formatPicUrl(item?.album?.picUrl, 50, 50)" alt="">
+                                <div class="play-btn">
+                                    <div class="trangel"></div>
+                                </div>
+                            </div>
+                            <div class="song-info">
+                                <div class="name mb-5 fs-3 text-3a">{{ item.name }}</div>
+                                <div class="singer text-66 fs-2">{{ item?.artists[0]?.name }}</div>
                             </div>
                         </div>
-                        <div class="song-info">
-                            <div class="name mb-5 fs-3 text-3a">{{ item.name }}</div>
-                            <div class="singer text-66 fs-2">{{ item?.artists[0]?.name }}</div>
-                        </div>
                     </div>
+                    <Loading v-show="isShowSimiLoading"></Loading>
                 </div>
             </div>
         </div>
@@ -45,7 +48,7 @@
 </template>
 
 <script lang="ts" setup>
-
+import Loading from '../Loading.vue';
 import SongListComment from '../song/SongListComment.vue';
 import SongListMusic from "./SongListMusic.vue"
 import PersonalFmMusic from "./PersoanlFmMusic.vue"
@@ -58,6 +61,7 @@ import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
 
 const { playSingleMusic, player } = useMusicPlayRelation()
 const similarSongList = reactive({ data: [] as NewMusicRet[] })
+const isShowSimiLoading = ref(true)
 
 const props = withDefaults(defineProps<
     {
@@ -75,8 +79,10 @@ watch(() => player.value.currentTrack.id, (newVal) => {
 
 // 获取相似歌曲
 const getSimilatList = async (id: number) => {
+    isShowSimiLoading.value = true
     const r = await getSimilatSong({ id })
     similarSongList.data = r.songs
+    isShowSimiLoading.value = false
 }
 
 // 展示评论框

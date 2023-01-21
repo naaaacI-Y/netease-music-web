@@ -26,8 +26,7 @@
                 <RankCard v-for="(item, index) in rankankList.data.slice(4)" :key="item.id" :card-width="158"
                     :rank-type="1" :rank-item="item" class="rank-card-item">
                     <template #playCount>
-                        <div class="play-count d-flex ai-center fs-1 jc-end" style="color: white;"
-                            @click.stop="playList(item.id)">
+                        <div class="play-count d-flex ai-center fs-1 jc-end" style="color: white;">
                             <i class="iconfont icon-bofang1  fs-7"></i>
                             {{ formatPlayCount(item.playCount) }}
                         </div>
@@ -47,18 +46,12 @@ import { getAllRank } from '@/service/api/rank';
 import { RankList } from '@/service/api/rank/types';
 import { formatPlayCount, formatTime } from '@/utils';
 import { useRouter } from 'vue-router';
-const router = useRouter()
 const rankankList = reactive({ data: [] as RankList[] })
 
 // 获取所有排行榜数据
 const getRank = async () => {
     const r = await getAllRank()
     rankankList.data = r.list
-}
-
-// 播放榜单歌曲
-const playList = (id: number) => {
-
 }
 
 getRank()

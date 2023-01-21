@@ -39,7 +39,7 @@
                     </div>
                 </div>
             </div>
-            <div class="new-comment mt-30" v-if="allComment.data?.length" id="new-comment-pos">
+            <div class="new-comment mt-30" v-if="allComment.data?.length && !isShowLoading" id="new-comment-pos">
                 <div class="comment-label text-4e mb-15">最新评论</div>
                 <CommentItem v-for="(item) in allComment.data" :is-grey="isGrey" :comment-content="item"
                     @active-comment="activeComment" :key="item.commentId" :type="sourceType">
@@ -131,6 +131,7 @@ watch(() => pages.page, async (newVal) => {
         // 滚动到最新评论处
         scrollToPos()
     }
+
     getAllComment(cid.value)
 })
 watch(() => route.params.id, (newVal) => {
@@ -145,11 +146,13 @@ watch(() => cContent.value, async (newVal) => {
     }
 })
 
-watch(() => cid.value, () => {
+watch(() => cid.value, (newVal) => {
     // 更新评论
     pages.page = 1
+
+    console.log("歌曲切换，更新评论========");
     isShowLoading.value = true
-    getAllComment(cid.value)
+    getAllComment(newVal)
     // 更新相似歌曲
     emits("updateSimilarList")
 

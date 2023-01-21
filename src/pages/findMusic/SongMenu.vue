@@ -26,7 +26,7 @@
         <div class="content-wrap" v-show="!isShowLoading">
             <div class="song-list d-flex flex-wrap jc-between">
                 <RecommendSongListCard :is-out-side="false" v-for="item in songList.data" :key="item.id"
-                    @click="goSongList(item.id)" :song-list-item="item">
+                    :song-list-item="item">
                     <template #songlist-name>
                         <div class="songlist-name fs-3 text-4e">
                             {{ item.name }}

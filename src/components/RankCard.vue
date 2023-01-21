@@ -96,7 +96,7 @@ const getRankDetail = async () => {
     const r = await getSongListDetail({ id: props.rankItem.id })
     randDetail.data = r.playlist.tracks.slice(0, 5)
 
-    songListInfo.data = r.playlist.trackIds?.slice(0, randDetail.data.length)?.filter((_item, index) => {
+    songListInfo.data = r.playlist.trackIds?.slice(0, r.playlist.tracks.length)?.filter((_item, index) => {
         const _: HotSong = r.playlist.tracks[index]
         return checkMusicCopyright(_.fee, !_.noCopyrightRcmd)
     }) || []
