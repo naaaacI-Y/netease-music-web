@@ -21,6 +21,19 @@
 <script  lang="ts" setup>
 import { getHeadBanner } from '@/service/api/recommend';
 import { Banner } from '@/service/api/recommend/types';
+import { BannerType } from "@/utils/const"
+import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
+import { getMusicDetail } from '@/service/api/music';
+import Message from "@/components/message"
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
+const { checkMusicCopyright, playSingleMusic } = useMusicPlayRelation()
+const sliderDomList = reactive({ data: [] as unknown as HTMLCollectionOf<Element> })
+const currentIndex = ref(0)
+const bannerList = reactive({ data: [] as Banner[] })
+const timer = ref()
+
 const props = withDefaults(defineProps<{
     color?: string,
     interval?: number,
@@ -32,9 +45,6 @@ const props = withDefaults(defineProps<{
     interval: 4000,
     imgType: "percentage",
 })
-const emits = defineEmits<{
-    (e: "sliderClick", index: number): void
-}>()
 const sliderStyle = computed(() => {
     return {
         width: props.width ? props.width : '100%',
@@ -44,14 +54,14 @@ const sliderStyle = computed(() => {
             props.imgType == 'percentage' ? '100% 100%' : props.imgType,
     }
 })
-const sliderDomList = reactive({ data: [] as unknown as HTMLCollectionOf<Element> })
-const currentIndex = ref(0)
-const bannerList = reactive({ data: [] as Banner[] })
-const timer = ref()
+
+// 获取banner
 const getBanner = async () => {
     const r = await getHeadBanner()
     bannerList.data = r.banners
 }
+
+// 设置样式
 const setClass = (i: number) => {
     let next =
         currentIndex.value === bannerList.data.length - 1 ? 0 : currentIndex.value + 1
@@ -68,12 +78,15 @@ const setClass = (i: number) => {
             return ''
     }
 }
+
 const setBGImg = (src: string) => {
     console.log(src, 'src====')
     return {
         backgroundImage: `require(${src})`,
     }
 }
+
+// 设置当前激活中的dot
 const setActiveDot = (index: number) => {
     return index === currentIndex.value
         ? {
@@ -83,25 +96,35 @@ const setActiveDot = (index: number) => {
             backgroundColor: '#ccc',
         }
 }
+
+// 播放轮播
 const play = () => {
     pause()
     timer.value = setInterval(() => {
         next()
     }, props.interval)
 }
+
+// 暂停
 const pause = () => {
     clearInterval(timer.value)
 }
+
+// 下一张
 const next = () => {
     currentIndex.value = ++currentIndex.value % bannerList.data.length
 }
+
+// 上一张
 const prev = () => {
     currentIndex.value =
         currentIndex.value === 0 ? bannerList.data.length - 1 : currentIndex.value - 1
 }
+
+// 点击轮播
 const onClick = (i: number) => {
     if (i === currentIndex.value) {
-        emits("sliderClick", i)
+        bannerClick(bannerList.data[i])
     } else {
         let currentClickClassName = sliderDomList.data[i].className.split(' ')[1]
         if (currentClickClassName === 'next') {
@@ -111,6 +134,30 @@ const onClick = (i: number) => {
         }
     }
 }
+
+// 轮播图点击跳转
+const bannerClick = async (item: Banner) => {
+    switch (item.targetType) {
+        case BannerType["NEWSONG"]:
+            // 新歌 播放
+            const r = await getMusicDetail(String(item.targetId))
+            const isHaveCopy = checkMusicCopyright(r.songs[0].fee, !r.songs[0].noCopyrightRcmd)
+            if (!isHaveCopy) return Message.error("没有播放权限")
+            playSingleMusic([], r.songs[0].id, -1)
+            break;
+        case BannerType["NEWCARD"]:
+            // 新碟 跳转
+            router.push(`/album/${item.targetId}`)
+            break
+        case BannerType["SONGLIST"]:
+            // 歌单 跳转
+            router.push(`/song-list/${item.targetId}`)
+            break
+        default:
+            break;
+    }
+}
+
 onMounted(() => {
     sliderDomList.data = document.getElementsByClassName("slider")
 })

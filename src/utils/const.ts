@@ -20,6 +20,16 @@ const firstPagePath = [
     "/my-collection/3"
 ]
 
+// 轮播图类型
+// 1000: 歌单 ==> 跳转歌单页面
+// 1: 新歌首发 ==> 播放音乐
+// 10: 新碟 ==> 跳转歌单页面
+const enum BannerType {
+    NEWSONG = 1,
+    NEWCARD = 10,
+    SONGLIST = 1000
+}
+
 // 头部导航栏左侧相关路径
 const paths = ["/findMusic", "/video", "/friends", "/prettyCommon", "/unique", "/dynamic", "/focus", "/fans", "/hot-comment", "/recent-play"]
 
@@ -131,6 +141,7 @@ export {
     dynamicMap,
     firstPagePath,
     labelListMap,
-    paths
+    paths,
+    BannerType
 
 }
