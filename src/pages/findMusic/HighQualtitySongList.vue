@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import RecommendSongListCard from '@/components/RecommendSongListCard.vue';
 
 import Loading from '@/components/Loading.vue';
@@ -52,9 +52,9 @@ import { getHighqualitySongList } from "@/service/api/music"
 import { onMounted, onUnmounted, reactive, ref } from 'vue';
 import { Playlist } from '@/service/api/music/types';
 import { debounce, FormatList, formatListData } from '@/utils';
-import router from '@/router';
 
 const route = useRoute()
+const router = useRouter()
 const type = route.query.type ?? "全部"
 const isShowLoading = ref(false)
 const loaded = ref(false)

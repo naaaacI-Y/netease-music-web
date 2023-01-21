@@ -56,7 +56,6 @@ import Pagination from '@/components/Pagination.vue';
 import RecommendSongListCard from '@/components/RecommendSongListCard.vue';
 import FilterItem from '@/components/FilterItem.vue';
 import { songMenuTypes } from "@/utils/const"
-import { computed, reactive, ref, watchEffect } from 'vue';
 import { getSongList, getHighqualitySongList } from "@/service/api/music"
 import { Playlist, SongListParams } from '@/service/api/music/types';
 import { useRouter } from 'vue-router';

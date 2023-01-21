@@ -20,7 +20,6 @@ import Loading from "@/components/Loading.vue"
 import { formatListData, FormatList, debounce } from "@/utils"
 import UniqueCard from '../findMusic/personalRecommend/components/UniqueCard.vue';
 import { getUniquereCommendList } from "@/service/api/recommend"
-import { onMounted, onUnmounted, reactive, ref } from 'vue';
 import { UniqueRecommendRet } from '@/service/api/recommend/types';
 const uniqueList = reactive({ data: [] as FormatList<UniqueRecommendRet> })
 const loaded = ref(false) // 是否还有更多数据

@@ -43,7 +43,6 @@ import Loading from '@/components/Loading.vue';
 import NewMusicItemInside from './personalRecommend/components/NewMusicItemInside.vue';
 import { getNewMusic } from "@/service/api/music/index"
 import { newestMusicType } from "@/utils/const"
-import { reactive, ref, watch } from 'vue';
 import Message from "@/components/message"
 import { NewMusicRet } from '@/service/api/music/types';
 import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';

@@ -39,7 +39,6 @@ import { getAllMv, getNetProdMV, getNewMv } from '@/service/api/mv';
 import { MVItem } from '@/service/api/mv/types';
 import { areaList } from "@/utils/const"
 import Loading from '@/components/Loading.vue';
-import { reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 const types = Object.fromEntries(Object.entries(areaList).filter(item => item[0] !== '全部'))
 const activeType = ref("内地")

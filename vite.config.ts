@@ -6,11 +6,16 @@ import viteCompression from 'vite-plugin-compression'
 import proxy from './build/proxy'
 import VueSetupExtend from 'vite-plugin-vue-setup-extend'
 import { VITE_PORT } from './build/constant'
+import autoImport from "unplugin-auto-import/vite" // 自动引入插件
 // https://vitejs.dev/config/
 export default defineConfig({
   base: './', //打包路径
   plugins: [
     vue(),
+    autoImport({
+      imports: ["vue"],
+      dts: "src/types/auto-import.d.ts"
+    }),
     VueSetupExtend(),
     // gzip压缩 生产环境生成 .gz 文件
     viteCompression({

@@ -21,7 +21,6 @@ import { getSongListDetail } from '@/service/api/music';
 import { Creator, HeaderInfo, TrackId } from '@/service/api/music/types';
 import { HotSong } from '@/service/api/singer/types';
 import { getQueryId } from '@/utils';
-import { provide, reactive, ref } from 'vue';
 import { onBeforeRouteUpdate } from 'vue-router';
 import { Playlist_user } from '@/service/api/user/types';
 import { useMusicPlayRelation } from "@/hooks/useMusicPlayRelation"

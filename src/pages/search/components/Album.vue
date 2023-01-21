@@ -34,7 +34,6 @@
 <script lang="ts" setup name="Album">
 import Pagination from '@/components/Pagination.vue';
 import { keywordsColorful } from '@/utils';
-import { reactive, ref, watch } from 'vue';
 import CommonItem from '@/components/CommonItem.vue';
 import { Album } from "@/service/api/recommend/types"
 import { useRoute, useRouter } from 'vue-router';

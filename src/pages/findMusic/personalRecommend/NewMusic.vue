@@ -23,7 +23,6 @@
 import { useRouter } from 'vue-router';
 import NewMusicItem from './components/NewMusicItem.vue';
 import { getRecommendNewMusic } from "@/service/api/recommend/index"
-import { reactive } from 'vue';
 import { RecommendNewMusicRet } from '@/service/api/recommend/types';
 const router = useRouter()
 const newMusicList = reactive<Record<string, RecommendNewMusicRet[]>>({ data: [] })

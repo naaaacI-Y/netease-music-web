@@ -17,7 +17,6 @@
 import { formatPicUrl } from '@/utils';
 import { UniqueRecommendRet } from '@/service/api/recommend/types';
 import LazyLoadImg from "@/components/LazyLoadImg.vue"
-import { computed } from 'vue';
 const props = withDefaults(defineProps<
     {
         cardWidth?: number,

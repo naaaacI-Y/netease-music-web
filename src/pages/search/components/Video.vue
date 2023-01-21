@@ -26,7 +26,6 @@ import VideoCard from '@/components/VideoCard.vue';
 import { searchByType } from '@/service/api/search';
 import { SearchVideoResult, Video } from '@/service/api/search/types';
 import { scrollToTop } from '@/utils';
-import { reactive, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const isShowLoading = ref(false)

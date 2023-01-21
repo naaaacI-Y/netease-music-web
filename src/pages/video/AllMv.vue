@@ -37,7 +37,6 @@ import RecommendMvCard from '@/components/RecommendMvCard.vue';
 import { getAllMv } from '@/service/api/mv';
 import { AllMvParam, MVItem } from '@/service/api/mv/types';
 import { areaList, typeList, sortList } from "@/utils/const"
-import { reactive, ref, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 import { scrollToTop } from '@/utils';
 const route = useRoute()

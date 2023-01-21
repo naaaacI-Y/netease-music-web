@@ -21,7 +21,6 @@
 <script  lang="ts" setup>
 import { getHeadBanner } from '@/service/api/recommend';
 import { Banner } from '@/service/api/recommend/types';
-import { computed, onMounted, reactive, ref } from 'vue';
 const props = withDefaults(defineProps<{
     color?: string,
     interval?: number,

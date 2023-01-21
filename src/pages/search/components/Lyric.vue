@@ -42,7 +42,6 @@ import { searchByType } from '@/service/api/search';
 import { SearchLyricResult } from '@/service/api/search/types';
 import { Song } from '@/service/api/singer/types';
 import Message from "@/components/message"
-import { provide, reactive, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import Loading from '@/components/Loading.vue';
 import Header from '@/components/header/Header.vue';

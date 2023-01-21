@@ -40,7 +40,6 @@ import { keywordsColorful } from "@/utils"
 import Pagination from '@/components/Pagination.vue';
 import { searchByType } from "@/service/api/search";
 import { Playlist, SearchSongListResult } from "@/service/api/search/types"
-import { reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from "vue-router";
 import CommonItem from '../../../components/CommonItem.vue';
 import Loading from '@/components/Loading.vue';

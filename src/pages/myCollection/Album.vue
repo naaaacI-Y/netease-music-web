@@ -48,7 +48,6 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, onUnmounted, reactive, ref } from 'vue';
 import Loading from '@/components/Loading.vue';
 import CommonItem from "@/components/CommonItem.vue"
 import { getCollectedAlbum } from '@/service/api/album';

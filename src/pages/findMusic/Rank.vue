@@ -43,7 +43,6 @@
 
 <script lang="ts" setup>
 import RankCard from '@/components/RankCard.vue';
-import { reactive } from 'vue';
 import { getAllRank } from '@/service/api/rank';
 import { RankList } from '@/service/api/rank/types';
 import { formatPlayCount, formatTime } from '@/utils';

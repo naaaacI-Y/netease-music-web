@@ -11,7 +11,6 @@
 import { useRouter } from 'vue-router';
 import RecommendMvCard from '@/components/RecommendMvCard.vue';
 import { MVItem } from '@/service/api/mv/types';
-import { reactive } from 'vue';
 import { getRecommendMv } from '@/service/api/mv';
 const router = useRouter()
 const recommendMvList = reactive<Record<string, MVItem[]>>({ data: [] })

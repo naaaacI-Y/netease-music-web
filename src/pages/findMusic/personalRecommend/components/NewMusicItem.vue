@@ -35,7 +35,6 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
 import { RecommendNewMusicRet } from '@/service/api/recommend/types';
 import { formatPicUrl, paddingLeft } from '@/utils';
 import { useRoute, useRouter } from 'vue-router';

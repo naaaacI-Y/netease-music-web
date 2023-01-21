@@ -15,7 +15,6 @@ import RecommendCarousel from './RecommendCarousel.vue';
 import RecommendSonglist from './RecommendSonglist.vue';
 import Unique from './Unique.vue';
 import RecommendMv from './RecommendMv.vue';
-import { ref } from 'vue';
 
 </script>
 <style lang="scss" scoped>

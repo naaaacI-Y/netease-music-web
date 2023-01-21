@@ -13,7 +13,6 @@
 import AlbumHeader from '@/components/header/AlbumHeader.vue';
 import SwicthTabForAlbum from '@/components/switchTab/SwicthTabForAlbum.vue';
 import { getAlbumInfo, getAlbumDynamicInfo } from "@/service/api/album"
-import { provide, reactive, ref } from 'vue';
 import { HotAlbum, HotSong } from '@/service/api/singer/types';
 import { AlbumDynamicInfoResult, Info } from '@/service/api/album/types';
 import { getQueryId } from '@/utils';

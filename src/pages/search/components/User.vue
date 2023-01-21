@@ -44,7 +44,6 @@ import Pagination from '@/components/Pagination.vue';
 import Loading from '@/components/Loading.vue';
 import CommonItem from '../../../components/CommonItem.vue';
 import { SearchUserResult, Userprofile } from '@/service/api/search/types';
-import { computed, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { searchByType } from '@/service/api/search';
 import { scrollToTop } from '@/utils';

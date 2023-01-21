@@ -7,7 +7,6 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from 'vue';
 import { Event } from "@/service/api/user/types"
 import { getUserDynamic } from "@/service/api/user"
 import DynamicItem from './components/DynamicItem.vue'

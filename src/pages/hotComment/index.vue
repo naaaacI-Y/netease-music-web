@@ -15,7 +15,6 @@ import Pagination from '@/components/Pagination.vue';
 import { getHotComment } from '@/service/api/comment';
 import { HotComment, list } from '@/service/api/comment/types';
 import { getQueryId, scrollToTop } from '@/utils';
-import { reactive, watch } from 'vue';
 import { useRoute } from 'vue-router';
 const route = useRoute()
 const pages = reactive({

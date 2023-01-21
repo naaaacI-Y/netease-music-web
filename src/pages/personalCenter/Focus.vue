@@ -13,7 +13,6 @@ import Pagination from '@/components/Pagination.vue';
 import { getFocusList } from '@/service/api/user';
 import { Follow } from '@/service/api/user/types';
 import { getQueryId, scrollToTop } from '@/utils';
-import { reactive, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import FocusAndFansItem from './components/FocusAndFansItem.vue';
 const focusList = reactive({ data: [] as Follow[] })

@@ -36,7 +36,6 @@ import Pagination from '@/components/Pagination.vue';
 import { searchByType } from '@/service/api/search';
 import { useRoute, useRouter } from "vue-router"
 import { Artist, SearchSingerResult } from '@/service/api/search/types';
-import { reactive, ref, watch } from 'vue';
 import CommonItem from '@/components/CommonItem.vue';
 import { scrollToTop } from '@/utils';
 import { keywordsColorful } from '@/utils';

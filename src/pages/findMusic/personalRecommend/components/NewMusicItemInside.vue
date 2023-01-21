@@ -33,7 +33,6 @@
 <script lang="ts" setup>
 import { formatPicUrl, formatSongTime } from "@/utils/index"
 import LazyLoadImg from '@/components/LazyLoadImg.vue';
-import { computed } from 'vue';
 import { paddingLeft } from "@/utils";
 import { NewMusicRet } from '@/service/api/music/types';
 import { useRouter } from "vue-router";

@@ -12,7 +12,6 @@
 
 <script lang="ts" setup>
 import { Artist, HotSong } from '@/service/api/singer/types';
-import { reactive, ref, watch } from 'vue';
 import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 import SingerHeader from '@/components/header/SingerHeader.vue';
 import SwitchTabForSinger from '@/components/switchTab/SwitchTabForSinger.vue';

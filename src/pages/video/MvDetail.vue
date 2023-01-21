@@ -94,7 +94,6 @@ import LazyLoadImg from '@/components/LazyLoadImg.vue';
 import { getMvUrl, getMvDetail, getSimilarMv } from "@/service/api/mv"
 import { Mv, MvDetailRet } from '@/service/api/mv/types';
 import { formatPicUrl, formatPlayCount, formatSongTime } from '@/utils';
-import { onMounted, reactive, ref } from 'vue';
 import '@/assets/plyr.css';
 import { onBeforeRouteUpdate, useRouter } from "vue-router"
 import { useInitVideoPlayer } from '@/hooks/useInitVideoPlayer';

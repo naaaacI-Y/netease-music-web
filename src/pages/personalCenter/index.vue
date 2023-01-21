@@ -93,7 +93,6 @@ import { Playlist_user } from '@/service/api/user/types';
 import useStore from '@/store';
 
 import { checkLogin, getQueryId } from '@/utils';
-import { computed, reactive, ref } from 'vue';
 const songListShowType = ref("card") // card | table
 const songList = reactive({ data: [] as any[] }) // 创建的歌单
 const collectSongList = reactive({ data: [] as any[] }) // 收藏的歌单

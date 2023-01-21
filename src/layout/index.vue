@@ -15,27 +15,27 @@
     </Footer>
     <!--组件切换效果  TODO-->
     <transition>
-        <MusicPlay play-type="songList" v-if="isShowPlayPage" :music-id="musicId" style="" class="music-play">
-        </MusicPlay>
+        <MusicCommon v-if="isShowPlayPage" :music-id="player.currentTrack.id" style="" class="music-play"
+            play-type="songList">
+        </MusicCommon>
     </transition>
     <Login v-if="isShowLoginBox"></Login>
 </template>
 
 <script lang="ts" setup>
 import Login from '@/components/Login.vue';
-
+import MusicCommon from '@/components/music/MusicCommon.vue';
 import SearchResultBox from '@/pages/search/SearchResultBox.vue';
-import MusicPlay from '@/components/music/MusicPlay.vue';
 import Footer from '@/components/Footer.vue'
 import SideBar from '@/components/SideBar.vue'
 import Nav from "@/components/Nav.vue"
-import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import useStore from '@/store';
 
-const { useGlobal } = useStore()
+const { useGlobal, usePlayer } = useStore()
 const { isShowLoginBox, isShowPlayPage } = storeToRefs(useGlobal)
+const { player } = storeToRefs(usePlayer)
 const isShowSearchBox = ref(false)
 const searchKeyWords = ref("")
 const musicId = ref<number>()

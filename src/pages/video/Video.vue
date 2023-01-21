@@ -36,7 +36,6 @@ import { getVideoByCategory, getVideoLabelList } from '@/service/api/video';
 import { VideoByCategoryItem, VideoByCategoryRet, VideoGroupItem } from '@/service/api/video/types';
 import { debounce, FormatList, formatListData } from '@/utils';
 import { videoTypes } from '@/utils/const';
-import { onMounted, onUnmounted, reactive, ref, watch, watchEffect } from 'vue';
 const allVideoLists = reactive({ data: [] as FormatList<VideoByCategoryItem> })
 const labelList = reactive({ data: [] as VideoGroupItem[] })
 const activeType = ref('现场')

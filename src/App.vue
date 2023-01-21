@@ -1,13 +1,9 @@
 <template>
   <router-view></router-view>
-  <!-- <Login v-if="isShowLoginBox"></Login> -->
 </template>
 
 <script lang="ts" setup>
-// import { storeToRefs } from "pinia"
-// import useGlobalStore from "@/store/globalStore"
-// import Login from '@/components/Login.vue';
-// const { isShowLoginBox } = storeToRefs(useGlobalStore())
+
 </script>
 
 <style lang="scss">

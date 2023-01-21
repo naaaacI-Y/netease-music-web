@@ -50,7 +50,6 @@
 
 <script lang="ts" setup>
 import { dynamicMap } from "@/utils/const"
-import { computed, ref } from 'vue';
 import { Event } from "@/service/api/user/types"
 import SongListComment from '@/components/song/SongListComment.vue';
 import { calcTime, formatTime } from '@/utils';

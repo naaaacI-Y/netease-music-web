@@ -19,7 +19,6 @@
 <script lang="ts" setup>
 import DayRecommendCard from './components/DayRecommendCard.vue';
 import { Recommend } from '@/service/api/recommend/types';
-import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { getRecommendSongList } from '@/service/api/music';
 import { checkLogin } from '@/utils';

@@ -15,7 +15,6 @@ import Pagination from '@/components/Pagination.vue';
 import { getFansList } from '@/service/api/user';
 import { Follow } from '@/service/api/user/types';
 import { getQueryId, scrollToTop } from '@/utils';
-import { reactive, watch } from 'vue';
 import FocusAndFansItem from './components/FocusAndFansItem.vue';
 const fansList = reactive({ data: [] as Follow[] })
 const id = getQueryId() as number

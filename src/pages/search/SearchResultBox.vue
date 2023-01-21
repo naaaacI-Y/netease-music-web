@@ -103,7 +103,6 @@ import { HotSearchListRet, SearchSuggestRet, SearchSuggestSong } from '@/service
 import useThemeStore from '@/store/theme';
 import { getSearchHistory, setSearchHistory, clearSearchHistory } from '@/utils';
 import { storeToRefs } from 'pinia';
-import { reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from "vue-router"
 import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
 

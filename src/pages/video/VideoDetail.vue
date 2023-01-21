@@ -93,7 +93,6 @@ import SongListComment from '@/components/song/SongListComment.vue';
 import LazyLoadImg from '@/components/LazyLoadImg.vue';
 import { getRelatedVideo, getVideoDetail, getVideoPlayUrl, getVieoCountInfo } from "@/service/api/video"
 import { formatPicUrl, formatPlayCount, formatSongTime } from '@/utils';
-import { onMounted, reactive, ref } from 'vue';
 import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router"
 import { RelatedVideoRet, VideoDetailRet } from '@/service/api/video/types';
 import { useInitVideoPlayer } from '@/hooks/useInitVideoPlayer';

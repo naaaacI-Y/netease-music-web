@@ -27,7 +27,6 @@ import User from "./components/User.vue"
 import Radio from "./components/Radio.vue"
 import SongList from "./components/SongList.vue"
 import { searchTypeList } from "@/utils/const"
-import { computed, ref } from "vue";
 import { onBeforeRouteUpdate, useRoute } from "vue-router";
 const tabsComponents = {
     Album, Lyric, Singer, Video, Song, User, Radio, SongList

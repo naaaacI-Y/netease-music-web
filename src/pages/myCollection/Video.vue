@@ -56,7 +56,6 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, onUnmounted, reactive, ref } from 'vue';
 import { useRoute } from "vue-router"
 import Loading from '@/components/Loading.vue';
 import VideoCard from '@/components/VideoCard.vue';

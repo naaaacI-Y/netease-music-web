@@ -45,7 +45,6 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onUnmounted, reactive, ref } from 'vue';
 import { useRouter } from "vue-router"
 import Loading from '@/components/Loading.vue';
 import CommonItem from "@/components/CommonItem.vue"

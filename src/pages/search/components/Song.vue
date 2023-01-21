@@ -25,7 +25,6 @@ import SongListItem from '@/components/song/SongListItem.vue';
 import { searchByType } from '@/service/api/search';
 import { SearchSongResult } from '@/service/api/search/types';
 import { Song } from '@/service/api/singer/types';
-import { computed, provide, reactive, ref, watch } from 'vue';
 import Loading from '@/components/Loading.vue';
 import { useRoute } from 'vue-router';
 import Header from '@/components/header/Header.vue';

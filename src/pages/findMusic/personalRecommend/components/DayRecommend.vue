@@ -34,7 +34,6 @@ import SongList from '@/components/song/SongList.vue';
 import { getDayRecommend } from '@/service/api/music';
 import { DailySong, TrackId } from '@/service/api/music/types';
 import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
-import { provide, reactive, ref } from 'vue';
 import Message from "@/components/message"
 const { checkMusicCopyright, playSongList } = useMusicPlayRelation()
 const songList = reactive({ data: [] as DailySong[] })

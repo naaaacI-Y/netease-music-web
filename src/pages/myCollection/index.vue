@@ -8,7 +8,6 @@
 import Album from "./Album.vue"
 import Singer from "./Singer.vue"
 import Video from "./Video.vue"
-import { computed, reactive, ref } from 'vue';
 import { useRoute } from "vue-router"
 const idx = computed(() => {
     return Number(useRoute().params.index)
