@@ -12,7 +12,6 @@
             </template>
             <template v-slot="{ item, index }">
                 <div class="album-wrapper" @click="goAlbum(item.id)">
-                    <!-- <SingerCard v-for="it in item.dataList" :key="it.id + 1" :singer-item="it"></SingerCard> -->
                     <CommonItem :key="item.id + 1" :index="index">
                         <template #avatar>
                             <div class="avatar mr-15">

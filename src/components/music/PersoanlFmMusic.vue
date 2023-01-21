@@ -6,10 +6,10 @@
                     <img :src="formatPicUrl(player.personalFMTrack.album.picUrl, 270, 270)" alt="">
 
                 </div>
-                <div class="playing" v-show="player.playing" @click="musicPlay()">
+                <div class="playing" v-show="player.isPersonalFM && player.playing" @click="musicPlay()">
                     <i class="iconfont icon-zanting01 text-primary_red_4"></i>
                 </div>
-                <div class="pause" v-show="!player.playing" @click="musicPlay()">
+                <div class="pause" v-show="player.isPersonalFM && !player.playing" @click="musicPlay()">
                     <div class="trangel"></div>
                 </div>
             </div>
