@@ -243,7 +243,8 @@ export const useMusicPlayRelation = () => {
         playSingleMusic,
         checkMusicCopyright,
         messageTip,
-        playnextFm
+        playnextFm,
+        isShowLoginBox
 
     }
 }

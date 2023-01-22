@@ -117,22 +117,15 @@ const cid = computed(() => {
 })
 
 watch(() => pages.page, async (newVal) => {
-    console.log(newVal, "pages newVal=======");
-
-    if (newVal === 1) {
-        // 滚动到顶部
-        if (route.path === "/personal-fm") {
-            scrollToTop()
-        }
-        if (useGlobal.isShowPlayPage) {
-            const el = document.getElementsByClassName("music-play-wrapper")[0]
-            el?.scrollTo(0, 0)
-        }
+    if (route.path === "/personal-fm") {
         scrollToTop()
-    } else {
+    }
+    if (newVal === 1 && useGlobal.isShowPlayPage) {
+        scrollToTop("music-play-wrapper")
+    }
+    if (newVal !== 1) {
         // 滚动到最新评论处
-        const e = document.getElementsByClassName("music-play-wrapper")[0]
-        e.scrollTo(0, 625) // 写死了现在>_<
+        scrollToTop("music-play-wrapper", 625)
     }
     getAllComment(cid.value)
 })

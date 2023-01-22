@@ -56,10 +56,10 @@ import { reactive, ref, watch } from 'vue';
 import Message from "@/components/message"
 import { getSimilatSong } from '@/service/api/music';
 import { NewMusicRet } from '@/service/api/music/types';
-import { formatPicUrl } from '@/utils';
-import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
+import { checkLogin, formatPicUrl } from '@/utils';
+import { useMusicPlayRelation, } from '@/hooks/useMusicPlayRelation';
 
-const { playSingleMusic, player } = useMusicPlayRelation()
+const { playSingleMusic, player, isShowLoginBox } = useMusicPlayRelation()
 const similarSongList = reactive({ data: [] as NewMusicRet[] })
 const isShowSimiLoading = ref(true)
 
@@ -87,6 +87,7 @@ const getSimilatList = async (id: number) => {
 
 // 展示评论框
 const showCommentBox = () => {
+    if (!checkLogin()) return isShowLoginBox.value = true
     Message.publishComment(1, 0, `歌曲: ${player.value.currentTrack.name}`, player.value.currentTrack.id)
 }
 

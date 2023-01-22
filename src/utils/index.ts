@@ -225,9 +225,13 @@ const getArea = (province: number, city: number) => {
     return `${_p} ${_c}`
 }
 // 滚动到顶部
-const scrollToTop = (wrapClass = "content") => {
+const scrollToTop = (wrapClass = "content", top?: number) => {
     const wrap = document.getElementsByClassName(wrapClass)[0]
-    wrap?.scrollTo(0, 0)
+    if (!top) {
+        wrap?.scrollTo(0, 0)
+    } else {
+        wrap?.scrollTo(0, top)
+    }
 }
 
 // 格式化图片url
