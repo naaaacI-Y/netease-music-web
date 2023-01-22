@@ -1,3 +1,4 @@
+import { checkLogin } from '@/utils';
 import useStore from "@/store"
 // import { storeToRefs } from "pinia"
 import { reactive, ref } from "vue"
@@ -7,6 +8,7 @@ import { getSongList } from '@/service/api/user';
 import { Playlist_user } from '@/service/api/user/types';
 import useSideSongListStore from "@/store/sideSongList";
 import useUserProfileStore from "@/store/user";
+// import likeSongList from '@/utils/LIKESONGLIST';
 // const sideSongList = useSideSongListStore()
 // const userProfile = useUserProfileStore()
 const hasMore = ref(false)
@@ -26,7 +28,19 @@ const pages = reactive({
  * @returns
  */
 export const getPersonSongList = (createdFlag: number, collectedflag: number, createdResetFlag: number, collectedResetFlag: number) => {
-    console.log(pages.page, "pages.page=========");
+    const userProfile = useUserProfileStore()
+    const sideSongList = useSideSongListStore()
+    if (!checkLogin()) {
+        // 没有登陆 从本地获取  清空已有的创建和收藏的歌单 后面再做
+        // const list = localStorage.getItem("sideSongList")
+        // likeSongList[0].createTime = new Date().getTime()
+        // if (!list) {
+        //     return sideSongList.updateTempCreatedSongList(likeSongList)
+        // }
+        // const temp = JSON.parse(list!).tempCreatedSongList || []
+        // return sideSongList.updateTempCreatedSongList(temp.length ? temp : likeSongList)
+        return
+    }
     if (createdResetFlag) {
         createdList.data = []
     }
@@ -43,8 +57,7 @@ export const getPersonSongList = (createdFlag: number, collectedflag: number, cr
     // const createdList = [] as Playlist_user[] // 创建的歌单信息
     // const collectedList = [] as Playlist_user[] // 收藏的歌单信息
     // let hasMore = false
-    const userProfile = useUserProfileStore()
-    const sideSongList = useSideSongListStore()
+
     if (!userProfile.userFile.userId) return;
 
     const getList = async () => {

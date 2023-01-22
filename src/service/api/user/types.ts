@@ -30,7 +30,7 @@ export interface Profile {
     avatarImgIdStr: string;
     backgroundImgIdStr: string;
     allAuthTypes?: { desc: string, tags: string[], type: number }[]
-    description: string;
+    description: string | null;
     nickname: string;
     accountStatus: number;
     vipType: number;
@@ -38,21 +38,31 @@ export interface Profile {
     createTime: number;
     birthday: number;
     avatarUrl: string;
+    shortUserName?: string;
     experts: Expert;
+    accountType?: number;
     expertTags?: any;
     djStatus: number;
     gender: number;
+    userName?: number;
     province: number;
     city: number;
     defaultAvatar: boolean;
     avatarImgId: number;
+    locationStatus?: number;
     backgroundImgId: number;
     backgroundUrl: string;
     mutual: boolean;
+    lastLoginIP?: string;
     followed: boolean;
+    anchor?: boolean;
+    authenticationTypes?: number;
+    viptypeVersion?: number;
+    lastLoginTime?: number;
+    authenticated?: boolean;
     remarkName?: any;
     authStatus: number;
-    detailDescription: string;
+    detailDescription: string | null;
     userId: number;
     signature: string;
     authority: number;
@@ -432,7 +442,7 @@ export interface Playlist_user {
     alg?: string;
     commentCount?: number;
     copywriter?: string;
-    subscribers: Subscriber[];
+    subscribers: any[];
     subscribed: boolean;
     creator: Creator;
     tracks?: any;
@@ -459,17 +469,17 @@ export interface Playlist_user {
     anonimous?: boolean;
     createTime: number;
     highQuality: boolean;
-    newImported: boolean;
-    trackNumberUpdateTime: number;
+    newImported?: boolean;
+    trackNumberUpdateTime?: number;
     playCount: number;
-    adType: number;
+    adType?: number;
     description?: any;
-    tags: any[];
-    ordered: boolean;
-    status: number;
+    tags?: any[];
+    ordered?: boolean;
+    status?: number;
     name: string;
     id: number;
-    coverImgId_str: string;
+    coverImgId_str?: string;
     sharedUsers?: any;
     shareStatus?: any;
     copied?: boolean;
@@ -491,4 +501,14 @@ export interface FocusOrCancelPersonParams {
 }
 export interface FocusOrCancelPersonResult {
     code: number
+}
+
+
+// 游客登录
+
+export interface PassengerLoginResult {
+    code: number;
+    userId: number;
+    createTime: number;
+    cookie: string;
 }
