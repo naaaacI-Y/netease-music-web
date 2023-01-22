@@ -1,7 +1,7 @@
 <template>
     <DefaultLayout>
-        <RecycleScroller id="scroller" :items="highQualityList.data" :item-size="155" key-field="id" :buffer="1550"
-            style="height: 100%;width: 100%;">
+        <RecycleScroller id="scroller" class="pb-30" :items="highQualityList.data" :item-size="155" key-field="id"
+            :buffer="1550" style="height: 100%;width: 100%;">
             <template #before>
                 <div class="title mb-10 fs-5 text-33 mt-10">精品歌单 - {{ type === "" ? '全部' : type }}</div>
             </template>
@@ -37,7 +37,9 @@
                 </div>
             </template>
             <template #after>
-                <Loading v-show="isShowLoading"></Loading>
+                <div style="margin-top: -10px;">
+                    <Loading :is-need-show-scroll="false" :is-show-padding-top="false" v-show="loading"></Loading>
+                </div>
             </template>
         </RecycleScroller>
     </DefaultLayout>
@@ -51,12 +53,13 @@ import Loading from '@/components/Loading.vue';
 import { getHighqualitySongList } from "@/service/api/music"
 import { onMounted, onUnmounted, reactive, ref } from 'vue';
 import { Playlist } from '@/service/api/music/types';
-import { debounce, FormatList, formatListData } from '@/utils';
+import { FormatList, formatListData } from '@/utils';
+import { useScroll } from '@/hooks/useScroll';
 
+const { listenListScroll, removeListener } = useScroll()
 const route = useRoute()
 const router = useRouter()
 const type = route.query.type ?? "全部"
-const isShowLoading = ref(false)
 const loaded = ref(false)
 const loading = ref(false)
 const pages = reactive({
@@ -64,15 +67,15 @@ const pages = reactive({
     page: 1
 })
 const highQualityList = reactive({ data: [] as FormatList<Playlist> })
+
 // 前往歌单作者界面
 const goAuthorPage = (id: number) => {
     router.push(`/personal-center/${id}`)
 }
+// 获取列表数据
 const getList = async () => {
     if (loaded.value || loading.value) return
-    isShowLoading.value = true
     loading.value = true
-
     const info: { [key: string]: any } = {
         cat: type === "" ? "全部" : type,
         limit: pages.limit
@@ -83,39 +86,24 @@ const getList = async () => {
     }
     const r = await getHighqualitySongList(info)
     const _ = formatListData<Playlist>(r.playlists, 3)
-    isShowLoading.value = false
     highQualityList.data = highQualityList.data.concat(..._)
     pages.page++
 
     loading.value = false
     loaded.value = !r.more
 }
-// 监听歌手列表滚动
-const handleListener = (e: Event) => {
-    const target = e.target as HTMLElement
-    const scrollTop = target.scrollTop
-    const clientHeight = target.clientHeight
-    const scrollHeight = target.scrollHeight
 
-    if (Math.ceil(scrollTop + clientHeight) >= scrollHeight) {
-        // 滚动到底部 加载更多
-        if (!loaded.value && !loading.value) {
-            getList()
-        }
-    }
-
-}
-const handleFn = debounce(handleListener, 100)
-const listenListScroll = () => {
-    const wrapper = document.getElementById("scroller")
-    wrapper?.addEventListener("scroll", handleFn)
-}
 onMounted(() => {
-    listenListScroll()
+    const scroller = document.getElementById("scroller")
+    setTimeout(() => {
+        // 这里不用定时的话 传递进去的值是在获取数据结束之前的
+        listenListScroll(scroller!, [getList, loaded.value, loading.value])
+    }, 200)
 })
 onUnmounted(() => {
-    const wrapper = document.getElementById("scroller")
-    wrapper?.removeEventListener("scroll", handleFn)
+    const scroller = document.getElementById("scroller")
+
+    removeListener(scroller!, [getList, loaded.value, loading.value])
 })
 getList()
 </script>

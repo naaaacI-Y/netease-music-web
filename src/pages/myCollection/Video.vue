@@ -48,7 +48,9 @@
                 </DynamicScrollerItem>
             </template>
             <template #after>
-                <loading v-show="isShowLoaidng"></loading>
+                <div style="margin-top: -10px;">
+                    <Loading :is-need-show-scroll="false" :is-show-padding-top="false" v-show="loading"></Loading>
+                </div>
             </template>
         </DynamicScroller>
 
@@ -56,17 +58,16 @@
 </template>
 
 <script lang="ts" setup>
-import { useRoute } from "vue-router"
 import Loading from '@/components/Loading.vue';
 import VideoCard from '@/components/VideoCard.vue';
 import { getCollectedVideo } from '@/service/api/video';
 import { CollectedVideoData } from "@/service/api/video/types"
-import { debounce, FormatList, formatListData } from '@/utils';
-const route = useRoute()
+import { FormatList, formatListData } from '@/utils';
+import { useScroll } from '@/hooks/useScroll';
 
+const { listenListScroll, removeListener } = useScroll()
 const loading = ref(false)
 const loaded = ref(false)
-const isShowLoaidng = ref(false)
 const total = ref(0)
 const list = reactive({ data: [] as FormatList<CollectedVideoData> })
 const pages = reactive({
@@ -83,7 +84,6 @@ const addIdPropertety = (videoDatas: Array<CollectedVideoData>) => {
 const getList = async () => {
     if (loaded.value || loading.value) return
     loading.value = true
-    isShowLoaidng.value = true
     const queryInfo = {
         limit: pages.limit,
         offset: (pages.page - 1) * pages.limit
@@ -97,35 +97,18 @@ const getList = async () => {
     total.value = r.count
     pages.page++
     loading.value = false
-    isShowLoaidng.value = false
-}
-const handleListener = (e: Event) => {
-    const target = e.target as HTMLElement
-    const scrollTop = target.scrollTop
-    const clientHeight = target.clientHeight
-    const scrollHeight = target.scrollHeight
-    if (scrollTop + clientHeight >= scrollHeight) {
-        // 加载更多
-        console.log("触底加载");
-        if (!loaded.value && !loading.value) {
-            getList()
-        }
-    }
-}
-const handleFn = debounce(handleListener, 100)
-const listenListScroll = (scroller: HTMLElement) => {
-    scroller?.addEventListener("scroll", handleFn)
-}
-const removeListener = (scroller: HTMLElement) => {
-    scroller?.removeEventListener("scroll", handleFn)
 }
 onMounted(() => {
     const scroller = document.getElementById("scroller")
-    listenListScroll(scroller!)
+    setTimeout(() => {
+        // 这里不用定时的话 传递进去的值是在获取数据结束之前的
+        listenListScroll(scroller!, [getList, loaded.value, loading.value])
+    }, 200)
 })
 onUnmounted(() => {
     const scroller = document.getElementById("scroller")
-    removeListener(scroller!)
+
+    removeListener(scroller!, [getList, loaded.value, loading.value])
 })
 getList()
 </script>

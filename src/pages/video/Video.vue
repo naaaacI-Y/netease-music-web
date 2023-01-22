@@ -1,6 +1,6 @@
 <template>
     <RecycleScroller id="scroller" class="pb-30" :items="allVideoLists.data" :item-size="217" key-field="id"
-        :buffer="1472" style="height: 100%;width: 100%;">
+        :buffer="1906" style="height: 100%;width: 100%;">
         <template #before>
             <div class="filter-wrapper mb-20">
                 <FilterItem :active-type="videoTypes[activeType]" :type-list="videoTypes"
@@ -12,7 +12,6 @@
                         </div>
                     </template>
                 </FilterItem>
-                <Loading v-show="isShowLoading"></Loading>
             </div>
         </template>
         <template v-slot="{ item }">
@@ -23,7 +22,9 @@
 
         </template>
         <template #after>
-            <Loading :is-need-show-scroll="false" :is-show-padding-top="false" v-if="isShowLoading4LoadMore"></Loading>
+            <div class="loading-wrap" style="margin-top: -10px;">
+                <Loading :is-need-show-scroll="false" :is-show-padding-top="false" v-show="loading"></Loading>
+            </div>
         </template>
     </RecycleScroller>
 </template>
@@ -36,17 +37,19 @@ import { getVideoByCategory, getVideoLabelList } from '@/service/api/video';
 import { VideoByCategoryItem, VideoByCategoryRet, VideoGroupItem } from '@/service/api/video/types';
 import { debounce, FormatList, formatListData } from '@/utils';
 import { videoTypes } from '@/utils/const';
+import { useScroll } from '@/hooks/useScroll';
+const { listenListScroll, removeListener } = useScroll()
 const allVideoLists = reactive({ data: [] as FormatList<VideoByCategoryItem> })
 const labelList = reactive({ data: [] as VideoGroupItem[] })
 const activeType = ref('现场')
-const isShowLoading = ref(true) // 类型切换的loading
-const isShowLoading4LoadMore = ref(false)
-const loaded = ref(false) // 抽离出去 连同滚动的部分 卡片顶部和底部白色的文字看不清，增加遮罩 TODO
+// const isShowLoading = ref(true) // 类型切换的loading
+// const isShowLoading4LoadMore = ref(false)
+const loaded = ref(false)
 const loading = ref(false)
 const initState = () => {
     loading.value = false
     loaded.value = false
-    isShowLoading.value = true
+    // isShowLoading.value = true
     allVideoLists.data = []
 }
 
@@ -84,37 +87,19 @@ const getList = async () => {
     const _ = formatListData<VideoByCategoryItem>(addIdPropertety([...r1.datas, ...r2.datas, ...r3.datas]))
     allVideoLists.data = allVideoLists.data.concat(..._)
     loading.value = false
-    isShowLoading4LoadMore.value = false
     loaded.value = !r3.hasmore
-    isShowLoading.value = false
-}
-// 监听歌手列表滚动
-const handleListener = (e: Event) => {
-    const target = e.target as HTMLElement
-    const scrollTop = target.scrollTop
-    const clientHeight = target.clientHeight
-    const scrollHeight = target.scrollHeight
-    if (scrollTop + clientHeight >= scrollHeight) {
-        // 滚动到底部了 加载更多
-        isShowLoading4LoadMore.value = true
-        if (!loaded.value && !loading.value) {
-            getList()
-        }
-    }
-
 }
 
-const handleFn = debounce(handleListener, 100)
-const listenListScroll = () => {
-    const wrapper = document.getElementById("scroller")
-    wrapper?.addEventListener("scroll", handleFn)
-}
 onMounted(() => {
-    listenListScroll()
+    const scroller = document.getElementById("scroller")
+    setTimeout(() => {
+        // 这里不用定时的话 传递进去的值是在获取数据结束之前的
+        listenListScroll(scroller!, [getList, loaded.value, loading.value])
+    }, 1000)
 })
 onUnmounted(() => {
-    const wrapper = document.getElementById("scroller")
-    wrapper?.removeEventListener("scroll", handleFn)
+    const scroller = document.getElementById("scroller")
+    removeListener(scroller!, [getList, loaded.value, loading.value])
 })
 getVideoLabel()
 </script>
