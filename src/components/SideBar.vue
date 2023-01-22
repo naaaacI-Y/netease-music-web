@@ -1,5 +1,6 @@
 <template>
     <div class="side-bar-wrapper bg-ed">
+        <!--头像信息-->
         <div class="head-info">
             <div class="isLoginHeader" v-if="userFile?.userId" @click="goPersonalCenter">
                 <div class="avatar">
@@ -20,7 +21,9 @@
                 </div>
             </div>
         </div>
-        <div class="other-navigator">
+        <!--所有的导航-->
+        <div class="all-navigator">
+            <!--主要的导航-->
             <div class="main-navigator mb-20 text-41">
                 <div :class="['find', active('findMusic') ? isActive : '']"
                     @click="go('/findMusic/personal-recommend')">
@@ -41,6 +44,8 @@
                         <span>朋友</span>
                     </div> -->
             </div>
+
+            <!--我的音乐-->
             <div class="my-music mt-9 text-41 mb-20">
                 <div class="title pl-18">我的音乐</div>
                 <!-- <div class="itunes pl-18">
@@ -61,6 +66,8 @@
                     <span class="fs-7">我的收藏</span>
                 </div>
             </div>
+
+            <!--创建的歌单-->
             <div class="created-song-list text-41 fs-18 mb-20 pl-3" v-if="userFile?.userId">
                 <div class="title" @click="isShowCreated = !isShowCreated">
                     <i class="iconfont icon-xiangyou fs-1" v-show="!isShowCreated"></i>
@@ -68,13 +75,23 @@
                     <span class="ml-3">创建的歌单</span>
                 </div>
                 <div class="created-wrap" v-show="isShowCreated">
-                    <div class="list-item fs-2 text-41 pl-18" v-for="item in createdSongList"
+                    <div class="list-item fs-2 text-41 pl-18 d-flex ai-center" v-for="item in createdSongList"
                         @click="goSongList(item.id)" :class="{ isActiveSongList: activeId === item.id }">
                         <i class="iconfont icon-gedan fs-5"></i>
                         <span class="fs-2 ml-3">{{ item.name }}</span>
                     </div>
                 </div>
+                <!--留给未登录的 暂时不做处理-->
+                <!-- <div class="created-wrap" v-show="isShowCreated && !userFile?.userId">
+                    <div class="list-item fs-2 text-41 pl-18 d-flex ai-center" v-for="item in tempCreatedSongList"
+                        @click="goSongList(item.id)" :class="{ isActiveSongList: activeId === item.id }">
+                        <i class="iconfont icon-24gl-heart"></i>
+                        <span class="fs-2 ml-3">{{ item.name }}</span>
+                    </div>
+                </div> -->
             </div>
+
+            <!--收藏的歌单-->
             <div class="collected-song-list" v-if="userFile?.userId">
                 <div class="title pl-3" @click="isShowCollected = !isShowCollected">
                     <i class="iconfont icon-xiangyou fs-1" v-show="!isShowCollected"></i>
@@ -82,7 +99,7 @@
                     <span class="ml-3">收藏的歌单</span>
                 </div>
                 <div class="collected-wrap mt-10" v-show="isShowCollected">
-                    <div class="list-item fs-2 text-41 pl-18" v-for="item in collectedSongList"
+                    <div class="list-item fs-2 text-41 pl-18 d-flex ai-center" v-for="item in collectedSongList"
                         @click="goSongList(item.id)" :class="{ isActiveSongList: activeId === item.id }">
                         <i class="iconfont icon-gedan fs-5"></i>
                         <span class="fs-2 ml-3">{{ item.name }}</span>
@@ -94,24 +111,28 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import useStore from "@/store"
 import { storeToRefs } from 'pinia';
+
+
 const { useGlobal, userProfile, useSideSongList } = useStore()
 const route = useRoute()
 const router = useRouter()
 const isActive = ref('isActive')
 const { userFile } = storeToRefs(userProfile)
-const { createdSongList, collectedSongList } = storeToRefs(useSideSongList)
-const isShowCreated = ref(false) // 是否展开创建的歌单
-const isShowCollected = ref(false) // 是否展开收藏的歌单
+const { createdSongList, collectedSongList, tempCreatedSongList } = storeToRefs(useSideSongList)
+const isShowCreated = ref(true) // 是否展开创建的歌单
+const isShowCollected = ref(true) // 是否展开收藏的歌单
+
+// 当前选中的歌单
 const activeId = computed(() => {
     if (route.path.startsWith('/song-list')) {
         return Number(route.params?.id)
     }
 })
 
+// 前往个人中心
 const goPersonalCenter = () => {
     const id = userFile.value?.userId
     if (id) {
@@ -119,12 +140,15 @@ const goPersonalCenter = () => {
     }
     useGlobal.isShowLoginBox = true
 }
+
+// 是否选中某个导航栏
 const active = (name1: string, name2?: string): boolean => {
     if (name2) {
         return route.path.startsWith('/' + name1) || route.path.startsWith('/' + name2)
     }
     return route.path.startsWith('/' + name1)
 }
+
 // 跳转
 const go = (path: string): void => {
     if (route.path !== path) {
@@ -135,6 +159,7 @@ const go = (path: string): void => {
         router.push(path)
     }
 }
+
 // 前往歌单
 const goSongList = (id: number) => {
     if (Number(route.params.id) !== id) {
@@ -176,7 +201,7 @@ const goSongList = (id: number) => {
         }
     }
 
-    .other-navigator {
+    .all-navigator {
         height: calc(100% - 60px);
         overflow-y: auto;
 
