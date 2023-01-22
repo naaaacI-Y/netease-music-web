@@ -113,3 +113,9 @@ export interface checkLoginStatusRet {
 export interface checkLoginStatusResult {
   data: checkLoginStatusRet;
 }
+
+
+// 退出登录
+export interface LogOutResult {
+  code: number
+}

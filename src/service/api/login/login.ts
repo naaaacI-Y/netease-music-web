@@ -97,3 +97,11 @@ export function getQrcodeStatus(key: string) {
 export function checkLoginStatus() {
   return http.get<T.checkLoginStatusResult>("/login/status");
 }
+
+/**
+ * 退出登录
+ * @returns
+ */
+export const logOut = () => {
+  return http.get<T.LogOutResult>("/logout")
+}

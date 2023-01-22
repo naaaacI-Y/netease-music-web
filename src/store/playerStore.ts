@@ -749,7 +749,7 @@ const usePlayerStore = defineStore("player", {
          */
         getLikedSongs() {
             if (!checkLogin()) return;
-            getLikedSongList({ uid: useUserProfileStore().userFile.userId }).then(res => {
+            getLikedSongList({ uid: useUserProfileStore().userFile?.profile?.userId }).then(res => {
                 this.likedList = res.ids
             })
         },

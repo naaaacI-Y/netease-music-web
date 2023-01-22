@@ -1,22 +1,26 @@
 <template>
     <Nav :isChangeBgc='isShowPlayPage' @handle-key-words-change="handleKeyWordsChange">
     </Nav>
-    <div class="main-content" :class="[!isNotVideo ? 'isAuto' : '', !isNotVideo ? 'isVideoPlay' : '']">
+    <div class="main-content" :class="[!isNotVideo ? 'isAuto' : '', !isNotVideo ? 'isVideoPlay' : '']"
+        v-if="!isShowReset">
         <side-bar v-show="isNotVideo"></side-bar>
         <div class="content bg-white" :class="{ isAuto: isNotVideo && isNotSearch }" id="content">
-            <slot></slot>
+            <!-- <slot></slot>
             <SearchResultBox :search-keywords="searchKeyWords" v-if="isShowSearchBox" @hideSearchBox="hideSearchBox">
-            </SearchResultBox>
+            </SearchResultBox> -->
         </div>
     </div>
-    <Footer v-show="isNotVideo" @showPlayPage="showPlayPage" :is-show-play="isShowPlayPage">
+    <!-- <Footer v-show="isNotVideo" @showPlayPage="showPlayPage" :is-show-play="isShowPlayPage">
     </Footer>
     <transition>
         <MusicCommon v-if="isShowPlayPage" :music-id="player.currentTrack.id" style="" class="music-play"
             play-type="songList">
         </MusicCommon>
     </transition>
-    <Login v-if="isShowLoginBox"></Login>
+    <Login v-if="isShowLoginBox"></Login> -->
+    <div class="reset d-flex ai-center jc-center" v-if="!isShowReset">
+        正在为您生成个性化推荐
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -29,14 +33,17 @@ import Nav from "@/components/Nav.vue"
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import useStore from '@/store';
+import initUser from '@/config/user';
 
-const { useGlobal, usePlayer } = useStore()
+const { useGlobal, usePlayer, userProfile } = useStore()
 const { isShowLoginBox, isShowPlayPage } = storeToRefs(useGlobal)
 const { player } = storeToRefs(usePlayer)
+const { userFile } = storeToRefs(userProfile)
 const isShowSearchBox = ref(false)
 const searchKeyWords = ref("")
 const musicId = ref<number>()
 const route = useRoute()
+const isShowReset = ref(false) // 重新加载
 
 const isNotVideo = computed(() => {
     return !route.path.startsWith('/mv-detail') && !route.path.startsWith('/video-detail')
@@ -44,6 +51,19 @@ const isNotVideo = computed(() => {
 const isNotSearch = computed(() => {
     return !route.path.startsWith('/search-result-detail')
 })
+
+// 监听退出登录
+watch(() => userFile.value.profile, (newVal) => {
+    console.log("监听退出");
+    if (!newVal) {
+        isShowReset.value = true
+        initUser()
+        setTimeout(() => {
+            isShowReset.value = false
+        }, 2000)
+    }
+})
+
 watch(() => isShowPlayPage.value, (newVal) => {
     if (!newVal) {
         musicId.value = undefined
@@ -58,13 +78,7 @@ const showPlayPage = (id: number) => {
 const hideSearchBox = () => {
     isShowSearchBox.value = false
 }
-// // 输入框获取焦点
-// const inputOnFocus = (value: string) => {
-//     console.log("inputOnFocus");
 
-//     searchKeyWords.value = value
-//     isShowSearchBox.value = true
-// }
 // 输入框值改变 触发的函数
 const handleKeyWordsChange = (value: string) => {
     searchKeyWords.value = value
@@ -100,9 +114,6 @@ onMounted(() => {
 
 .isAuto {
     overflow: auto;
-    // background-color: var(--theme-white);
-    // // height: 100vh;
-    // height: 100%;
 }
 
 .isVideoPlay {
@@ -118,6 +129,14 @@ onMounted(() => {
     overflow: scroll;
     height: calc(100vh - 110px);
     background-color: white;
+}
 
+.reset {
+    position: absolute;
+    width: calc(100% - 200px);
+    height: calc(100% - 110px);
+    top: 50px;
+    right: 0;
+    background-color: rgba($color: red, $alpha: 0.6);
 }
 </style>
