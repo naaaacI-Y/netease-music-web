@@ -84,7 +84,7 @@ export const useMusicPlayRelation = () => {
                 break;
             case 1:
                 // 检查用户是否是vip 不需要考虑用户开通会员的问题
-                if (!userFile.value?.vipType) {
+                if (!userFile.value?.profile?.vipType) {
                     isNeedVip.value = true
                     r = false
                 } else {

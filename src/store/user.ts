@@ -1,10 +1,11 @@
 import { profile } from "@/service/api/login/types"
+import { UserDetailByIdResult } from "@/service/api/user/types"
 import { defineStore } from "pinia"
 
 const useUserProfileStore = defineStore("user", {
     state: () => {
         return {
-            userFile: {} as profile
+            userFile: {} as UserDetailByIdResult
         }
     },
     getters: {
@@ -12,9 +13,9 @@ const useUserProfileStore = defineStore("user", {
     },
     actions: {
         clearUserInfo() {
-            this.userFile = {} as profile
+            this.userFile = {} as UserDetailByIdResult
         },
-        setUserProfile(profile: profile) {
+        setUserProfile(profile: UserDetailByIdResult) {
             this.userFile = profile
         }
     },

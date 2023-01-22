@@ -145,7 +145,7 @@ const formatPlayCount = (count: number) => {
  */
 const checkLogin = () => {
     const store = useStore()
-    const isLogin = store.userProfile.userFile?.userId
+    const isLogin = store.userProfile.userFile?.profile?.userId
     if (!isLogin) {
         return false
     }

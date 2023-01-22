@@ -99,6 +99,7 @@ import {
 import Registry from './global/Registry.vue';
 import useStore from "@/store"
 import { setCookieExpireTime } from "@/utils";
+import { getUserDetailById } from "@/service/api/user";
 const { useGlobal, userProfile } = useStore()
 
 let qrImg = ref("");
@@ -146,7 +147,9 @@ const getQrcodeImg = async () => {
                 case 803:
                     //授权成功  查看登录状态
                     const statusResult = await checkLoginStatus();
-                    userProfile.setUserProfile(statusResult.data.profile)
+                    // 存储完整信息
+                    const r = await getUserDetailById({ uid: statusResult.data.profile.userId })
+                    userProfile.setUserProfile(r)
                     // 存储过期时间
                     setCookieExpireTime(result.cookie)
                     status.isAuthing = false;

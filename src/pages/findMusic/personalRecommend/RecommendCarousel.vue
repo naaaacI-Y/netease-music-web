@@ -28,7 +28,7 @@ import Message from "@/components/message"
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
-const { checkMusicCopyright, playSingleMusic } = useMusicPlayRelation()
+const { checkMusicCopyright, playSingleMusic, player } = useMusicPlayRelation()
 const sliderDomList = reactive({ data: [] as unknown as HTMLCollectionOf<Element> })
 const currentIndex = ref(0)
 const bannerList = reactive({ data: [] as Banner[] })
@@ -137,12 +137,14 @@ const onClick = (i: number) => {
 
 // 轮播图点击跳转
 const bannerClick = async (item: Banner) => {
+    console.log(item.targetType, "targetType======");
     switch (item.targetType) {
         case BannerType["NEWSONG"]:
             // 新歌 播放
             const r = await getMusicDetail(String(item.targetId))
             const isHaveCopy = checkMusicCopyright(r.songs[0].fee, !r.songs[0].noCopyrightRcmd)
             if (!isHaveCopy) return Message.error("没有播放权限")
+            player.value.isPersonalFM = false
             playSingleMusic([], r.songs[0].id, -1)
             break;
         case BannerType["NEWCARD"]:
@@ -153,7 +155,25 @@ const bannerClick = async (item: Banner) => {
             // 歌单 跳转
             router.push(`/song-list/${item.targetId}`)
             break
+        // case BannerType["NUMBERALBUM"]:
+        //     console.log("独家策划========");
+
+        //     // 有可能是数字专辑和独家策划目前来看的话,没有类型区分 先按?分割
+        //     const splits = item.url.split("?")
+        //     console.log(splits.length);
+
+        //     if (splits.length === 1) {
+        //         // 独家策划 跳转到视频页
+        //         const splits = item.url.split("/")
+        //         console.log(splits[splits.length - 1]);
+
+        //         return router.push(`/video-detail/${splits[splits.length - 1]}`)
+        //     }
+        //     // 数字专辑
+        //     router.push(`/album/${splits[splits.length - 1].split("=")[1]}`)
+        //     break
         default:
+            return Message.error("不做跳转处理>_<")
             break;
     }
 }

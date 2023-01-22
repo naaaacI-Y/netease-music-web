@@ -58,11 +58,11 @@ export const getPersonSongList = (createdFlag: number, collectedflag: number, cr
     // const collectedList = [] as Playlist_user[] // 收藏的歌单信息
     // let hasMore = false
 
-    if (!userProfile.userFile.userId) return;
+    if (!userProfile.userFile?.profile?.userId) return;
 
     const getList = async () => {
         const _ = {
-            uid: userProfile.userFile.userId,
+            uid: userProfile.userFile?.profile?.userId,
             limit: pages.limit,
             offset: (pages.page - 1) * pages.limit
         }

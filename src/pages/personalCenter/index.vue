@@ -100,7 +100,7 @@ const id = getQueryId() as number
 const isSelf = computed(() => {
     if (!checkLogin()) return false
     const store = useStore()
-    const uid = store.userProfile.userFile?.userId
+    const uid = store.userProfile.userFile?.profile?.userId
     if (uid === id) return true
     return false
 })

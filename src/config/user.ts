@@ -17,9 +17,9 @@ const initUser = async () => {
         setCookieExpireTime(r.cookie)
     }
     // 重新获取个人信息
-    if (userProfile.userFile?.userId) {
-        const r = await getUserDetailById({ uid: userProfile.userFile.userId })
-        userProfile.setUserProfile(r.profile)
+    if (userProfile.userFile?.profile?.userId) {
+        const r = await getUserDetailById({ uid: userProfile.userFile?.profile?.userId })
+        userProfile.setUserProfile(r)
     }
 
 }
