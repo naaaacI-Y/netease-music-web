@@ -13,7 +13,7 @@
         </div> -->
         <div class="filter-wrap d-flex ai-center text-7d mb-8 jc-between">
             <div class="filter d-flex ai-center">
-                <div class="filter-item fs-3 mr-30" v-for="(item) in filterList" @click="filterType = Number(item[0])"
+                <div class="filter-item fs-3 mr-30" v-for="(item) in filterList" @click="changeType(Number(item[0]))"
                     :class="{ isFilterActive: filterType === Number(item[0]) }" :key="Number(item[0])">
                     {{ item[1]}}
                 </div>
@@ -46,6 +46,8 @@ import { newestMusicType } from "@/utils/const"
 import Message from "@/components/message"
 import { NewMusicRet } from '@/service/api/music/types';
 import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
+import { scrollToTop } from '@/utils';
+
 const filterList = Object.entries(newestMusicType)
 const { playSongList, playSingleMusic, checkMusicCopyright } = useMusicPlayRelation()
 const filterType = ref(0)
@@ -55,11 +57,19 @@ watch(filterType, () => {
     // 重新请求  如果是频繁切换的话 TODO
     getMusic()
 })
+
+// 获取类型对应歌曲
 const getMusic = async () => {
     isShowLoading.value = true
     const r = await getNewMusic({ type: filterType.value })
     musicList.data = r.data
     isShowLoading.value = false
+}
+
+// 更改类型
+const changeType = (type: number) => {
+    if (isShowLoading.value) return Message.error("请勿频繁操作！")
+    filterType.value = type
 }
 
 /**
@@ -93,6 +103,9 @@ const playAll = () => {
     }
     playSongList(JSON.stringify(ids), filterType.value)
 }
+
+// 滚动到顶部
+scrollToTop()
 getMusic()
 </script>
 <style lang="scss" scoped>
