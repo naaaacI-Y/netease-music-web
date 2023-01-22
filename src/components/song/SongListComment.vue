@@ -76,7 +76,7 @@ import { storeToRefs } from 'pinia';
 import useInsertComment from '@/hooks/useInsertComment';
 const { usePlayer, useGlobal } = useStore()
 const { player } = storeToRefs(usePlayer)
-const { cContent, isShowPlayPage } = storeToRefs(useGlobal)
+const { cContent } = storeToRefs(useGlobal)
 const router = useRouter()
 const route = useRoute()
 const replyPerson = ref("")
@@ -117,6 +117,8 @@ const cid = computed(() => {
 })
 
 watch(() => pages.page, async (newVal) => {
+    console.log(newVal, "pages newVal=======");
+
     if (newVal === 1) {
         // 滚动到顶部
         if (route.path === "/personal-fm") {
@@ -129,9 +131,9 @@ watch(() => pages.page, async (newVal) => {
         scrollToTop()
     } else {
         // 滚动到最新评论处
-        scrollToPos()
+        const e = document.getElementsByClassName("music-play-wrapper")[0]
+        e.scrollTo(0, 625) // 写死了现在>_<
     }
-
     getAllComment(cid.value)
 })
 watch(() => route.params.id, (newVal) => {
@@ -141,9 +143,13 @@ watch(() => route.params.id, (newVal) => {
 })
 // 同步弹出窗的评论之后的评论信息同步
 watch(() => cContent.value, async (newVal) => {
-    if (isShowPlayPage.value && newVal) {
+    if (newVal) {
         inserData()
     }
+
+    // if (isShowPlayPage.value && newVal) {
+    //     inserData()
+    // }
 })
 
 watch(() => cid.value, (newVal) => {
@@ -162,19 +168,15 @@ const maxLength = computed(() => {
     return 140 - commentContent.value.length
 })
 
-
-
-// const hasMore = ref(false) // 是否有更多评论
-
-
 // 插入评论数据
 const inserData = () => {
     // 插入数据
     const insertData = useInsertComment(useGlobal.cContent)
     allComment.data.unshift(insertData)
     // 清空评论内容
-    useGlobal.cContent = "" as unknown as Comment
+    cContent.value = "" as unknown as Comment
 }
+
 // 激活评论框
 const activeComment = (info: { name: string, commentId: number }) => {
     commentContent.value = "回复" + info.name + '：'
@@ -202,8 +204,8 @@ const checkIsPublishOrReply = () => {
         return ["publish", splitList.join("")]
     }
     return ["reply", splitList[splitList.length - 1]]
-
 }
+
 // 提交评论
 const submitContent = async () => {
     const commentType = checkIsPublishOrReply()
@@ -232,11 +234,7 @@ const submitContent = async () => {
         replyPerson.value = ""
     }
 }
-// 滚动到指定位置
-const scrollToPos = () => {
-    const item = document.getElementById("new-comment-pos")
-    item!.scrollIntoView()
-}
+
 // 更多热评
 const goMoreHotComment = () => {
     // 如果当前展示了播放界面
@@ -246,10 +244,12 @@ const goMoreHotComment = () => {
     }
     router.push(`/hot-comment/${id}/${props.sourceType}`)
 }
+
 // 处理分页页码变化
 const handlePageChange = (num: number) => {
     pages.page = num
 }
+
 // 获取所有评论 根据不同的分类
 const getAllComment = async (id: string | number) => {
     let r: SongListCommentResult;
@@ -292,10 +292,12 @@ const getAllComment = async (id: string | number) => {
     emits("changeCommentCount", r.total)
     // hasMore.value = r.more
 }
+
 // 向外暴露获取评论的方法
 defineExpose({
     getAllComment
 })
+
 getAllComment(cid.value)
 </script>
 <style lang="scss" scoped>

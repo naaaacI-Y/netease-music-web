@@ -22,7 +22,8 @@ function renderMsg(conf: ConfigType) {
         commentId,
         title,
         replyName,
-        queryId
+        queryId,
+        parentContent
 
     } = conf;
 
@@ -42,7 +43,8 @@ function renderMsg(conf: ConfigType) {
         singerId,
         mvid,
         songListId,
-        queryId
+        queryId,
+        parentContent
     });
 }
 
@@ -73,8 +75,9 @@ export default {
      * @param queryId 资源id
      * @param commentId  回复的评论 id (回复评论时必填)
      * @param replyName 回复用户的用户名
+     * @param parentContent  父级评论内容
      */
-    publishComment(t: number, sType: list, title: string, queryId: number, commentId?: number, replyName?: string) {
+    publishComment(t: number, sType: list, title: string, queryId: number, commentId?: number, replyName?: string, parentContent?: string) {
         const config = {
             type: "publishComment",
             t,
@@ -82,7 +85,8 @@ export default {
             commentId,
             title,
             replyName,
-            queryId
+            queryId,
+            parentContent
         }
         return renderMsg(config);
     },

@@ -1,3 +1,4 @@
+import { checkLogin } from '@/utils';
 import { likeSong } from "@/service/api/music"
 import Message from "@/components/message"
 import useStore from "@/store"
@@ -7,7 +8,7 @@ import { useRoute } from "vue-router";
 export const useMusicPlayRelation = () => {
     const { usePlayer, useGlobal, useSideSongList, userProfile } = useStore()
     const { player, likedList, currentTrackDuration } = storeToRefs(usePlayer)
-    const { isShowPlayPage } = storeToRefs(useGlobal)
+    const { isShowPlayPage, isShowLoginBox } = storeToRefs(useGlobal)
     const { createdSongList, collectedSongList } = storeToRefs(useSideSongList)
     const { userFile } = storeToRefs(userProfile)
     const isHaveCopyRight = ref(true) // 是否需要版权
@@ -26,6 +27,9 @@ export const useMusicPlayRelation = () => {
 
     // 喜欢音乐
     const likeMusic = async (id: number, like: boolean, callback?: Function) => {
+        if (!checkLogin()) {
+            return isShowLoginBox.value = true
+        }
         const _ = {
             id,
             like
@@ -121,8 +125,12 @@ export const useMusicPlayRelation = () => {
      * @returns
      */
     const playSingleMusic = async (ids: number[], id: number, sourceId: number) => {
-        // 如果当前正在播放 并且歌曲id和点击的一致 什么也不做
+        // 如果当前正在播放 并且歌曲id和点击的一致
         if (player.value.currentTrack.id === id) {
+            // // 如果当前正在播放的是私人fm的歌曲，点击了列表同样歌曲
+            // if (player.value.isPersonalFM) {
+            //     return playSongList(JSON.stringify(ids), id, sourceId)
+            // }
             if (player.value.playing) return
             return usePlayer.playOrPause()
         }
@@ -130,7 +138,6 @@ export const useMusicPlayRelation = () => {
         if (sourceId === -1) {
             // 如果当前有播放的列表
             if (player.value.list.length) {
-                console.log("播放单曲？？？？？？");
                 return usePlayer.addTrackToPlay(id)
             }
             // 如果当前没有播放的歌曲
@@ -141,8 +148,6 @@ export const useMusicPlayRelation = () => {
         }
         // 如果当前的歌单id和playlistsource的一致
         if (player.value.playlistSource.id === sourceId) {
-            console.log("play in same song list");
-
             return usePlayer.playTrackOnListByID(id)
         }
         // 如果不一致 播放新的歌单
@@ -155,9 +160,13 @@ export const useMusicPlayRelation = () => {
     }
 
     const scrollTop = () => {
-        if (isShowPlayPage.value || route.path === "/personal-fm") {
+        if (isShowPlayPage.value) {
             // 滚动到顶部
             const el = document.getElementsByClassName("music-play-wrapper")[0]
+            el?.scrollTo(0, 0)
+        }
+        if (route.path === "/personal-fm") {
+            const el = document.getElementsByClassName("content")[0]
             el?.scrollTo(0, 0)
         }
     }
@@ -177,6 +186,8 @@ export const useMusicPlayRelation = () => {
     // 音乐播放/暂停
     const musicPlay = () => {
         if (player.value.enabled) {
+            // 如果有播放中的歌曲并且不是私人fm
+
             usePlayer.playOrPause()
         }
     }
@@ -194,6 +205,10 @@ export const useMusicPlayRelation = () => {
     // 播放私人fm
     const playPersonalFm = () => {
         usePlayer.playPersonalFM()
+    }
+    // 播放下一首私人fm
+    const playnextFm = () => {
+        usePlayer.playNextFMTrack()
     }
     // 静音
     const mute = () => {
@@ -227,8 +242,8 @@ export const useMusicPlayRelation = () => {
         playPersonalFm,
         playSingleMusic,
         checkMusicCopyright,
-        messageTip
-
+        messageTip,
+        playnextFm
 
     }
 }

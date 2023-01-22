@@ -6,10 +6,11 @@
                     <img :src="formatPicUrl(player.personalFMTrack.album.picUrl, 270, 270)" alt="">
 
                 </div>
-                <div class="playing" v-show="player.isPersonalFM && player.playing" @click="musicPlay()">
+                <div class="playing" v-show="player.isPersonalFM && player.playing" @click="playPersonal">
                     <i class="iconfont icon-zanting01 text-primary_red_4"></i>
                 </div>
-                <div class="pause" v-show="player.isPersonalFM && !player.playing" @click="musicPlay()">
+                <div class="pause" v-show="!player.isPersonalFM || (player.isPersonalFM && !player.playing)"
+                    @click="playPersonal">
                     <div class="trangel"></div>
                 </div>
             </div>
@@ -24,7 +25,7 @@
                 <div class="delete" @click="delete2PlayNext()">
                     <i class="iconfont icon-shanchu fs-9"></i>
                 </div>
-                <div class="next" @click="playNextSong">
+                <div class="next" @click="playnextFm">
                     <i class="iconfont icon-xiayigexiayishou fs-7"></i>
                 </div>
                 <div class="other" @click="Message.error('暂不支持')">
@@ -41,21 +42,33 @@ import Message from "@/components/message"
 import { onMounted } from 'vue';
 import { formatPicUrl } from '@/utils';
 import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
-const { likeMusic, isLike, player, delete2PlayNext, playPersonalFm, playNextSong, musicPlay } = useMusicPlayRelation()
+const { likeMusic, isLike, player, delete2PlayNext, playPersonalFm, playnextFm, musicPlay } = useMusicPlayRelation()
 const emits = defineEmits<{
     (e: "getPersonalComment", id: number): void
 }>()
+
+// 初始化私人fm
 const initPersonalSong = () => {
     // 如果当前没有播放歌曲 && 不是私人fm
     if (!player.value.playing && !player.value.isPersonalFM) {
         // 播放私人fm
         playPersonalFm()
     }
-    // 如果当前正在播放
-
     // 加载评论
     emits("getPersonalComment", player.value.personalFMTrack.id)
 }
+
+// 播放私人fm歌曲
+const playPersonal = () => {
+    // 如果当前不是私人fm
+    if (!player.value.isPersonalFM) {
+        // 如果是播放中或者暂停中的状态都播放私人fm的歌曲
+        return playPersonalFm()
+    }
+    // 如果当前是私人fm
+    musicPlay()
+}
+
 
 // initPersonalSong()
 onMounted(() => {

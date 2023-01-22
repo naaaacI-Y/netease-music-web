@@ -25,8 +25,6 @@ import { ConfigType } from '../message/types';
 import useStore from '@/store';
 import { storeToRefs } from 'pinia';
 import useInsertComment from "@/hooks/useInsertComment"
-const { useGlobal, usePlayer } = useStore()
-const { player } = storeToRefs(usePlayer)
 const props = defineProps<{
     params: ConfigType
 }>()
@@ -41,12 +39,17 @@ const maxLength = computed(() => {
 })
 const submitContent = async () => {
     if (!commentContent.value.length) return
+    const { useGlobal } = useStore()
+    const { cContent } = storeToRefs(useGlobal)
+    const { usePlayer } = useStore()
+    const { player } = storeToRefs(usePlayer)
     const _: SendOrReplyCommentParam = {
         t: props.params.t as t,
         type: props.params.sType as list,
         content: commentContent.value,
         id: useGlobal.isShowPlayPage ? player.value.currentTrack.id : props.params.queryId!,
     }
+
     if (props.params.t === 2) {
         _.commentId = props.params.commentId
     }
@@ -54,13 +57,18 @@ const submitContent = async () => {
     if (r.code === 200) {
         // 关闭弹窗
         emits("close")
-        // 提示评论成功
         setTimeout(() => {
             Message.success("评论成功")
         }, 15)
-
         // 更新评论信息 构造一条数据
-        useGlobal.cContent = useInsertComment(r.comment)
+        const _ = JSON.parse(JSON.stringify(r.comment))
+        if (_.beRepliedUser && props.params.parentContent) {
+            _.beRepliedUser.content = props.params.parentContent
+        }
+
+        cContent.value = useInsertComment(_)
+        console.log(cContent.value, "cContent.value");
+
     } else {
         // 网络错误
         Message.error("网络错误，请检查！")

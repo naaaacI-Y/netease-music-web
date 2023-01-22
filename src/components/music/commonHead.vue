@@ -44,30 +44,39 @@
 <script lang="ts" setup>
 import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
 import { getLyric } from '@/service/api/music';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { binarySearch, lyricParser, ParseResult } from '@/utils/lyrics';
 
 const router = useRouter()
+const route = useRoute()
 const { player, isShowPlayPage } = useMusicPlayRelation()
 const lyric = reactive({ data: {} as ParseResult }) // 歌词,
 const activeLine = ref(-1)
 
-defineProps<{
+const props = defineProps<{
     playType: "personal" | "songList"
 }>()
 // 动态获取当前正在播放歌曲的id
 const cId = computed(() => {
-    if (player.value.isPersonalFM) {
+    if (props.playType === 'personal') {
         return player.value.personalFMTrack.id
     }
     return player.value.currentTrack.id
 })
 // 当前歌词正在播放的某一行
 watch(() => player.value.progress, () => {
+    // 如果当前是私人fm页面 播放的不是私人fm的歌
+    if ((!player.value.isPersonalFM && route.path === "/personal-fm") || !isShowPlayPage) {
+        return
+    }
     getActive()
 })
 // 监听播放歌曲id的改变，更新歌词
 watch(() => cId.value, () => {
+    // 如果当前是私人fm页面 播放的不是私人fm的歌
+    if ((!player.value.isPersonalFM && route.path === "/personal-fm") || !isShowPlayPage) {
+        return
+    }
     getlyric()
 })
 // 监听播放到第几行  歌词滚动
@@ -80,13 +89,13 @@ watch(() => activeLine.value, () => {
     }
 })
 const trackName = computed(() => {
-    return player.value.isPersonalFM ? player.value.personalFMTrack.name : player.value.currentTrack.name
+    return props.playType === 'personal' ? player.value.personalFMTrack.name : player.value.currentTrack.name
 })
 const singerName = computed(() => {
-    return player.value.isPersonalFM ? player.value.personalFMTrack.artists[0].name : player.value.currentTrack.ar[0].name
+    return props.playType === 'personal' ? player.value.personalFMTrack.artists[0].name : player.value.currentTrack.ar[0].name
 })
 const album = computed(() => {
-    return player.value.isPersonalFM ? player.value.personalFMTrack.album.name : player.value.currentTrack.al.name
+    return props.playType === 'personal' ? player.value.personalFMTrack.album.name : player.value.currentTrack.al.name
 })
 
 // 获取当前播放到第几行
@@ -97,19 +106,24 @@ const getActive = () => {
 
 // 获取歌词 获取进度对应的某一行
 const getlyric = async () => {
-    const id = player.value.isPersonalFM ? player.value.personalFMTrack.id : player.value.currentTrack.id
+    const id = props.playType === 'personal' ? player.value.personalFMTrack.id : player.value.currentTrack.id
     const r = await getLyric({ id })
     lyric.data = lyricParser(r)
     // 如果没有歌词的音乐 不获取
     if (!lyric.data.lyric.length) {
         return
     }
+    // 如果当前是私人fm页面 播放的不是私人fm的歌
+    if ((!player.value.isPersonalFM && route.path === "/personal-fm") || !isShowPlayPage) {
+        return
+    }
+    // 如果当前不是播放界面 不必动态加载歌词的行数
     getActive()
 }
 
 // 前往专辑页
 const goAlbum = () => {
-    const albumId = player.value.isPersonalFM ? player.value.personalFMTrack.album.id : player.value.currentTrack.al.id
+    const albumId = props.playType === 'personal' ? player.value.personalFMTrack.album.id : player.value.currentTrack.al.id
     if (isShowPlayPage.value) {
         isShowPlayPage.value = false
     }
@@ -121,7 +135,7 @@ const goSinger = () => {
     if (isShowPlayPage.value) {
         isShowPlayPage.value = false
     }
-    const singerId = player.value.isPersonalFM ? player.value.personalFMTrack.artists[0].id : player.value.currentTrack.ar[0].id
+    const singerId = props.playType === 'personal' ? player.value.personalFMTrack.artists[0].id : player.value.currentTrack.ar[0].id
     router.push(`/singer-home/${singerId}`)
 }
 

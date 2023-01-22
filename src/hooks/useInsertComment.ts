@@ -40,7 +40,7 @@ const useInsertComment = (commentData: any) => {
     const result = Object.assign({}, structure) as Comment
     for (const key in dt) {
         if (key === "beRepliedUser" && dt[key]) {
-            (result as any)["beReplied"] = dt[key]
+            (result as any)["beReplied"] = [dt[key]] // 还要带上原评论内容
             continue
         }
         (result as any)[key] = dt[key]

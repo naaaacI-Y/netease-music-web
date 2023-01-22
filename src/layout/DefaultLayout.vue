@@ -1,19 +1,16 @@
 <template>
-    <!-- @input-on-focus="inputOnFocus" -->
     <Nav :isChangeBgc='isShowPlayPage' @handle-key-words-change="handleKeyWordsChange">
     </Nav>
     <div class="main-content" :class="[!isNotVideo ? 'isAuto' : '', !isNotVideo ? 'isVideoPlay' : '']">
         <side-bar v-show="isNotVideo"></side-bar>
         <div class="content bg-white" :class="{ isAuto: isNotVideo && isNotSearch }" id="content">
             <slot></slot>
-            <!-- v-if="isShowSearchBox" -->
             <SearchResultBox :search-keywords="searchKeyWords" v-if="isShowSearchBox" @hideSearchBox="hideSearchBox">
             </SearchResultBox>
         </div>
     </div>
     <Footer v-show="isNotVideo" @showPlayPage="showPlayPage" :is-show-play="isShowPlayPage">
     </Footer>
-    <!--组件切换效果  TODO-->
     <transition>
         <MusicCommon v-if="isShowPlayPage" :music-id="player.currentTrack.id" style="" class="music-play"
             play-type="songList">

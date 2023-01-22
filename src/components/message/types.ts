@@ -15,4 +15,5 @@ export interface ConfigType {
     title?: string
     replyName?: string
     queryId?: number
+    parentContent?: string
 }

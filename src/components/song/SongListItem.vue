@@ -161,7 +161,7 @@ const playMusic = async () => {
     // 在外层过滤
     const trackIds = injectSongListInfo?.data.map(item => item.id) || []
 
-    const sourceId = Number(route.params?.id) || (!props.colorful ? 100 : -1) // 每日歌曲推荐没有资源id 写死100目前  900是搜索界面的播放
+    const sourceId = Number(route.params?.id) || (!props.colorful ? 100 : -1) // 每日歌曲推荐没有资源id 写死-1目前  900是搜索界面的播放
     // 如果是搜索界面的话 trackids传空 不新开playlist 在原有基础上添加该首歌曲
     playSingleMusic(props.colorful ? [] : trackIds!, props.item!.id, sourceId)
 }
