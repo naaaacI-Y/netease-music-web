@@ -2,22 +2,43 @@
     <div class="side-bar-wrapper bg-ed">
         <!--头像信息-->
         <div class="head-info">
-            <div class="isLoginHeader" v-if="userFile?.userId" @click="goPersonalCenter">
+            <div class="isLoginHeader" v-if="userFile?.profile?.userId" @click="goPersonalCenter">
                 <div class="avatar">
-                    <img :src="userFile.avatarUrl" alt="">
+                    <img :src="userFile?.profile?.avatarUrl" alt="">
                 </div>
                 <div class="toLogin">
-                    <span class="fs-3 mr-2">{{ userFile.nickname }}</span>
+                    <span class="fs-3 mr-2">{{ userFile?.profile?.nickname }}</span>
                     <i class="iconfont icon-xiangyou fs-1" style="color:#8e8e8e"></i>
                 </div>
             </div>
-            <div class="isNotLoginHeader" @click="goPersonalCenter" v-if="!userFile?.userId">
-                <div class="avatar">
+            <div class="isNotLoginHeader" v-if="!userFile?.profile?.userId">
+                <div class="avatar" @click="goPersonalCenter">
                     <img src="@/assets/images/defaultAvatar.png" alt="">
                 </div>
-                <div class="toLogin">
+                <div class="toLogin" id="toLogin" @click.stop="showInfoBox">
                     <span class="fs-3 mr-2">未登录</span>
                     <i class="iconfont icon-xiangyou fs-1" style="color:#8e8e8e"></i>
+                </div>
+                <div class="info-box d-flex flex-column ai-center jc-center" v-show="isShowInfoBox" id="info-box"
+                    @mouseenter="isShowInfoBox = true" @mouseleave="isShowInfoBox = false"
+                    :class="{ isShowBoxShadow: theme !== 'dark' }">
+                    <div class="account-info mb-20">
+                        <div class="count d-flex mb-4">
+                            <div class="dynamic d-flex flex-column ai-center mr-30" @click="goDynamic">
+                                <div class="fs-9 text-33">{{ userFile?.profile?.eventCount?? 0 }}</div>
+                                <div class="text-66 fs-2">动态</div>
+                            </div>
+                            <div class="focus-count d-flex flex-column ai-center mr-30 ml-30" @click="goFocus">
+                                <div class="fs-9 text-33">{{ userFile.profile?.follows ?? 0 }}</div>
+                                <div class="text-66 fs-2">关注</div>
+                            </div>
+                            <div class="fans-count d-flex flex-column ai-center ml-30" @click="goFans">
+                                <div class="fs-9 text-33">{{ userFile.profile?.followeds ?? 0 }}</div>
+                                <div class="text-66 fs-2">粉丝</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="log-out text-33 fs-2" @click="logout">退出登录</div>
                 </div>
             </div>
         </div>
@@ -60,15 +81,15 @@
                     <i class="iconfont icon-zuijinbofang fs-7"></i>
                     <span class="fs-7">最近播放</span>
                 </div>
-                <div class="my-collection pl-18" :class="{ isActive: active('my-collection') }" v-if="userFile?.userId"
-                    @click="go('/my-collection')">
+                <div class="my-collection pl-18" :class="{ isActive: active('my-collection') }"
+                    v-if="userFile?.profile?.userId" @click="go('/my-collection')">
                     <i class="iconfont icon-shoucang fs-7"></i>
                     <span class="fs-7">我的收藏</span>
                 </div>
             </div>
 
             <!--创建的歌单-->
-            <div class="created-song-list text-41 fs-18 mb-20 pl-3" v-if="userFile?.userId">
+            <div class="created-song-list text-41 fs-18 mb-20 pl-3" v-if="userFile?.profile?.userId">
                 <div class="title" @click="isShowCreated = !isShowCreated">
                     <i class="iconfont icon-xiangyou fs-1" v-show="!isShowCreated"></i>
                     <i class="iconfont icon-xiangxia fs-1" v-show="isShowCreated"></i>
@@ -92,7 +113,7 @@
             </div>
 
             <!--收藏的歌单-->
-            <div class="collected-song-list" v-if="userFile?.userId">
+            <div class="collected-song-list" v-if="userFile?.profile?.userId">
                 <div class="title pl-3" @click="isShowCollected = !isShowCollected">
                     <i class="iconfont icon-xiangyou fs-1" v-show="!isShowCollected"></i>
                     <i class="iconfont icon-xiangxia fs-1" v-show="isShowCollected"></i>
@@ -114,16 +135,22 @@
 import { useRoute, useRouter } from 'vue-router';
 import useStore from "@/store"
 import { storeToRefs } from 'pinia';
+import { logOut } from '@/service/api/login/login';
+import Cookies from 'js-cookie';
 
 
-const { useGlobal, userProfile, useSideSongList } = useStore()
+const { useGlobal, userProfile, useSideSongList, useTheme } = useStore()
 const route = useRoute()
 const router = useRouter()
 const isActive = ref('isActive')
 const { userFile } = storeToRefs(userProfile)
+const { theme } = storeToRefs(useTheme)
 const { createdSongList, collectedSongList, tempCreatedSongList } = storeToRefs(useSideSongList)
 const isShowCreated = ref(true) // 是否展开创建的歌单
 const isShowCollected = ref(true) // 是否展开收藏的歌单
+const isShowInfoBox = ref(false) // 信息框， 用于退出登录
+
+
 
 // 当前选中的歌单
 const activeId = computed(() => {
@@ -134,7 +161,7 @@ const activeId = computed(() => {
 
 // 前往个人中心
 const goPersonalCenter = () => {
-    const id = userFile.value?.userId
+    const id = userFile.value?.profile?.userId
     if (id) {
         return router.push(`/personal-center/${id}`)
     }
@@ -149,6 +176,42 @@ const active = (name1: string, name2?: string): boolean => {
     return route.path.startsWith('/' + name1)
 }
 
+const showInfoBox = () => {
+    if (isShowInfoBox.value) {
+        return isShowInfoBox.value = false
+    }
+    isShowInfoBox.value = true
+}
+
+// 动态
+const goDynamic = () => {
+    // 接口没有关注总数
+    router.push(`/focus?focusName=${userFile.value.profile.nickname}&id=${userFile.value.profile.userId}&focus=${userFile.value.profile.follows}`)
+}
+
+// 关注
+const goFocus = () => {
+    router.push(`/fans?fansName=${userFile.value.profile.nickname}&id=${userFile.value.profile.userId}`)
+}
+
+// 粉丝
+const goFans = () => {
+    router.push(`/dynamic?dynamicName=${userFile.value.profile.nickname}&id=${userFile.value.profile.userId}`)
+}
+
+// 退出登录
+const logout = async () => {
+    const r = await logOut()
+    // 如果当前不是在首页
+    if (route.path !== "/findMusic/personal-recommend") {
+        // 清空数据
+        userProfile.clearUserInfo()
+        Cookies.remove("__csrf")
+        // 回到首页
+        router.replace("/findMusic/personal-recommend")
+        //
+    }
+}
 // 跳转
 const go = (path: string): void => {
     if (route.path !== path) {
@@ -166,6 +229,23 @@ const goSongList = (id: number) => {
         router.push(`/song-list/${id}`)
     }
 }
+
+// 检查点击区域， 用于隐藏点击的个人信息弹窗
+const checkClickArea = (e: Event) => {
+    const id = (e.target as any).id
+    console.log(id, "iddddd");
+    console.log(isShowInfoBox.value, "isShowInfoBox.valueisShowInfoBox.valueisShowInfoBox.value");
+    if (id !== "info-box" && isShowInfoBox.value) {
+        isShowInfoBox.value = false
+    }
+}
+
+onMounted(() => {
+    document.addEventListener("click", checkClickArea)
+})
+onUnmounted(() => {
+    document.removeEventListener("click", checkClickArea)
+})
 </script>
 <style scoped lang="scss">
 .side-bar-wrapper {
@@ -180,6 +260,7 @@ const goSongList = (id: number) => {
             height: 60px;
             padding: 14px 10px;
             @include flex(row, flex-start, center);
+            position: relative;
 
             .avatar {
                 margin-right: 12px;
@@ -197,6 +278,54 @@ const goSongList = (id: number) => {
                 }
 
                 @include flex(row, flex-start, center);
+            }
+
+            #info-box {
+                width: 320px;
+                height: 150px;
+                position: absolute;
+                top: 10px;
+                left: 150px;
+                border-radius: 10px;
+                background-color: var(--theme-36);
+
+                z-index: 10;
+
+                .log-out {
+                    width: 95px;
+                    height: 30px;
+                    border-radius: 20px;
+                    text-align: center;
+                    line-height: 30px;
+                    border: 1px solid var(--theme-e5);
+
+                    &:hover {
+                        background-color: var(--theme-f2);
+                    }
+                }
+
+                .account-info {
+
+                    .dynamic,
+                    .focus-count {
+                        position: relative;
+
+                        &::after {
+                            content: "丨";
+                            display: block;
+                            position: absolute;
+                            right: -52px;
+                            font-size: 45px;
+                            font-weight: 100;
+                            color: var(--theme-e5);
+                            bottom: -10px;
+                        }
+                    }
+                }
+            }
+
+            .isShowBoxShadow {
+                box-shadow: -4px 0 6px -4px var(--theme-cc), 4px 4px 6px -4px var(--theme-cc), 4px -4px 6px -4px var(--theme-cc);
             }
         }
     }

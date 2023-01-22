@@ -13,6 +13,7 @@
   "dependencies": {
     "axios": "^0.24.0",
     "howler": "^2.2.3",
+    "js-cookie": "^3.0.1",
     "pinia": "^2.0.0-rc.10",
     "pinia-plugin-persistedstate": "^3.0.1",
     "plyr": "^3.7.3",
@@ -25,6 +26,7 @@
   "devDependencies": {
     "@babel/types": "^7.16.0",
     "@types/howler": "^2.2.7",
+    "@types/js-cookie": "^3.0.2",
     "@types/node": "^16.11.10",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",

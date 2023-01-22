@@ -95,7 +95,6 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { focusOrCancelPerson, getUserDetailById } from '@/service/api/user';
 import { UserDetailByIdResult } from '@/service/api/user/types';
