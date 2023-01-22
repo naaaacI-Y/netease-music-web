@@ -63,3 +63,12 @@ export const getSongList = (params: T.UserFocusListParams) => {
 export const focusOrCancelPerson = (params: T.FocusOrCancelPersonParams) => {
     return http.get<T.FocusOrCancelPersonResult>(`/follow${stringifyParams(params)}`)
 }
+
+
+/**
+ * 游客登录
+ * @returns
+ */
+export const passengerLogin = () => {
+    return http.get<T.PassengerLoginResult>("/register/anonimous")
+}

@@ -5,6 +5,7 @@ import { initPlayer } from "./player"
 import { getPersonSongList } from "./songList"
 import { initTheme } from "./theme"
 import DefaultLayout from "@/layout/DefaultLayout.vue"
+import initUser from "./user"
 const initApp = () => {
     // 初始化注册全局组件
 
@@ -15,6 +16,9 @@ const initApp = () => {
 
     // 初始化音乐播放器
     initPlayer()
+
+    // 如果登录了重新获取用户个人信息 TODO
+    initUser()
 }
 
 // 注册全局组件

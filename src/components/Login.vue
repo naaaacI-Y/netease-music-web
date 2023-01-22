@@ -95,14 +95,11 @@ import {
     getQrcodeStatus,
     checkLoginStatus,
 } from "@/service/api/login/login";
-//   import useUsernfoStore from "@/store"
 
 import Registry from './global/Registry.vue';
-import { onUnmounted, reactive, ref, watch } from 'vue';
 import useStore from "@/store"
-import { storeToRefs } from "pinia";
+import { setCookieExpireTime } from "@/utils";
 const { useGlobal, userProfile } = useStore()
-const { isShowLoginBox } = storeToRefs(useGlobal)
 
 let qrImg = ref("");
 const time = ref<number>()
@@ -150,6 +147,8 @@ const getQrcodeImg = async () => {
                     //授权成功  查看登录状态
                     const statusResult = await checkLoginStatus();
                     userProfile.setUserProfile(statusResult.data.profile)
+                    // 存储过期时间
+                    setCookieExpireTime(result.cookie)
                     status.isAuthing = false;
                     // 窗口关闭
                     closeDialog()
@@ -161,6 +160,7 @@ const getQrcodeImg = async () => {
         console.log(error);
     }
 };
+
 const checkToAccountLogin = (): void => {
     status.isAccountLogin = true;
     status.isRegistry = false;
@@ -178,16 +178,6 @@ const goLogin = () => {
     if (!status.isChecked) return status.isShowModal = true
 }
 const goRegistry = () => {
-    // if(this.timer) return;
-    // if(!status.isChecked) {
-    //   status.isShowModal = true
-    //   this.timer = setTimeout(() => {
-    //     this.isShowModal = false
-    //     clearTimeout(this.timer)
-    //     this.timer = null
-    //   }, 2000);
-    //   return
-    // }
     if (status.isShowModal) {
         status.isShowModal = false
     }

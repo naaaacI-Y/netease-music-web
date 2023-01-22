@@ -146,10 +146,7 @@ const formatPlayCount = (count: number) => {
 const checkLogin = () => {
     const store = useStore()
     const isLogin = store.userProfile.userFile?.userId
-    console.log(isLogin, "isLogin========");
-
     if (!isLogin) {
-        // store.globalState.isShowLoginBox = true
         return false
     }
     return true
@@ -296,7 +293,13 @@ function keywordsColorful(str: string, key: string) {
 }
 
 
-
+// 获取cookie的过期时间 并存储
+const setCookieExpireTime = (cookie: string) => {
+    const splitList = cookie.split(';')
+    const index = splitList.findIndex(item => item.startsWith('__csrf'))
+    const _ = splitList[index + 2].split("=")[1] //
+    localStorage.setItem("expireTime", new Date(_).getTime().toString())
+}
 
 
 export {
@@ -318,6 +321,7 @@ export {
     formatPicUrl,
     paddingLeft,
     formatListData,
+    setCookieExpireTime,
     keywordsColorful,
     FormatList
 }
