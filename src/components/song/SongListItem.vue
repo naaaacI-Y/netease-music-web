@@ -17,7 +17,7 @@
                 <i class="iconfont icon-xiazai text-99"></i>
             </div>
 
-            <!--歌曲标识 上升下架等信息-->
+            <!--歌曲标识 上升下降等信息-->
             <div class="rank d-flex ai-center mr-5 pl-8" v-if="type === 3">
                 <div class="index fs-4 mr-8" :class="{ isTop3: index <= 3 }">{{ index }}</div>
                 <slot name="flag"></slot>
@@ -25,8 +25,9 @@
 
             <!--主要信息-->
             <div class="main-info fs-2 d-flex ">
-                <div class="song-name d-flex ai-center" :style="{ width: rankType === -1 ? '34.8%' : '42.8%' }">
-                    <div class="text-33 mr-4" v-if="!colorful"
+                <div class="song-name common d-flex ai-center pr-10"
+                    :style="{ width: rankType === -1 ? '34.8%' : '39%' }">
+                    <div class="text-33 mr-4 name" v-if="!colorful"
                         :class="[isPlaying ? 'isPlaying' : '', isHaveCopyRight ? '' : 'isNeddCopyRight']">{{
                             item?.name
                         }}
@@ -35,8 +36,7 @@
                         :class="[isPlaying ? 'isPlaying' : '', isHaveCopyRight ? '' : 'isNeddCopyRight']"
                         v-html="keywordsColorful(item.name, keywords)">
                     </div>
-                    <div class="text-99 mr-4" v-if="item?.alia?.length">({{ item?.alia[0] }})</div>
-                    <!-- <i class="iconfont icon-h-square text-primary_red_4 fs-2" v-if="item?.sq && type !== 3"></i> -->
+                    <div class="text-99 mr-4 name" v-if="item?.alia?.length">({{ item?.alia[0] }})</div>
                     <div class="sq d-flex ai-center" v-if="item?.sq && type !== 3">
                         <span>SQ</span>
                     </div>
@@ -45,22 +45,23 @@
                 </div>
                 <!--飙升率-->
                 <slot name="rate"></slot>
-                <div class="singer  text-99" v-if="(isShow === 'all' || isShow === 'rank') && !colorful"
+                <div class="singer  text-99 common" v-if="(isShow === 'all' || isShow === 'rank') && !colorful"
                     @click="goSingerPage">
                     {{ item.ar[0]?.name }}
                 </div>
-                <div class="singer  text-99" v-if="(isShow === 'all' || isShow === 'rank') && colorful"
+                <div class="singer  text-99 common" v-if="(isShow === 'all' || isShow === 'rank') && colorful"
                     @click="goSingerPage" v-html="keywordsColorful(item.ar[0]?.name, keywords)">
                 </div>
-                <div class="album  text-99" v-if="isShow === 'all' && !colorful" @click="goAlbumPage">
+                <div class="album  text-99 common" v-if="isShow === 'all' && !colorful" @click="goAlbumPage">
                     {{ item.al.name }}
                 </div>
-                <div class="album  text-99" v-if="isShow === 'all' && colorful" @click="goAlbumPage"
+                <div class="album  text-99 common" v-if="isShow === 'all' && colorful" @click="goAlbumPage"
                     v-html="keywordsColorful(item.al.name, keywords)">
                 </div>
                 <div class="time text-c4 d-flex ai-center" v-if="isShow === 'all' || isShow === 'singer'">{{
                     formatSongTime(item!.dt)
                 }}</div>
+                <!--个人中心歌单展示形式切换的时候展示播放次数，暂时不做-->
                 <!-- <div class="count text-c4 d-flex ai-cente" v-if="isShow === 'listen'">7次</div> -->
             </div>
         </div>
@@ -201,12 +202,21 @@ checkMusicCopyright(props.item.fee, !props.item.noCopyrightRcmd)
     .main-info {
         width: 92.8%;
 
-        .song-name {
-            width: 42.8%;
+        .common {
             line-height: 35px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+        }
+
+        .song-name {
+            width: 39%;
+
+            .name {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
 
             .sq {
                 @include SQ;
@@ -227,12 +237,6 @@ checkMusicCopyright(props.item.fee, !props.item.noCopyrightRcmd)
 
         .singer,
         .album {
-
-            line-height: 35px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-
             &:hover {
                 cursor: pointer;
                 color: var(--theme-56); // dark: #b7b7b7b

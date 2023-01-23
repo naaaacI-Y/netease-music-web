@@ -86,17 +86,14 @@ const goVideoDetail = () => {
 
     .img-wrapper {
         width: 100%;
-        // height: 138px;
         height: 0;
         padding-bottom: 56%;
         border-radius: 5px;
         overflow: hidden;
         position: relative;
 
-        // background-color: aqua;
         img {
             width: 100%;
-            // height: 100%;
         }
 
         .play-count {
@@ -131,6 +128,12 @@ const goVideoDetail = () => {
             &:hover {
                 color: var(--theme-3a);
                 cursor: pointer;
+            }
+
+            .title {
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
             }
         }
 

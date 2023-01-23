@@ -98,7 +98,7 @@ onMounted(() => {
     setTimeout(() => {
         // 这里不用定时的话 传递进去的值是在获取数据结束之前的
         listenListScroll(scroller!, [getList, loaded.value, loading.value])
-    }, 200)
+    }, 1000)
 })
 onUnmounted(() => {
     const scroller = document.getElementById("scroller")
@@ -136,6 +136,8 @@ getList()
 }
 
 .right-info-wrap {
+    width: calc(100% - 145px);
+
     .song-list-author {
         img {
             width: 15px;
@@ -149,15 +151,29 @@ getList()
         }
     }
 
+    .song-list-des {
+        width: 100%;
+
+    }
 
     .tags {
         border: 1px solid #c3473a;
         border-radius: 4px;
-        padding: 0 5px;
+        padding: 0 2px;
+        white-space: nowrap;
+        display: inline !important;
+        // span {
+        //     transform: scale(0.9);
+        //     display: inline-block;
+        // }
     }
 
     .summary {
         color: var(--theme-dd);
+        display: inline !important;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
 }
 </style>

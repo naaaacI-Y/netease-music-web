@@ -75,7 +75,7 @@ const goSongList = () => {
     .songlist-card-wrapper {
         // display: flex;
         // width: 100%;
-        margin-bottom: 45px;
+        margin-bottom: 15px;
 
         .img-wrapper {
             width: 100%;

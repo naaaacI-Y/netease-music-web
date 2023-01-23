@@ -1,7 +1,7 @@
 <template>
     <div class="song-list-wrapper">
         <div class="head text-99 fs-2 d-flex ai-center">
-            <div class="music-title" :style="{ width: rankType === -1 ? '34.8%' : '42.8%' }">音乐标题</div>
+            <div class="music-title" :style="{ width: rankType === -1 ? '34.8%' : '39%' }">音乐标题</div>
             <div class="rate" v-if="rankType === -1">飙升率</div>
             <div class="music-singer">歌手</div>
             <div class="music-album">专辑</div>
