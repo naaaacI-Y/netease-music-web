@@ -8,16 +8,6 @@
                         <span class="fs-5 text-33" style="font-weight: bold;">{{ isSelf? '我创建的歌单': '歌单' }}</span>
                         <span class="text-66 fs-2">({{ songList.data.length }})</span>
                     </div>
-                    <div class="type-change d-flex">
-                        <div class="type1 mr-2 d-flex ai-center jc-center"
-                            :class="{ isActive: songListShowType === 'card' }" @click="songListShowType = 'card'">
-                            <i class="iconfont icon-datu fs-9 text-66"></i>
-                        </div>
-                        <div class="type2 d-flex ai-center jc-center"
-                            :class="{ isActive: songListShowType === 'table' }" @click="songListShowType = 'table'">
-                            <i class="iconfont icon-liebiao fs-5 text-66"></i>
-                        </div>
-                    </div>
                 </div>
                 <div class="list-content-wrapper ">
                     <div class="content-type1 d-flex flex-wrap" v-if="songListShowType === 'card'">
@@ -33,11 +23,6 @@
                             </template>
                         </RecommendSongListCard>
                     </div>
-                    <!-- <Pagination v-if="pages4Self.total >= pages4Self.size" :total="pages4Self.total" :size="pages4Self.size" :page="pages4Self.page"
-                        @page-change="handlePageChange4Self" class="mt-30 mb-30"></Pagination> -->
-                    <!-- <div class="content-type2" v-if="songListShowType === 'table'">
-                        <SongForList v-for="item in 4"></SongForList>
-                    </div> -->
                 </div>
             </div>
             <div class="song-list-wrapper" v-if="collectSongList.data.length">
@@ -45,16 +30,6 @@
                     <div class="title">
                         <span class="fs-5 text-33" style="font-weight: bold;">{{ isSelf? '我收藏的歌单': '收藏' }}</span>
                         <span class="text-66 fs-2">({{ collectSongList.data.length }})</span>
-                    </div>
-                    <div class="type-change d-flex">
-                        <div class="type1 mr-2 d-flex ai-center jc-center"
-                            :class="{ isActive: songListShowType === 'card' }" @click="songListShowType = 'card'">
-                            <i class="iconfont icon-datu fs-9 text-66"></i>
-                        </div>
-                        <div class="type2 d-flex ai-center jc-center"
-                            :class="{ isActive: songListShowType === 'table' }" @click="songListShowType = 'table'">
-                            <i class="iconfont icon-liebiao fs-5 text-66"></i>
-                        </div>
                     </div>
                 </div>
                 <div class="list-content-wrapper ">
@@ -71,11 +46,6 @@
                             </template>
                         </RecommendSongListCard>
                     </div>
-                    <!-- <Pagination v-if="pages4Collect.total >= pages4Collect.size" :total="pages4Collect.total" :size="pages4Collect.size" :page="pages4Collect.page"
-                        @page-change="handlePageChange4Collection" class="mt-30 mb-30"></Pagination> -->
-                    <!-- <div class="content-type2" v-if="songListShowType === 'table'">
-                        <SongForList v-for="item in 4"></SongForList>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -83,16 +53,14 @@
 </template>
 
 <script lang="ts" setup>
-import Pagination from '@/components/Pagination.vue';
+// import Pagination from '@/components/Pagination.vue';
 
 import UserHeader from '@/components/header/UserHeader.vue';
 import RecommendSongListCard from '@/components/RecommendSongListCard.vue';
-import SongForList from '@/components/SongForList.vue';
 import { getSongList } from '@/service/api/user';
-import { Playlist_user } from '@/service/api/user/types';
 import useStore from '@/store';
-
 import { checkLogin, getQueryId } from '@/utils';
+
 const songListShowType = ref("card") // card | table
 const songList = reactive({ data: [] as any[] }) // 创建的歌单
 const collectSongList = reactive({ data: [] as any[] }) // 收藏的歌单

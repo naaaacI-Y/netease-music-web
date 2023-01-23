@@ -13,7 +13,8 @@
             </div>
             <div class="time fs-2 mb-10 text-7d">{{ calcTime(dynamicItem.eventTime) }}</div>
             <div class="dynamic-content fs-2 mb-5">{{ info.msg }}</div>
-            <div class="quote d-flex ai-center mb-15">
+            <!--单曲-->
+            <div class="quote d-flex ai-center mb-15" v-if="dynamicItem.type === 18">
                 <div class="song-img mr-10">
                     <img :src="info.song.album.picUrl" alt="">
                     <div class="play-btn">
@@ -25,15 +26,21 @@
                     <div class="singer text-7d">{{ info.song.artists[0].name }}</div>
                 </div>
             </div>
+            <div class="pic-wrap d-flex flex-wrap" :style="{ width: picWrapWidth }" v-if="dynamicItem.pics.length">
+                <div class="pic-item mb-5" v-for="(item, index) in dynamicItem.pics.slice(0, columnCount)" :key="index"
+                    :style="{ marginRight: index !== columnCount - 1 ? '5px' : '' }">
+                    <img :src="item.pcSquareUrl" alt="" class="img">
+                </div>
+            </div>
             <div class="comment-reactive d-flex ai-center fs-2 jc-end mb-15">
-                <div class="vote d-flex ai-center mr-6">
-                    <i class="iconfont icon-dianzan1 mr-4"></i>
+                <div class="vote d-flex ai-center mr-6" @click="voteToDynamic">
+                    <i class="iconfont icon-dianzan1 mr-4" :style="{ color: isVoted ? '#c3473a' : '' }"></i>
                     <span class="vote-count" v-if="dynamicItem.info.commentThread.likedCount">{{
                         dynamicItem.info.commentThread.likedCount
                     }}</span>
                 </div>
                 <span class="text-ee">丨</span>
-                <div class="share mr-6 ml-6">
+                <div class="share mr-6 ml-6" @click="Message.error('暂不支持')">
                     <i class="iconfont icon-fenxiang2 fs-3"></i>
                 </div>
                 <span class="text-ee">丨</span>
@@ -52,7 +59,13 @@
 import { dynamicMap } from "@/utils/const"
 import { Event } from "@/service/api/user/types"
 import SongListComment from '@/components/song/SongListComment.vue';
-import { calcTime, formatTime } from '@/utils';
+import { calcTime, checkLogin, formatTime } from '@/utils';
+import Message from "@/components/message"
+import useStore from "@/store";
+import { storeToRefs } from "pinia";
+
+const { useGlobal } = useStore()
+const { isShowLoginBox } = storeToRefs(useGlobal)
 
 const props = defineProps<{
     dynamicItem: Event
@@ -60,11 +73,28 @@ const props = defineProps<{
 const info = computed(() => {
     return JSON.parse(props.dynamicItem.json)
 })
+const columnCount = computed(() => {
+    const len = props.dynamicItem.pics.length
+    return Math.ceil(Math.sqrt(len))
+})
+const picWrapWidth = computed(() => {
+    return columnCount.value * 120 + (columnCount.value - 1) * 5 + 'px'
+})
+
 const isShowCommentDetail = ref(false)
+const isVoted = ref(props.dynamicItem.xInfo.info.liked)
+const votedCount = ref(props.dynamicItem.info.commentThread.likedCount)
+
+
+// 点赞
+const voteToDynamic = () => {
+    if (!checkLogin()) return isShowLoginBox.value = true
+
+}
 </script>
 <style lang="scss" scoped>
 .dynamic-item-wrapper {
-    padding-bottom: 50px;
+    // padding-bottom: px;
     margin-bottom: 20px;
     border-bottom: 1px solid #f2f2f2;
 
@@ -125,6 +155,23 @@ const isShowCommentDetail = ref(false)
 
             &:hover {
                 background-color: #ededed;
+            }
+        }
+
+        .pic-wrap {
+            // @include grid-between(370px);
+
+            .pic-item {
+                width: 120px;
+                height: 120px;
+                border-radius: 10px;
+
+                // background-color: #d33b31;
+                img {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 5px;
+                }
             }
         }
 

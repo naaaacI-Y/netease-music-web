@@ -1,8 +1,9 @@
 <template>
     <DefaultLayout>
-        <div class="home-focus-wrapper pt-10">
+        <div class="home-focus-wrapper pt-10" v-if="focusList.data.length">
             <FocusAndFansItem v-for="item in focusList.data" :key="item.userId" :item="item"></FocusAndFansItem>
         </div>
+        <div class="no-focus text-66 fs-1 d-flex jc-center" v-if="!focusList.data.length">还没有关注</div>
         <Pagination v-if="pages.total >= pages.size" :total="pages.total" :size="pages.size" :page="pages.page"
             @page-change="handlePageChange" class="mt-30 mb-30"></Pagination>
     </DefaultLayout>
@@ -15,6 +16,7 @@ import { Follow } from '@/service/api/user/types';
 import { getQueryId, scrollToTop } from '@/utils';
 import { useRoute } from 'vue-router';
 import FocusAndFansItem from './components/FocusAndFansItem.vue';
+
 const focusList = reactive({ data: [] as Follow[] })
 const pages = reactive({
     page: 1,
@@ -31,21 +33,24 @@ watch(() => pages.page, async () => {
 const handlePageChange = (num: number) => {
     pages.page = num
 }
+
+// 获取关注列表
 const getFocuList = async () => {
     const _ = {
         uid: id, limit: pages.size, offset: (pages.page - 1) * pages.size
     }
     const r = await getFocusList(_)
     focusList.data = r.follow
+
 }
 getFocuList()
 </script>
 <style lang="scss" scoped>
 .home-focus-wrapper {
-    // display: grid;
-    // justify-content: space-between;
-    // grid-template-columns: repeat(auto-fill, 395px);
-    // grid-gap: 0;
     @include grid-between(395px);
+}
+
+.no-focus {
+    padding-top: 100px;
 }
 </style>

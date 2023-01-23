@@ -1,9 +1,9 @@
 <template>
     <DefaultLayout>
-        <div class="home-fans-wrapper pt-10 ">
+        <div class="home-fans-wrapper pt-10" v-if="fansList.data.length">
             <FocusAndFansItem v-for="item in fansList.data" :key="item.userId" :item="item"></FocusAndFansItem>
-
         </div>
+        <div class="no-fans text-66 fs-1 d-flex jc-center" v-if="!fansList.data.length">还没有粉丝</div>
         <Pagination v-if="pages.total >= pages.size" :total="pages.total" :size="pages.size" :page="pages.page"
             @page-change="handlePageChange" class="mt-30 mb-30"></Pagination>
     </DefaultLayout>
@@ -44,5 +44,9 @@ getFanList()
 <style lang="scss" scoped>
 .home-fans-wrapper {
     @include grid-between(395px);
+}
+
+.no-fans {
+    padding-top: 100px;
 }
 </style>
