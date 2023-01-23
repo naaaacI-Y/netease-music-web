@@ -17,7 +17,7 @@
                 <span class="text-33">{{ commentContent.content }}</span>
             </div>
             <div class="right-middle fs-2   mb-10" style="padding: 9px;" :class="isGrey ? 'bg-f6' : 'bg-fa'"
-                v-if="commentContent.beReplied.length">
+                v-if="commentContent?.beReplied?.length">
                 <span class="origin-reply text-shadow_blue"
                     @click="goPersonCenter(commentContent?.beReplied[0]?.user?.userId)">
                     @{{ commentContent?.beReplied[0]?.user?.nickname }}：
@@ -66,10 +66,10 @@ const props = withDefaults(defineProps<{
     isGrey: true
 })
 const emits = defineEmits<{
-    (e: "activeComment", info: { name: string, commentId: number }): void
+    (e: "activeComment", info: { name: string, commentId: number, parentContent: string }): void
 }>()
 
-const voteCount = ref(props.commentContent.likedCount) // 缓存点赞数量
+const voteCount = ref(props.commentContent.likedCount || 0) // 缓存点赞数量
 const isLiked = ref(props.commentContent.liked) // 缓存是否点赞
 const isVoting = ref(false) // 限制频繁点赞
 const { usePlayer, useGlobal } = useStore()
@@ -110,14 +110,17 @@ const comment = () => {
     // 如果是热评或是歌曲播放页面（私人fm以及单曲播放）则直接弹出评论框
     const needShowBox = ["/hot-comment", "/personal-fm"]
     // 要带上父级评论的内容 用于构造插入的回复结构
-    if (needShowBox.some(item => route.path.startsWith(item)) || isShowPlayPage) {
-        if (isShowPlayPage) {
+    if (needShowBox.some(item => route.path.startsWith(item)) || isShowPlayPage.value) {
+        if (isShowPlayPage.value) {
             return Message.publishComment(2, props.type as list, '评论', player.value.currentTrack.id, props.commentContent.commentId, props.commentContent.user.nickname, props.commentContent.content)
         }
         return Message.publishComment(2, props.type as list, '评论', queryId ? Number(queryId) : player.value.personalFMTrack.id, props.commentContent.commentId, props.commentContent.user.nickname, props.commentContent.content)
     }
+    console.log("评论======");
+    console.log();
+
     // 评论框显示原评论的用户名，如果改动了用户名则会变成发表评论
-    emits("activeComment", { name: props.commentContent.user.nickname, commentId: props.commentContent.commentId })
+    emits("activeComment", { name: props.commentContent.user.nickname, commentId: props.commentContent.commentId, parentContent: props.commentContent.content })
 }
 // 前往个人中心
 const goPersonCenter = (id: number) => {

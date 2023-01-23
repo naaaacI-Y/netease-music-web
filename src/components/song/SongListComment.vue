@@ -60,7 +60,7 @@ import Pagination from '@/components/Pagination.vue';
 import { computed, reactive, ref, watch } from 'vue';
 import CommentItem from '../CommentItem.vue';
 import useGlobalStore from '@/store/globalStore';
-import { Comment, HotComment, SendOrReplyCommentParam, t } from "@/service/api/comment/types"
+import { Comment, HotComment, SendOrReplyComment, SendOrReplyCommentParam, t } from "@/service/api/comment/types"
 import { checkLogin, getQueryId, scrollToTop } from "@/utils"
 import Message from "@/components/message"
 import { getComment4Album } from '@/service/api/album';
@@ -82,7 +82,8 @@ const route = useRoute()
 const replyPerson = ref("")
 const isShowLoading = ref(false)
 const paginationIndex = ref(0)
-const commentId = ref<number>()
+const commentId = ref<number>() // 记录评论id
+const parentContent = ref("") // 回复的评论的内容
 const textArea = ref<HTMLInputElement | null>(null)
 const id = getQueryId() as number | string // id
 const allComment = reactive({ data: [] as Comment[] }) // 所有评论
@@ -139,17 +140,11 @@ watch(() => cContent.value, async (newVal) => {
     if (newVal) {
         inserData()
     }
-
-    // if (isShowPlayPage.value && newVal) {
-    //     inserData()
-    // }
 })
 
 watch(() => cid.value, (newVal) => {
     // 更新评论
     pages.page = 1
-
-    console.log("歌曲切换，更新评论========");
     isShowLoading.value = true
     getAllComment(newVal)
     // 更新相似歌曲
@@ -161,22 +156,45 @@ const maxLength = computed(() => {
     return 140 - commentContent.value.length
 })
 
-// 插入评论数据
-const inserData = () => {
+/**
+ * 插入评论数据
+ * @param data 接口返回的评论内容
+ * @param parentContent 父级评论内容
+ */
+const inserData = (data?: SendOrReplyComment, parentContent?: string) => {
+    let insertData: Comment
     // 插入数据
-    const insertData = useInsertComment(useGlobal.cContent)
+    if (data) {
+        const _ = JSON.parse(JSON.stringify(data))
+        if (_.beRepliedUser && parentContent) {
+            _.beRepliedUser.content = parentContent
+        }
+        insertData = useInsertComment(_)
+    } else {
+        insertData = useInsertComment(useGlobal.cContent)
+        cContent.value = "" as unknown as Comment
+    }
+    console.log(data, "评论的数据");
+    console.log(parentContent, "parentContent");
+    console.log(insertData, "insertData");
+
     allComment.data.unshift(insertData)
-    // 清空评论内容
-    cContent.value = "" as unknown as Comment
+
 }
 
 // 激活评论框
-const activeComment = (info: { name: string, commentId: number }) => {
+const activeComment = (info: { name: string, commentId: number, parentContent: string }) => {
+    console.log("接收到子组件的触发事件=======");
+
     commentContent.value = "回复" + info.name + '：'
     replyPerson.value = info.name + '：' // 记录被回复用户名
     // 滚动到评论框处
     scrollToTop()
     commentId.value = info.commentId
+    parentContent.value = info.parentContent
+    console.log(parentContent, "parentContentparentContentparentContentparentContentparentContent");
+    console.log(replyPerson, "replyPersonreplyPersonreplyPerson");
+
     // 获取焦点
     textArea.value!.focus()
 }
@@ -215,13 +233,21 @@ const submitContent = async () => {
         type: props.sourceType,
         content: commentType[1],
     }
+    console.log(_, "SendOrReplyCommentParamSendOrReplyCommentParamSendOrReplyCommentParamSendOrReplyCommentParam");
+
     if (commentType[0] === "reply") {
         _.commentId = commentId.value
     }
     const r = await sendOrReplyComment(_)
     if (r.code === 200) {
         // 插入数据
-        inserData()
+        inserData(r.comment, _.t === 1 ? undefined : parentContent.value)
+        // const _ = JSON.parse(JSON.stringify(r.comment))
+        // if (_.beRepliedUser && props.params.parentContent) {
+        //     _.beRepliedUser.content = props.params.parentContent
+        // }
+        // const insertData = useInsertComment(_)
+        // allComment.data.unshift(insertData)
         Message.success("评论成功！")
         commentContent.value = ""
         replyPerson.value = ""
