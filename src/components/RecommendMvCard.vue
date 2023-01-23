@@ -19,7 +19,7 @@
             <div class="line1 fs-3 text-4e" :class="{ noWrap: !isOneline }">
                 {{ recommendMvItem.name }}
             </div>
-            <div class="line2 fs-1 text-97" v-if="!isOneline">
+            <div class="line2 fs-1 text-97" v-if="!isOneline" @click.stop="goAuthor">
                 {{ recommendMvItem.artistName }}
             </div>
         </div>
@@ -56,6 +56,11 @@ const cardWidth = computed(() => {
 // 前往视频详情页
 const goVideoDetail = () => {
     router.push(`/mv-detail/${props.recommendMvItem.id}`)
+}
+
+// 前往作者页
+const goAuthor = () => {
+    router.push(`/singer-home/${props.recommendMvItem.artistId}`)
 }
 </script>
 <style lang="scss" scoped >

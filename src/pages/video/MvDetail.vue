@@ -11,7 +11,7 @@
                         <video ref="videoPlayerEle" class="plyr"></video>
                     </div>
                     <div class="singer-info-wrap">
-                        <div class="avatar-info d-flex ai-center mb-20">
+                        <div class="avatar-info d-flex ai-center mb-20" @click="goCreator(mvDetailInfo.data.artistId)">
                             <div class="avatar mr-10" v-if="mvDetailInfo.data && mvDetailInfo.data?.artists?.length">
                                 <LazyLoadImg :src="mvDetailInfo.data?.artists[0]?.img1v1Url"></LazyLoadImg>
                             </div>
@@ -78,7 +78,9 @@
                             <div class="name mb-10 fs-2 text-33">{{ item.name }}</div>
                             <div class="author fs-1 d-flex">
                                 <span class="text-66 mr-5">by</span>
-                                <span class="text-bc">{{ item.artistName }}</span>
+                                <span class="text-bc" @click.stop="goCreator(item.artistId)">{{
+                                    item.artistName
+                                }}</span>
                             </div>
                         </div>
                     </div>
@@ -152,14 +154,24 @@ const getDetail4Mv = async (id: number) => {
     })
     getSimilar(id)
 }
+
+
 // 相似mv
 const getSimilar = async (id: number) => {
     const r = await getSimilarMv({ mvid: id })
     similarMVList.data = r.mvs
 }
+
+// mv详情
 const goVideoDetail = (id: number) => {
     router.push(`/mv-detail/${id}`)
 }
+
+//作者页面
+const goCreator = (id: number) => {
+    router.push(`/singer-home/${id}`)
+}
+
 onMounted(() => {
     initVideoPlayer(getDetail4Mv, Number(queryId), videoPlayerEle.value!)
 })

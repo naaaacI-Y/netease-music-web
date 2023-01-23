@@ -3,7 +3,7 @@
             class="iconfont icon-xiangyou1"></i>
     </div>
     <div class="song-list-wrapper d-flex flex-wrap jc-between mb-20">
-        <DayRecommendCard :type="0" :song-list-item="{ name: '每日歌曲推荐' }" v-if="isLogin">
+        <DayRecommendCard :type="0" :song-list-item="{ name: '每日歌曲推荐' }">
             <template #canlender>
                 <div class="canlender" style="color: white;">
                     <div class="day">{{ day }}</div>
@@ -21,16 +21,17 @@ import DayRecommendCard from './components/DayRecommendCard.vue';
 import { Recommend } from '@/service/api/recommend/types';
 import { useRouter } from 'vue-router';
 import { getRecommendSongList } from '@/service/api/music';
-import { checkLogin } from '@/utils';
+
 const router = useRouter()
-const isLogin = checkLogin()
 const recommendSongList = reactive({ data: [] as Recommend[] })
 const day = new Date().getDate()
+
+// 获取每日推荐歌单
 const getSongListNotLogin = async () => {
-    const limit = { limit: isLogin ? 9 : 10 }
-    const r = await getRecommendSongList(limit)
+    const r = await getRecommendSongList({ limit: 9 })
     recommendSongList.data = r.result
 }
+
 getSongListNotLogin()
 </script>
 <style lang="scss" scoped>

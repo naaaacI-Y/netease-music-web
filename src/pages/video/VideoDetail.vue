@@ -11,7 +11,8 @@
                         <video ref="videoPlayerEle" class="plyr"></video>
                     </div>
                     <div class="singer-info-wrap">
-                        <div class="avatar-info d-flex ai-center mb-20">
+                        <div class="avatar-info d-flex ai-center mb-20"
+                            @click="goCreatorPage(videoDetailInfo.data.creator.userId)">
                             <div class="avatar mr-10" v-if="videoDetailInfo.data && videoDetailInfo.data?.avatarUrl">
                                 <LazyLoadImg :src="videoDetailInfo.data?.avatarUrl"></LazyLoadImg>
                             </div>
@@ -76,9 +77,9 @@
                         </div>
                         <div class="item-info d-flex flex-column jc-center">
                             <div class="name mb-10 fs-2 text-33">{{ item.title }}</div>
-                            <div class="author fs-1 d-flex">
+                            <div class="author fs-1 d-flex" @click.stop="goCreatorPage(item.creator[0]?.userId)">
                                 <span class="text-66 mr-5">by</span>
-                                <span class="text-bc" v-if="item.creator">{{ item.creator[0]?.nickname }}</span>
+                                <span class="text-bc" v-if="item.creator">{{ item.creator[0]?.userName }}</span>
                             </div>
                         </div>
                     </div>
@@ -147,14 +148,24 @@ const getDetail4Video = async (id: string) => {
     };
     getSimilar(id)
 }
+
+
 // 相似mv
 const getSimilar = async (id: string) => {
     const r = await getRelatedVideo({ id })
     similarVideoList.data = r.data
 }
+
+// 前往视频详情页
 const goVideoDetail = (id: string) => {
     router.push(`/video-detail/${id}`)
 }
+
+// 前往作者界面
+const goCreatorPage = (id: number) => {
+    router.push(`/personal-center/${id}`)
+}
+
 onMounted(() => {
     initVideoPlayer(getDetail4Video, queryId, videoPlayerEle.value!)
 })

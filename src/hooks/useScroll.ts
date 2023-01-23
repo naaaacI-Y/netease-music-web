@@ -6,7 +6,8 @@ export const useScroll = () => {
         const scrollTop = el.scrollTop
         const clientHeight = el.clientHeight
         const scrollHeight = el.scrollHeight
-        if (scrollTop + clientHeight >= scrollHeight) {
+
+        if (scrollTop + clientHeight + 1 >= scrollHeight) {
             // 加载更多
             console.log("加载更多");
             console.log(loaded, loading);
