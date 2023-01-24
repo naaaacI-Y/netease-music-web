@@ -41,9 +41,13 @@ const collectorsList = reactive({ data: [] as Subscriber[] })
 const id = getQueryId() as number
 const getCollectors = async () => {
     isShowLoading.value = true
-    const r = await getCollectors4SongList({ id })
-    collectorsList.data = r.subscribers
-    isShowLoading.value = false
+    try {
+        const r = await getCollectors4SongList({ id })
+        collectorsList.data = r.subscribers
+        isShowLoading.value = false
+    } catch (error) {
+        isShowLoading.value = false
+    }
 }
 const goPersonCenter = (userId: number) => {
     router.push(`/personal-center/${userId}`)

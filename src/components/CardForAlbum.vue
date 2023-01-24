@@ -42,14 +42,17 @@ const playAlbum = async () => {
     // 获取专辑详情
     const albumId = props.albumItem.id
     if (player.value.playing && player.value.playlistSource.id === albumId) return
-    const r = await getAlbumInfo({ id: albumId })
-    const ids = r.songs?.filter((item) => {
-        return checkMusicCopyright(item.fee, !item.noCopyrightRcmd)
-    }).map(item => item.id)
-    if (!ids?.length) {
-        return Message.error("惊不惊喜，一首都不让你听>_<")
+    try {
+        const r = await getAlbumInfo({ id: albumId })
+        const ids = r.songs?.filter((item) => {
+            return checkMusicCopyright(item.fee, !item.noCopyrightRcmd)
+        }).map(item => item.id)
+        if (!ids?.length) {
+            return Message.error("惊不惊喜，一首都不让你听>_<")
+        }
+        playSongList(JSON.stringify(ids), albumId)
+    } catch (error) {
     }
-    playSongList(JSON.stringify(ids), albumId)
 }
 </script>
 <style lang="scss" scoped>

@@ -60,29 +60,33 @@ const getDetail = async (query: { id: number, flag?: boolean }) => {
     if (!query.flag) {
         isShowLoading.value = true
     }
-    const r = await getSongListDetail({ id: query.id })
-    songList.data = r.playlist.tracks // 这里的音乐列表可能会比实际的少，不想在发起多次请求获取实际的列表
-    let key: keyof HeaderInfo
-    for (key in headerInfo) {
-        if (key === "trackIds") {
-            const result: TrackId[] = []
-            r.playlist.trackIds?.slice(0, songList.data.length).map((item, index) => {
-                const _ = songList.data[index]
-                if (checkMusicCopyright(_.fee, !_.noCopyrightRcmd)) {
-                    result.push(item)
-                }
-            })
-            headerInfo[key] = result
-            songListInfo.data = result
-            continue
+    try {
+        const r = await getSongListDetail({ id: query.id })
+        songList.data = r.playlist.tracks // 这里的音乐列表可能会比实际的少，不想在发起多次请求获取实际的列表
+        let key: keyof HeaderInfo
+        for (key in headerInfo) {
+            if (key === "trackIds") {
+                const result: TrackId[] = []
+                r.playlist.trackIds?.slice(0, songList.data.length).map((item, index) => {
+                    const _ = songList.data[index]
+                    if (checkMusicCopyright(_.fee, !_.noCopyrightRcmd)) {
+                        result.push(item)
+                    }
+                })
+                headerInfo[key] = result
+                songListInfo.data = result
+                continue
+            }
+            if (key === "playList") {
+                (headerInfo[key] as any) = r.playlist
+                continue
+            }
+            (headerInfo[key] as any) = r.playlist[key]
         }
-        if (key === "playList") {
-            (headerInfo[key] as any) = r.playlist
-            continue
-        }
-        (headerInfo[key] as any) = r.playlist[key]
+        isShowLoading.value = false
+    } catch (error) {
+        isShowLoading.value = false
     }
-    isShowLoading.value = false
 }
 onBeforeRouteUpdate((to, from, next) => {
     getDetail({ id: Number(to.params.id) })

@@ -2,7 +2,8 @@
     <div class="lyric-wrapper">
         <div class="wrap" v-show="!isShowLoading && pages.total">
             <Header></Header>
-            <SongListItem v-for="(item, index) in LyricList.data" :key="item.id" :index="index" :type="0" :item="item">
+            <SongListItem v-for="(item, index) in LyricList.data" :key="item.id" :index="index" :type="0" :item="item"
+                :colorful="true">
                 <template #lyric>
                     <div class="lyric-wrap d-flex ai-start mt-5" v-if="item.lyrics">
                         <div class="lyric fs-1 text-88">
@@ -94,16 +95,20 @@ const getLyrics = async () => {
     // 滚动到顶部
     scrollToTop("search-result-wrapper")
     isShowLoading.value = true
-    const r = await searchByType({ keywords, type: 1006, limit: pages.size, offset: (pages.page - 1) * pages.size })
-    const _ = r.result as unknown as SearchLyricResult
-    LyricList.data = _.songs?.map(item => {
-        item.isFold = true
-        return item
-    })
-    isShowLoading.value = false
-    pages.total = _.songCount
-    if (pages.total === 0) {
-        emits("changeTotal", pages.total)
+    try {
+        const r = await searchByType({ keywords, type: 1006, limit: pages.size, offset: (pages.page - 1) * pages.size })
+        const _ = r.result as unknown as SearchLyricResult
+        LyricList.data = _.songs?.map(item => {
+            item.isFold = true
+            return item
+        })
+        isShowLoading.value = false
+        pages.total = _.songCount
+        if (pages.total === 0) {
+            emits("changeTotal", pages.total)
+        }
+    } catch (error) {
+        isShowLoading.value = false
     }
 
 }

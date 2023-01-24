@@ -78,8 +78,8 @@ import Message from "@/components/message"
 import { Playlist_user } from '@/service/api/user/types';
 import { computed, ref } from 'vue';
 import { useRoute } from "vue-router"
-
 import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
+
 const loading = ref(false)
 const route = useRoute()
 const { isShowPlayPage, collectedSongList, useSideSongList, playSongList, createdSongList } = useMusicPlayRelation()
@@ -106,16 +106,19 @@ const isMySelf = computed(() => {
  */
 const updateSongList = async (id: number, type: number) => {
     const oldList = JSON.parse(JSON.stringify(collectedSongList.value)) as Playlist_user[]
-    if (type === 1) {
-        // 添加新的歌单数据
-        const r = await getSongListDetail({ id })
-        oldList.unshift(r.playlist as Playlist_user)
-    } else {
-        // 删除
-        const idx = oldList.findIndex(item => item.id === id)
-        oldList.splice(idx, 1)
+    try {
+        if (type === 1) {
+            // 添加新的歌单数据
+            const r = await getSongListDetail({ id })
+            oldList.unshift(r.playlist as Playlist_user)
+        } else {
+            // 删除
+            const idx = oldList.findIndex(item => item.id === id)
+            oldList.splice(idx, 1)
+        }
+        useSideSongList.updateCollectedSongList(oldList)
+    } catch (error) {
     }
-    useSideSongList.updateCollectedSongList(oldList)
 }
 
 // 歌单收藏 限制点击频次
@@ -131,16 +134,19 @@ const collectSongList = async () => {
         t: subscribed ? 2 : 1,
         id
     }
-    const r = await collectOrCancelSongList(_)
-    loading.value = false
-    if (r.code === 200) {
+    try {
+        const r = await collectOrCancelSongList(_)
+        loading.value = false
         subscribed ? Message.success("取消收藏成功") : Message.success("收藏成功")
         // getPersonSongList(0, 1, 0, 1)
         // 更新侧边栏数据
         updateSongList(id, subscribed ? 0 : 1)
         // 重新加载数据
         emits("changeState", { id: props.headerInfo.id, flag: true })
+    } catch (error) {
+        loading.value = false
     }
+
 }
 
 // 播放全部

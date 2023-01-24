@@ -15,10 +15,11 @@ import { getRecommendMv } from '@/service/api/mv';
 const router = useRouter()
 const recommendMvList = reactive<Record<string, MVItem[]>>({ data: [] })
 const getrecommendMvList = async () => {
-    const r = await getRecommendMv()
-    console.log(r, "rrrr");
-    if (r.code === 200) {
+    try {
+        const r = await getRecommendMv()
         recommendMvList.data = r.result
+    } catch (error) {
+
     }
 }
 getrecommendMvList()

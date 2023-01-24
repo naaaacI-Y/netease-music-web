@@ -82,11 +82,15 @@ const getList = async (params: SongListParams) => {
     isShowLoading.value = true
     // 滚动到顶部
     scrollToTop()
-    const r = await getSongList(params)
-    songList.data = r.playlists
-    pages.total = r.total
+    try {
+        const r = await getSongList(params)
+        songList.data = r.playlists
+        pages.total = r.total
 
-    isShowLoading.value = false
+        isShowLoading.value = false
+    } catch (error) {
+        isShowLoading.value = false
+    }
 }
 // 获取歌单头部banner信息
 const getbannerInfo = async () => {
@@ -94,8 +98,12 @@ const getbannerInfo = async () => {
         cat: !activeType.value ? "全部" : activeType.value,
         limit: 1
     }
-    const r = await getHighqualitySongList(queryInfo)
-    bannerInfo.data = r.playlists[0]
+    try {
+        const r = await getHighqualitySongList(queryInfo)
+        bannerInfo.data = r.playlists[0]
+    } catch (error) {
+
+    }
 }
 watchEffect(async () => {
     const queryInfo = {
@@ -104,10 +112,14 @@ watchEffect(async () => {
         page: pages.page,
         offset: (pages.page - 1) * pages.limit
     }
-    await getList(queryInfo)
-    await getbannerInfo()
-    // 重新构建分页，并且修改总页码 ==> 从1开始  如果当前页是1就不需要再重新构建了
-    paginationIndex.value++
+    try {
+        await getList(queryInfo)
+        await getbannerInfo()
+        // 重新构建分页，并且修改总页码 ==> 从1开始  如果当前页是1就不需要再重新构建了
+        paginationIndex.value++
+    } catch (error) {
+
+    }
 })
 const changeActiveType = (name: string) => {
     activeType.value = name

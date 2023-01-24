@@ -62,7 +62,7 @@
             </div>
             <div class="video-detail-right">
                 <div class="recommend-title mb-15 text-33" style="font-weight: bold;">相关推荐</div>
-                <div class="recommend-list">
+                <div class="recommend-list" v-show="!isShowLoading && similarMVList.data.length" style="width: 308px;">
                     <div class="recomment-item d-flex mb-10" v-for="item in similarMVList.data" :key="item.id"
                         @click="goVideoDetail(item.id)">
                         <div class="mv-img mr-8 text-white fs-1" style="color: white;">
@@ -85,6 +85,7 @@
                         </div>
                     </div>
                 </div>
+                <Loading v-show="isShowLoading" style="width: 100%"></Loading>
             </div>
         </div>
     </DefaultLayout>
@@ -97,6 +98,7 @@ import { getMvUrl, getMvDetail, getSimilarMv } from "@/service/api/mv"
 import { Mv, MvDetailRet } from '@/service/api/mv/types';
 import { formatPicUrl, formatPlayCount, formatSongTime } from '@/utils';
 import Message from "@/components/message"
+import Loading from '@/components/Loading.vue';
 import '@/assets/plyr.css';
 import { onBeforeRouteUpdate, useRouter } from "vue-router"
 import { useInitVideoPlayer } from '@/hooks/useInitVideoPlayer';
@@ -117,6 +119,8 @@ const router = useRouter()
 const mvDetailInfo = reactive({ data: {} as MvDetailRet }) // 详情
 const similarMVList = reactive({ data: [] as Mv[] }) // 相似mv
 const videoPlayerEle = ref<HTMLElement>()
+const isShowLoading = ref(false)
+
 
 // 在当前路由改变，但是该组件被复用时调用
 onBeforeRouteUpdate((to, from, next) => {
@@ -132,35 +136,46 @@ const goVideoByCategory = (id: number, name: string) => {
 }
 // mv详情
 const getDetail4Mv = async (id: number) => {
-    const r = await getMvDetail({ mvid: id })
-    mvDetailInfo.data = r.data
-    subsCount.value = r.data.subCount
-    const requests = r.data.brs.map(br => {
-        return getMvUrl({ id, r: br.br })
-    })
-    Promise.all(requests).then(results => {
-        let sources = results.map(result => {
-            return {
-                src: result.data.url.replace(/^http:/, 'https:'),
-                type: 'video/mp4',
-                size: result.data.r,
+    try {
+        const r = await getMvDetail({ mvid: id })
+        mvDetailInfo.data = r.data
+        subsCount.value = r.data.subCount
+        const requests = r.data.brs.map(br => {
+            return getMvUrl({ id, r: br.br })
+        })
+        Promise.all(requests).then(results => {
+            let sources = results.map(result => {
+                return {
+                    src: result.data.url.replace(/^http:/, 'https:'),
+                    type: 'video/mp4',
+                    size: result.data.r,
+                };
+            });
+            videoPlayer.data.source = {
+                type: 'video',
+                title: mvDetailInfo.data.name,
+                sources: sources,
+                poster: mvDetailInfo.data.cover.replace(/^http:/, 'https:'),
             };
-        });
-        videoPlayer.data.source = {
-            type: 'video',
-            title: mvDetailInfo.data.name,
-            sources: sources,
-            poster: mvDetailInfo.data.cover.replace(/^http:/, 'https:'),
-        };
-    })
-    getSimilar(id)
+        })
+        getSimilar(id)
+    } catch (error) {
+
+    }
 }
 
 
 // 相似mv
 const getSimilar = async (id: number) => {
-    const r = await getSimilarMv({ mvid: id })
-    similarMVList.data = r.mvs
+    try {
+        isShowLoading.value = true
+        const r = await getSimilarMv({ mvid: id })
+        similarMVList.data = r.mvs
+        isShowLoading.value = false
+    } catch (error) {
+        isShowLoading.value = false
+
+    }
 }
 
 // mv详情
@@ -188,9 +203,10 @@ getIsVoted(1, queryId)
     padding-bottom: 100px;
 
     .video-detail-left {
+        width: 620px;
+
         .video-wrap {
             .play-box {
-                width: 620px;
                 height: 350px;
                 border-radius: 10px;
                 background-color: #000;
@@ -234,7 +250,8 @@ getIsVoted(1, queryId)
     }
 
     .video-detail-right {
-        width: calc(100% - 650px);
+        width: 308px;
+        border: 1px solid transparent;
 
         .recomment-item {
             .mv-img {

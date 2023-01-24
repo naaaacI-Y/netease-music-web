@@ -81,13 +81,17 @@ const getSearchUserList = async () => {
     // 滚动到顶部
     scrollToTop("search-result-wrapper")
     isShowLoading.value = true
-    const r = await searchByType({ keywords: keywords.value, type: 1002, limit: pages.size, offset: (pages.page - 1) * pages.size })
-    const _ = r.result as unknown as SearchUserResult
-    pages.total = _.userprofileCount
-    userList.data = _.userprofiles
-    isShowLoading.value = false
-    if (pages.total === 0) {
-        emits("changeTotal", pages.total)
+    try {
+        const r = await searchByType({ keywords: keywords.value, type: 1002, limit: pages.size, offset: (pages.page - 1) * pages.size })
+        const _ = r.result as unknown as SearchUserResult
+        pages.total = _.userprofileCount
+        userList.data = _.userprofiles
+        isShowLoading.value = false
+        if (pages.total === 0) {
+            emits("changeTotal", pages.total)
+        }
+    } catch (error) {
+        isShowLoading.value = false
     }
 }
 getSearchUserList()

@@ -24,9 +24,13 @@ const pages = reactive({
 })
 watch(() => pages.page, async () => {
 
-    await getAllHotComment()
-    // 滚动到顶部
-    scrollToTop()
+    try {
+        await getAllHotComment()
+        // 滚动到顶部
+        scrollToTop()
+    } catch (error) {
+
+    }
 })
 const id = getQueryId() as number
 const type = Number(route.params.type) as list
@@ -42,9 +46,13 @@ const getAllHotComment = async () => {
         offset: (pages.page - 1) * pages.size
         // before:  // 如果评论大于5000的时候只需要添加，暂时不考虑，后面出问题了再说 TODO
     }
-    const r = await getHotComment(_)
-    allHotComment.data = r.hotComments
-    pages.total = r.total
+    try {
+        const r = await getHotComment(_)
+        allHotComment.data = r.hotComments
+        pages.total = r.total
+    } catch (error) {
+
+    }
 }
 getAllHotComment()
 </script>

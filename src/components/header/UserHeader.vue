@@ -12,20 +12,20 @@
                     }}
                     </div>
                     <div class="person-level d-flex jc-between ai-center">
+                        <!--个人信息 等级、性别等-->
                         <div class="left d-flex ai-center">
                             <!-- <div class="vip-level mr-6"></div> -->
                             <div class="auth-type d-flex ai-center mr-5"
                                 v-if="userInfo.data?.profile?.authStatus === 1">
                                 <div class="avatar-detail mr-4 d-flex ai-center"
-                                    v-if="userInfo.data.profile.avatarDetail">
-                                    <img :src="userInfo.data.identify?.imageUrl" alt="">
+                                    v-if="userInfo.data?.profile.avatarDetail">
+                                    <img :src="userInfo.data?.identify?.imageUrl" alt="">
                                 </div>
                                 <div class="auth-tags d-flex ai-center" style="color: #de5545;"
-                                    v-if="userInfo.data.identify">
-                                    <span> {{ userInfo.data.identify.imageDesc }}</span>
+                                    v-if="userInfo.data?.identify">
+                                    <span> {{ userInfo.data?.identify.imageDesc }}</span>
                                 </div>
                             </div>
-                            <!-- <div class="identify" v-if=""></div> -->
                             <div class="account-level fs-1 mr-6">Lv{{ isReset? 0: userInfo.data?.level }}</div>
                             <div class="sex d-flex ai-center jc-center"
                                 v-if="userInfo.data?.profile?.gender && !isReset"
@@ -37,10 +37,10 @@
                             </div>
                         </div>
                         <div class="right d-flex">
-                            <div class="edit-info d-flex ai-center fs-3" v-if="isSelf">
+                            <!-- <div class="edit-info d-flex ai-center fs-3" v-if="isSelf">
                                 <i class="iconfont icon-bianji fs-9"></i>
                                 <span class="text-33">编辑个人信息</span>
-                            </div>
+                            </div> -->
                             <div class="focus d-flex ai-center pl-6 fs-3" v-if="!isSelf" @click="focusPerson">
                                 <i class="iconfont icon-jia text-primary_red_4 fs-9 mr-4"
                                     v-if="!userInfo.data?.profile?.followed"></i>
@@ -53,6 +53,7 @@
                     </div>
                 </div>
                 <div class="account-about">
+                    <!--账号动态信息-->
                     <div class="count d-flex mb-4">
                         <div class="dynamic d-flex flex-column ai-center mr-30" @click="goDynamic">
                             <div class="fs-9 text-33">{{ isReset? 0: userInfo.data?.profile?.eventCount }}</div>
@@ -69,6 +70,8 @@
                             <div class="text-66 fs-2">粉丝</div>
                         </div>
                     </div>
+
+                    <!--地址信息相关-->
                     <div class="address fs-2">
                         <div class="area d-flex ai-center mb-4" v-if="area && !isReset">
                             <span class="text-33">所在地区：</span>
@@ -85,7 +88,7 @@
                         </div>
                         <div class="introduce">
                             <span class="text-33">个人介绍：</span>
-                            <span class="text-66">{{ userInfo?.data?.profile?.signature || "暂无介绍" }}</span>
+                            <span class="text-66">{{ userInfo.data?.profile?.signature || "暂无介绍" }}</span>
                         </div>
                     </div>
                 </div>
@@ -100,16 +103,39 @@ import { focusOrCancelPerson, getUserDetailById } from '@/service/api/user';
 import { UserDetailByIdResult } from '@/service/api/user/types';
 import { getArea } from '@/utils';
 import Message from "@/components/message"
+
 const props = withDefaults(defineProps<{
     isSelf: boolean
     uid: number
 }>(), {
     isSelf: false
 })
+const userInfo = reactive({ data: {} as UserDetailByIdResult })
 const router = useRouter()
 const isReset = ref(false) // 用户是否注销账号
 const area = ref("")
-const userInfo = reactive({ data: {} as UserDetailByIdResult })
+
+// 关注/取消关注用户 code:200 ==> TODO
+const focusPerson = async () => {
+    if (isReset.value) {
+        return Message.error("该用户已注销，无法操作~")
+    }
+    const _ = {
+        id: userInfo.data.profile.userId,
+        t: !userInfo.data.profile.followed ? 1 : 0
+    }
+    focusOrCancelPerson(_).then(async res => {
+        if (res.code === 200) {
+            await getUserDetail()
+            !_.t ? Message.success("关注成功！") : Message.success("取消关注成功！")
+        }
+    }, error => {
+        // 接口返回拦截已经弹窗提示了
+        if (error.code === -462) {
+            Message.error("请在手机端完成验证")
+        }
+    })
+}
 
 const getUserDetail = async () => {
     getUserDetailById({ uid: props.uid }).then(res => {
@@ -121,41 +147,29 @@ const getUserDetail = async () => {
             isReset.value = true
         }
     })
-
-    // if (r.code === 404) {
-    //     // 用户已注销
-    //     return isReset.value = true
-    // }
-
 }
-// 关注/取消关注用户 code:200 ==> TODO
-const focusPerson = async () => {
-    if (isReset.value) {
-        return Message.error("该用户已注销，无法操作~")
-    }
-    const _ = {
-        id: userInfo.data.profile.userId,
-        t: !userInfo.data.profile.followed ? 1 : 0
-    }
-    const r = await focusOrCancelPerson(_)
-    if (r.code === 200) {
-        await getUserDetail()
-        !_.t ? Message.success("关注成功！") : Message.success("取消关注成功！")
-    }
-}
+
+// 前往关注页
 const goFocus = () => {
     if (isReset.value) return
     // 接口没有关注总数
     router.push(`/focus?focusName=${userInfo.data.profile.nickname}&id=${props.uid}&focus=${userInfo.data.profile.follows}`)
 }
+
+// 前往粉丝页
 const goFans = () => {
     if (isReset.value) return
     router.push(`/fans?fansName=${userInfo.data.profile.nickname}&id=${props.uid}`)
 }
+
+// 前往动态
 const goDynamic = () => {
+
     if (isReset.value) return
-    router.push(`/dynamic?dynamicName=${userInfo.data.profile.nickname}&id=${props.uid}`)
+    return Message.error("暂不支持>_<")
+    // router.push(`/dynamic?dynamicName=${userInfo.data.profile.nickname}&id=${props.uid}`)
 }
+
 getUserDetail()
 </script>
 <style lang="scss" scoped>

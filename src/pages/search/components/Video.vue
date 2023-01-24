@@ -54,13 +54,17 @@ const handlePageChange = (num: number) => {
 const getSearchVideoList = async () => {
     scrollToTop("search-result-wrapper")
     isShowLoading.value = true
-    const r = await searchByType({ keywords, type: 1014, limit: pages.size, offset: (pages.page - 1) * pages.size })
-    const _ = r.result as unknown as SearchVideoResult
-    videoList.data = _.videos
-    pages.total = _.videoCount
-    isShowLoading.value = false
-    if (pages.total === 0) {
-        emits("changeTotal", pages.total)
+    try {
+        const r = await searchByType({ keywords, type: 1014, limit: pages.size, offset: (pages.page - 1) * pages.size })
+        const _ = r.result as unknown as SearchVideoResult
+        videoList.data = _.videos
+        pages.total = _.videoCount
+        isShowLoading.value = false
+        if (pages.total === 0) {
+            emits("changeTotal", pages.total)
+        }
+    } catch (error) {
+        isShowLoading.value = false
     }
 
 }

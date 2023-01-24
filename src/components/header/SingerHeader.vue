@@ -13,10 +13,10 @@
                     <i class="iconfont icon-gou- mr-3" v-show="singerInfo.followed"></i>
                     <span class="fs-3">{{ singerInfo.followed ? "已收藏" : "收藏" }}</span>
                 </div>
-                <div class="homepage d-flex ai-center jc-center">
+                <!-- <div class="homepage d-flex ai-center jc-center">
                     <i class="iconfont icon-iconfontyonghuming mr-3 fs-6"></i>
                     <span class="fs-3">个人主页</span>
-                </div>
+                </div> -->
             </div>
             <div class="info d-flex ai-center">
                 <div class="mr-15">
@@ -47,6 +47,7 @@ import { checkLogin, formatPicUrl } from '@/utils';
 import useGlobalStore from '@/store/globalStore';
 import { collectOrCancelSinger } from "@/service/api/singer"
 import Message from "@/components/message"
+
 const globalState = useGlobalStore()
 const props = defineProps<{
     singerInfo: Artist
@@ -64,10 +65,11 @@ const collecSinger = async () => {
         id: props.singerInfo.id,
         t: followed ? 0 : 1
     }
-    const r = await collectOrCancelSinger(_)
-    if (r.code === 200) {
+    try {
+        const r = await collectOrCancelSinger(_)
         followed ? Message.success("取消收藏成功") : Message.success("收藏成功")
         emits("changeCollectState")
+    } catch (error) {
     }
 }
 </script>

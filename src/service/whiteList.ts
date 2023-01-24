@@ -26,6 +26,7 @@ const whiteList = [
     "/likelist", // 用户喜欢音乐列表
     "/like",  // 喜欢歌曲
     "/comment/music", // 歌曲评论
-    "/personal_fm" // 私人fm
+    "/personal_fm", // 私人fm
+    "/user/event", // 用户动态
 ]
 export default whiteList

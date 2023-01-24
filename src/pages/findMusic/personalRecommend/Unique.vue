@@ -13,9 +13,14 @@ import { getUniquereCommendList } from "@/service/api/recommend"
 import { UniqueRecommendRet } from '@/service/api/recommend/types';
 const router = useRouter()
 const recommendList = reactive<Record<string, UniqueRecommendRet[]>>({ data: [] })
+
 const getRecommend = async () => {
-    const r = await getUniquereCommendList({ limit: 4, offset: 0 })
-    recommendList.data = r.result
+    try {
+        const r = await getUniquereCommendList({ limit: 4, offset: 0 })
+        recommendList.data = r.result
+    } catch (error) {
+
+    }
 }
 getRecommend()
 </script>

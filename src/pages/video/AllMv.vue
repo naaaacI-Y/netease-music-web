@@ -78,9 +78,13 @@ watchEffect(async () => {
     if (queryInfo.area === "全部" && queryInfo.type === "全部" && queryInfo.order === "上升最快") {
         return
     }
-    await getMvLists(queryInfo)
-    // 重新构建分页，并且修改总页码 ==> 从1开始  如果当前页是1就不需要再重新构建了
-    paginationIndex.value++
+    try {
+        await getMvLists(queryInfo)
+        // 重新构建分页，并且修改总页码 ==> 从1开始  如果当前页是1就不需要再重新构建了
+        paginationIndex.value++
+    } catch (error) {
+
+    }
 })
 
 // 初始化路径查询参数
@@ -97,11 +101,15 @@ const getMvLists = async (params: AllMvParam) => {
     if (pages.page !== 1) {
         scrollToTop()
     }
-    const r = await getAllMv(params)
-    pages.total = r.count ?? pages.total
-    allMvLists.data = r.data
-    isShowLoading.value = false
+    try {
+        const r = await getAllMv(params)
+        pages.total = r.count ?? pages.total
+        allMvLists.data = r.data
+        isShowLoading.value = false
 
+    } catch (error) {
+        isShowLoading.value = false
+    }
 }
 // 处理分页页码变化
 const handlePageChange = (num: number) => {

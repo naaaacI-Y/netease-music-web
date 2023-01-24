@@ -55,14 +55,18 @@ const focusPerson = async () => {
         id: props.item.userId,
         t: props.item.followed ? 0 : 1
     }
-    const r = await focusOrCancelPerson(_)
-    if (r.code === -462) {
-        return Message.error("请在手机端完成验证")
-    }
-    if (r.code === 200) {
-        const tip = _.t === 0 ? "取消关注成功" : "关注成功"
-        Message.success(tip)
-        isShowFocusBtn.value = _.t === 0 ? true : false
+    try {
+        const r = await focusOrCancelPerson(_)
+        if (r.code === -462) {
+            return Message.error("请在手机端完成验证")
+        }
+        if (r.code === 200) {
+            const tip = _.t === 0 ? "取消关注成功" : "关注成功"
+            Message.success(tip)
+            isShowFocusBtn.value = _.t === 0 ? true : false
+        }
+    } catch (error) {
+
     }
 }
 

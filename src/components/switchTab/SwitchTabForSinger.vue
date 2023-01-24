@@ -95,13 +95,18 @@ const similarSingerList = reactive<Record<string, Artist[]>>({ data: [] }) // �
 const singerDetail = reactive<Record<string, Introduction[]>>({ data: [] }) // 歌手详情
 const isShowLaoding = ref(false)
 
-watch(() => route.params.id, (newVal) => {
+watch(() => route.params.id, async (newVal) => {
     activeIndex.value = 0
     singerAlbumList.data = []
     singerMvList.data = []
     similarSingerList.data = []
     singerDetail.data = []
     singerId.value = Number(newVal)
+    if (!singerAlbumList.data.length) {
+        await getAlbum()
+
+    }
+
 })
 watch(() => activeIndex.value, (newVal) => {
     switch (newVal) {
@@ -130,58 +135,50 @@ watch(() => activeIndex.value, (newVal) => {
 })
 // 获取专辑  分页TODO
 const getAlbum = async () => {
-    isShowLaoding.value = true
-    const r = await getSingerAlbum({ id: singerId.value })
-    singerAlbumList.data = r.hotAlbums
-    isShowLaoding.value = false
+    try {
+        isShowLaoding.value = true
+        const r = await getSingerAlbum({ id: singerId.value })
+        singerAlbumList.data = r.hotAlbums
+        isShowLaoding.value = false
+    } catch (error) {
+        isShowLaoding.value = false
+    }
 }
 
 // mv
 const getMv = async () => {
-    isShowLaoding.value = true
-    const r = await getSingerMv({ id: singerId.value })
-    singerMvList.data = r.mvs
-    isShowLaoding.value = false
+    try {
+        isShowLaoding.value = true
+        const r = await getSingerMv({ id: singerId.value })
+        singerMvList.data = r.mvs
+        isShowLaoding.value = false
+    } catch (error) {
+        isShowLaoding.value = false
+    }
 }
 // 相似歌手
 const getSimilar = async () => {
-    isShowLaoding.value = true
-    const r = await getSimilarSinger({ id: singerId.value })
-    similarSingerList.data = r.artists
-    isShowLaoding.value = false
+    try {
+        isShowLaoding.value = true
+        const r = await getSimilarSinger({ id: singerId.value })
+        similarSingerList.data = r.artists
+        isShowLaoding.value = false
+    } catch (error) {
+        isShowLaoding.value = false
+    }
 }
 // 歌手详情
 const getSingerDetail = async () => {
-    isShowLaoding.value = true
-    const r = await getSingerDes({ id: singerId.value })
-    singerDetail.data = r.introduction
-    isShowLaoding.value = false
+    try {
+        isShowLaoding.value = true
+        const r = await getSingerDes({ id: singerId.value })
+        singerDetail.data = r.introduction
+        isShowLaoding.value = false
+    } catch (error) {
+        isShowLaoding.value = false
+    }
 }
-// watchEffect(() => {
-//     switch (activeIndex.value) {
-//         case 0:
-//             if (!singerAlbumList.data.length) {
-//                 getAlbum()
-//             }
-//             break
-//         case 1:
-//             if (!singerMvList.data.length) {
-//                 getMv()
-//             }
-//             break
-//         case 2:
-//             if (!singerDetail.data.length) {
-//                 getSingerDetail()
-//             }
-//             break
-//         case 3:
-//             if (!similarSingerList.data.length) {
-//                 getSimilar()
-//             }
-//             break
 
-//     }
-// })
 getAlbum()
 </script>
 <style lang="scss" scoped>

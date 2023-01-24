@@ -23,11 +23,15 @@ const id = getQueryId() as number
 // 获取用户动态
 const getDynamics = async () => {
     isShowLoading.value = true
-    const r = await getUserDynamic({ uid: id })
-    dynamicList.data = r.events.filter(item => {
-        return Object.keys(dynamicMap).map(item => Number(item)).includes(item.type)
-    })
-    isShowLoading.value = false
+    try {
+        const r = await getUserDynamic({ uid: id })
+        dynamicList.data = r.events.filter(item => {
+            return Object.keys(dynamicMap).map(item => Number(item)).includes(item.type)
+        })
+        isShowLoading.value = false
+    } catch (error) {
+        isShowLoading.value = false
+    }
 }
 
 getDynamics()

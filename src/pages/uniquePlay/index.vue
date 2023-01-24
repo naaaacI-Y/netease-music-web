@@ -43,14 +43,18 @@ const getList = async () => {
         limit: pages.limit,
         offset: (pages.page - 1) * pages.limit
     }
-    const r = await getUniquereCommendList(queryInfo)
-    loading.value = false
-    pages.page++
-    const _ = formatListData<UniqueRecommendRet>(r.result)
+    try {
+        const r = await getUniquereCommendList(queryInfo)
+        loading.value = false
+        pages.page++
+        const _ = formatListData<UniqueRecommendRet>(r.result)
 
-    uniqueList.data = uniqueList.data.concat(..._)
-    loaded.value = !r.more
+        uniqueList.data = uniqueList.data.concat(..._)
+        loaded.value = !r.more
 
+    } catch (error) {
+        loading.value = false
+    }
 
 }
 

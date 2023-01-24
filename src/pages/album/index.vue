@@ -38,23 +38,31 @@ provide("songListInfo", songListInfo)
 // 获取专辑详情
 const getAlbumDetailInfo = async () => {
     isShowLoading.value = true
-    const r = await getAlbumInfo({ id: queryId })
-    albumInfo.data = r.album
-    detailInfo.value = r.album.description
-    albumSongList.data = r.songs
-    songListInfo.data = r.songs.filter(item => {
-        return checkMusicCopyright(item.fee, !item.noCopyrightRcmd)
-    }).map(item => {
-        return { id: item.id }
-    })
-    isShowLoading.value = false
+    try {
+        const r = await getAlbumInfo({ id: queryId })
+        albumInfo.data = r.album
+        detailInfo.value = r.album.description
+        albumSongList.data = r.songs
+        songListInfo.data = r.songs.filter(item => {
+            return checkMusicCopyright(item.fee, !item.noCopyrightRcmd)
+        }).map(item => {
+            return { id: item.id }
+        })
+        isShowLoading.value = false
+    } catch (error) {
+        isShowLoading.value = false
+    }
 }
 // 获取专辑数量相关 收藏、分享
 const getAlbumCountInfo = async () => {
-    const r = await getAlbumDynamicInfo({ id: queryId })
-    albumCountInfo.data = r
-    // 同步外部的评论数量
-    commentCount.value = r.commentCount
+    try {
+        const r = await getAlbumDynamicInfo({ id: queryId })
+        albumCountInfo.data = r
+        // 同步外部的评论数量
+        commentCount.value = r.commentCount
+    } catch (error) {
+
+    }
 }
 getAlbumDetailInfo()
 getAlbumCountInfo()

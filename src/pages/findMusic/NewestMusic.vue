@@ -61,9 +61,13 @@ watch(filterType, () => {
 // 获取类型对应歌曲
 const getMusic = async () => {
     isShowLoading.value = true
-    const r = await getNewMusic({ type: filterType.value })
-    musicList.data = r.data
-    isShowLoading.value = false
+    try {
+        const r = await getNewMusic({ type: filterType.value })
+        musicList.data = r.data
+        isShowLoading.value = false
+    } catch (error) {
+        isShowLoading.value = false
+    }
 }
 
 // 更改类型

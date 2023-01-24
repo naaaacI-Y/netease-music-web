@@ -20,7 +20,6 @@ const emits = defineEmits<{
 let pagination = ref(null) as any
 const initPagination = () => {
     pagination.value = null
-    console.log(props.id, "idddddddd");
 
     const id = props.id ?? "pagination"
     return new Pagination({
@@ -44,8 +43,6 @@ watch(() => props.index, () => {
     }
 })
 onMounted(() => {
-    console.log(document.getElementById(props.id!));
-
     initPagination()
 })
 </script>

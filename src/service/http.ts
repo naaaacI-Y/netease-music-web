@@ -1,6 +1,7 @@
 //http.ts
-import axios, { AxiosRequestConfig } from 'axios'
+import axios, { AxiosError, AxiosRequestConfig } from 'axios'
 import whiteList from "./whiteList"
+import Message from "@/components/message"
 interface Http {
   get<T>(url: string, params?: unknown): Promise<T>
   post<T>(url: string, params?: unknown): Promise<T>
@@ -8,6 +9,25 @@ interface Http {
   download(url: string): void
 }
 
+function onError(e: AxiosError) {
+  if (e.response) {
+    // 请求已发出，服务器返回的 http 状态码不是 2xx
+    // http 状态码非2开头（没有额外定义 validateStatus）的都会进来这里，如 404, 500 等，error 的数据结构如下：error-400、error-500
+    Message.error(e.response.statusText)
+    return Promise.reject(e.response);
+  } else if (e.request) {
+    // 请求已发出，但没有收到响应，断网
+    Message.error("网络错误，请检查")
+    return Promise.reject(e.request);
+  } else {
+    // 取消请求会进入这里，可以用 axios.isCancel(error) 来判断是否是取消请求，error 的数据结构如下：cancel-error
+    // 请求运行有异常会进入这里，如故意将 headers 写错
+    console.debug('请求被取消或者发送请求时异常', e.message)
+    Message.error(e.message)
+    return Promise.reject(e);
+  }
+
+}
 
 // 设置请求头和请求路径
 const service = axios.create({
@@ -22,6 +42,7 @@ const service = axios.create({
 // axios.defaults.timeout = 10000
 // axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
 // axios.defaults.withCredentials = true
+
 service.interceptors.request.use(
   (config): AxiosRequestConfig<any> => {
     //  部分请求不需要缓存，请求url上面添加时间戳
@@ -34,19 +55,12 @@ service.interceptors.request.use(
       }
     }
     return config
-  },
-  (error) => {
-    return error
   }
 )
 // 响应拦截
 service.interceptors.response.use((res) => {
-  if (res.data.code === 111) {
-    sessionStorage.setItem('token', '')
-    // token过期操作
-  }
   return res
-})
+}, onError)
 
 
 

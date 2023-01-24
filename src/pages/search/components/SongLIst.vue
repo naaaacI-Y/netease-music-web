@@ -74,13 +74,18 @@ const getSearchSongList = async () => {
     // 滚动到顶部
     scrollToTop("search-result-wrapper")
     isShowLoading.value = true
-    const r = await searchByType({ keywords: keywords, type: 1000, limit: pages.size, offset: (pages.page - 1) * pages.size })
-    const _ = r.result as unknown as SearchSongListResult
-    songList.data = _.playlists
-    pages.total = _.playlistCount
-    isShowLoading.value = false
-    if (pages.total === 0) {
-        emits("changeTotal", pages.total)
+    try {
+        const r = await searchByType({ keywords: keywords, type: 1000, limit: pages.size, offset: (pages.page - 1) * pages.size })
+        const _ = r.result as unknown as SearchSongListResult
+        songList.data = _.playlists
+        pages.total = _.playlistCount
+        isShowLoading.value = false
+        if (pages.total === 0) {
+            emits("changeTotal", pages.total)
+        }
+    } catch (error) {
+        isShowLoading.value = false
+
     }
 }
 getSearchSongList()

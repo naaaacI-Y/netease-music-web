@@ -28,8 +28,12 @@ const day = new Date().getDate()
 
 // 获取每日推荐歌单
 const getSongListNotLogin = async () => {
-    const r = await getRecommendSongList({ limit: 9 })
-    recommendSongList.data = r.result
+    try {
+        const r = await getRecommendSongList({ limit: 9 })
+        recommendSongList.data = r.result
+    } catch (error) {
+
+    }
 }
 
 getSongListNotLogin()

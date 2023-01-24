@@ -49,17 +49,20 @@ const props = withDefaults(defineProps<{
 const playAllList = async () => {
     const songListId = props.songListItem.id
     if (player.value.playing && player.value.playlistSource.id === songListId) return
-    // 获取歌单详情
-    const r = await getSongListDetail({ id: songListId })
-    const ids = r.playlist.trackIds?.slice(0, r.playlist.tracks.length).filter((_item, index) => {
-        const _: HotSong = r.playlist.tracks[index]
-        return checkMusicCopyright(_.fee, !_.noCopyrightRcmd)
-    }).map(item => item.id)
+    try {
+        // 获取歌单详情
+        const r = await getSongListDetail({ id: songListId })
+        const ids = r.playlist.trackIds?.slice(0, r.playlist.tracks.length).filter((_item, index) => {
+            const _: HotSong = r.playlist.tracks[index]
+            return checkMusicCopyright(_.fee, !_.noCopyrightRcmd)
+        }).map(item => item.id)
 
-    if (!ids?.length) {
-        return Message.error("惊不惊喜，一首都不让你听>_<")
+        if (!ids?.length) {
+            return Message.error("惊不惊喜，一首都不让你听>_<")
+        }
+        playSongList(JSON.stringify(ids), songListId)
+    } catch (error) {
     }
-    playSongList(JSON.stringify(ids), songListId)
 }
 
 // 前往歌单页

@@ -26,9 +26,13 @@ onBeforeRouteUpdate((to, from, next) => {
     next()
 })
 const getSingeInfo = async (id: number) => {
-    const r = await getSingelSingerSong({ id })
-    hotSonList.data = r.hotSongs
-    singerInfo.data = r.artist
+    try {
+        const r = await getSingelSingerSong({ id })
+        hotSonList.data = r.hotSongs
+        singerInfo.data = r.artist
+    } catch (error) {
+
+    }
 }
 getSingeInfo(singerId.value)
 </script>

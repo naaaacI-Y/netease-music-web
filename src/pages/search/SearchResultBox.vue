@@ -161,14 +161,22 @@ const goSearchResult = (keywords?: string) => {
 
 // 搜索
 const getSuggest = async (keywords: string) => {
-    const r = await searchSuggest({ keywords })
-    searchResult.data = r.result
+    try {
+        const r = await searchSuggest({ keywords })
+        searchResult.data = r.result
+    } catch (error) {
+
+    }
 }
 
 // 获取热搜列表
 const getHotSearch = async () => {
-    const r = await getHotSearchList()
-    hotSearchList.data = r.data
+    try {
+        const r = await getHotSearchList()
+        hotSearchList.data = r.data
+    } catch (error) {
+
+    }
 }
 
 props.searchKeywords ? getSuggest(props.searchKeywords) : getHotSearch()

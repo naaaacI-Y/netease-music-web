@@ -77,12 +77,16 @@ const getList = async () => {
         limit: pages.limit,
         offset: (pages.page - 1) * pages.limit
     }
-    const r = await getCollectedSinger(queryInfo)
-    list.data = list.data.concat(...r.data)
-    loaded.value = !r.hasMore
-    total.value = r.count
-    pages.page++
-    loading.value = false
+    try {
+        const r = await getCollectedSinger(queryInfo)
+        list.data = list.data.concat(...r.data)
+        loaded.value = !r.hasMore
+        total.value = r.count
+        pages.page++
+        loading.value = false
+    } catch (error) {
+        loading.value = false
+    }
 }
 
 onMounted(() => {

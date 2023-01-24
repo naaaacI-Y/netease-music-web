@@ -18,7 +18,7 @@
                 <FilterItem :active-type="filterList[activeFilterType]" :type-list="filterList" label="筛选"
                     :is-between="false" @change-active-type="changeFilterActive">
                     <template #left-label>
-                        <div class="filter-label fs-1 mr-8 text-33">筛选：</div>
+                        <div class="filter-label fs-1 mr-4 text-33" style="width: 60px;">筛选：</div>
                     </template>
                 </FilterItem>
             </div>
@@ -92,12 +92,16 @@ const getList = async () => {
         limit: pages.limit,
         offset: (pages.page - 1) * pages.limit
     }
-    const r = await getSingerByCategory(queryInfo)
-    pages.page++
-    loading.value = false
-    const _ = formatListData<Artist>(r.artists, 6)
-    loaded.value = !r.more
-    singerList.data = singerList.data.concat(..._)
+    try {
+        const r = await getSingerByCategory(queryInfo)
+        pages.page++
+        loading.value = false
+        const _ = formatListData<Artist>(r.artists, 6)
+        loaded.value = !r.more
+        singerList.data = singerList.data.concat(..._)
+    } catch (error) {
+        loading.value = false
+    }
 }
 
 onMounted(() => {

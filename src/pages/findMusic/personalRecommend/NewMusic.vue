@@ -26,10 +26,14 @@ import { getRecommendNewMusic } from "@/service/api/recommend/index"
 import { RecommendNewMusicRet } from '@/service/api/recommend/types';
 const router = useRouter()
 const newMusicList = reactive<Record<string, RecommendNewMusicRet[]>>({ data: [] })
-const getRecommendMusic = async () => {
-    const r = await getRecommendNewMusic()
 
-    newMusicList.data = r.result
+const getRecommendMusic = async () => {
+    try {
+        const r = await getRecommendNewMusic()
+        newMusicList.data = r.result
+    } catch (error) {
+
+    }
 }
 getRecommendMusic()
 </script>

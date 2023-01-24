@@ -21,36 +21,44 @@ export const useVideoVoteAndCollect = function () {
     const likeCount = ref(0) // 点赞数量，用作缓存
     const subsCount = ref(0) // 收藏数量，用户缓存
     const isSubscribe = ref(false)  // 是否已收藏
+
     // 视频/mv是否收藏
     const getIsSubscribed = async (id: string | number) => {
-        const r = await getCollectedVideo(pages)
-        let idx: number
-        let susList: CollectedVideoResult["data"]
-        if (Number(id)) {
-            // mv
-            susList = r.data.filter(item => Number(item.vid))
-            idx = susList.findIndex(item => Number(item.vid) === id)
-        } else {
-            // 视频
-            susList = r.data.filter(item => !Number(item.vid))
-            idx = susList.findIndex(item => item.vid === id)
+        try {
+            const r = await getCollectedVideo(pages)
+            let idx: number
+            let susList: CollectedVideoResult["data"]
+            if (Number(id)) {
+                // mv
+                susList = r.data.filter(item => Number(item.vid))
+                idx = susList.findIndex(item => Number(item.vid) === id)
+            } else {
+                // 视频
+                susList = r.data.filter(item => !Number(item.vid))
+                idx = susList.findIndex(item => item.vid === id)
+            }
+            isSubscribe.value = idx !== -1
+        } catch (error) {
+
         }
-        isSubscribe.value = idx !== -1
 
     }
     // 视频是否已点赞 ==> 通过视频点赞数据接口
     // type: 1 mv 2 video
     const getIsVoted = async (type: number, id: number | string) => {
         let r: VideoCountInfo
-        if (type === 1) {
-            r = await getMvInfo({ mvid: Number(id) })
-        } else {
+        try {
+            if (type === 1) {
+                r = await getMvInfo({ mvid: Number(id) })
+            } else {
 
-            r = await getVieoCountInfo({ vid: id as string })
+                r = await getVieoCountInfo({ vid: id as string })
+            }
+            likeCount.value = r.likedCount ?? 0
+            isLiked.value = r.liked
+        } catch (error) {
+
         }
-
-        likeCount.value = r.likedCount ?? 0
-        isLiked.value = r.liked
     }
     // 点赞 视频和mv公用接口
     const voteVideo = async () => {
@@ -64,11 +72,15 @@ export const useVideoVoteAndCollect = function () {
             type: Number(qId) ? 1 : 5 as list,
             t: isLiked.value ? 0 : 1
         }
-        const r = await voteToVideo(_)
-        if (r.code === 200) {
-            // 不请求接口，取缓存的点赞数量
-            isLiked.value ? likeCount.value-- : likeCount.value++
-            isLiked.value = !isLiked.value
+        try {
+            const r = await voteToVideo(_)
+            if (r.code === 200) {
+                // 不请求接口，取缓存的点赞数量
+                isLiked.value ? likeCount.value-- : likeCount.value++
+                isLiked.value = !isLiked.value
+            }
+        } catch (error) {
+
         }
     }
     // 收藏
@@ -80,26 +92,30 @@ export const useVideoVoteAndCollect = function () {
         const qId = route.params.id
         let params: CollectOrCancelVideoParams | CollectOrCancelMvParams;
         let r: { code: number }
-        if (!Number(qId)) {
-            // 视频
-            params = {
-                id: qId as string,
-                t: isSubscribe.value ? 0 : 1
+        try {
+            if (!Number(qId)) {
+                // 视频
+                params = {
+                    id: qId as string,
+                    t: isSubscribe.value ? 0 : 1
+                }
+                r = await collectOrCancelVideo(params)
+            } else {
+                // mv
+                params = {
+                    mvid: Number(qId),
+                    t: isSubscribe.value ? 0 : 1
+                }
+                r = await collectOrCancelMv(params)
             }
-            r = await collectOrCancelVideo(params)
-        } else {
-            // mv
-            params = {
-                mvid: Number(qId),
-                t: isSubscribe.value ? 0 : 1
+            if (r.code === 200) {
+                isSubscribe.value ? subsCount.value-- : subsCount.value++
+                const message = isSubscribe.value ? '取消收藏视频成功!' : "视频收藏成功!"
+                Message.success(message)
+                isSubscribe.value = !isSubscribe.value
             }
-            r = await collectOrCancelMv(params)
-        }
-        if (r.code === 200) {
-            isSubscribe.value ? subsCount.value-- : subsCount.value++
-            const message = isSubscribe.value ? '取消收藏视频成功!' : "视频收藏成功!"
-            Message.success(message)
-            isSubscribe.value = !isSubscribe.value
+        } catch (error) {
+
         }
     }
     return {

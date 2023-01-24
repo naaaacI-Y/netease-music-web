@@ -84,13 +84,17 @@ const getList = async () => {
         const lastData = highQualityList.data[highQualityList.data.length - 1]
         info.before = lastData.dataList[lastData.dataList.length - 1].updateTime
     }
-    const r = await getHighqualitySongList(info)
-    const _ = formatListData<Playlist>(r.playlists, 3)
-    highQualityList.data = highQualityList.data.concat(..._)
-    pages.page++
+    try {
+        const r = await getHighqualitySongList(info)
+        const _ = formatListData<Playlist>(r.playlists, 3)
+        highQualityList.data = highQualityList.data.concat(..._)
+        pages.page++
 
-    loading.value = false
-    loaded.value = !r.more
+        loading.value = false
+        loaded.value = !r.more
+    } catch (error) {
+        loading.value = false
+    }
 }
 
 onMounted(() => {
@@ -98,11 +102,10 @@ onMounted(() => {
     setTimeout(() => {
         // 这里不用定时的话 传递进去的值是在获取数据结束之前的
         listenListScroll(scroller!, [getList, loaded.value, loading.value])
-    }, 1000)
+    }, 500)
 })
 onUnmounted(() => {
     const scroller = document.getElementById("scroller")
-
     removeListener(scroller!, [getList, loaded.value, loading.value])
 })
 getList()

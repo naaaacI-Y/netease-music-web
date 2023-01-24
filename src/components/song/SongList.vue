@@ -40,6 +40,7 @@ import { useRoute } from 'vue-router';
 import SongListItem from './SongListItem.vue';
 import { getMusicDetail } from '@/service/api/music';
 import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
+
 const injectSongList = inject<{ data: HotSong[] }>("songList")
 const injectSongListInfo = inject<{ data: TrackId[] }>("songListInfo")
 // 取消收藏会更改列表数据
@@ -48,6 +49,7 @@ const info = inject<{ data: TrackId[] }>("songListInfo")
 const route = useRoute()
 const rankType = Number(route.query.rankType)
 const { likedList, player, createdSongList } = useMusicPlayRelation()
+
 defineProps<{
     isShowLoading: boolean
 }>()
@@ -70,13 +72,16 @@ watch(() => likedList.value.length, async (newVal, oldVal) => {
         if (oldVal > newVal) {
             return list.data = list.data.filter(item => likedList.value.includes(item.id))
         }
-        // 构建一条新数据插入
-        if (player.value.isPersonalFM) {
-            // 需要重新获取歌曲详情
-            const r = await getMusicDetail(String(player.value.personalFMTrack.id))
-            return list.data.unshift(r.songs[0])
+        try {
+            // 构建一条新数据插入
+            if (player.value.isPersonalFM) {
+                // 需要重新获取歌曲详情
+                const r = await getMusicDetail(String(player.value.personalFMTrack.id))
+                return list.data.unshift(r.songs[0])
+            }
+            list.data.unshift(player.value.currentTrack)
+        } catch (error) {
         }
-        list.data.unshift(player.value.currentTrack)
     }
 
 })

@@ -26,9 +26,13 @@ const pages = reactive({
 const id = getQueryId() as number
 
 watch(() => pages.page, async () => {
-    await getFocuList()
-    // 滚动到顶部
-    scrollToTop()
+    try {
+        await getFocuList()
+        // 滚动到顶部
+        scrollToTop()
+    } catch (error) {
+
+    }
 })
 const handlePageChange = (num: number) => {
     pages.page = num
@@ -39,8 +43,12 @@ const getFocuList = async () => {
     const _ = {
         uid: id, limit: pages.size, offset: (pages.page - 1) * pages.size
     }
-    const r = await getFocusList(_)
-    focusList.data = r.follow
+    try {
+        const r = await getFocusList(_)
+        focusList.data = r.follow
+    } catch (error) {
+
+    }
 
 }
 getFocuList()

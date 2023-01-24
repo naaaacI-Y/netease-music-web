@@ -88,15 +88,19 @@ const getList = async () => {
         limit: pages.limit,
         offset: (pages.page - 1) * pages.limit
     }
-    const r = await getCollectedVideo(queryInfo) // 需要区分是mv还是视频
-    // 格式化数据
+    try {
+        const r = await getCollectedVideo(queryInfo) // 需要区分是mv还是视频
+        // 格式化数据
 
-    const _ = formatListData<CollectedVideoData>(addIdPropertety(r.data), 5)
-    list.data = list.data.concat(..._)
-    loaded.value = !r.hasMore
-    total.value = r.count
-    pages.page++
-    loading.value = false
+        const _ = formatListData<CollectedVideoData>(addIdPropertety(r.data), 5)
+        list.data = list.data.concat(..._)
+        loaded.value = !r.hasMore
+        total.value = r.count
+        pages.page++
+        loading.value = false
+    } catch (error) {
+        loading.value = false
+    }
 }
 onMounted(() => {
     const scroller = document.getElementById("scroller")

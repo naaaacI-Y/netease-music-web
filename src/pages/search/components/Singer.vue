@@ -65,14 +65,18 @@ const handlePageChange = (num: number) => {
 const getSearchSinger = async () => {
     // 滚动到顶部
     scrollToTop("search-result-wrapper")
-    isShowLoading.value = true
-    const r = await searchByType({ keywords: keywords, type: 100, limit: pages.size, offset: (pages.page - 1) * pages.size })
-    const _ = r.result as unknown as SearchSingerResult
-    singerList.data = _.artists
-    pages.total = _.artistCount
-    isShowLoading.value = false
-    if (pages.total === 0) {
-        emits("changeTotal", pages.total)
+    try {
+        isShowLoading.value = true
+        const r = await searchByType({ keywords: keywords, type: 100, limit: pages.size, offset: (pages.page - 1) * pages.size })
+        const _ = r.result as unknown as SearchSingerResult
+        singerList.data = _.artists
+        pages.total = _.artistCount
+        isShowLoading.value = false
+        if (pages.total === 0) {
+            emits("changeTotal", pages.total)
+        }
+    } catch (error) {
+        isShowLoading.value = false
     }
 }
 getSearchSinger()

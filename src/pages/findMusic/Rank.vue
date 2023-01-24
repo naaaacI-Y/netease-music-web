@@ -50,8 +50,12 @@ const rankankList = reactive({ data: [] as RankList[] })
 
 // 获取所有排行榜数据
 const getRank = async () => {
-    const r = await getAllRank()
-    rankankList.data = r.list
+    try {
+        const r = await getAllRank()
+        rankankList.data = r.list
+    } catch (error) {
+
+    }
 }
 
 getRank()

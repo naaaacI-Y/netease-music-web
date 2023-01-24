@@ -67,19 +67,23 @@ const handlePageChange = (num: number) => {
 const getSongs = async () => {
     scrollToTop("search-result-wrapper")
     isShowLoading.value = true
-    const r = await searchByType({ keywords: keywords.value, type: 1, limit: pages.size, offset: (pages.page - 1) * pages.size })
-    const _ = r.result as unknown as SearchSongResult
-    songs.data = _.songs
-    pages.total = _.songCount
-    isShowLoading.value = false
-    // 构造songListInfo信息
-    songListInfo.data = songs.data.filter(item => {
-        return checkMusicCopyright(item.fee, !item.noCopyrightRcmd)
-    }).map(item => {
-        return { id: item.id }
-    })
-    if (pages.total === 0) {
-        emits("changeTotal", pages.total)
+    try {
+        const r = await searchByType({ keywords: keywords.value, type: 1, limit: pages.size, offset: (pages.page - 1) * pages.size })
+        const _ = r.result as unknown as SearchSongResult
+        songs.data = _.songs
+        pages.total = _.songCount
+        isShowLoading.value = false
+        // 构造songListInfo信息
+        songListInfo.data = songs.data.filter(item => {
+            return checkMusicCopyright(item.fee, !item.noCopyrightRcmd)
+        }).map(item => {
+            return { id: item.id }
+        })
+        if (pages.total === 0) {
+            emits("changeTotal", pages.total)
+        }
+    } catch (error) {
+        isShowLoading.value = false
     }
 }
 getSongs()

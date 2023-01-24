@@ -129,31 +129,39 @@ const goVideoByCategory = (id: number, name: string) => {
 }
 // 获取视频详情
 const getDetail4Video = async (id: string) => {
-    const r = await getVideoDetail({ id })
-    videoDetailInfo.data = r.data
-    subsCount.value = r.data.subscribeCount
-    const urlInfo = await getVideoPlayUrl({ id })
-    const sources = urlInfo.urls.map(url => {
-        return {
-            src: url.url.replace(/^http:/, 'https:'),
-            type: 'video/mp4',
-            size: url.size,
-        }
-    })
-    videoPlayer.data.source = {
-        type: 'video',
-        title: videoDetailInfo.data.title,
-        sources: sources,
-        poster: videoDetailInfo.data.coverUrl.replace(/^http:/, 'https:'),
-    };
-    getSimilar(id)
+    try {
+        const r = await getVideoDetail({ id })
+        videoDetailInfo.data = r.data
+        subsCount.value = r.data.subscribeCount
+        const urlInfo = await getVideoPlayUrl({ id })
+        const sources = urlInfo.urls.map(url => {
+            return {
+                src: url.url.replace(/^http:/, 'https:'),
+                type: 'video/mp4',
+                size: url.size,
+            }
+        })
+        videoPlayer.data.source = {
+            type: 'video',
+            title: videoDetailInfo.data.title,
+            sources: sources,
+            poster: videoDetailInfo.data.coverUrl.replace(/^http:/, 'https:'),
+        };
+        getSimilar(id)
+    } catch (error) {
+
+    }
 }
 
 
 // 相似mv
 const getSimilar = async (id: string) => {
-    const r = await getRelatedVideo({ id })
-    similarVideoList.data = r.data
+    try {
+        const r = await getRelatedVideo({ id })
+        similarVideoList.data = r.data
+    } catch (error) {
+
+    }
 }
 
 // 前往视频详情页

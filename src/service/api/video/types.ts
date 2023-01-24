@@ -40,7 +40,7 @@ export interface RelatedVideoRet {
     type: number;
     title: string;
     durationms: number;
-    creator: Creator[];
+    creator: { userId: number, userName: string }[];
     playTime: number;
     coverUrl: string;
     vid: string;

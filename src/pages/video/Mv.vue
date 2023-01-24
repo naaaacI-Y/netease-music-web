@@ -59,20 +59,32 @@ const goAllMv = (area: number, type: number, sort: number) => {
 }
 // 最新mv
 const getNewMvs = async () => {
-    isShowLoading.value = true
-    const r = await getNewMv({ area: activeType.value, limit: 8 })
-    newMvList.data = r.data
-    isShowLoading.value = false
+    try {
+        isShowLoading.value = true
+        const r = await getNewMv({ area: activeType.value, limit: 8 })
+        newMvList.data = r.data
+        isShowLoading.value = false
+    } catch (error) {
+        isShowLoading.value = false
+    }
 }
 // // 热播mv
 const getHotMv = async () => {
-    const r = await getAllMv({ limit: 8 })
-    hotMvList.data = r.data
+    try {
+        const r = await getAllMv({ limit: 8 })
+        hotMvList.data = r.data
+    } catch (error) {
+
+    }
 }
 // 网易出品mv
 const getNetMv = async () => {
-    const r = await getNetProdMV({ limit: 8 })
-    netProMvList.data = r.data
+    try {
+        const r = await getNetProdMV({ limit: 8 })
+        netProMvList.data = r.data
+    } catch (error) {
+
+    }
 }
 getNewMvs()
 getNetMv()

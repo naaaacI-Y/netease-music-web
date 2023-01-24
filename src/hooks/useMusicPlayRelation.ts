@@ -34,8 +34,8 @@ export const useMusicPlayRelation = () => {
             id,
             like
         }
-        const r = await likeSong(_)
-        if (r.code === 200) {
+        try {
+            const r = await likeSong(_)
             // 更新喜欢的歌曲列表
             usePlayer.updateLikedSong(id, like)
             if (callback) {
@@ -45,6 +45,8 @@ export const useMusicPlayRelation = () => {
                 return Message.success("取消喜欢成功")
             }
             Message.success("已添加到我喜欢的音乐")
+        } catch (error) {
+
         }
     }
 

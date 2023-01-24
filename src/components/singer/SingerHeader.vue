@@ -11,10 +11,10 @@
                     <i class="iconfont icon-xinjianwenjianjia mr-3"></i>
                     <span class="fs-3 text-4e">收藏</span>
                 </div>
-                <div class="homepage d-flex ai-center jc-center">
+                <!-- <div class="homepage d-flex ai-center jc-center">
                     <i class="iconfont icon-iconfontyonghuming mr-3 fs-6"></i>
                     <span class="fs-3 text-4e">个人主页</span>
-                </div>
+                </div> -->
             </div>
             <div class="info d-flex ai-center">
                 <div>

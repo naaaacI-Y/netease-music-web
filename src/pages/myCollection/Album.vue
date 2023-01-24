@@ -86,12 +86,16 @@ const getList = async () => {
         limit: pages.limit,
         offset: (pages.page - 1) * pages.limit
     }
-    const r = await getCollectedAlbum(queryInfo)
-    loaded.value = !r.hasMore
-    list.data = list.data.concat(...r.data)
-    total.value = r.count
-    pages.page++
-    loading.value = false
+    try {
+        const r = await getCollectedAlbum(queryInfo)
+        loaded.value = !r.hasMore
+        list.data = list.data.concat(...r.data)
+        total.value = r.count
+        pages.page++
+        loading.value = false
+    } catch (error) {
+        loading.value = false
+    }
 }
 
 onMounted(() => {

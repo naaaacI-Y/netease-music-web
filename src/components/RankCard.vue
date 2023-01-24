@@ -83,24 +83,30 @@ const width = computed(() => {
 // 播放全部
 const playAll = async () => {
     if (player.value.playing && player.value.playlistSource.id === props.rankItem.id) return
-    await getRankDetail()
-    const ids = songListInfo.data.map(item => item.id)
-    if (!ids.length) {
-        return Message.error("惊不惊喜，一首都不让你听>_<")
+    try {
+        await getRankDetail()
+        const ids = songListInfo.data.map(item => item.id)
+        if (!ids.length) {
+            return Message.error("惊不惊喜，一首都不让你听>_<")
+        }
+        playSongList(JSON.stringify(ids), props.rankItem.id)
+    } catch (error) {
     }
-    playSongList(JSON.stringify(ids), props.rankItem.id)
 }
 
 // 获取排行榜详情
 const getRankDetail = async () => {
-    const r = await getSongListDetail({ id: props.rankItem.id })
-    randDetail.data = r.playlist.tracks.slice(0, 5)
+    try {
+        const r = await getSongListDetail({ id: props.rankItem.id })
+        randDetail.data = r.playlist.tracks.slice(0, 5)
 
-    songListInfo.data = r.playlist.trackIds?.slice(0, r.playlist.tracks.length)?.filter((_item, index) => {
-        const _: HotSong = r.playlist.tracks[index]
-        return checkMusicCopyright(_.fee, !_.noCopyrightRcmd)
-    }) || []
-    flagDetail.data = r.playlist.trackIds || []
+        songListInfo.data = r.playlist.trackIds?.slice(0, r.playlist.tracks.length)?.filter((_item, index) => {
+            const _: HotSong = r.playlist.tracks[index]
+            return checkMusicCopyright(_.fee, !_.noCopyrightRcmd)
+        }) || []
+        flagDetail.data = r.playlist.trackIds || []
+    } catch (error) {
+    }
 }
 
 // 排行榜跳转

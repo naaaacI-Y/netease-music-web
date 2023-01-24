@@ -64,8 +64,12 @@ const changeActiveType = (name: string) => {
 }
 // 获取视频标签
 const getVideoLabel = async () => {
-    const r = await getVideoLabelList()
-    labelList.data = r.data.filter(item => item.name !== "MV")
+    try {
+        const r = await getVideoLabelList()
+        labelList.data = r.data.filter(item => item.name !== "MV")
+    } catch (error) {
+
+    }
 }
 // 给列表数据添加id === vid
 const addIdPropertety = (videoDatas: Array<VideoByCategoryRet>) => {
@@ -80,14 +84,18 @@ const getList = async () => {
     loading.value = true
     const idx = labelList.data.findIndex(item => item.name === activeType.value)
     const id = labelList.data[idx].id
-    const r1 = await getVideoByCategory({ id })
-    const r2 = await getVideoByCategory({ id })
-    const r3 = await getVideoByCategory({ id })
+    try {
+        const r1 = await getVideoByCategory({ id })
+        const r2 = await getVideoByCategory({ id })
+        const r3 = await getVideoByCategory({ id })
 
-    const _ = formatListData<VideoByCategoryItem>(addIdPropertety([...r1.datas, ...r2.datas, ...r3.datas]))
-    allVideoLists.data = allVideoLists.data.concat(..._)
-    loading.value = false
-    loaded.value = !r3.hasmore
+        const _ = formatListData<VideoByCategoryItem>(addIdPropertety([...r1.datas, ...r2.datas, ...r3.datas]))
+        allVideoLists.data = allVideoLists.data.concat(..._)
+        loading.value = false
+        loaded.value = !r3.hasmore
+    } catch (error) {
+        loading.value = false
+    }
 }
 
 onMounted(() => {

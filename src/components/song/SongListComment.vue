@@ -3,7 +3,7 @@
         <div class="comment pt-20">
             <div class="comment-title mb-10" v-if="isShowTitle">
                 <span class="mr-4 text-00">听友评论</span>
-                <span class="fs-1 text-66">(已有{{ pages.total ?? 0 }}条评论)</span>
+                <span class="fs-1 text-66">(已有{{ pages.total }}条评论)</span>
             </div>
             <div class="comment-input" v-if="isShowInputBox">
                 <textarea id="textArea" rows="4" maxlength="140" v-model="commentContent" class="text-33" ref="textArea"
@@ -75,12 +75,13 @@ import { useRouter, useRoute } from 'vue-router';
 import useStore from "@/store"
 import { storeToRefs } from 'pinia';
 import useInsertComment from '@/hooks/useInsertComment';
+
 const { usePlayer, useGlobal } = useStore()
 const { player } = storeToRefs(usePlayer)
 const { cContent } = storeToRefs(useGlobal)
 const router = useRouter()
 const route = useRoute()
-const replyPerson = ref("")
+const replyPerson = ref("") // 回复的用户
 const isShowLoading = ref(false)
 const paginationIndex = ref(0)
 const commentId = ref<number>() // 记录评论id
@@ -125,7 +126,10 @@ watch(() => pages.page, async (newVal) => {
     if (newVal === 1 && useGlobal.isShowPlayPage) {
         scrollToTop("music-play-wrapper")
     }
-    if (newVal !== 1) {
+    // 专辑页的滚动到最新评论处
+    if (newVal !== 1 && route.path.startsWith("/album")) {
+        scrollToTop("content", 450)
+    } else {
         // 滚动到最新评论处
         scrollToTop("music-play-wrapper", 625)
     }
@@ -172,12 +176,12 @@ const inserData = (data?: SendOrReplyComment, parentContent?: string) => {
         }
         insertData = useInsertComment(_)
     } else {
-        insertData = useInsertComment(useGlobal.cContent)
+        insertData = useInsertComment(cContent.value)
         cContent.value = "" as unknown as Comment
     }
 
     allComment.data.unshift(insertData)
-
+    emits("changeCommentCount", pages.total)
 }
 
 // 激活评论框
@@ -229,14 +233,18 @@ const submitContent = async () => {
     if (commentType[0] === "reply") {
         _.commentId = commentId.value
     }
-    const r = await sendOrReplyComment(_)
-    if (r.code === 200) {
+    try {
+        const r = await sendOrReplyComment(_)
         // 插入数据
         inserData(r.comment, _.t === 1 ? undefined : parentContent.value)
         Message.success("评论成功！")
         commentContent.value = ""
         replyPerson.value = ""
+        emits("changeCommentCount", pages.total++)
+    } catch (error) {
+
     }
+
 }
 
 // 更多热评
@@ -262,39 +270,34 @@ const getAllComment = async (id: string | number) => {
         limit: pages.size,
         offset: (pages.page - 1) * pages.size
     }
-    // TODO  遇到问题了再看
-    // if (pages.total && pages.total > 5000) {
-    //     queryInfo.before = allComment.data[allComment.data.length - 1].time
-    // }
     isShowLoading.value = true
-    switch (props.sourceType) {
-        case 0:
-            r = await getComment4Song(queryInfo as SongListCommentParams)
-            break;
-        case 1:
-            r = await getComment4MV(queryInfo as SongListCommentParams)
-            break;
-        case 2:
-            r = await getComment4SongList(queryInfo as SongListCommentParams)
-            break
-        case 3:
-            r = await getComment4Album(queryInfo as SongListCommentParams)
-            break;
-        case 5:
-            r = await getComment4Video(queryInfo as VideoCommentParams)
-            break
-        // case 6:
-        //     break
-        // default:
-        //     break;
+    try {
+        switch (props.sourceType) {
+            case 0:
+                r = await getComment4Song(queryInfo as SongListCommentParams)
+                break;
+            case 1:
+                r = await getComment4MV(queryInfo as SongListCommentParams)
+                break;
+            case 2:
+                r = await getComment4SongList(queryInfo as SongListCommentParams)
+                break
+            case 3:
+                r = await getComment4Album(queryInfo as SongListCommentParams)
+                break;
+            case 5:
+                r = await getComment4Video(queryInfo as VideoCommentParams)
+                break
+        }
+        allComment.data = r.comments
+        pages.total = r.total
+        hotCommentList.data = r.hotComments?.length ? r.hotComments : hotCommentList.data
+        hasMoreHot.value = r.moreHot
+        isShowLoading.value = false
+        emits("changeCommentCount", r.total)
+    } catch (error) {
+        isShowLoading.value = false
     }
-    allComment.data = r.comments
-    pages.total = r.total
-    hotCommentList.data = r.hotComments?.length ? r.hotComments : hotCommentList.data
-    hasMoreHot.value = r.moreHot
-    isShowLoading.value = false
-    emits("changeCommentCount", r.total)
-    // hasMore.value = r.more
 }
 
 // 向外暴露获取评论的方法

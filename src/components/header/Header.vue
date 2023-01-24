@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<{
     padding-left: 7.2%;
 
     .music-title {
-        width: 42.8%;
+        width: 39%;
     }
 
     .isRecentPlayTitle {

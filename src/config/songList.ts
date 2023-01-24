@@ -59,8 +59,8 @@ export const getPersonSongList = (createdFlag: number, collectedflag: number, cr
             limit: pages.limit,
             offset: (pages.page - 1) * pages.limit
         }
-        const r = await getSongList(_)
-        if (r.code === 200) {
+        try {
+            const r = await getSongList(_)
             hasMore.value = r.more
             const self = r.playlist.filter(item => item.creator.userId === _.uid)
             const collect = r.playlist.filter(item => item.creator.userId !== _.uid)
@@ -74,6 +74,7 @@ export const getPersonSongList = (createdFlag: number, collectedflag: number, cr
                 createdFlag && sideSongList.updateCreatedSongList(createdList.data)
                 collectedflag && sideSongList.updateCollectedSongList(collectedList.data)
             }
+        } catch (error) {
         }
     }
     getList()

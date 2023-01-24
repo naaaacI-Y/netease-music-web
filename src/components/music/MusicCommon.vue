@@ -27,7 +27,7 @@
                     <div class="similar-head mb-10 fs-5 text-33">相似歌曲</div>
                     <div class="simi-item-wrap" v-if="!isShowSimiLoading">
                         <div class="similar-item item d-flex" v-for="item in similarSongList.data" :key="item.id"
-                            @click="playSingleMusic([], item.id, -1)">
+                            @click="playSimilarMusic(item.id)">
                             <div class="img">
                                 <img :src="formatPicUrl(item?.album?.picUrl, 50, 50)" alt="">
                                 <div class="play-btn">
@@ -56,7 +56,7 @@ import { reactive, ref, watch } from 'vue';
 import Message from "@/components/message"
 import { getSimilatSong } from '@/service/api/music';
 import { NewMusicRet } from '@/service/api/music/types';
-import { checkLogin, formatPicUrl } from '@/utils';
+import { checkLogin, formatPicUrl, scrollToTop } from '@/utils';
 import { useMusicPlayRelation, } from '@/hooks/useMusicPlayRelation';
 
 const { playSingleMusic, player, isShowLoginBox } = useMusicPlayRelation()
@@ -83,6 +83,13 @@ const getSimilatList = async (id: number) => {
     const r = await getSimilatSong({ id })
     similarSongList.data = r.songs
     isShowSimiLoading.value = false
+}
+
+// 播放相似音乐
+const playSimilarMusic = (id: number) => {
+    // 滚动到顶部
+    scrollToTop("music-play-wrapper")
+    playSingleMusic([], id, -1)
 }
 
 // 展示评论框

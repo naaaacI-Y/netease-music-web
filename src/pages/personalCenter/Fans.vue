@@ -24,9 +24,13 @@ const pages = reactive({
     total: 0
 })
 watch(() => pages.page, async () => {
-    await getFanList()
-    // 滚动到顶部
-    scrollToTop()
+    try {
+        await getFanList()
+        // 滚动到顶部
+        scrollToTop()
+    } catch (error) {
+
+    }
 })
 const handlePageChange = (num: number) => {
     pages.page = num
@@ -35,9 +39,13 @@ const getFanList = async () => {
     const _ = {
         uid: id, limit: pages.size, offset: (pages.page - 1) * pages.size
     }
-    const r = await getFansList(_)
-    fansList.data = r.followeds
-    pages.total = r.size
+    try {
+        const r = await getFansList(_)
+        fansList.data = r.followeds
+        pages.total = r.size
+    } catch (error) {
+
+    }
 }
 getFanList()
 </script>

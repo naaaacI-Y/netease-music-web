@@ -44,11 +44,15 @@ provide("songList", songList)
 provide("songListInfo", songListInfo)
 // 获取歌单列表
 const getSongList = async () => {
-    const r = await getDayRecommend()
-    songList.data = r.data.dailySongs
-    songListInfo.data = r.data.dailySongs.map(item => item.id)
+    try {
+        const r = await getDayRecommend()
+        songList.data = r.data.dailySongs
+        songListInfo.data = r.data.dailySongs.map(item => item.id)
 
-    showLoading.value = false
+        showLoading.value = false
+    } catch (error) {
+        showLoading.value = false
+    }
 }
 // 播放全部  需要过滤列表
 const playAll = () => {

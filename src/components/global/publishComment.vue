@@ -10,7 +10,7 @@
                     :placeholder="params?.replyName ? `回复 ${params?.replyName}：` : '发表评论'"></textarea>
             </div>
             <div class="max-length fs-3 text-97 pr-10">{{ maxLength - commentContent.length }}</div>
-            <div class="submit-comment text-white fs-4 bg-primary_red_4 d-flex ai-center jc-center mt-13"
+            <div class="submit-comment  fs-4 bg-primary_red_4 d-flex ai-center jc-center mt-13" style="color:white"
                 :class="maxLength === 140 ? 'hasNoContent' : ''" @click="submitContent">评 论</div>
         </div>
     </div>
@@ -53,26 +53,22 @@ const submitContent = async () => {
     if (props.params.t === 2) {
         _.commentId = props.params.commentId
     }
-    const r = await sendOrReplyComment(_)
-    if (r.code === 200) {
+    try {
+        const r = await sendOrReplyComment(_)
         // 关闭弹窗
         emits("close")
         setTimeout(() => {
             Message.success("评论成功")
         }, 15)
         // 更新评论信息 构造一条数据
-        const _ = JSON.parse(JSON.stringify(r.comment))
-        if (_.beRepliedUser && props.params.parentContent) {
-            _.beRepliedUser.content = props.params.parentContent
+        const dt = JSON.parse(JSON.stringify(r.comment))
+        if (dt.beRepliedUser && props.params.parentContent) {
+            dt.beRepliedUser.content = props.params.parentContent
         }
-
-        cContent.value = useInsertComment(_)
-        console.log(cContent.value, "cContent.value");
-
-    } else {
-        // 网络错误
-        Message.error("网络错误，请检查！")
+        cContent.value = useInsertComment(dt)
+    } catch (error) {
     }
+
 }
 </script>
 <style lang="scss" scoped>

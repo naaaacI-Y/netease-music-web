@@ -107,18 +107,21 @@ const getActive = () => {
 // 获取歌词 获取进度对应的某一行
 const getlyric = async () => {
     const id = props.playType === 'personal' ? player.value.personalFMTrack.id : player.value.currentTrack.id
-    const r = await getLyric({ id })
-    lyric.data = lyricParser(r)
-    // 如果没有歌词的音乐 不获取
-    if (!lyric.data.lyric.length) {
-        return
+    try {
+        const r = await getLyric({ id })
+        lyric.data = lyricParser(r)
+        // 如果没有歌词的音乐 不获取
+        if (!lyric.data.lyric.length) {
+            return
+        }
+        // 如果当前是私人fm页面 播放的不是私人fm的歌
+        if ((!player.value.isPersonalFM && route.path === "/personal-fm") || !isShowPlayPage) {
+            return
+        }
+        // 如果当前不是播放界面 不必动态加载歌词的行数
+        getActive()
+    } catch (error) {
     }
-    // 如果当前是私人fm页面 播放的不是私人fm的歌
-    if ((!player.value.isPersonalFM && route.path === "/personal-fm") || !isShowPlayPage) {
-        return
-    }
-    // 如果当前不是播放界面 不必动态加载歌词的行数
-    getActive()
 }
 
 // 前往专辑页
