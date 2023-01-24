@@ -42,8 +42,8 @@
                     </template>
                 </RecommendSongListCard>
             </div>
-            <Pagination v-if="pages.total >= pages.limit" :total="pages.total" :size="pages.limit" :page="pages.page"
-                @page-change="handlePageChange" class="mt-30 mb-30" :index="paginationIndex">
+            <Pagination id="pagination" v-if="pages.total >= pages.limit" :total="pages.total" :size="pages.limit"
+                :page="pages.page" @page-change="handlePageChange" class="mt-30 mb-30" :index="paginationIndex">
             </Pagination>
         </div>
         <Loading v-show="isShowLoading"></Loading>

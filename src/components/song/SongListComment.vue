@@ -46,8 +46,9 @@
                 </CommentItem>
             </div>
             <div class="no-data text-66 mt-20 fs-3" v-if="!allComment.data?.length && !isShowLoading">还没有评论，快来抢沙发~</div>
-            <Pagination v-if="pages.total >= pages.size && !isShowLoading" :total="pages.total" :size="pages.size"
-                :page="pages.page" @page-change="handlePageChange" class="mt-30 mb-30" :index="paginationIndex">
+            <Pagination id="pagination" v-if="pages.total >= pages.size && !isShowLoading" :total="pages.total"
+                :size="pages.size" :page="pages.page" @page-change="handlePageChange" class="mt-30 mb-30"
+                :index="paginationIndex">
             </Pagination>
             <Loading v-show="isShowLoading"></Loading>
         </div>
@@ -174,9 +175,6 @@ const inserData = (data?: SendOrReplyComment, parentContent?: string) => {
         insertData = useInsertComment(useGlobal.cContent)
         cContent.value = "" as unknown as Comment
     }
-    console.log(data, "评论的数据");
-    console.log(parentContent, "parentContent");
-    console.log(insertData, "insertData");
 
     allComment.data.unshift(insertData)
 
@@ -184,17 +182,12 @@ const inserData = (data?: SendOrReplyComment, parentContent?: string) => {
 
 // 激活评论框
 const activeComment = (info: { name: string, commentId: number, parentContent: string }) => {
-    console.log("接收到子组件的触发事件=======");
-
     commentContent.value = "回复" + info.name + '：'
     replyPerson.value = info.name + '：' // 记录被回复用户名
     // 滚动到评论框处
     scrollToTop()
     commentId.value = info.commentId
     parentContent.value = info.parentContent
-    console.log(parentContent, "parentContentparentContentparentContentparentContentparentContent");
-    console.log(replyPerson, "replyPersonreplyPersonreplyPerson");
-
     // 获取焦点
     textArea.value!.focus()
 }
@@ -233,8 +226,6 @@ const submitContent = async () => {
         type: props.sourceType,
         content: commentType[1],
     }
-    console.log(_, "SendOrReplyCommentParamSendOrReplyCommentParamSendOrReplyCommentParamSendOrReplyCommentParam");
-
     if (commentType[0] === "reply") {
         _.commentId = commentId.value
     }
@@ -242,12 +233,6 @@ const submitContent = async () => {
     if (r.code === 200) {
         // 插入数据
         inserData(r.comment, _.t === 1 ? undefined : parentContent.value)
-        // const _ = JSON.parse(JSON.stringify(r.comment))
-        // if (_.beRepliedUser && props.params.parentContent) {
-        //     _.beRepliedUser.content = props.params.parentContent
-        // }
-        // const insertData = useInsertComment(_)
-        // allComment.data.unshift(insertData)
         Message.success("评论成功！")
         commentContent.value = ""
         replyPerson.value = ""

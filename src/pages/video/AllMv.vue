@@ -22,8 +22,9 @@
             <RecommendMvCard v-for="item in allMvLists.data" :is-play-btn="true" :key="item.id"
                 :recommend-mv-item="item" class="recommend-mv-card"></RecommendMvCard>
         </div>
-        <Pagination v-if="pages.total >= pages.size && !isShowLoading" :total="pages.total" :size="pages.size"
-            :page="pages.page" @page-change="handlePageChange" class="mt-30 mb-30" :index="paginationIndex">
+        <Pagination id="pagination" v-if="pages.total >= pages.size && !isShowLoading" :total="pages.total"
+            :size="pages.size" :page="pages.page" @page-change="handlePageChange" class="mt-30 mb-30"
+            :index="paginationIndex">
         </Pagination>
         <Loading v-show="isShowLoading"></Loading>
     </div>

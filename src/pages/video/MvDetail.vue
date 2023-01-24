@@ -48,11 +48,11 @@
                                 <span>{{ isSubscribe? "已收藏": "收藏" }}</span>
                                 <span v-if="subsCount">({{ subsCount }})</span>
                             </div>
-                            <!-- <div class="share d-flex ai-center jc-center fs-3">
+                            <div class="share d-flex ai-center jc-center fs-3" @click="Message.error('暂不支持>_<')">
                                 <i class="iconfont icon-fenxiang1 fs-5"></i>
                                 分享
                                 <span>({{ mvDetailInfo.data.shareCount }})</span>
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -96,6 +96,7 @@ import LazyLoadImg from '@/components/LazyLoadImg.vue';
 import { getMvUrl, getMvDetail, getSimilarMv } from "@/service/api/mv"
 import { Mv, MvDetailRet } from '@/service/api/mv/types';
 import { formatPicUrl, formatPlayCount, formatSongTime } from '@/utils';
+import Message from "@/components/message"
 import '@/assets/plyr.css';
 import { onBeforeRouteUpdate, useRouter } from "vue-router"
 import { useInitVideoPlayer } from '@/hooks/useInitVideoPlayer';

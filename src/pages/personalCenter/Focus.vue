@@ -4,8 +4,8 @@
             <FocusAndFansItem v-for="item in focusList.data" :key="item.userId" :item="item"></FocusAndFansItem>
         </div>
         <div class="no-focus text-66 fs-1 d-flex jc-center" v-if="!focusList.data.length">还没有关注</div>
-        <Pagination v-if="pages.total >= pages.size" :total="pages.total" :size="pages.size" :page="pages.page"
-            @page-change="handlePageChange" class="mt-30 mb-30"></Pagination>
+        <Pagination id="pagination" v-if="pages.total >= pages.size" :total="pages.total" :size="pages.size"
+            :page="pages.page" @page-change="handlePageChange" class="mt-30 mb-30"></Pagination>
     </DefaultLayout>
 </template>
 

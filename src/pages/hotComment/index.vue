@@ -3,8 +3,8 @@
         <div class="hot-comment-wrapper">
             <CommentItem v-for="item in allHotComment.data" :key="item.commentId" :comment-content="item" :type="type">
             </CommentItem>
-            <Pagination v-if="pages.total >= pages.size" :total="pages.total" :size="pages.size" :page="pages.page"
-                @page-change="handlePageChange" class="mt-30 mb-30"></Pagination>
+            <Pagination id="pagination" v-if="pages.total >= pages.size" :total="pages.total" :size="pages.size"
+                :page="pages.page" @page-change="handlePageChange" class="mt-30 mb-30"></Pagination>
         </div>
     </DefaultLayout>
 </template>

@@ -15,7 +15,7 @@ const hasMore = ref(false)
 const createdList = reactive({ data: [] as Playlist_user[] })
 const collectedList = reactive({ data: [] as Playlist_user[] })
 const pages = reactive({
-    limit: 30,
+    limit: 1000, // 一次全部取回
     page: 1
 })
 
@@ -50,13 +50,6 @@ export const getPersonSongList = (createdFlag: number, collectedflag: number, cr
     if (createdResetFlag || collectedResetFlag) {
         pages.page = 1
     }
-    // const pages = {
-    //     limit: 30,
-    //     page: 1
-    // }
-    // const createdList = [] as Playlist_user[] // 创建的歌单信息
-    // const collectedList = [] as Playlist_user[] // 收藏的歌单信息
-    // let hasMore = false
 
     if (!userProfile.userFile?.profile?.userId) return;
 

@@ -19,8 +19,9 @@
                 </template>
             </CommonItem>
         </div>
-        <Pagination v-if="pages.total >= pages.size && !isShowLoading && pages.total" :total="pages.total"
-            :size="pages.size" :page="pages.page" @page-change="handlePageChange" class="mt-30 mb-30"></Pagination>
+        <Pagination id="pagination" v-if="pages.total >= pages.size && !isShowLoading && pages.total"
+            :total="pages.total" :size="pages.size" :page="pages.page" @page-change="handlePageChange"
+            class="mt-30 mb-30"></Pagination>
         <Loading v-show="isShowLoading"></Loading>
 
     </div>

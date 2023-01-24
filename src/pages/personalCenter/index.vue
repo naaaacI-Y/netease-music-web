@@ -2,6 +2,8 @@
     <DefaultLayout>
         <div class="persoanl-center-wrapper">
             <UserHeader :is-self="isSelf" :uid="id"></UserHeader>
+
+            <!--创建的歌单-->
             <div class="song-list-wrapper mb-30">
                 <div class="head d-flex jc-between mb-15 ai-center">
                     <div class="title">
@@ -10,8 +12,9 @@
                     </div>
                 </div>
                 <div class="list-content-wrapper ">
-                    <div class="content-type1 d-flex flex-wrap" v-if="songListShowType === 'card'">
-                        <RecommendSongListCard v-for="(item) in songList.data" :is-oneline="true"
+                    <div class="content-type1 d-flex flex-wrap"
+                        v-if="!createdPages.isShowLoading && showSongList.data.length">
+                        <RecommendSongListCard v-for="(item) in showSongList.data" :is-oneline="true"
                             class="recommedn-list-card" :song-list-item="item" :key="item.id">
                             <template #songlist-name>
                                 <div class="songlist-name fs-3 text-4e isOneLine">
@@ -23,9 +26,16 @@
                             </template>
                         </RecommendSongListCard>
                     </div>
+                    <Pagination v-if="createdPages.total >= createdPages.limit && !createdPages.isShowLoading"
+                        id="created-pagination" :total="createdPages.total" :size="createdPages.limit"
+                        :page="createdPages.page" @page-change="handlePageChange4Self" class="mt-30 mb-30"
+                        :index="createdPages.paginationIndex">
+                    </Pagination>
+                    <!-- <Loading v-show="createdPages.isShowLoading"></Loading> -->
                 </div>
             </div>
-            <div class="song-list-wrapper" v-if="collectSongList.data.length">
+            <!--收藏的歌单-->
+            <div class="song-list-wrapper">
                 <div class="head d-flex jc-between mb-15 ai-center">
                     <div class="title">
                         <span class="fs-5 text-33" style="font-weight: bold;">{{ isSelf? '我收藏的歌单': '收藏' }}</span>
@@ -33,8 +43,9 @@
                     </div>
                 </div>
                 <div class="list-content-wrapper ">
-                    <div class="content-type1 d-flex flex-wrap " v-if="songListShowType === 'card'">
-                        <RecommendSongListCard v-for="(item) in collectSongList.data" :is-oneline="true"
+                    <div class="content-type1 d-flex flex-wrap "
+                        v-if="!collectedPages.isShowLoading && showCollectSongList.data.length">
+                        <RecommendSongListCard v-for="(item) in showCollectSongList.data" :is-oneline="true"
                             class="recommedn-list-card" :song-list-item="item" :key="item.id">
                             <template #songlist-name>
                                 <div class="songlist-name fs-3 text-4e isOneLine">
@@ -46,6 +57,12 @@
                             </template>
                         </RecommendSongListCard>
                     </div>
+                    <Pagination v-if="collectedPages.total >= collectedPages.limit && !collectedPages.isShowLoading"
+                        id="collected-pagination" :total="collectedPages.total" :size="collectedPages.limit"
+                        :page="collectedPages.page" @page-change="handlePageChange4Collection" class="mt-30 mb-30"
+                        :index="collectedPages.paginationIndex">
+                    </Pagination>
+                    <Loading v-show="collectedPages.isShowLoading"></Loading>
                 </div>
             </div>
         </div>
@@ -60,10 +77,29 @@ import RecommendSongListCard from '@/components/RecommendSongListCard.vue';
 import { getSongList } from '@/service/api/user';
 import useStore from '@/store';
 import { checkLogin, getQueryId } from '@/utils';
+import Loading from '@/components/Loading.vue';
+import Pagination from '@/components/Pagination.vue';
 
+
+const createdPages = reactive({ // 创建的歌单
+    page: 1,
+    limit: 20,
+    total: 0,
+    isShowLoading: true,
+    paginationIndex: 0
+})
+const collectedPages = reactive({ // 收藏的歌单
+    page: 1,
+    limit: 20,
+    total: 0,
+    isShowLoading: true,
+    paginationIndex: 0
+})
 const songListShowType = ref("card") // card | table
 const songList = reactive({ data: [] as any[] }) // 创建的歌单
+const showSongList = reactive({ data: [] as any[] }) // 展示的创建的歌单
 const collectSongList = reactive({ data: [] as any[] }) // 收藏的歌单
+const showCollectSongList = reactive({ data: [] as any[] }) // 展示的收藏的歌单
 const id = getQueryId() as number
 const isSelf = computed(() => {
     if (!checkLogin()) return false
@@ -72,30 +108,33 @@ const isSelf = computed(() => {
     if (uid === id) return true
     return false
 })
-// 歌单分页 TODO
-const pages4Self = reactive({
-    page: 1,
-    size: 30,
-    total: 0
-})
-const pages4Collect = reactive({
-    page: 1,
-    size: 30,
-    total: 0
-})
+
 // 自建歌单分页触发
 const handlePageChange4Self = (num: number) => {
-    pages4Self.page = num
+    createdPages.page = num
+    showSongList.data = songList.data.slice((createdPages.page - 1) * createdPages.limit, createdPages.limit * createdPages.page)
+
 }
+
 // 收藏歌单分页触发
 const handlePageChange4Collection = (num: number) => {
-    pages4Collect.page = num
+    collectedPages.page = num
+    showCollectSongList.data = collectSongList.data.slice((collectedPages.page - 1) * collectedPages.limit, collectedPages.limit * collectedPages.page)
 }
-const getList = async () => {
-    const r = await getSongList({ uid: id })
-    songList.data = r.playlist.filter(item => item.creator.userId === id)
 
+// 获取所有歌单
+const getList = async () => {
+    createdPages.isShowLoading = true
+    collectedPages.isShowLoading = true
+    const r = await getSongList({ uid: id, limit: 1000 })
+    songList.data = r.playlist.filter(item => item.creator.userId === id)
+    showSongList.data = songList.data.slice(0, createdPages.limit)
+    createdPages.total = songList.data.length
     collectSongList.data = r.playlist.filter(item => item.creator.userId !== id)
+    showCollectSongList.data = collectSongList.data.slice(0, collectedPages.limit)
+    collectedPages.total = collectSongList.data.length
+    createdPages.isShowLoading = false
+    collectedPages.isShowLoading = false
 }
 getList()
 </script>

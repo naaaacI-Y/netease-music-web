@@ -1,6 +1,6 @@
 <template>
     <div class="pagination-wrapper d-flex ai-center jc-center">
-        <div id="pagination"></div>
+        <div :id="id" class="pagination"></div>
     </div>
 </template>
 
@@ -12,6 +12,7 @@ const props = defineProps<{
     page: number
     total: number
     index?: number
+    id?: string
 }>()
 const emits = defineEmits<{
     (e: "pageChange", num: number): void
@@ -19,9 +20,12 @@ const emits = defineEmits<{
 let pagination = ref(null) as any
 const initPagination = () => {
     pagination.value = null
+    console.log(props.id, "idddddddd");
+
+    const id = props.id ?? "pagination"
     return new Pagination({
         //实例化组件
-        wrap: document.getElementById('pagination'), //容器
+        wrap: document.getElementById(id), //容器
         page: props.page, // 当前页,默认初始为1
         size: props.size, //页面条数
         total: props.total,
@@ -40,12 +44,14 @@ watch(() => props.index, () => {
     }
 })
 onMounted(() => {
+    console.log(document.getElementById(props.id!));
+
     initPagination()
 })
 </script>
 <style lang="scss">
 .pagination-wrapper {
-    #pagination {
+    .pagination {
         [class$=_pager] {
             user-select: none;
             list-style: none;
