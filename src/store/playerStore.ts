@@ -77,8 +77,7 @@ const usePlayerStore = defineStore("player", {
                 // 恢复当前播放歌曲
                 this.replaceCurrentTrack(this.player.currentTrack.id, false).then(() => {
                     const i = Number(localStorage.getItem('playerCurrentTrackTime'))
-                    const time = i ?? 0
-                    this.player.howler?.seek(time);
+                    this.player.howler?.seek(i ?? 0);
                 }); // update audio source and init howler
                 // this._initMediaSession();
                 // this.setIntervals();
@@ -101,8 +100,13 @@ const usePlayerStore = defineStore("player", {
         },
         loadSelfFromLocalStorage() {
             const player = localStorage.getItem('player')
+            const playCurrentTime = localStorage.getItem("playCurrentTime") ?? 0
             if (!player) return;
             for (const [key, value] of Object.entries(JSON.parse(player))) {
+                if (key === "progress" && value !== playCurrentTime) {
+                    (this.$state.player as any)[key] = playCurrentTime;
+                    continue
+                }
                 (this.$state.player as any)[key] = value;
             }
         },
@@ -115,7 +119,6 @@ const usePlayerStore = defineStore("player", {
             Object.defineProperty(player, 'howler', {
                 enumerable: false,
             });
-            localStorage.setItem('player', JSON.stringify(player));
 
         },
         /**
@@ -133,10 +136,6 @@ const usePlayerStore = defineStore("player", {
                         this.player.progress = seekTime;
                     }
                 }
-                // this.player.progress = seekTime;
-                this.saveSelfToLocalStorage()
-                // player.value._progress = seekTime
-                localStorage.setItem('playerCurrentTrackTime', String(this.player.progress));
             }, 1000)
 
         },
@@ -159,6 +158,7 @@ const usePlayerStore = defineStore("player", {
             Howler.volume(volume);
             this.saveSelfToLocalStorage()
         },
+
         /**
          * 设置播放进度
          * @param value
@@ -241,9 +241,6 @@ const usePlayerStore = defineStore("player", {
          * @param completed 是否完成
          */
         async _scrobble(track: Song, time: number, completed = false) {
-            console.debug(
-                `[debug][Player.js] scrobble track 👉 ${track.name} by ${track.ar[0].name} 👉 time:${time} completed: ${completed}`
-            );
             const trackDuration = ~~(track.dt / 1000);
             time = completed ? trackDuration : ~~time;
             scrobble({
@@ -418,7 +415,6 @@ const usePlayerStore = defineStore("player", {
             if (trackID === undefined) return false;
             this.player.current = index;
             this.replaceCurrentTrack(trackID, true, 'playPrevTrack');
-            // this.saveSelfToLocalStorage()
             return true;
         },
 
@@ -435,7 +431,6 @@ const usePlayerStore = defineStore("player", {
             }
             this.player.current = index!;
             this.replaceCurrentTrack(trackID);
-            // this.saveSelfToLocalStorage()
             return true;
         },
 
@@ -641,7 +636,6 @@ const usePlayerStore = defineStore("player", {
         playTrackOnListByID(id: number, listName = 'default') {
             if (listName === 'default') {
                 this.player.current = this.player.list.findIndex(t => t === id);
-                // this.saveSelfToLocalStorage()
             }
             this.replaceCurrentTrack(id);
         },
@@ -662,7 +656,6 @@ const usePlayerStore = defineStore("player", {
                     this.playNextTrack();
                 }
             }
-            // this.saveSelfToLocalStorage()
         },
 
         /**
@@ -697,7 +690,6 @@ const usePlayerStore = defineStore("player", {
             } else {
                 this.playOrPause();
             }
-            // this.saveSelfToLocalStorage()
         },
 
         /**
@@ -709,7 +701,6 @@ const usePlayerStore = defineStore("player", {
             if (await this.playNextFMTrack()) {
                 fmTrash({ id });
             }
-            // this.saveSelfToLocalStorage()
         },
 
         /**

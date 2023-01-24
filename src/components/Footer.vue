@@ -129,7 +129,12 @@ const isShowMask = computed(() => {
     return isShowPlayPage.value
 })
 
-
+watch(() => player.value.progress, (newVal, oldVal) => {
+    if (newVal - oldVal > 2 || oldVal - newVal > 2) {
+        player.value.howler.seek(newVal)
+    }
+    localStorage.setItem("playerCurrentTrackTime", String(newVal))
+})
 /**
  * 进度时间格式化
  * @param time
