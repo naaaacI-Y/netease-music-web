@@ -2,41 +2,17 @@
     <div class="nav-wrapper d-flex ai-center" :class='{ "active": isChangeBgc }'>
         <div class="right d-flex ai-center jc-end" :class='{ "hasLeft": isHasLeft }'>
             <div class="find d-flex" v-if="isActive('/findMusic')">
-                <div :class="{ 'active': route.path === firstPagePath[0] }" @click="activeIndex = 0">
-                    个性推荐
-                </div>
-                <div :class="{ 'active': route.path === firstPagePath[1] }" @click="activeIndex = 1">
-                    歌单
-                </div>
-                <div :class="{ 'active': route.path === firstPagePath[2] }" @click="activeIndex = 2">
-                    主播电台
-                </div>
-                <div :class="{ 'active': route.path === firstPagePath[3] }" @click="activeIndex = 3">
-                    排行榜
-                </div>
-                <div :class="{ 'active': route.path === firstPagePath[4] }" @click="activeIndex = 4">
-                    歌手
-                </div>
-                <div :class="{ 'active': route.path === firstPagePath[5] }" @click="activeIndex = 5">
-                    最新音乐
-                </div>
+                <div :class="{ 'active': acIdx === 0 }" @click="goInside(0)">个性推荐</div>
+                <div :class="{ 'active': acIdx === 1 }" @click="goInside(1)">歌单</div>
+                <div :class="{ 'active': acIdx === 2 }" @click="goInside(2)">主播电台</div>
+                <div :class="{ 'active': acIdx === 3 }" @click="goInside(3)">排行榜</div>
+                <div :class="{ 'active': acIdx === 4 }" @click="goInside(4)">歌手</div>
+                <div :class="{ 'active': acIdx === 5 }" @click="goInside(5)">最新音乐</div>
             </div>
             <div class="collection d-flex" v-if="isActive('/my-collection')">
-                <div :class="{
-                    'active': route.path === firstPagePath[6]
-                }" @click="activeIndex = 6">
-                    专辑
-                </div>
-                <div :class="{
-                    'active': route.path === firstPagePath[7]
-                }" @click="activeIndex = 7">
-                    歌手
-                </div>
-                <div :class="{
-                    'active': route.path === firstPagePath[8]
-                }" @click="activeIndex = 8">
-                    视频
-                </div>
+                <div :class="{ 'active': acIdx === 6 }" @click="goInside(6)">专辑</div>
+                <div :class="{ 'active': acIdx === 7 }" @click="goInside(7)">歌手</div>
+                <div :class="{ 'active': acIdx === 8 }" @click="goInside(8)">视频</div>
             </div>
             <div class="personalCenter pl-30 text-33" v-if="isActive('/dynamic')">{{ dynamicName }}动态</div>
             <div class="personalCenter pl-30 text-33" v-if="isActive('/focus')">{{ focusName }}的关注</div>
@@ -47,9 +23,7 @@
             <div class="all-video pl-30 fs-4 text-33" v-if="isActive('/video/all-mv')">全部MV</div>
             <div class="video d-flex pl-30 fs-4" v-if="isActive('/video/video-inside', '/video/mv')">
                 <div class="video-inside mr-20" :class="{ isVideo: route.path === '/video/video-inside' }"
-                    @click="goInside('/video/video-inside')">
-                    视频
-                </div>
+                    @click="goInside('/video/video-inside')">视频</div>
                 <div class="video-mv" :class="{ isVideo: route.path === '/video/mv' }" @click="goInside('/video/mv')">
                     MV
                 </div>
@@ -113,24 +87,23 @@ import { storeToRefs } from 'pinia';
 import useThemeStore from '@/store/theme';
 import { changeTheme } from '@/config/theme';
 import { firstPagePath, paths } from '@/utils/const';
+
 const props = withDefaults(defineProps<{
     isChangeBgc: boolean
 }>(), {
     isChangeBgc: false
 })
 const emits = defineEmits<{
-    // (e: "inputOnFocus", value: string): void
-    // (e: "inputOnBlur", value: string): void
     (e: "handleKeyWordsChange", keywords: string): void
 }>()
+
 const route = useRoute()
 const router = useRouter()
 const { dynamicName, focusName, fansName } = route.query  // 动态 关注  粉丝
-const activeIndex = ref(0)
-const collectionIndex = ref('1')
 const searchKeyWords = ref("") // 搜索关键字
 const isShowSetTheme = ref(false) // 是否显示主题设置弹窗
 const { theme } = storeToRefs(useThemeStore())
+
 const isHasLeft = computed(() => { // 头部flex横向布局相关
     if (route.path.startsWith("/video-detail") || route.path.startsWith("/mv-detail")) return false
     return paths.some(item => route.path.startsWith(item))
@@ -138,77 +111,11 @@ const isHasLeft = computed(() => { // 头部flex横向布局相关
 watch(() => searchKeyWords.value, () => {
     debounceTextChange()
 })
-// watch(() => route.path, (newVal) => {
-//     activeIndex.value = firstPagePath.findIndex(item => item === newVal)
-// })
-watch(() => activeIndex.value, () => {
-    if (!route.path.startsWith('/find') && !route.path.startsWith('/my-collection')) return;
-    switch (activeIndex.value) {
-        case 0:
-            router.push('/findMusic/personal-recommend')
-            break;
-        case 1:
-            router.push('/findMusic/song-menu')
-            // findMusic/songList
-            break;
-        case 2:
-            router.push('/findMusic/host-radio')
-            break;
-        case 3:
-            router.push('/findMusic/rank')
-            break;
-        case 4:
-            router.push('/findMusic/singer')
-            break;
-        case 5:
-            router.push('/findMusic/newest-music')
-            break;
-        case 6:
-            router.push('/my-collection/1')
-            break;
-        case 7:
-            router.push('/my-collection/2')
-            break;
-        case 8:
-            router.push('/my-collection/3')
-            break;
-        default:
-            break;
-    }
+
+const acIdx = computed(() => {
+    return firstPagePath.findIndex(item => item === route.path)
 })
-watch(() => route.path, (newVal: string) => {
-    switch (newVal) {
-        case "/findMusic/personal-recommend":
-            activeIndex.value = 0
-            break;
-        case "/findMusic/song-menu":
-            activeIndex.value = 1
-            break;
-        case "/findMusic/host-radio":
-            activeIndex.value = 2
-            break;
-        case "/findMusic/rank":
-            activeIndex.value = 3
-            break;
-        case "/findMusic/singer":
-            activeIndex.value = 4
-            break;
-        case "/findMusic/newest-music":
-            activeIndex.value = 5
-            break;
-        case "/my-collection/1":
-            activeIndex.value = 6
-            break;
-        case "/my-collection/2":
-            activeIndex.value = 7
-            break;
-        case "/my-collection/3":
-            activeIndex.value = 8
-            break;
-        default:
-            break;
-    }
-})
+
 // 输入框值改变 触发搜索
 const handleKeyWordsChange = () => {
     emits("handleKeyWordsChange", searchKeyWords.value)
@@ -222,13 +129,7 @@ const setTheme = (theme: string) => {
     isShowSetTheme.value = false
 }
 const debounceTextChange = debounce(handleKeyWordsChange, 200)
-// const searchBoxFocus = (e: Event) => {
-//     console.log("searchBoxFocus value", (e.target as HTMLInputElement).value);
-//     emits("inputOnFocus", (e.target as HTMLInputElement).value)
-// }
-// const searchBoxBlur = (e: Event) => {
-//     emits("inputOnBlur", (e.target as HTMLInputElement).value)
-// }
+
 const isActive = (path1: string, path2?: string) => {
     if (props.isChangeBgc) return false
     if (path2) {
@@ -237,11 +138,18 @@ const isActive = (path1: string, path2?: string) => {
     return route.path.startsWith(path1)
 
 }
-const goInside = (path: string) => {
-    if (route.path !== path) {
+
+
+const goInside = (path: string | number) => {
+    if (typeof path === "number" && route.path !== firstPagePath[path]) {
+        return router.push(firstPagePath[path])
+    }
+    if (typeof path === "string" && route.path !== path) {
         router.push(path)
     }
 }
+
+
 </script>
 <style lang="scss" scoped>
 .nav-wrapper {
