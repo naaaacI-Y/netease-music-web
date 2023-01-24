@@ -6,17 +6,8 @@
                 <div class="avatar">
                     <img :src="userFile?.profile?.avatarUrl" alt="">
                 </div>
-                <div class="toLogin">
-                    <span class="fs-3 mr-2">{{ userFile?.profile?.nickname }}</span>
-                    <i class="iconfont icon-xiangyou fs-1" style="color:#8e8e8e"></i>
-                </div>
-            </div>
-            <div class="isNotLoginHeader" v-if="!userFile?.profile?.userId">
-                <div class="avatar" @click="goPersonalCenter">
-                    <img src="@/assets/images/defaultAvatar.png" alt="">
-                </div>
                 <div class="toLogin" id="toLogin" @click.stop="showInfoBox">
-                    <span class="fs-3 mr-2">未登录</span>
+                    <span class="fs-3 mr-2 user-name">{{ userFile?.profile?.nickname }}</span>
                     <i class="iconfont icon-xiangyou fs-1" style="color:#8e8e8e"></i>
                 </div>
                 <div class="info-box d-flex flex-column ai-center jc-center" v-show="isShowInfoBox" id="info-box"
@@ -39,6 +30,15 @@
                         </div>
                     </div>
                     <div class="log-out text-33 fs-2" @click="logout">退出登录</div>
+                </div>
+            </div>
+            <div class="isNotLoginHeader" v-if="!userFile?.profile?.userId" @click="goPersonalCenter">
+                <div class="avatar">
+                    <img src="@/assets/images/defaultAvatar.png" alt="">
+                </div>
+                <div class="toLogin">
+                    <span class="fs-3 mr-2">未登录</span>
+                    <i class="iconfont icon-xiangyou fs-1" style="color:#8e8e8e"></i>
                 </div>
             </div>
         </div>
@@ -99,7 +99,7 @@
                     <div class="list-item fs-2 text-41 pl-18 d-flex ai-center" v-for="item in createdSongList"
                         @click="goSongList(item.id)" :class="{ isActiveSongList: activeId === item.id }">
                         <i class="iconfont icon-gedan fs-5"></i>
-                        <span class="fs-2 ml-3">{{ item.name }}</span>
+                        <span class="fs-2 ml-3 list-name">{{ item.name }}</span>
                     </div>
                 </div>
                 <!--留给未登录的 暂时不做处理-->
@@ -113,7 +113,7 @@
             </div>
 
             <!--收藏的歌单-->
-            <div class="collected-song-list" v-if="userFile?.profile?.userId">
+            <div class="collected-song-list" v-if="userFile?.profile?.userId && collectedSongList.length">
                 <div class="title pl-3" @click="isShowCollected = !isShowCollected">
                     <i class="iconfont icon-xiangyou fs-1" v-show="!isShowCollected"></i>
                     <i class="iconfont icon-xiangxia fs-1" v-show="isShowCollected"></i>
@@ -123,7 +123,7 @@
                     <div class="list-item fs-2 text-41 pl-18 d-flex ai-center" v-for="item in collectedSongList"
                         @click="goSongList(item.id)" :class="{ isActiveSongList: activeId === item.id }">
                         <i class="iconfont icon-gedan fs-5"></i>
-                        <span class="fs-2 ml-3">{{ item.name }}</span>
+                        <span class="fs-2 ml-3 list-name">{{ item.name }}</span>
                     </div>
                 </div>
             </div>
@@ -201,17 +201,13 @@ const goFans = () => {
 
 // 退出登录
 const logout = async () => {
-    const r = await logOut()
-    // 如果当前不是在首页
-    if (route.path !== "/findMusic/personal-recommend") {
-        // 清空数据
-        userProfile.clearUserInfo()
-        Cookies.remove("__csrf")
-        // 回到首页
-        router.replace("/findMusic/personal-recommend")
-        //
-    }
+    await logOut()
+    userProfile.clearUserInfo()
+    useSideSongList.updateCreatedSongList([])
+    useSideSongList.updateCollectedSongList([])
+    useGlobal.updateLoginStatus(-1)
 }
+
 // 跳转
 const go = (path: string): void => {
     if (route.path !== path) {
@@ -233,8 +229,6 @@ const goSongList = (id: number) => {
 // 检查点击区域， 用于隐藏点击的个人信息弹窗
 const checkClickArea = (e: Event) => {
     const id = (e.target as any).id
-    console.log(id, "iddddd");
-    console.log(isShowInfoBox.value, "isShowInfoBox.valueisShowInfoBox.valueisShowInfoBox.value");
     if (id !== "info-box" && isShowInfoBox.value) {
         isShowInfoBox.value = false
     }
@@ -328,6 +322,15 @@ onUnmounted(() => {
                 box-shadow: -4px 0 6px -4px var(--theme-cc), 4px 4px 6px -4px var(--theme-cc), 4px -4px 6px -4px var(--theme-cc);
             }
         }
+
+        .isLoginHeader {
+            .user-name {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 105px;
+            }
+        }
     }
 
     .all-navigator {
@@ -395,7 +398,13 @@ onUnmounted(() => {
             height: 35px;
             width: 100%;
             line-height: 35px;
-            @include no-wrap(192px);
+
+            .list-name {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                width: 100%;
+            }
 
             // display: flex;
             &:hover {

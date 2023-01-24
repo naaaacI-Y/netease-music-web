@@ -1,24 +1,25 @@
 <template>
     <Nav :isChangeBgc='isShowPlayPage' @handle-key-words-change="handleKeyWordsChange">
     </Nav>
-    <div class="main-content" :class="[!isNotVideo ? 'isAuto' : '', !isNotVideo ? 'isVideoPlay' : '']"
-        v-if="!isShowReset">
+    <div class="main-content" :class="[!isNotVideo ? 'isAuto' : '', !isNotVideo ? 'isVideoPlay' : '']">
         <side-bar v-show="isNotVideo"></side-bar>
-        <div class="content bg-white" :class="{ isAuto: isNotVideo && isNotSearch }" id="content">
-            <!-- <slot></slot>
+        <div class="content bg-white" :class="{ isAuto: isNotVideo && isNotSearch }" id="content" v-if="!isShowReset">
+            <slot></slot>
             <SearchResultBox :search-keywords="searchKeyWords" v-if="isShowSearchBox" @hideSearchBox="hideSearchBox">
-            </SearchResultBox> -->
+            </SearchResultBox>
+        </div>
+        <div class="content" v-if="isShowReset">
         </div>
     </div>
-    <!-- <Footer v-show="isNotVideo" @showPlayPage="showPlayPage" :is-show-play="isShowPlayPage">
+    <Footer v-show="isNotVideo" @showPlayPage="showPlayPage" :is-show-play="isShowPlayPage">
     </Footer>
-    <transition>
+    <transition name="fade">
         <MusicCommon v-if="isShowPlayPage" :music-id="player.currentTrack.id" style="" class="music-play"
             play-type="songList">
         </MusicCommon>
     </transition>
-    <Login v-if="isShowLoginBox"></Login> -->
-    <div class="reset d-flex ai-center jc-center" v-if="!isShowReset">
+    <Login v-if="isShowLoginBox"></Login>
+    <div class="reset d-flex ai-center jc-center" v-if="isShowReset">
         正在为您生成个性化推荐
     </div>
 </template>
@@ -30,20 +31,24 @@ import SearchResultBox from '@/pages/search/SearchResultBox.vue';
 import Footer from '@/components/Footer.vue'
 import SideBar from '@/components/SideBar.vue'
 import Nav from "@/components/Nav.vue"
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import useStore from '@/store';
-import initUser from '@/config/user';
+import initUser, { clearCookieInfo } from '@/config/user';
+import { getPersonSongList } from '@/config/songList';
+import { passengerLogin } from '@/service/api/user';
+import { setCookieExpireTime } from '@/utils';
 
 const { useGlobal, usePlayer, userProfile } = useStore()
-const { isShowLoginBox, isShowPlayPage } = storeToRefs(useGlobal)
+const { isShowLoginBox, isShowPlayPage, loginOrLogout } = storeToRefs(useGlobal)
 const { player } = storeToRefs(usePlayer)
 const { userFile } = storeToRefs(userProfile)
 const isShowSearchBox = ref(false)
 const searchKeyWords = ref("")
 const musicId = ref<number>()
 const route = useRoute()
-const isShowReset = ref(false) // 重新加载
+const router = useRouter()
+// const isShowReset = ref(false) // 重新加载
 
 const isNotVideo = computed(() => {
     return !route.path.startsWith('/mv-detail') && !route.path.startsWith('/video-detail')
@@ -51,29 +56,38 @@ const isNotVideo = computed(() => {
 const isNotSearch = computed(() => {
     return !route.path.startsWith('/search-result-detail')
 })
-
-// 监听退出登录
-watch(() => userFile.value.profile, (newVal) => {
-    console.log("监听退出");
-    if (!newVal) {
-        isShowReset.value = true
-        initUser()
-        setTimeout(() => {
-            isShowReset.value = false
-        }, 2000)
-    }
+const isShowReset = computed(() => {
+    return !!loginOrLogout.value
 })
 
+// 监听登录/退出状态
+watch(() => loginOrLogout.value, (newVal, oldVal) => {
+    console.log("监听登录/退出")
+    if (route.path !== "/findMusic/personal-recommend" && newVal) {
+        // 回到首页
+        router.replace("/findMusic/personal-recommend")
+    }
+    newVal && setTimeout(async () => {
+        if (newVal === -1) {
+            clearCookieInfo()
+        }
+        // 页面刷新
+        console.log("页面刷新");
+        window.location.reload()
+    }, 2000)
+})
 watch(() => isShowPlayPage.value, (newVal) => {
     if (!newVal) {
         musicId.value = undefined
     }
 })
+
 // 是否显示音乐播放界面
 const showPlayPage = (id: number) => {
     useGlobal.isShowPlayPage = !useGlobal.isShowPlayPage
     musicId.value = id
 }
+
 // 隐藏搜索框
 const hideSearchBox = () => {
     isShowSearchBox.value = false
@@ -83,6 +97,7 @@ const hideSearchBox = () => {
 const handleKeyWordsChange = (value: string) => {
     searchKeyWords.value = value
 }
+
 onMounted(() => {
     document.addEventListener("click", (e: Event) => {
         const targetId = (e.target as any)?.id
@@ -121,6 +136,8 @@ onMounted(() => {
     height: 100vh;
 }
 
+
+
 .music-play {
     position: absolute;
     top: 50px;
@@ -129,6 +146,16 @@ onMounted(() => {
     overflow: scroll;
     height: calc(100vh - 110px);
     background-color: white;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .5s linear;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
 }
 
 .reset {

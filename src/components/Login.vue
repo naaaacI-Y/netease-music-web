@@ -11,16 +11,16 @@
                     <div class="tip">扫码登录更安全</div>
                 </div>
             </div>
-            <div class="scanLogin" v-if="status.isScanLogin">
+            <div class="scanLogin d-flex flex-column jc-center ai-center" v-if="status.isScanLogin">
                 <div class="title">扫码登录</div>
                 <div class="qrcodeImg" :style="{ backgroundImage: 'url(' + qrImg + ')' }" v-if="!status.isAuthing">
-                    <div class="invilidate" v-if="status.overdue">
+                    <div class="invilidate d-flex flex-column jc-center ai-center" v-if="status.overdue">
                         <div>二维码已失效</div>
                         <div class="refreshBtn" @click="getQrcodeImg">点击刷新</div>
                     </div>
                 </div>
-                <div class="authing" v-if="status.isAuthing">
-                    <div>扫描成功</div>
+                <div class="authing d-flex flex-column ai-center" v-if="status.isAuthing">
+                    <div class="mb-10">扫描成功</div>
                     <div>请在手机上确认登录</div>
                 </div>
                 <div class="des" v-if="!status.isAuthing">
@@ -28,25 +28,25 @@
                     <span>网易云音乐app</span>
                     <span>扫码登录</span>
                 </div>
-                <div class="otherWay" @click="selectOtherLoginWay" v-if="!status.isAuthing">
+                <!-- <div class="otherWay" @click="selectOtherLoginWay" v-if="!status.isAuthing">
                     选择其他登录模式 >
-                </div>
+                </div> -->
             </div>
-            <div class="accountLogin" v-if="status.isAccountLogin">
+            <div class="accountLogin d-flex flex-column jc-center ai-center" v-if="status.isAccountLogin">
                 <div class="logo">
                     <i class="iconfont icon-wangyiyunyinle1"></i>
                 </div>
-                <div class="iptBox">
-                    <div class="account">
+                <div class="iptBox d-flex flex-column jc-start ai-start">
+                    <div class="account d-flex  jc-start ai-center">
                         <div class="area">
                             <i class="iconfont icon-shouji"></i>
                             +86
                         </div>
-                        <div class="content">
+                        <div class="content d-flex jc-start ai-center">
                             <input type="number" placeholder="请输入手机号" />
                         </div>
                     </div>
-                    <div class="pwd">
+                    <div class="pwd d-flex jc-start ai-center">
                         <i class="iconfont icon-mima" style="font-size: 18px"></i>
                         <input type="password" placeholder="请输入密码" />
                         <!-- <div class="reset" style="color: #c4c4c4">重设密码</div> -->
@@ -54,7 +54,7 @@
                 </div>
                 <div class="loginBtn" @click="goLogin">登 录</div>
                 <div class="registry" @click="goRegistry">注册</div>
-                <!-- <div class="otherWay">
+                <!-- <div class="otherWay d-flex jc-between ai-center">
                     <div>
                         <i class="iconfont icon-weixinbg" style="color: #49de6c; font-size: 30px"></i>
                     </div>
@@ -68,8 +68,8 @@
                         <i class="iconfont icon-wangyi" style="color: #ed462f; font-size: 28px"></i>
                     </div>
                 </div> -->
-                <div class="protocal">
-                    <div class="checkbox" :class="status.isChecked ? 'checked' : ''"
+                <div class="protocal d-flex jc-start ai-center">
+                    <div class="checkbox d-flex jc-center ai-center" :class="status.isChecked ? 'checked' : ''"
                         @click="status.isChecked = !status.isChecked">
                         <i class="iconfont icon-gou-" style="color: white; font-size: 12px" v-if="status.isChecked"></i>
                     </div>
@@ -100,8 +100,8 @@ import Registry from './global/Registry.vue';
 import useStore from "@/store"
 import { setCookieExpireTime } from "@/utils";
 import { getUserDetailById } from "@/service/api/user";
-const { useGlobal, userProfile } = useStore()
 
+const { useGlobal, userProfile } = useStore()
 let qrImg = ref("");
 const time = ref<number>()
 const status = reactive({
@@ -114,6 +114,7 @@ const status = reactive({
     isAuthing: false,
     showModalTimer: null,
 })
+
 watch(() => status.isShowModal, (newVal) => {
     if (newVal) {
         setTimeout(() => {
@@ -121,6 +122,8 @@ watch(() => status.isShowModal, (newVal) => {
         }, 500)
     }
 })
+
+
 const getQrcodeImg = async () => {
     status.overdue = false;
     status.isAuthing = false;
@@ -131,8 +134,8 @@ const getQrcodeImg = async () => {
         const img = await getQrImg(key);
         qrImg.value = img.data.qrimg;
         time.value = Number(setInterval(async () => {
+            // 检查授权情况
             const result = await getQrcodeStatus(key);
-            // console.log(result, "登录授权情况");
             switch (result.code) {
                 case 800:
                     // 二维码不存在或已过期
@@ -153,14 +156,16 @@ const getQrcodeImg = async () => {
                     // 存储过期时间
                     setCookieExpireTime(result.cookie)
                     status.isAuthing = false;
+                    // 更改登录状态
+                    useGlobal.updateLoginStatus(1)
                     // 窗口关闭
                     closeDialog()
                 default:
                     break;
             }
-        }, 4000));
+        }, 1000));
     } catch (error) {
-        console.log(error);
+
     }
 };
 
@@ -168,18 +173,26 @@ const checkToAccountLogin = (): void => {
     status.isAccountLogin = true;
     status.isRegistry = false;
 };
+
+// 扫码过程中的实时监测
 const checkScanLogin = (): void => {
     status.isScanLogin = true;
     status.isAccountLogin = !status.isScanLogin
     getQrcodeImg()
 };
+
+// 选择其他登录方式
 const selectOtherLoginWay = (): void => {
     status.isScanLogin = false;
     status.isAccountLogin = !status.isScanLogin;
 };
+
+// 账号密码登录 暂时只支持扫码登录，网易云的账号密码登录限制
 const goLogin = () => {
     if (!status.isChecked) return status.isShowModal = true
 }
+
+// 注册
 const goRegistry = () => {
     if (status.isShowModal) {
         status.isShowModal = false
@@ -188,14 +201,17 @@ const goRegistry = () => {
     status.isAccountLogin = false
     status.isRegistry = true
 }
+
+// 关闭弹窗
 const closeDialog = () => {
     useGlobal.isShowLoginBox = false
+}
+// 获取二维码
+getQrcodeImg();
+
+onBeforeUnmount(() => {
     clearInterval(time.value)
     time.value = 0
-}
-getQrcodeImg();
-onUnmounted(() => {
-    closeDialog()
 })
 </script>
 
@@ -276,11 +292,8 @@ onUnmounted(() => {
                     content: "";
                     display: block;
                     position: absolute;
-                    // width: 5px;
-                    // height: 5px;
                     top: 0;
                     right: -6px;
-                    // background-color: red;
                     width: 0;
                     height: 0;
                     border-top: 5px solid #a3a3a3;
@@ -292,7 +305,7 @@ onUnmounted(() => {
 
     .scanLogin {
         margin-top: 28px;
-        @include flex(column, center, center);
+        // @include flex(column, center, center);
 
         .title {
             color: #333;
@@ -311,7 +324,7 @@ onUnmounted(() => {
                 background-color: rgba($color: #000, $alpha: 0.7);
                 width: 100%;
                 height: 100%;
-                @include flex(column, center, center);
+                // @include flex(column, center, center);
 
                 div:nth-child(1) {
                     color: white;
@@ -336,6 +349,10 @@ onUnmounted(() => {
             }
         }
 
+        .authing {
+            margin: 80px 0;
+        }
+
         .des {
             font-size: 14px;
             color: #555;
@@ -357,7 +374,7 @@ onUnmounted(() => {
     }
 
     .accountLogin {
-        @include flex(column, flex-start, center);
+        // @include flex(column, flex-start, center);
 
         .logo {
             margin-top: 30px;
@@ -374,13 +391,13 @@ onUnmounted(() => {
             height: 80px;
             border: 1px solid #dfddde;
             border-radius: 8px;
-            @include flex(column, flex-start, flex-start);
+            // @include flex(column, flex-start, flex-start);
 
             .account {
                 flex: 1;
                 width: 100%;
                 border-bottom: 1px solid #dfddde;
-                @include flex(row, flex-start, center);
+                // @include flex(row, flex-start, center);
 
                 .area {
                     width: 90px;
@@ -404,7 +421,7 @@ onUnmounted(() => {
                 }
 
                 .content {
-                    @include flex(row, flex-start, center);
+                    // @include flex(row, flex-start, center);
                     padding: 0 5px;
 
                     input {
@@ -433,7 +450,7 @@ onUnmounted(() => {
                     color: #999;
                 }
 
-                @include flex(row, flex-start, center);
+                // @include flex(row, flex-start, center);
 
                 input {
                     flex: 1;
@@ -479,7 +496,7 @@ onUnmounted(() => {
             width: 260px;
             padding: 0 8px;
             margin-top: 20px;
-            @include flex(row, space-between, center);
+            // @include flex(row, space-between, center);
 
             div:hover {
                 cursor: pointer;
@@ -492,24 +509,20 @@ onUnmounted(() => {
             padding: 0 8px;
             color: #999;
             font-size: 13px;
-            @include flex(row, flex-start, center);
+            // @include flex(row, flex-start, center);
 
             .checkbox {
                 width: 10px;
                 height: 10px;
                 border-radius: 2px;
                 border: 1px solid #999;
-                @include flex(row, center, center);
+                // @include flex(row, center, center);
                 margin-right: 5px;
             }
 
             .checked {
                 border: none;
                 background-color: #d33b31;
-            }
-
-            span:first-of-type {
-                // margin-left: 5px;
             }
 
             span {

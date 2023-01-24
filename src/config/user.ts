@@ -4,24 +4,33 @@ import { setCookieExpireTime } from '@/utils'
 import Cookies from 'js-cookie'
 // 初始化个人信息
 const initUser = async () => {
+    console.log("initUserInfo");
     const { userProfile } = useStore()
-    // 检查cookie是否存在
+    // 检查cookie是否存在或者是否过期
     const isExpire = checkCookie()
     if (isExpire) {
-        // 清空cookie和个人信息 重新游客登录
-        Cookies.remove("__csrf")
-        userProfile.clearUserInfo()
-        // 游客登录
-        const r = await passengerLogin()
-        // 存储过期时间
-        setCookieExpireTime(r.cookie)
+        return clearCookieInfo()
     }
     // 重新获取个人信息
     if (userProfile.userFile?.profile?.userId) {
         const r = await getUserDetailById({ uid: userProfile.userFile?.profile?.userId })
         userProfile.setUserProfile(r)
     }
+}
 
+export const clearCookieInfo = async () => {
+    console.log("清理cookie以及游客登录");
+
+    // const { userProfile, useSideSongList } = useStore()
+    // 清空侧边栏歌单列表
+    // useSideSongList.updateCreatedSongList([])
+    // useSideSongList.updateCollectedSongList([])
+    Cookies.remove("__csrf")
+    // userProfile.clearUserInfo()
+    // 游客登录
+    const r = await passengerLogin()
+    // 存储过期时间
+    setCookieExpireTime(r.cookie)
 }
 // 获取cookie 检查是否过期
 const checkCookie = () => {

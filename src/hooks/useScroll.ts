@@ -9,9 +9,6 @@ export const useScroll = () => {
 
         if (scrollTop + clientHeight + 1 >= scrollHeight) {
             // 加载更多
-            console.log("加载更多");
-            console.log(loaded, loading);
-
             if (!loaded && !loading) {
                 callback()
             }
