@@ -6,11 +6,12 @@ import { computed, ref, watch } from "vue"
 import { storeToRefs } from 'pinia';
 import { useRoute } from "vue-router";
 export const useMusicPlayRelation = () => {
-    const { usePlayer, useGlobal, useSideSongList, userProfile } = useStore()
+    const { usePlayer, useGlobal, useSideSongList, userProfile, useTheme } = useStore()
     const { player, likedList, currentTrackDuration } = storeToRefs(usePlayer)
     const { isShowPlayPage, isShowLoginBox } = storeToRefs(useGlobal)
     const { createdSongList, collectedSongList } = storeToRefs(useSideSongList)
     const { userFile } = storeToRefs(userProfile)
+    const { theme } = storeToRefs(useTheme)
     const isHaveCopyRight = ref(true) // 是否需要版权
     const isNeedVip = ref(false) // 是否需要vip
     const isNeedBuy = ref(false) // 是否需要购买
@@ -219,6 +220,7 @@ export const useMusicPlayRelation = () => {
 
     return {
         player,
+        theme,
         likedList,
         currentTrackDuration,
         isLike,

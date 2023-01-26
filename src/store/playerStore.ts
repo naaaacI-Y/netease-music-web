@@ -114,8 +114,13 @@ const usePlayerStore = defineStore("player", {
             let player = {} as any;
             for (let [key, value] of Object.entries(this.$state.player)) {
                 if (excludeSaveKeys.includes(key)) continue;
+                if (key === "volume") {
+                    console.log(value, "value");
+
+                }
                 player[key] = value;
             }
+            localStorage.setItem('player', JSON.stringify(player));
             Object.defineProperty(player, 'howler', {
                 enumerable: false,
             });
@@ -156,6 +161,8 @@ const usePlayerStore = defineStore("player", {
         setVolume(volume: number) {
             this.player.volume = volume;
             Howler.volume(volume);
+            console.log("save to locastorage");
+
             this.saveSelfToLocalStorage()
         },
 

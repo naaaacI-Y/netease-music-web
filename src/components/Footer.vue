@@ -1,3 +1,4 @@
+
 <template>
     <div class="footer-wrapper">
         <div class="progressBar">
@@ -75,11 +76,14 @@
                     <i class="iconfont icon-24gl-repeat2 text-4b mr-15 fs-7" v-show="player.repeatMode === 'on'"></i>
 
                 </div>
-                <i class="iconfont icon-24gl-playlist text-4b mr-15 fs-5" v-show="!player.isPersonalFM"></i>
-                <div class="volume" @click="mute">
-                    <i class="iconfont icon-24gl-volumeZero text-4b fs-7" v-show="player.volume !== 0"></i>
-                    <i class="iconfont icon-24gl-volumeDisable fs-7" v-show="player.volume === 0"></i>
-
+                <i class="iconfont icon-24gl-playlist text-4b fs-5" v-show="!player.isPersonalFM"></i>
+                <div class="volume">
+                    <i class="iconfont icon-24gl-volumeZero text-4b fs-7" v-show="player.volume !== 0"
+                        @click="mute"></i>
+                    <i class="iconfont icon-24gl-volumeDisable fs-7" v-show="player.volume === 0" @click="mute"></i>
+                    <div class="change-volume" :class="{ isShowShadow: theme !== 'dark' }">
+                        <input type="range" min="0" max="100" @input="volChange" :value="player.volume * 100">
+                    </div>
                 </div>
 
             </div>
@@ -96,10 +100,12 @@ import { useRoute } from 'vue-router';
 import router from '@/router';
 import Message from "@/components/message"
 import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
+
 const {
     isShowPlayPage,
     isLike,
     player,
+    usePlayer,
     currentTrackDuration,
     likeMusic,
     delete2PlayNext,
@@ -107,10 +113,11 @@ const {
     mute,
     musicPlay,
     switchMode,
-    playPrevTrack
+    playPrevTrack,
+    theme
 } = useMusicPlayRelation()
-
 const route = useRoute()
+
 withDefaults(defineProps<{
     isShowPlay?: boolean
 }>(), {
@@ -120,6 +127,10 @@ const emits = defineEmits<{
     (e: "showPlayPage", id: number): void
 }>()
 
+
+const vol = computed(() => {
+    return player.value.volume * 100
+})
 // 播放进度
 const progress = computed(() => {
     return timeCalc(player.value.progress * 1000)
@@ -128,13 +139,18 @@ const progress = computed(() => {
 const isShowMask = computed(() => {
     return isShowPlayPage.value
 })
-
 watch(() => player.value.progress, (newVal, oldVal) => {
     if (newVal - oldVal > 2 || oldVal - newVal > 2) {
         player.value.howler.seek(newVal)
     }
     localStorage.setItem("playerCurrentTrackTime", String(newVal))
 })
+
+// 改变声音
+const volChange = (e: Event) => {
+    const vol = (e.target! as HTMLInputElement).value
+    usePlayer.setVolume(Number(vol) / 100)
+}
 /**
  * 进度时间格式化
  * @param time
@@ -247,6 +263,68 @@ const goSinger = () => {
             right: 0;
             top: 50%;
             transform: translateY(-50%);
+
+            .volume {
+                position: relative;
+                width: 50px;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .change-volume {
+                    width: 30px;
+                    height: 100px;
+                    border-radius: 5px;
+                    bottom: 40px;
+                    right: 15px;
+                    background-color: var(--theme-36);
+                    position: absolute;
+                    display: none;
+
+                    [type="range"] {
+                        -webkit-appearance: none;
+                        appearance: none;
+                        margin: 0;
+                        outline: 0;
+                        background-color: transparent;
+                        width: 80px;
+                        transform: rotate(270deg) translate(-40px, -25px)
+                    }
+
+                    [type="range"]::-webkit-slider-runnable-track {
+                        height: 4px;
+                        background: var(--theme-e5);
+                    }
+
+                    [type="range" i]::-webkit-slider-container {
+                        height: 20px;
+                        overflow: hidden;
+                    }
+
+                    [type="range"]::-webkit-slider-thumb {
+                        -webkit-appearance: none;
+                        appearance: none;
+                        width: 10px;
+                        height: 10px;
+                        border-radius: 50%;
+                        background-color: #f44336;
+                        border: 1px solid transparent;
+                        margin-top: -3px;
+                        border-image: linear-gradient(#f44336, #f44336) 0 fill / 3 10 3 0 / 0px 0px 0 2000px;
+                    }
+                }
+
+                .isShowShadow {
+                    box-shadow: 0px -5px 5px -5px #ccc, -5px 0 5px -5px #ccc, 5px 5px 5px -5px #ccc;
+                }
+
+                &:hover {
+                    .change-volume {
+                        display: block;
+                    }
+                }
+            }
         }
     }
 }
