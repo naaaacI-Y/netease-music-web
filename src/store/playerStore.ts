@@ -175,23 +175,26 @@ const usePlayerStore = defineStore("player", {
          * @returns [trackID, index] 下一首的id和索引
          */
         getNextTrack(): [number, number] {
-            const next = this.player.reversed ? this.player.current - 1 : this.player.current + 1;
+            const next = this.player.current + 1;
             // if (this.player.playNextList.length > 0) {
             //     let trackID = this.player.playNextList.shift();
             //     return [trackID || 0, this.player.current];
             // }
             // 循环模式开启，则重新播放当前模式下的相对的下一首
-            //
             if (this.player.repeatMode === 'on') {
-                if (this.player.reversed && this.player.current === 0) {
-                    // 倒序模式，当前歌曲是第一首，则重新播放列表最后一首
-                    return [this.player.list[this.player.list.length - 1], this.player.list.length - 1];
-                } else if (this.player.list.length === this.player.current + 1) {
+                // 如果已经是最后一首 则播放第一手
+                if (this.player.list.length === this.player.current + 1) {
                     // 正序模式，当前歌曲是最后一首，则重新播放第一首
                     return [this.player.list[0], 0];
                 }
             }
 
+            // 如果是顺序播放
+            if (next > this.player.list.length) {
+                // 播放的是最后一首 暂停播放
+                return [undefined as unknown as number, next]
+
+            }
             return [this.player.list[next], next];
         },
         /**
@@ -255,7 +258,7 @@ const usePlayerStore = defineStore("player", {
          * 下一首的回调
          */
         nextTrackCallback() {
-            this._scrobble(this.player.currentTrack, 0, true);
+            // this._scrobble(this.player.currentTrack, 0, true);
             // 如果非私人fm并且循环模式是单曲的继续播放当前歌曲
             if (!this.player.isPersonalFM && this.player.repeatMode === 'one') {
                 this.replaceCurrentTrack(this.player.currentTrack.id);
@@ -425,6 +428,7 @@ const usePlayerStore = defineStore("player", {
             if (trackID === undefined) {
                 this.player.howler?.stop();
                 this.player.playing = false
+                this.player.progress = 0
                 return false;
             }
             this.player.current = index!;
