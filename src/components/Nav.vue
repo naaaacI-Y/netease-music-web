@@ -4,7 +4,6 @@
             <div class="find d-flex" v-if="isActive('/findMusic')">
                 <div :class="{ 'active': acIdx === 0 }" @click="goInside(0)">个性推荐</div>
                 <div :class="{ 'active': acIdx === 1 }" @click="goInside(1)">歌单</div>
-                <!-- <div :class="{ 'active': acIdx === 2 }" @click="goInside(2)">主播电台</div> -->
                 <div :class="{ 'active': acIdx === 3 }" @click="goInside(3)">排行榜</div>
                 <div :class="{ 'active': acIdx === 4 }" @click="goInside(4)">歌手</div>
                 <div :class="{ 'active': acIdx === 5 }" @click="goInside(5)">最新音乐</div>
@@ -20,7 +19,7 @@
             <div class="unique-play pl-30" v-if="isActive('/unique-play')"> 独家放送</div>
             <div class="personalfm" v-if="isActive('/personal-fm')"></div>
             <div class="dayRecommend" v-if="isActive('/songlist')"></div>
-            <div class="all-video pl-30 fs-4 text-33" v-if="isActive('/video/all-mv')">全部MV</div>
+            <div class="all-video pl-30 fs-4" v-if="isActive('/video/all-mv')">全部MV</div>
             <div class="video d-flex pl-30 fs-4" v-if="isActive('/video/video-inside', '/video/mv')">
                 <div class="video-inside mr-20" :class="{ isVideo: route.path === '/video/video-inside' }"
                     @click="goInside('/video/video-inside')">视频</div>
@@ -44,12 +43,6 @@
                     </div>
                     <input type="text" placeholder="搜索" v-model="searchKeyWords" id="search-box" />
                 </div>
-                <!-- <div class="setting mr-15 d-flex ai-center jc-center">
-                    <i class="iconfont icon-shezhi fs-9"></i>
-                </div>
-                <div class="info mr-15 d-flex ai-center jc-center">
-                    <i class="iconfont icon-youjian1 fs-9"></i>
-                </div> -->
                 <div class="skin d-flex ai-center jc-center" @click="showSetTheme">
                     <i class="iconfont icon-icon-pifu fs-9" :class="{ isSkinActive: isShowSetTheme }"></i>
                 </div>
@@ -212,6 +205,10 @@ const goInside = (path: string | number) => {
             &:hover {
                 cursor: pointer;
             }
+        }
+
+        .all-video {
+            color: var(--theme-head-00)
         }
 
         .set {

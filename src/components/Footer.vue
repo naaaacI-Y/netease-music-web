@@ -67,16 +67,14 @@
                 <i class="iconfont icon-fenxiang1 text-3a" v-show="!player.isPersonalFM"
                     @click="Message.error('暂不支持>_<')"></i>
             </div>
-            <div class="right text-4b d-flex ai-center mr-15">
+            <div class="right text-4b d-flex ai-center">
 
                 <div class="song-list d-flex ai-center" v-show="!player.isPersonalFM" @click="switchMode">
-                    <i class="iconfont icon-24gl-repeatOnce2 text-4b mr-15 fs-7"
-                        v-show="player.repeatMode === 'one'"></i>
-                    <i class="iconfont icon-24gl-indent text-4b mr-15 fs-5" v-show="player.repeatMode === 'off'"></i>
-                    <i class="iconfont icon-24gl-repeat2 text-4b mr-15 fs-7" v-show="player.repeatMode === 'on'"></i>
+                    <i class="iconfont icon-24gl-repeatOnce2 text-4b fs-7" v-show="player.repeatMode === 'one'"></i>
+                    <i class="iconfont icon-24gl-indent text-4b fs-5" v-show="player.repeatMode === 'off'"></i>
+                    <i class="iconfont icon-24gl-repeat2 text-4b fs-7" v-show="player.repeatMode === 'on'"></i>
 
                 </div>
-                <i class="iconfont icon-24gl-playlist text-4b fs-5" v-show="!player.isPersonalFM"></i>
                 <div class="volume">
                     <i class="iconfont icon-24gl-volumeZero text-4b fs-7" v-show="player.volume !== 0"
                         @click="mute"></i>

@@ -27,8 +27,7 @@
                     <i class="iconfont icon-bofang_o  fs-9"></i>
                     播放全部
                 </div>
-                <div class="collect-count mr-15 fs-2 d-flex ai-center" @click="collectSongList"
-                    :class="{ isSelf: isMySelf }">
+                <div class="collect-count mr-15 fs-2 d-flex ai-center" :class="{ isSelf: isMySelf }">
                     <i class="iconfont icon-xinjianwenjianjia fs-7 mr-3" v-if="!headerInfo.subscribed"></i>
                     <i class="iconfont icon-gou- fs-7 mr-3" v-if="headerInfo.subscribed"></i>
                     <span>{{ headerInfo.subscribed ? "已收藏" : "收藏" }}</span>
@@ -214,6 +213,11 @@ const goPersonCenter = () => {
                     background-color: var(--theme-f2);
                     cursor: pointer;
                 }
+            }
+
+            .collect-count {
+                background-color: var(--theme-f2);
+                pointer-events: none
             }
 
             .isSelf {

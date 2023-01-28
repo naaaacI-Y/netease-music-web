@@ -8,7 +8,7 @@
             <div class="singer-name mb-10 fs-9 text-33" style="font-weight: bold;">{{ singerInfo.name }}</div>
             <div class="alias mb-15 text-66 fs-2">{{ singerInfo?.alias?.join("; ") }}</div>
             <div class="operate d-flex ai-center mb-20 text-4e">
-                <div class="collection d-flex ai-center jc-center mr-9" @click="collecSinger">
+                <div class="collection d-flex ai-center jc-center mr-9">
                     <i class="iconfont icon-xinjianwenjianjia mr-3" v-show="!singerInfo.followed"></i>
                     <i class="iconfont icon-gou- mr-3" v-show="singerInfo.followed"></i>
                     <span class="fs-3">{{ singerInfo.followed ? "已收藏" : "收藏" }}</span>
@@ -100,6 +100,11 @@ const collecSinger = async () => {
                     background-color: rgba($color: #000000, $alpha: 0.1);
                     cursor: pointer;
                 }
+            }
+
+            .collection {
+                background-color: rgba($color: #000000, $alpha: 0.1);
+                pointer-events: none
             }
         }
 

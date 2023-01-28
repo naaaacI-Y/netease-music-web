@@ -30,24 +30,6 @@ export const initGlobalComponet = (app: App) => {
 
         app.component(name, compoents[path].default)
     }
-    // const LayoutComponent: Record<string | number, any> = import.meta.glob("@/layout/*.vue", { eager: true } as any)
-    // const l1Component = import.meta.glob("@/components/*.vue", { eager: true, import: 'default' } as any)
-    // const l2Component = import.meta.glob("@/components/*/*.vue", { eager: true, import: 'default' } as any)
-
-    // Object.keys(LayoutComponent).map((path: string) => {
-    //     const paths = path.split("/")
-    //     const name = paths[paths.length - 1].split('.')[0]
-    //     app.component(name, LayoutComponent[path].default)
-    // })
-    // Object.keys(l1Component).map((path: string) => {
-    //     register(l1Component, path)
-    // })
-    // Object.keys(l2Component).forEach((path: string) => {
-    //     if (path !== "../components/message/index.vue") {
-    //         register(l2Component, path)
-    //     }
-
-    // })
 }
 
 export default initApp
