@@ -79,6 +79,7 @@ const usePlayerStore = defineStore("player", {
                 this.replaceCurrentTrack(this.player.currentTrack.id, false).then(() => {
                     const i = Number(localStorage.getItem('playerCurrentTrackTime'))
                     this.player.howler?.seek(i ?? 0);
+                    this.player.playing = false
                 }); // update audio source and init howler
                 // this._initMediaSession();
                 // this.setIntervals();
