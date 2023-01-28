@@ -22,9 +22,8 @@
                 <div class="song-info d-flex flex-column jc-center" v-if="player.enabled">
                     <div class="name" @click="goSinger">
                         <span class="fs-3 text-33">{{ player.currentTrack?.name }}</span>
-                        <span class="fs-1 text-97"> - {{
-                            player.isPersonalFM ?
-                                player.personalFMTrack?.artists[0]?.musicSize : player.currentTrack?.ar[0]?.name
+                        <span class="fs-1 text-97" v-if="player.currentTrack?.ar?.length"> - {{
+                            player.currentTrack?.ar[0]?.name
                         }}</span>
                     </div>
                     <div class="time d-flex ai-center fs-1 text-97">
