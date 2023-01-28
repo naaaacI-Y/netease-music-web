@@ -9,7 +9,6 @@ import { UniqueRecommendRet } from '@/service/api/recommend/types';
 import { VideoByCategoryItem } from "@/service/api/video/types";
 import { Playlist } from "@/service/api/music/types";
 import { Video } from "@/service/api/search/types";
-import { checkCookie } from "@/config/user";
 
 type FormatList<T> = { id: number | string, dataList: T[] }[]
 /**
@@ -127,8 +126,9 @@ const formatPlayCount = (count: number) => {
  * @returns
  */
 const checkLogin = () => {
-    const isNotLogin = checkCookie()
-    if (isNotLogin) {
+    const store = useStore()
+    const isLogin = store.userProfile.userFile?.profile?.userId
+    if (!isLogin) {
         return false
     }
     return true
