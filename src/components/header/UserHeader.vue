@@ -143,7 +143,7 @@ const getUserDetail = async () => {
         area.value = getArea(res.profile.province, res.profile.city)
     }).catch((err) => {
         console.log(err);
-        if (!err) {
+        if (err) {
             isReset.value = true
         }
     })

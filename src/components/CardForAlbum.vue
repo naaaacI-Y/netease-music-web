@@ -45,7 +45,7 @@ const playAlbum = async () => {
     try {
         const r = await getAlbumInfo({ id: albumId })
         const ids = r.songs?.filter((item) => {
-            return checkMusicCopyright(item.fee, !item.noCopyrightRcmd)
+            return checkMusicCopyright(item.fee, !item.noCopyrightRcmd, item.copyright)
         }).map(item => item.id)
         if (!ids?.length) {
             return Message.error("惊不惊喜，一首都不让你听>_<")
@@ -92,6 +92,10 @@ const playAlbum = async () => {
     }
 
     .album-info {
+        .name {
+            @include multiEllipsis;
+        }
+
         &:hover {
             cursor: pointer;
         }

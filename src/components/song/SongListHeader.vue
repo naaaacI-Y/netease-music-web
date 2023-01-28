@@ -53,7 +53,7 @@
                 <div class="song-about d-flex fs-1 mb-3">
                     <div class="song-count mr-11">
                         <span class="text-33">歌曲数：</span>
-                        <span class="text-99">{{ headerInfo.trackCount }}</span>
+                        <span class="text-99">{{ headerInfo?.playList?.tracks?.length }}</span>
                     </div>
                     <div class="play-count fs-1">
                         <span class="text-33">播放数：</span>
@@ -82,7 +82,7 @@ import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
 
 const loading = ref(false)
 const route = useRoute()
-const { isShowPlayPage, collectedSongList, useSideSongList, playSongList, createdSongList } = useMusicPlayRelation()
+const { isShowPlayPage, collectedSongList, useSideSongList, playSongList, createdSongList, isShowLoginBox } = useMusicPlayRelation()
 
 const emits = defineEmits<{
     (e: "changeState", query: { id: number, flag?: boolean }): void
@@ -125,7 +125,7 @@ const updateSongList = async (id: number, type: number) => {
 const collectSongList = async () => {
     if (isMySelf.value) return
     if (!checkLogin()) {
-        return isShowPlayPage.value = true
+        return isShowLoginBox.value = true
     }
     if (loading.value) return Message.error("请勿频繁操作")
     loading.value = true
@@ -197,9 +197,9 @@ const goPersonCenter = () => {
             }
         }
 
-        .other-info .label-name:hover {
-            cursor: pointer;
-        }
+        // .other-info .label-name:hover {
+        //     cursor: pointer;
+        // }
 
         .operate {
 

@@ -73,12 +73,13 @@ export const useMusicPlayRelation = () => {
      * fee === 4 ==> 需要购买专辑， 检查是否已购买 暂时不做
      * fee === 8 ==> 非会员可播放低音质 正常展示
      * copyrightId: 最新音乐列表传copyrightId 普通歌单传 !noCopyrightRcmd
+     * copyRight: 0时表示没有版权
      */
-    const checkMusicCopyright = (fee: number, copyrightId: any) => {
+    const checkMusicCopyright = (fee: number, copyrightId: any, copyRight?: number) => {
         let r: boolean
         switch (fee) {
             case 0:
-                if (!copyrightId) {
+                if (!copyrightId || !copyRight) {
                     isHaveCopyRight.value = false
                     r = false
                 } else {

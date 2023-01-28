@@ -59,7 +59,7 @@ const playAll = () => {
     // 资源id？？？？？
     const ids: number[] = []
     songList.data.forEach(item => {
-        if (checkMusicCopyright(item.fee, !item.noCopyrightRcmd)) {
+        if (checkMusicCopyright(item.fee, !item.noCopyrightRcmd, item.copyright)) {
             ids.push(item.id)
         }
     })

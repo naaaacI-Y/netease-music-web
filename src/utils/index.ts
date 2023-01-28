@@ -9,6 +9,7 @@ import { UniqueRecommendRet } from '@/service/api/recommend/types';
 import { VideoByCategoryItem } from "@/service/api/video/types";
 import { Playlist } from "@/service/api/music/types";
 import { Video } from "@/service/api/search/types";
+import { checkCookie } from "@/config/user";
 
 type FormatList<T> = { id: number | string, dataList: T[] }[]
 /**
@@ -144,9 +145,8 @@ const formatPlayCount = (count: number) => {
  * @returns
  */
 const checkLogin = () => {
-    const store = useStore()
-    const isLogin = store.userProfile.userFile?.profile?.userId
-    if (!isLogin) {
+    const isNotLogin = checkCookie()
+    if (isNotLogin) {
         return false
     }
     return true
@@ -244,29 +244,6 @@ const paddingLeft = (num: number) => {
     if (num < 10) return `0${num}`
     return num
 }
-
-// // 监听页面滚动
-// const handleListener = (e: Event, callback: Function ) => {
-//    return () => {
-//     const target = e.target as HTMLElement
-//     const scrollTop = target.scrollTop
-//     const clientHeight = target.clientHeight
-//     const scrollHeight = target.scrollHeight
-//     if (scrollTop + clientHeight >= scrollHeight) {
-//         // 滚动到底部了
-//         callback()
-//     }
-//    }
-// }
-// const listenPageScroll = (wrapperId: string, callback: Function, removeFlag?: boolean) => {
-//     const wrapper = document.getElementById(wrapperId)
-//     wrapper?.addEventListener("scroll", handleListener(e, callback))
-// }
-// // 移除监听
-// const removeListener = () => {
-//     const wrapper = document.getElementById("scroller")
-//     wrapper?.removeEventListener("scroll", handleListener(e, callback))
-// }
 
 
 // 格式化列表数据供RecycleScroller使用

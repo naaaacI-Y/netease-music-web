@@ -1,6 +1,7 @@
 
 import { Howl, Howler } from 'howler';
 import { defineStore } from "pinia"
+import Message from "@/components/message"
 import { Song } from '@/service/api/music/types';
 import { Song as PersonalSong } from "@/service/api/recommend/types"
 import { fmTrash, personalFM } from '@/service/api/personalFm';
@@ -114,10 +115,6 @@ const usePlayerStore = defineStore("player", {
             let player = {} as any;
             for (let [key, value] of Object.entries(this.$state.player)) {
                 if (excludeSaveKeys.includes(key)) continue;
-                if (key === "volume") {
-                    console.log(value, "value");
-
-                }
                 player[key] = value;
             }
             localStorage.setItem('player', JSON.stringify(player));
@@ -161,8 +158,6 @@ const usePlayerStore = defineStore("player", {
         setVolume(volume: number) {
             this.player.volume = volume;
             Howler.volume(volume);
-            console.log("save to locastorage");
-
             this.saveSelfToLocalStorage()
         },
 
@@ -171,7 +166,6 @@ const usePlayerStore = defineStore("player", {
          * @param value
          */
         setProgress(value: number) {
-            console.log(value, '更新播放进度=======');
             if (this.player.howler) {
                 this.player.howler.seek(value);
             }
@@ -279,8 +273,6 @@ const usePlayerStore = defineStore("player", {
          * @returns
          */
         async playNextFMTrack() {
-            console.log(this.player.personalFMLoading, "loading======");
-
             if (this.player.personalFMLoading) {
                 return false;
             }
@@ -309,7 +301,6 @@ const usePlayerStore = defineStore("player", {
                 if (retryCount < 0) {
                     let content = '获取私人FM数据时重试次数过多，请手动切换下一首';
                     // store.dispatch('showToast', content);
-                    console.log(content);
                     return false;
                 }
                 // 这里只能拿到一条数据
@@ -391,21 +382,21 @@ const usePlayerStore = defineStore("player", {
                 // this._updateMediaSessionMetaData(track);
                 return this.getAudioSource(track).then(source => {
                     if (source) {
-
                         this.playAudioSource(source, autoplay);
                         // this._cacheNextTrack();
                         // return source;
                     } else {
                         // 如果获取不到资源
-                        if (ifUnplayableThen === 'playNextTrack') {
-                            if (this.player.isPersonalFM) {
-                                this.playNextFMTrack();
-                            } else {
-                                this.playNextTrack();
-                            }
-                        } else {
-                            this.playPrevTrack();
-                        }
+                        console.log("没有获取到资源");
+                        // if (ifUnplayableThen === 'playNextTrack') {
+                        //     if (this.player.isPersonalFM) {
+                        //         this.playNextFMTrack();
+                        //     } else {
+                        //         this.playNextTrack();
+                        //     }
+                        // } else {
+                        //     this.playPrevTrack();
+                        // }
                     }
                 }).finally(() => {
                     this.saveSelfToLocalStorage()
@@ -758,16 +749,11 @@ const usePlayerStore = defineStore("player", {
          * @param flag true: 添加， false: 删除
          */
         updateLikedSong(id: number, flag: boolean) {
-            console.log("更新喜欢列表=========");
-
             if (flag) {
                 return this.likedList.push(id)
             }
             const idx = this.likedList.findIndex(item => item === id)
-            console.log(idx, "idxxxxxxxxxx");
-
-            const r = this.likedList.splice(idx, 1)
-            console.log(r, "删除的元素");
+            this.likedList.splice(idx, 1)
 
         }
 

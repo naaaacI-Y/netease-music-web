@@ -16,8 +16,7 @@
     </div>
 </template>
 
-<script lang="ts" setup>import { computed, ref } from 'vue';
-
+<script lang="ts" setup>
 withDefaults(defineProps<
     {
         headName?: string,

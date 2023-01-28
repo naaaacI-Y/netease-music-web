@@ -127,7 +127,7 @@ watch(() => pages.page, async (newVal) => {
         scrollToTop("music-play-wrapper")
     }
     // 专辑页的滚动到最新评论处
-    if (newVal !== 1 && route.path.startsWith("/album")) {
+    if (newVal !== 1 && (route.path.startsWith("/album") || route.path.startsWith("/song-list"))) {
         scrollToTop("content", 450)
     } else {
         // 滚动到最新评论处
@@ -165,6 +165,7 @@ const maxLength = computed(() => {
  * 插入评论数据
  * @param data 接口返回的评论内容
  * @param parentContent 父级评论内容
+ * @param isCountAdd 同步评论数量是否要再次+1
  */
 const inserData = (data?: SendOrReplyComment, parentContent?: string) => {
     let insertData: Comment
@@ -181,6 +182,7 @@ const inserData = (data?: SendOrReplyComment, parentContent?: string) => {
     }
 
     allComment.data.unshift(insertData)
+    pages.total++
     emits("changeCommentCount", pages.total)
 }
 
@@ -240,7 +242,7 @@ const submitContent = async () => {
         Message.success("评论成功！")
         commentContent.value = ""
         replyPerson.value = ""
-        emits("changeCommentCount", pages.total++)
+        // emits("changeCommentCount", pages.total++)
     } catch (error) {
 
     }

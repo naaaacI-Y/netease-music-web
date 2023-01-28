@@ -103,7 +103,7 @@ onMounted(() => {
     setTimeout(() => {
         // 这里不用定时的话 传递进去的值是在获取数据结束之前的
         listenListScroll(scroller!, [getList, loaded.value, loading.value])
-    }, 1000)
+    }, 1500)
 })
 onUnmounted(() => {
     const scroller = document.getElementById("scroller")

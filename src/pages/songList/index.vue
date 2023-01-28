@@ -69,7 +69,7 @@ const getDetail = async (query: { id: number, flag?: boolean }) => {
                 const result: TrackId[] = []
                 r.playlist.trackIds?.slice(0, songList.data.length).map((item, index) => {
                     const _ = songList.data[index]
-                    if (checkMusicCopyright(_.fee, !_.noCopyrightRcmd)) {
+                    if (checkMusicCopyright(_.fee, !_.noCopyrightRcmd, _.copyright)) {
                         result.push(item)
                     }
                 })

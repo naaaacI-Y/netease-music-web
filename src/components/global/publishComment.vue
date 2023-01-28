@@ -66,6 +66,7 @@ const submitContent = async () => {
             dt.beRepliedUser.content = props.params.parentContent
         }
         cContent.value = useInsertComment(dt)
+
     } catch (error) {
     }
 

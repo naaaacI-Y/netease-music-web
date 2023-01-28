@@ -54,7 +54,7 @@ const playAllList = async () => {
         const r = await getSongListDetail({ id: songListId })
         const ids = r.playlist.trackIds?.slice(0, r.playlist.tracks.length).filter((_item, index) => {
             const _: HotSong = r.playlist.tracks[index]
-            return checkMusicCopyright(_.fee, !_.noCopyrightRcmd)
+            return checkMusicCopyright(_.fee, !_.noCopyrightRcmd, _.copyright)
         }).map(item => item.id)
 
         if (!ids?.length) {

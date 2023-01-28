@@ -209,7 +209,7 @@ getIsVoted(1, queryId)
             .play-box {
                 height: 350px;
                 border-radius: 10px;
-                background-color: #000;
+                // background-color: #000;
             }
 
             .singer-info-wrap {

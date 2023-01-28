@@ -24,8 +24,6 @@ const visiable = ref(false)
 
 // 打开消息
 const onOpen = (config: ConfigType) => {
-    console.log(config, "config============");
-
     setTimeout(() => {
         visiable.value = true;
     }, 10);
@@ -34,8 +32,6 @@ const onOpen = (config: ConfigType) => {
     if (config?.duration) {
         setTimeout(() => {
             onClose();
-            console.log("移除节点========TODO");
-
         }, config.duration);
     }
 };

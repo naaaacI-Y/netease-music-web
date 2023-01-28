@@ -67,7 +67,7 @@
             </div>
 
             <!--我的音乐-->
-            <div class="my-music mt-9 text-41 mb-20">
+            <div class="my-music mt-9 text-41 mb-20" v-if="userFile?.profile?.userId">
                 <div class="title pl-18">我的音乐</div>
                 <!-- <div class="itunes pl-18">
                     <i class="iconfont icon-itunes text-41"></i>
@@ -77,10 +77,10 @@
                     <i class="iconfont icon-xiazai"></i>
                     <span class="fs-13">下载管理</span>
                 </div> -->
-                <div class="recent-play pl-18" @click="go('/recent-play')" :class="{ isActive: active('recent-play') }">
+                <!-- <div class="recent-play pl-18" @click="go('/recent-play')" :class="{ isActive: active('recent-play') }">
                     <i class="iconfont icon-zuijinbofang fs-7"></i>
                     <span class="fs-7">最近播放</span>
-                </div>
+                </div> -->
                 <div class="my-collection pl-18" :class="{ isActive: active('my-collection') }"
                     v-if="userFile?.profile?.userId" @click="go('/my-collection')">
                     <i class="iconfont icon-shoucang fs-7"></i>
@@ -136,7 +136,6 @@ import { useRoute, useRouter } from 'vue-router';
 import useStore from "@/store"
 import { storeToRefs } from 'pinia';
 import { logOut } from '@/service/api/login/login';
-import Cookies from 'js-cookie';
 
 
 const { useGlobal, userProfile, useSideSongList, useTheme } = useStore()

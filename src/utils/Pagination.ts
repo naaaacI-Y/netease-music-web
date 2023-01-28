@@ -73,7 +73,6 @@ class Pagination {
             numbers[i].onclick = function () {
                 //数字按钮点击事件
                 if (_this.page != Number(numbers[i].innerText)) {
-                    console.log(_this.page, Number(numbers[i].innerText))
                     _this.page = Number(numbers[i].innerText)
                     _this.init()
                     _this.callback!(_this.page) //按钮事件回调函数

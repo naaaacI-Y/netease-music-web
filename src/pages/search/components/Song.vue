@@ -75,7 +75,7 @@ const getSongs = async () => {
         isShowLoading.value = false
         // 构造songListInfo信息
         songListInfo.data = songs.data.filter(item => {
-            return checkMusicCopyright(item.fee, !item.noCopyrightRcmd)
+            return checkMusicCopyright(item.fee, !item.noCopyrightRcmd, item.copyright)
         }).map(item => {
             return { id: item.id }
         })

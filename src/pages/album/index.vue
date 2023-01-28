@@ -44,7 +44,7 @@ const getAlbumDetailInfo = async () => {
         detailInfo.value = r.album.description
         albumSongList.data = r.songs
         songListInfo.data = r.songs.filter(item => {
-            return checkMusicCopyright(item.fee, !item.noCopyrightRcmd)
+            return checkMusicCopyright(item.fee, !item.noCopyrightRcmd, item.copyright)
         }).map(item => {
             return { id: item.id }
         })

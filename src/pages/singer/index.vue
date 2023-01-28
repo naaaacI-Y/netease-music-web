@@ -3,7 +3,8 @@
         <div class="singer-homepage-wrapper">
             <SingerHeader :singer-info="singerInfo.data" @change-collect-state="getSingeInfo(singerId)"></SingerHeader>
             <div class="tab-wrapper mt-30">
-                <SwitchTabForSinger></SwitchTabForSinger>
+                <SwitchTabForSinger :info="{ albumCount: singerInfo.data.albumSize, mvCount: singerInfo.data.mvSize! }">
+                </SwitchTabForSinger>
             </div>
         </div>
     </DefaultLayout>

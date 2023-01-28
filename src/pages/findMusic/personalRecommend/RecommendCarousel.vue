@@ -139,7 +139,7 @@ const bannerClick = async (item: Banner) => {
             case BannerType["NEWSONG"]:
                 // 新歌 播放
                 const r = await getMusicDetail(String(item.targetId))
-                const isHaveCopy = checkMusicCopyright(r.songs[0].fee, !r.songs[0].noCopyrightRcmd)
+                const isHaveCopy = checkMusicCopyright(r.songs[0].fee, !r.songs[0].noCopyrightRcmd, r.songs[0].copyright)
                 if (!isHaveCopy) return Message.error("没有播放权限")
                 player.value.isPersonalFM = false
                 playSingleMusic([], r.songs[0].id, -1)

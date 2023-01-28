@@ -4,7 +4,7 @@
     </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup name="Pagination">
 import Pagination from '@/utils/Pagination';
 import { onMounted, ref, watch } from 'vue';
 const props = defineProps<{

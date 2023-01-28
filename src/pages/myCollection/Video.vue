@@ -1,29 +1,5 @@
 <template>
     <DefaultLayout>
-        <!-- <RecycleScroller id="scroller" class=" pb-30" :items="list.data" :item-size="315" key-field="id" :buffer="900"
-            style="height: 100%;width: 100%;padding: 0 30px;">
-            <template #before>
-                <div class="my-collection-wrapper">
-                    <div class="title fs-3 text-33">
-                        <span style="font-weight: bold;">收藏的视频</span>
-                        <span class="text-66 fs-2">&nbsp;({{ total }})</span>
-                    </div>
-                </div>
-            </template>
-            <template v-slot="{ item, index }">
-                <div class="d-flex flex-wrap jc-between singer-wrapper">
-                    <VideoCard v-for="it in item.dataList" :video-item="it" :is-show-time="true" :count="5"
-                        :key="it.id + 1">
-                        <template #mv-flag v-if="Number(it.vid)">
-                            <div class="mv-flag mr-8 text-primary_red_4 fs-1">MV</div>
-                        </template>
-                    </VideoCard>
-                </div>
-            </template>
-            <template #after>
-                <loading v-show="isShowLoaidng"></loading>
-            </template>
-        </RecycleScroller> -->
         <DynamicScroller :items="list.data" :min-item-size="225" id="scroller"
             style="height: 100%;width: 100%;padding: 0 30px;" class="scroller">
             <template #before>
@@ -37,9 +13,9 @@
             <template v-slot="{ item, index, active }">
                 <DynamicScrollerItem :item="item" :active="active" :size-dependencies="[item.message]"
                     :data-index="index">
-                    <div class="d-flex flex-wrap jc-between singer-wrapper">
+                    <div class="d-flex flex-wrap singer-wrapper">
                         <VideoCard v-for="it in item.dataList" :video-item="it" :is-show-time="true" :count="5"
-                            :key="it.id + 1">
+                            class="video-card" :key="it.id + 1">
                             <template #mv-flag v-if="Number(it.vid)">
                                 <div class="mv-flag mr-8 text-primary_red_4 fs-1">MV</div>
                             </template>
@@ -141,5 +117,13 @@ getList()
     text-align: center;
     line-height: 15px;
     border-radius: 4px;
+}
+
+.video-card {
+    width: 19%;
+
+    &:not(:nth-child(5n)) {
+        margin-right: calc(5% / 4); // 4为剩下空间的占比
+    }
 }
 </style>

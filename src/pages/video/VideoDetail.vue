@@ -212,9 +212,9 @@ getIsVoted(2, queryId)
                         padding: 2px 5px;
                         border-radius: 10px;
 
-                        &:hover {
-                            cursor: pointer;
-                        }
+                        // &:hover {
+                        //     cursor: pointer;
+                        // }
                     }
                 }
 

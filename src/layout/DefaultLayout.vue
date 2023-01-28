@@ -62,7 +62,6 @@ const isShowReset = computed(() => {
 
 // 监听登录/退出状态
 watch(() => loginOrLogout.value, (newVal, oldVal) => {
-    console.log("监听登录/退出")
     if (route.path !== "/findMusic/personal-recommend" && newVal) {
         // 回到首页
         router.replace("/findMusic/personal-recommend")
@@ -72,7 +71,6 @@ watch(() => loginOrLogout.value, (newVal, oldVal) => {
             clearCookieInfo()
         }
         // 页面刷新
-        console.log("页面刷新");
         window.location.reload()
     }, 2000)
 })
@@ -164,6 +162,7 @@ onMounted(() => {
     height: calc(100% - 110px);
     top: 50px;
     right: 0;
-    background-color: rgba($color: red, $alpha: 0.6);
+    color: var(--theme-3a);
+    background-color: var(--theme-white);
 }
 </style>

@@ -12,7 +12,7 @@
                 <slot name="flagInside" v-if="rankType === 1"></slot>
                 <i class="iconfont icon-aixin text-99" @click="likeMusic(item?.id!, true)"
                     v-show="!isLikeMusic(item?.id!)"></i>
-                <i class="iconfont icon-aixin_shixin text-primary_red_4"
+                <i class="iconfont icon-aixin_shixin text-primary_red_4 no-hover"
                     @click="likeMusic(item?.id!, false, updateSongListHeadeInfo)" v-show="isLikeMusic(item?.id!)"></i>
                 <i class="iconfont icon-xiazai text-99"></i>
             </div>
@@ -25,7 +25,7 @@
 
             <!--主要信息-->
             <div class="main-info fs-2 d-flex ">
-                <div class="song-name common d-flex ai-center pr-10"
+                <div class="song-name common d-flex ai-center pr-10" :class="{ isFlex: type === 3 }"
                     :style="{ width: rankType === -1 ? '34.8%' : '39%' }">
                     <div class="text-33 mr-4 name" v-if="!colorful"
                         :class="[isPlaying ? 'isPlaying' : '', isHaveCopyRight ? '' : 'isNeddCopyRight']">{{
@@ -78,7 +78,6 @@
 import { TrackId } from '@/service/api/music/types';
 import { HotSong } from '@/service/api/singer/types';
 import { formatSongTime, paddingLeft, keywordsColorful } from '@/utils';
-import { computed, inject, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Message from "@/components/message"
 import { useMusicPlayRelation } from '@/hooks/useMusicPlayRelation';
@@ -166,7 +165,7 @@ const playMusic = async () => {
     playSingleMusic(props.colorful ? [] : trackIds!, props.item!.id, sourceId)
 }
 
-checkMusicCopyright(props.item.fee, !props.item.noCopyrightRcmd)
+checkMusicCopyright(props.item.fee, !props.item.noCopyrightRcmd, props.item.copyright)
 </script>
 <style lang="scss" scoped>
 .song-list-item-wrapper {
@@ -181,7 +180,7 @@ checkMusicCopyright(props.item.fee, !props.item.noCopyrightRcmd)
             width: 20px;
         }
 
-        i:hover {
+        i:not(.no-hover):hover {
             color: var(--theme-56);
             cursor: pointer;
         }
@@ -224,6 +223,10 @@ checkMusicCopyright(props.item.fee, !props.item.noCopyrightRcmd)
             .icon-bofang2:hover {
                 cursor: pointer;
             }
+        }
+
+        .isFlex {
+            flex: 1
         }
 
         .isPlaying {

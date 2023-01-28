@@ -44,12 +44,12 @@ const playAllSongList = async () => {
         if (props.type === 0) {
             // 每日歌曲推荐
             const r = await getDayRecommend()
-            ids = r.data.dailySongs.filter(item => checkMusicCopyright(item.fee, !item.noCopyrightRcmd)).map(it => it.id)
+            ids = r.data.dailySongs.filter(item => checkMusicCopyright(item.fee, !item.noCopyrightRcmd, item.copyright)).map(it => it.id)
         }
         if (props.type === 1) {
             sourceId = props.songListItem.id!
             const r = await getSongListDetail({ id: props.songListItem.id! })
-            ids = r.playlist.tracks.filter(item => checkMusicCopyright(item.fee, !item.noCopyrightRcmd)).map(it => it.id)
+            ids = r.playlist.tracks.filter(item => checkMusicCopyright(item.fee, !item.noCopyrightRcmd, item.copyright)).map(it => it.id)
         }
         if (!ids.length) {
             return Message.error("惊不惊喜，一首都不让你听>_<")

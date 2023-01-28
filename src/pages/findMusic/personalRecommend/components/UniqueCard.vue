@@ -1,5 +1,5 @@
 <template>
-    <div class="unique-card-wrapper" :style="{ width: `${cardWidth}px` }">
+    <div class="unique-card-wrapper" :style="{ width: `${cardWidth}px` }" @click="playUnique">
         <div class="img-wrapper mb-5" :style="{ width: `${cardWidth}px`, height: `${cardHeight}px` }">
             <!-- <img :src="cardWidth === 250 ? uniqueItem.sPicUrl : uniqueItem.picUrl" alt=""> -->
             <LazyLoadImg :padding-bottom="paddingBottom"
@@ -15,8 +15,11 @@
 
 <script lang="ts" setup>
 import { formatPicUrl } from '@/utils';
+import { useRouter } from "vue-router"
 import { UniqueRecommendRet } from '@/service/api/recommend/types';
 import LazyLoadImg from "@/components/LazyLoadImg.vue"
+
+const router = useRouter()
 const props = withDefaults(defineProps<
     {
         cardWidth?: number,
@@ -32,6 +35,11 @@ const paddingBottom = computed(() => {
     }
     return (135 / 250) * 100
 })
+
+// 播放 ==> mv详情
+const playUnique = () => {
+    router.push(`/mv-detail/${props.uniqueItem.id}`)
+}
 </script>
 <style lang="scss" scoped>
 .unique-card-wrapper {

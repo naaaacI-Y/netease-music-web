@@ -89,7 +89,7 @@ const collect = async () => {
 const playAllAlbumSong = () => {
     const id = Number(route.params.id)
     const ids = songList?.data.filter(item => {
-        return checkMusicCopyright(item.fee, !item.noCopyrightRcmd)
+        return checkMusicCopyright(item.fee, !item.noCopyrightRcmd, item.copyright)
     }).map(item => item.id)
     if (!ids?.length) {
         return Message.error("惊不惊喜，一首都不让你听>_<")

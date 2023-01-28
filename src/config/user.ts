@@ -19,21 +19,14 @@ const initUser = async () => {
 }
 
 export const clearCookieInfo = async () => {
-    console.log("清理cookie以及游客登录");
-
-    // const { userProfile, useSideSongList } = useStore()
-    // 清空侧边栏歌单列表
-    // useSideSongList.updateCreatedSongList([])
-    // useSideSongList.updateCollectedSongList([])
     Cookies.remove("__csrf")
-    // userProfile.clearUserInfo()
     // 游客登录
     const r = await passengerLogin()
     // 存储过期时间
     setCookieExpireTime(r.cookie)
 }
 // 获取cookie 检查是否过期
-const checkCookie = () => {
+export const checkCookie = () => {
     const _csrf = Cookies.get("__csrf")
     if (!_csrf) {
         // 没有登陆

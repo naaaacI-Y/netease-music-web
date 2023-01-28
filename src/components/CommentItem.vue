@@ -116,9 +116,6 @@ const comment = () => {
         }
         return Message.publishComment(2, props.type as list, '评论', queryId ? Number(queryId) : player.value.personalFMTrack.id, props.commentContent.commentId, props.commentContent.user.nickname, props.commentContent.content)
     }
-    console.log("评论======");
-    console.log();
-
     // 评论框显示原评论的用户名，如果改动了用户名则会变成发表评论
     emits("activeComment", { name: props.commentContent.user.nickname, commentId: props.commentContent.commentId, parentContent: props.commentContent.content })
 }

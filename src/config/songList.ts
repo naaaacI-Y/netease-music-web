@@ -62,8 +62,8 @@ export const getPersonSongList = (createdFlag: number, collectedflag: number, cr
         try {
             const r = await getSongList(_)
             hasMore.value = r.more
-            const self = r.playlist.filter(item => item.creator.userId === _.uid)
-            const collect = r.playlist.filter(item => item.creator.userId !== _.uid)
+            const self = r.playlist.filter(item => item.creator.userId === _.uid && item.trackCount)
+            const collect = r.playlist.filter(item => item.creator.userId !== _.uid && item.trackCount)
             createdList.data = createdList.data.concat(...self)
             collectedList.data = collectedList.data.concat(...collect)
             pages.page++

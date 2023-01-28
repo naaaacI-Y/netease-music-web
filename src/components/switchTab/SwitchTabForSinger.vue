@@ -6,19 +6,6 @@
                     :class="{ isActive: activeIndex === index }" @click="activeIndex = index" :key="index">{{ item }}
                 </div>
             </div>
-            <!--展示类型切换  后面再做-->
-            <!-- <div class="change-radio" v-if="activeIndex === 0">
-                <div class="type-change d-flex">
-                    <div class="type1 mr-2 d-flex ai-center jc-center"
-                        :class="{ isBtnActive: songListShowType === 'card' }" @click="songListShowType = 'card'">
-                        <i class="iconfont icon-datu fs-9 text-66"></i>
-                    </div>
-                    <div class="type2 d-flex ai-center jc-center" :class="{ isBtnActive: songListShowType === 'list' }"
-                        @click="songListShowType = 'list'">
-                        <i class="iconfont icon-liebiao fs-5 text-66"></i>
-                    </div>
-                </div>
-            </div> -->
         </div>
         <!--专辑--->
         <keep-alive>
@@ -28,6 +15,10 @@
                         class="card-for-album"></CardForAlbum>
                 </div>
                 <div class="no-data text-66 fs-2" v-if="!singerAlbumList.data.length && !isShowLaoding">没有相关专辑</div>
+                <Pagination id="albumPagination"
+                    v-if="pages.total >= pages.size && !isShowLaoding && pages.total && isResetPagination"
+                    :total="pages.total" :size="pages.size" :page="pages.page" @page-change="handleAlbumPageChange"
+                    class="mt-30 mb-30"></Pagination>
                 <Loading v-show="isShowLaoding"></Loading>
             </div>
         </keep-alive>
@@ -40,6 +31,10 @@
                     </RecommendMvCard>
                 </div>
                 <div class="no-data text-66 fs-2" v-if="!singerMvList.data.length && !isShowLaoding">没有相关mv</div>
+                <Pagination id="mvPagination"
+                    v-if="pages.total >= pages.size && !isShowLaoding && pages.total && isResetPagination"
+                    :total="pages.total" :size="pages.size" :page="pages.page" @page-change="handleMvPageChange"
+                    class="mt-30 mb-30"></Pagination>
                 <Loading v-show="isShowLaoding"></Loading>
             </div>
         </keep-alive>
@@ -84,6 +79,9 @@ import { labelList } from "@/utils/const"
 import { useRoute } from 'vue-router';
 import { Artist, HotAlbum, Introduction, Mv } from '@/service/api/singer/types';
 import Loading from '../Loading.vue';
+import Pagination from "@/components/Pagination.vue"
+import { scrollToTop } from '@/utils';
+
 
 const route = useRoute()
 const activeIndex = ref(0)
@@ -94,28 +92,54 @@ const singerMvList = reactive<Record<string, Mv[]>>({ data: [] }) // mv
 const similarSingerList = reactive<Record<string, Artist[]>>({ data: [] }) // 相似歌手
 const singerDetail = reactive<Record<string, Introduction[]>>({ data: [] }) // 歌手详情
 const isShowLaoding = ref(false)
+const pages = reactive({
+    page: 1,
+    size: 30,
+    total: 0
+})
+const isResetPagination = ref(true)
+
+
+const props = defineProps<{
+    info: { albumCount: number, mvCount: number }
+}>()
+
+watch(() => props.info.albumCount, (newVal) => {
+    pages.total = newVal
+})
 
 watch(() => route.params.id, async (newVal) => {
     activeIndex.value = 0
     singerAlbumList.data = []
+    pages.page = 1
     singerMvList.data = []
     similarSingerList.data = []
     singerDetail.data = []
     singerId.value = Number(newVal)
     if (!singerAlbumList.data.length) {
         await getAlbum()
-
     }
-
 })
 watch(() => activeIndex.value, (newVal) => {
     switch (newVal) {
         case 0:
+            pages.total = props.info.albumCount
+            pages.page = 1
+            isResetPagination.value = false
+            nextTick(() => {
+                isResetPagination.value = true
+            })
             if (!singerAlbumList.data.length) {
                 getAlbum()
             }
             break
         case 1:
+            pages.total = props.info.mvCount
+            pages.page = 1
+            isResetPagination.value = false
+            nextTick(() => {
+                isResetPagination.value = true
+            })
             if (!singerMvList.data.length) {
                 getMv()
             }
@@ -137,7 +161,7 @@ watch(() => activeIndex.value, (newVal) => {
 const getAlbum = async () => {
     try {
         isShowLaoding.value = true
-        const r = await getSingerAlbum({ id: singerId.value })
+        const r = await getSingerAlbum({ id: singerId.value, limit: pages.size, offset: (pages.page - 1) * pages.size })
         singerAlbumList.data = r.hotAlbums
         isShowLaoding.value = false
     } catch (error) {
@@ -149,7 +173,7 @@ const getAlbum = async () => {
 const getMv = async () => {
     try {
         isShowLaoding.value = true
-        const r = await getSingerMv({ id: singerId.value })
+        const r = await getSingerMv({ id: singerId.value, limit: pages.size, offset: (pages.page - 1) * pages.size })
         singerMvList.data = r.mvs
         isShowLaoding.value = false
     } catch (error) {
@@ -167,6 +191,7 @@ const getSimilar = async () => {
         isShowLaoding.value = false
     }
 }
+
 // 歌手详情
 const getSingerDetail = async () => {
     try {
@@ -177,6 +202,17 @@ const getSingerDetail = async () => {
     } catch (error) {
         isShowLaoding.value = false
     }
+}
+
+const handleAlbumPageChange = (num: number) => {
+    pages.page = num
+    scrollToTop("content")
+    getAlbum()
+}
+const handleMvPageChange = (num: number) => {
+    pages.page = num
+    scrollToTop("content")
+    getMv()
 }
 
 getAlbum()
