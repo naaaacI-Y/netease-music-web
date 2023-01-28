@@ -1,6 +1,5 @@
 import http from "../../http"
 import * as T from "./types"
-import { stringifyParams } from "@/utils"
 /**
  * 私人 FM
  * @returns
@@ -16,5 +15,5 @@ export const personalFM = () => {
  * @returns
  */
 export const fmTrash = (params: T.FmTrashParams) => {
-    return http.get<T.FmTrashResult>(`/fm_trash${stringifyParams(params)}`)
+    return http.get<T.FmTrashResult>(`/fm_trash`, params)
 }

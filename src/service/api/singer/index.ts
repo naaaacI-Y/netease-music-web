@@ -1,4 +1,4 @@
-import { stringifyParams } from "@/utils"
+
 import http from "../../http"
 import { CollectedAlbumParams } from "../album/types"
 import * as T from "./types"
@@ -11,7 +11,7 @@ import * as T from "./types"
  * @returns
  */
 export const getSingelSingerSong = (params: T.SingelSingerSongParam) => {
-    return http.get<T.SingelSingerSongResult>(`/artists${stringifyParams(params)}`)
+    return http.get<T.SingelSingerSongResult>(`/artists`, params)
 }
 
 /**
@@ -21,7 +21,7 @@ export const getSingelSingerSong = (params: T.SingelSingerSongParam) => {
  * @returns
  */
 export const getSingerMv = (params: T.SingelSingerSongParam) => {
-    return http.get<T.SingerMvResult>(`/artist/mv${stringifyParams(params)}`)
+    return http.get<T.SingerMvResult>(`/artist/mv`, params)
 }
 
 
@@ -34,7 +34,7 @@ export const getSingerMv = (params: T.SingelSingerSongParam) => {
  * @returns
  */
 export const getSingerAlbum = (params: T.SingerAlbumParam) => {
-    return http.get<T.SingerAlbumresult>(`/artist/album${stringifyParams(params)}`)
+    return http.get<T.SingerAlbumresult>(`/artist/album`, params)
 }
 
 /**
@@ -44,7 +44,7 @@ export const getSingerAlbum = (params: T.SingerAlbumParam) => {
  * @returns
  */
 export const getSingerDes = (params: T.SingelSingerSongParam) => {
-    return http.get<T.SingerDesResult>(`/artist/desc${stringifyParams(params)}`)
+    return http.get<T.SingerDesResult>(`/artist/desc`, params)
 }
 
 /**
@@ -53,7 +53,7 @@ export const getSingerDes = (params: T.SingelSingerSongParam) => {
  * @returns
  */
 export const getSimilarSinger = (params: T.SingelSingerSongParam) => {
-    return http.get<T.SimilarSingerResult>(`/simi/artist${stringifyParams(params)}`)
+    return http.get<T.SimilarSingerResult>(`/simi/artist`, params)
 }
 
 
@@ -68,7 +68,7 @@ export const getSimilarSinger = (params: T.SingelSingerSongParam) => {
  * @returns
  */
 export const getSingerByCategory = (params: T.SingerCategoryParam) => {
-    return http.get<T.SingerCategoryResult>(`/artist/list${stringifyParams(params)}`)
+    return http.get<T.SingerCategoryResult>(`/artist/list`, params)
 }
 
 /**
@@ -79,7 +79,7 @@ export const getSingerByCategory = (params: T.SingerCategoryParam) => {
  * @returns
  */
 export const collectOrCancelSinger = (params: T.CollectorCancelSingerParam) => {
-    return http.get<T.CollectorCancelSingerResult>(`/artist/sub${stringifyParams(params)}`)
+    return http.get<T.CollectorCancelSingerResult>(`/artist/sub`, params)
 }
 
 /**
@@ -88,7 +88,7 @@ export const collectOrCancelSinger = (params: T.CollectorCancelSingerParam) => {
  * @returns
  */
 export const getSingerTopSong = (params: T.SingelSingerSongParam) => {
-    return http.get<T.SingerTopSongResult>(`/artist/top/song${stringifyParams(params)}`)
+    return http.get<T.SingerTopSongResult>(`/artist/top/song`, params)
 }
 
 // 收藏的歌手列表 TODO
@@ -100,7 +100,7 @@ export const getSingerTopSong = (params: T.SingelSingerSongParam) => {
  * @returns
  */
 export const getSingerFans = (params: T.SingerFansParam) => {
-    return http.get<T.SingerFansResult>(`/artist/fans${stringifyParams(params)}`)
+    return http.get<T.SingerFansResult>(`/artist/fans`, params)
 }
 
 /**
@@ -108,5 +108,5 @@ export const getSingerFans = (params: T.SingerFansParam) => {
  * @returns
  */
 export const getCollectedSinger = (params: CollectedAlbumParams) => {
-    return http.get<T.CollectedSingerResult>(`/artist/sublist${stringifyParams(params)}`)
+    return http.get<T.CollectedSingerResult>(`/artist/sublist`, params)
 }

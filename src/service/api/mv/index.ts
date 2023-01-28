@@ -1,4 +1,4 @@
-import { stringifyParams } from "@/utils"
+
 import http from "../../http"
 import * as T from "./types"
 
@@ -14,7 +14,7 @@ import * as T from "./types"
  * @returns
  */
 export const getAllMv = (params?: T.AllMvParam) => {
-    return http.get<T.MVResult>(`/mv/all${stringifyParams(params || {})}`)
+    return http.get<T.MVResult>(`/mv/all`, params || {})
 }
 
 
@@ -26,7 +26,7 @@ export const getAllMv = (params?: T.AllMvParam) => {
  * @returns
  */
 export const getNewMv = (params: T.newMvParam) => {
-    return http.get<T.MVResult>(`/mv/first${stringifyParams(params)}`)
+    return http.get<T.MVResult>(`/mv/first`, params)
 }
 
 /**
@@ -37,7 +37,7 @@ export const getNewMv = (params: T.newMvParam) => {
  * @returns
  */
 export const getNetProdMV = (params?: T.NetProductParam) => {
-    return http.get<T.MVResult>(`/mv/exclusive/rcmd${stringifyParams(params || {})}`)
+    return http.get<T.MVResult>(`/mv/exclusive/rcmd`, params || {})
 }
 
 /**
@@ -54,7 +54,7 @@ export const getRecommendMv = () => {
  * @returns
  */
 export const getSimilarMv = (params: T.SimilarMVParams) => {
-    return http.get<T.SimilarMVResult>(`/simi/mv${stringifyParams(params)}`)
+    return http.get<T.SimilarMVResult>(`/simi/mv`, params)
 }
 
 /**
@@ -64,7 +64,7 @@ export const getSimilarMv = (params: T.SimilarMVParams) => {
  * @returns
  */
 export const getMvDetail = (params: T.MvDetailParam) => {
-    return http.get<T.MvDetailResult>(`/mv/detail${stringifyParams(params)}`)
+    return http.get<T.MvDetailResult>(`/mv/detail`, params)
 }
 
 
@@ -76,7 +76,7 @@ export const getMvDetail = (params: T.MvDetailParam) => {
  * @returns
  */
 export const getMvUrl = (params: T.MvUrlParam) => {
-    return http.get<T.MvUrlResult>(`/mv/url${stringifyParams(params)}`)
+    return http.get<T.MvUrlResult>(`/mv/url`, params)
 }
 
 
@@ -86,7 +86,7 @@ export const getMvUrl = (params: T.MvUrlParam) => {
  * @returns
  */
 export const getMvInfo = (params: T.MvDetailParam) => {
-    return http.get<T.MvInfoResult>(`/mv/detail/info${stringifyParams(params)}`)
+    return http.get<T.MvInfoResult>(`/mv/detail/info`, params)
 }
 
 
@@ -100,5 +100,5 @@ export const getMvInfo = (params: T.MvDetailParam) => {
  * @returns
  */
 export const getComment4MV = (params: T.MVCommentParams) => {
-    return http.get<T.MVCommentResult>(`/comment/mv${stringifyParams(params)}`)
+    return http.get<T.MVCommentResult>(`/comment/mv`, params)
 }

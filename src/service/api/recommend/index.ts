@@ -1,4 +1,4 @@
-import { stringifyParams } from "@/utils"
+
 import http from "../../http"
 import * as T from "./types"
 
@@ -25,7 +25,7 @@ export const getUniquereCommend = () => {
  * @returns
  */
 export const getUniquereCommendList = (params: T.UniqueRecommendListParam) => {
-    return http.get<T.UniqueRecommendListRresult>(`/personalized/privatecontent/list${stringifyParams(params)}`)
+    return http.get<T.UniqueRecommendListRresult>(`/personalized/privatecontent/list`, params)
 }
 
 

@@ -96,24 +96,6 @@ const calcTime = (time: number) => {
 }
 
 /**
- * 序列化请求参数
- * @param obj key:value
- * @returns
- */
-const stringifyParams = (obj: object) => {
-    let r = "?"
-    Object.entries(obj).forEach(item => {
-        if (r === "?") {
-            r += `${item[0]}=${item[1]}`
-        } else {
-            r += `&${item[0]}=${item[1]}`
-        }
-
-    })
-    return r
-}
-
-/**
  * 格式化歌曲/视频时长
  * @param time 时间戳
  * @returns
@@ -285,7 +267,6 @@ const setCookieExpireTime = (cookie: string) => {
 
 export {
     formatTime,
-    stringifyParams,
     formatSongTime,
     calcTime,
     formatPlayCount,

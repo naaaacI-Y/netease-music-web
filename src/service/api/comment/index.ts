@@ -1,4 +1,4 @@
-import { stringifyParams } from "@/utils"
+
 import http from "../../http"
 import * as T from "./types"
 
@@ -11,12 +11,12 @@ import * as T from "./types"
  * @returns
  */
 export const getComment = (params: T.AllCommentParam) => {
-    return http.get<T.AllCommentResult>(`/comment/new${stringifyParams(params)}`)
+    return http.get<T.AllCommentResult>(`/comment/new`, params)
 }
 
 // 获取楼层评论
 // export const getFloorComment = (params: FloorCommentParam) => {
-//     return http.get<AllCommentResult>(`/comment/floor${stringifyParams(params)}`)
+//     return http.get<AllCommentResult>(`/comment/floor`, params)
 // }
 
 
@@ -29,7 +29,7 @@ export const getComment = (params: T.AllCommentParam) => {
  * @returns
  */
 export const voteComment = (params: T.VoteCommnentParam) => {
-    return http.get<T.VoteCommentResult>(`/comment/like${stringifyParams(params)}`)
+    return http.get<T.VoteCommentResult>(`/comment/like`, params)
 }
 
 
@@ -42,9 +42,9 @@ export const voteComment = (params: T.VoteCommnentParam) => {
  * @returns
  */
 export const sendOrReplyComment = (params: T.SendOrReplyCommentParam) => {
-    return http.get<T.SendOrReplyCommentResult>(`/comment${stringifyParams(params)}`)
+    return http.get<T.SendOrReplyCommentResult>(`/comment`, params)
 }
 
 export const getHotComment = (params: T.HotCommentParams) => {
-    return http.get<T.HotCommentResult>(`/comment/hot${stringifyParams(params)}`)
+    return http.get<T.HotCommentResult>(`/comment/hot`, params)
 }

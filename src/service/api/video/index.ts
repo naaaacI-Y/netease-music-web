@@ -1,4 +1,4 @@
-import { stringifyParams } from "@/utils"
+
 import http from "../../http"
 import { CollectedAlbumParams } from "../album/types"
 import * as T from "./types"
@@ -18,7 +18,7 @@ export const getVideoLabelList = () => {
  * @returns
  */
 export const getRelatedVideo = (params: T.RelatedVideoParams) => {
-    return http.get<T.RelatedVideoResult>(`/related/allvideo${stringifyParams(params)}`)
+    return http.get<T.RelatedVideoResult>(`/related/allvideo`, params)
 }
 
 
@@ -29,7 +29,7 @@ export const getRelatedVideo = (params: T.RelatedVideoParams) => {
  * @returns
  */
 export const getVideoDetail = (params: T.RelatedVideoParams) => {
-    return http.get<T.VideoDetailResult>(`/video/detail${stringifyParams(params)}`)
+    return http.get<T.VideoDetailResult>(`/video/detail`, params)
 }
 
 /**
@@ -39,7 +39,7 @@ export const getVideoDetail = (params: T.RelatedVideoParams) => {
  * @returns
  */
 export const getVieoCountInfo = (params: T.VideoCountInfoParam) => {
-    return http.get<T.VideoCountInfo>(`/video/detail/info${stringifyParams(params)}`)
+    return http.get<T.VideoCountInfo>(`/video/detail/info`, params)
 }
 
 
@@ -50,7 +50,7 @@ export const getVieoCountInfo = (params: T.VideoCountInfoParam) => {
  * @returns
  */
 export const getVideoPlayUrl = (params: T.RelatedVideoParams) => {
-    return http.get<T.VideoPlayUrlResult>(`/video/url${stringifyParams(params)}`)
+    return http.get<T.VideoPlayUrlResult>(`/video/url`, params)
 }
 
 
@@ -62,7 +62,7 @@ export const getVideoPlayUrl = (params: T.RelatedVideoParams) => {
  * @returns
  */
 export const getVideoByCategory = (params: T.VideoByCategoryParam) => {
-    return http.get<T.VideoByCategoryResult>(`/video/group${stringifyParams(params)}`)
+    return http.get<T.VideoByCategoryResult>(`/video/group`, params)
 }
 
 
@@ -76,13 +76,13 @@ export const getVideoByCategory = (params: T.VideoByCategoryParam) => {
  * @returns
  */
 export const getComment4Video = (params: T.VideoCommentParams) => {
-    return http.get<T.VideoCommentResult>(`/comment/video${stringifyParams(params)}`)
+    return http.get<T.VideoCommentResult>(`/comment/video`, params)
 }
 
 
 // 获取收藏的视频  包含mv
 export const getCollectedVideo = (params: CollectedAlbumParams) => {
-    return http.get<T.CollectedVideoResult>(`/mv/sublist${stringifyParams(params)}`)
+    return http.get<T.CollectedVideoResult>(`/mv/sublist`, params)
 }
 
 /**
@@ -95,7 +95,7 @@ export const getCollectedVideo = (params: CollectedAlbumParams) => {
  * @returns
  */
 export const voteToVideo = (params: T.VoteToVideoParams) => {
-    return http.get<T.VoteToVideoResult>(`/resource/like${stringifyParams(params)}`)
+    return http.get<T.VoteToVideoResult>(`/resource/like`, params)
 }
 
 /**
@@ -104,7 +104,7 @@ export const voteToVideo = (params: T.VoteToVideoParams) => {
  * @returns
  */
 export const collectOrCancelVideo = (params: T.CollectOrCancelVideoParams) => {
-    return http.get<T.CollectOrCancelVideoResult>(`/video/sub${stringifyParams(params)}`)
+    return http.get<T.CollectOrCancelVideoResult>(`/video/sub`, params)
 }
 
 /**
@@ -113,5 +113,5 @@ export const collectOrCancelVideo = (params: T.CollectOrCancelVideoParams) => {
  * @returns
  */
 export const collectOrCancelMv = (params: T.CollectOrCancelMvParams) => {
-    return http.get<T.CollectOrCancelMvResult>(`/mv/sub${stringifyParams(params)}`)
+    return http.get<T.CollectOrCancelMvResult>(`/mv/sub`, params)
 }

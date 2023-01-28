@@ -1,4 +1,4 @@
-import { stringifyParams } from "@/utils"
+
 import http from "../../http"
 import * as T from "./types"
 
@@ -8,7 +8,7 @@ import * as T from "./types"
  * @returns
  */
 export const getUserDetailById = (params: T.UserDetailParams) => {
-    return http.get<T.UserDetailByIdResult>(`/user/detail${stringifyParams(params)}`)
+    return http.get<T.UserDetailByIdResult>(`/user/detail`, params)
 }
 
 /**
@@ -17,7 +17,7 @@ export const getUserDetailById = (params: T.UserDetailParams) => {
  * @returns
  */
 export const getFocusList = (params: T.UserFocusListParams) => {
-    return http.get<T.UserFocusListResult>(`/user/follows${stringifyParams(params)}`)
+    return http.get<T.UserFocusListResult>(`/user/follows`, params)
 }
 
 /**
@@ -26,7 +26,7 @@ export const getFocusList = (params: T.UserFocusListParams) => {
  * @returns
  */
 export const getFansList = (params: T.UserFocusListParams) => {
-    return http.get<T.UserFansListResult>(`/user/followeds${stringifyParams(params)}`)
+    return http.get<T.UserFansListResult>(`/user/followeds`, params)
 }
 
 
@@ -36,7 +36,7 @@ export const getFansList = (params: T.UserFocusListParams) => {
  * @returns
  */
 export const getUserDynamic = (params: T.UserDynamicParams) => {
-    return http.get<T.UserDynamicResult>(`/user/event${stringifyParams(params)}`)
+    return http.get<T.UserDynamicResult>(`/user/event`, params)
 }
 
 /**
@@ -49,7 +49,7 @@ export const getUserDynamic = (params: T.UserDynamicParams) => {
  * @returns
  */
 export const getSongList = (params: T.UserFocusListParams) => {
-    return http.get<T.UserSongListResult>(`/user/playlist${stringifyParams(params)}`)
+    return http.get<T.UserSongListResult>(`/user/playlist`, params)
 }
 
 
@@ -61,7 +61,7 @@ export const getSongList = (params: T.UserFocusListParams) => {
  * @returns
  */
 export const focusOrCancelPerson = (params: T.FocusOrCancelPersonParams) => {
-    return http.get<T.FocusOrCancelPersonResult>(`/follow${stringifyParams(params)}`)
+    return http.get<T.FocusOrCancelPersonResult>(`/follow`, params)
 }
 
 

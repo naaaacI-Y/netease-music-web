@@ -1,4 +1,4 @@
-import { stringifyParams } from "@/utils"
+
 import http from "../../http"
 import * as T from "./types"
 
@@ -17,7 +17,7 @@ export const getHotSearchList = () => {
  * @returns
  */
 export const searchSuggest = (params: T.SearchSuggestParams) => {
-    return http.get<T.SearchSuggestResult>(`/search/suggest${stringifyParams(params)}`)
+    return http.get<T.SearchSuggestResult>(`/search/suggest`, params)
 }
 
 /**
@@ -30,6 +30,6 @@ export const searchSuggest = (params: T.SearchSuggestParams) => {
  * @returns
  */
 export const searchByType = (params: T.SearchParams) => {
-    return http.get<T.SearchResult>(`/cloudsearch${stringifyParams(params)}`)
+    return http.get<T.SearchResult>(`/cloudsearch`, params)
 }
 

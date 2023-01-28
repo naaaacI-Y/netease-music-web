@@ -1,4 +1,4 @@
-import { stringifyParams } from "@/utils"
+
 import http from "../../http"
 import * as T from "./types"
 
@@ -14,7 +14,7 @@ import * as T from "./types"
  * @returns
  */
 export const getNewMusic = (params: T.NewMusicParam) => {
-    return http.get<T.NewMusicResult>(`/top/song${stringifyParams(params)}`)
+    return http.get<T.NewMusicResult>(`/top/song`, params)
 }
 
 
@@ -28,7 +28,7 @@ export const getNewMusic = (params: T.NewMusicParam) => {
  * @returns
  */
 export const getSongList = (params: T.SongListParams) => {
-    return http.get<T.SongListResult>(`/top/playlist${stringifyParams(params)}`)
+    return http.get<T.SongListResult>(`/top/playlist`, params)
 }
 
 /**
@@ -40,7 +40,7 @@ export const getSongList = (params: T.SongListParams) => {
  * @returns
  */
 export const getHighqualitySongList = (params: T.HighqualitySongListParams) => {
-    return http.get<T.HighqualitySongListResult>(`/top/playlist/highquality${stringifyParams(params)}`)
+    return http.get<T.HighqualitySongListResult>(`/top/playlist/highquality`, params)
 }
 
 /**
@@ -51,7 +51,8 @@ export const getHighqualitySongList = (params: T.HighqualitySongListParams) => {
  * @returns
  */
 export const getSongListDetail = (params: T.SongListDetailParams) => {
-    return http.get<T.SongListDetailResult>(`/playlist/detail${stringifyParams(params)}`)
+    // return http.get<T.SongListDetailResult>(`/playlist/detail`, params)
+    return http.get<T.SongListDetailResult>(`/playlist/detail`, params)
 }
 
 /**
@@ -64,7 +65,7 @@ export const getSongListDetail = (params: T.SongListDetailParams) => {
  * @returns
  */
 export const getComment4SongList = (params: T.SongListCommentParams) => {
-    return http.get<T.SongListCommentResult>(`/comment/playlist${stringifyParams(params)}`)
+    return http.get<T.SongListCommentResult>(`/comment/playlist`, params)
 }
 
 /**
@@ -77,7 +78,7 @@ export const getComment4SongList = (params: T.SongListCommentParams) => {
  * @returns
  */
 export const getComment4Song = (params: T.SongListCommentParams) => {
-    return http.get<T.SongListCommentResult>(`/comment/music${stringifyParams(params)}`)
+    return http.get<T.SongListCommentResult>(`/comment/music`, params)
 }
 
 /**
@@ -86,7 +87,7 @@ export const getComment4Song = (params: T.SongListCommentParams) => {
  * @returns
  */
 export const getCollectors4SongList = (params: Omit<T.SongListCommentParams, "before">) => {
-    return http.get<T.SongListCollectorsResult>(`/playlist/subscribers${stringifyParams(params)}`)
+    return http.get<T.SongListCollectorsResult>(`/playlist/subscribers`, params)
 }
 
 /**
@@ -123,7 +124,7 @@ export const getMusicUrl = (params: string) => {
  * @returns
  */
 export const scrobble = (params: T.ScrobbleParams) => {
-    return http.get<T.ScrobbleResult>(`/scrobble${stringifyParams(params)}`)
+    return http.get<T.ScrobbleResult>(`/scrobble`, params)
 }
 
 
@@ -134,7 +135,7 @@ export const scrobble = (params: T.ScrobbleParams) => {
  * @returns
  */
 export const getLyric = (params: T.LyricParams) => {
-    return http.get<T.LyricsResult>(`/lyric${stringifyParams(params)}`)
+    return http.get<T.LyricsResult>(`/lyric`, params)
 }
 
 /**
@@ -143,7 +144,7 @@ export const getLyric = (params: T.LyricParams) => {
  * @returns
  */
 export const getRecommendSongList = (params?: T.RecommendSongListParams) => {
-    return http.get<T.RecommendSongListResult>(`/personalized${stringifyParams(params || {})}`)
+    return http.get<T.RecommendSongListResult>(`/personalized`, params)
 }
 
 /**
@@ -152,7 +153,7 @@ export const getRecommendSongList = (params?: T.RecommendSongListParams) => {
  * @returns
  */
 export const getSimilatSong = (params: T.SongListDetailParams) => {
-    return http.get<T.SimilarSongResult>(`/simi/song${stringifyParams(params)}`)
+    return http.get<T.SimilarSongResult>(`/simi/song`, params)
 }
 
 /**
@@ -161,7 +162,7 @@ export const getSimilatSong = (params: T.SongListDetailParams) => {
  * @returns
  */
 export const getComment = (params: T.SongCommentParams) => {
-    return http.get<T.SongCommentResult>(`/comment/music${stringifyParams(params)}`)
+    return http.get<T.SongCommentResult>(`/comment/music`, params)
 }
 
 /**
@@ -171,7 +172,7 @@ export const getComment = (params: T.SongCommentParams) => {
  * @returns
  */
 export const checkMusicAvaliable = (params: T.CheckSongAvaliableParams) => {
-    return http.get<T.CheckSongAvaliableresult>(`/check/music${stringifyParams(params)}`)
+    return http.get<T.CheckSongAvaliableresult>(`/check/music`, params)
 }
 
 /**
@@ -190,7 +191,7 @@ export const getRecentPlay = () => {
  * @returns
  */
 export const collectOrCancelSongList = (params: T.CollectSongListParams) => {
-    return http.get<T.CollectSongListResult>(`/playlist/subscribe${stringifyParams(params)}`)
+    return http.get<T.CollectSongListResult>(`/playlist/subscribe`, params)
 }
 
 
@@ -201,7 +202,7 @@ export const collectOrCancelSongList = (params: T.CollectSongListParams) => {
  */
 
 export const getLikedSongList = (params: { uid: number }) => {
-    return http.get<T.LikesSongResult>(`/likelist${stringifyParams(params)}`)
+    return http.get<T.LikesSongResult>(`/likelist`, params)
 }
 
 /**
@@ -211,5 +212,5 @@ export const getLikedSongList = (params: { uid: number }) => {
  * @returns
  */
 export const likeSong = (params: T.LikeSongPrams) => {
-    return http.get<T.LikeSongResult>(`/like${stringifyParams(params)}`)
+    return http.get<T.LikeSongResult>(`/like`, params)
 }

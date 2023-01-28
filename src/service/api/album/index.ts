@@ -1,4 +1,4 @@
-import { stringifyParams } from "@/utils"
+
 import http from "../../http"
 import * as T from "./types"
 
@@ -9,7 +9,7 @@ import * as T from "./types"
  * @returns
  */
 export const getAlbumInfo = (params: T.AlbumDetailParam) => {
-    return http.get<T.AlbumDetailResult>(`/album${stringifyParams(params)}`)
+    return http.get<T.AlbumDetailResult>(`/album`, params)
 }
 
 /**
@@ -19,7 +19,7 @@ export const getAlbumInfo = (params: T.AlbumDetailParam) => {
  * @returns
  */
 export const CollectOrCancelAlbum = (params: T.AlbumDetailParam & { t: number }) => {
-    return http.get<T.CollectOrCancelAlbumResult>(`/album/sub${stringifyParams(params)}`)
+    return http.get<T.CollectOrCancelAlbumResult>(`/album/sub`, params)
 }
 
 /**
@@ -30,7 +30,7 @@ export const CollectOrCancelAlbum = (params: T.AlbumDetailParam & { t: number })
  * @returns
  */
 export const getCollectedAlbum = (params: T.CollectedAlbumParams) => {
-    return http.get<T.CollectedAlbumResult>(`/album/sublist${stringifyParams(params)}`)
+    return http.get<T.CollectedAlbumResult>(`/album/sublist`, params)
 }
 
 
@@ -40,7 +40,7 @@ export const getCollectedAlbum = (params: T.CollectedAlbumParams) => {
  * @returns
  */
 export const getAlbumDynamicInfo = (params: T.AlbumDetailParam) => {
-    return http.get<T.AlbumDynamicInfoResult>(`/album/detail/dynamic${stringifyParams(params)}`)
+    return http.get<T.AlbumDynamicInfoResult>(`/album/detail/dynamic`, params)
 }
 
 
@@ -54,5 +54,5 @@ export const getAlbumDynamicInfo = (params: T.AlbumDetailParam) => {
  * @returns
  */
 export const getComment4Album = (params: T.AlbumCommentParams) => {
-    return http.get<T.AlbumCommentResult>(`/comment/album${stringifyParams(params)}`)
+    return http.get<T.AlbumCommentResult>(`/comment/album`, params)
 }
