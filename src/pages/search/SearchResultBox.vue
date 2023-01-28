@@ -78,7 +78,7 @@
         </div>
         <!--热搜列表-->
         <div class="search-hot" v-show="!searchKeywords">
-            <div class="hot-title fs-3 text-66 mb-10">热搜榜</div>
+            <div class="hot-title fs-3 text-66 mb-10 mt-10">热搜榜</div>
             <div class="hot-item d-flex ai-center" v-for="(item, index) in hotSearchList.data" :key="item.searchWord"
                 @click="goSearchResult(item.searchWord)">
                 <div class="index mr-20 text-cf" :class="{ isTop: index <= 2 }">{{ index + 1 }}</div>
