@@ -9,7 +9,7 @@
                 <textarea id="textArea" rows="7" maxlength="140" v-model="commentContent"
                     :placeholder="params?.replyName ? `回复 ${params?.replyName}：` : '发表评论'"></textarea>
             </div>
-            <div class="max-length fs-3 text-97 pr-10">{{ maxLength - commentContent.length }}</div>
+            <div class="max-length fs-3 text-97 pr-10">{{ maxLength }}</div>
             <div class="submit-comment  fs-4 bg-primary_red_4 d-flex ai-center jc-center mt-13" style="color:white"
                 :class="maxLength === 140 ? 'hasNoContent' : ''" @click="submitContent">评 论</div>
         </div>

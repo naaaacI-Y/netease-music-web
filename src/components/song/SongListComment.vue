@@ -12,7 +12,7 @@
             </div>
             <div class="max-length fs-2 text-99 pr-10" :style="{ top: isShowTitle ? '110px' : '80px' }"
                 v-if="isShowInputBox">
-                {{ maxLength - commentContent.length }}
+                {{ maxLength }}
             </div>
             <!--单曲播放界面的评论框-->
             <slot name="song-box"></slot>
@@ -158,6 +158,8 @@ watch(() => cid.value, (newVal) => {
 })
 // 最大长度
 const maxLength = computed(() => {
+    console.log(commentContent.value.length, "commentContent.value.lengthcommentContent.value.lengthcommentContent.value.length");
+
     return 140 - commentContent.value.length
 })
 
@@ -165,7 +167,6 @@ const maxLength = computed(() => {
  * 插入评论数据
  * @param data 接口返回的评论内容
  * @param parentContent 父级评论内容
- * @param isCountAdd 同步评论数量是否要再次+1
  */
 const inserData = (data?: SendOrReplyComment, parentContent?: string) => {
     let insertData: Comment
