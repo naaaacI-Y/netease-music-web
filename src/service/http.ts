@@ -13,9 +13,14 @@ function onError(e: AxiosError) {
   if (e.response) {
     // 请求已发出，服务器返回的 http 状态码不是 2xx
     // http 状态码非2开头（没有额外定义 validateStatus）的都会进来这里，如 404, 500 等，error 的数据结构如下：error-400、error-500
-    Message.error(e.response.statusText)
+    if (e.response.data.code === -460) {
+      Message.error("接口请求出错>_<")
+    } else {
+      Message.error(e.response.statusText)
+    }
     return Promise.reject(e.response);
   } else if (e.request) {
+    console.log(e.request, "e.requeste.requeste.requeste.request");
     // 请求已发出，但没有收到响应，断网
     Message.error("网络错误，请检查")
     return Promise.reject(e.request);

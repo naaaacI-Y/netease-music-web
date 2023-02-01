@@ -158,8 +158,6 @@ watch(() => cid.value, (newVal) => {
 })
 // 最大长度
 const maxLength = computed(() => {
-    console.log(commentContent.value.length, "commentContent.value.lengthcommentContent.value.lengthcommentContent.value.length");
-
     return 140 - commentContent.value.length
 })
 
