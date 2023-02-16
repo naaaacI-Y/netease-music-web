@@ -1,6 +1,6 @@
 # netease-music-web
 
->一款web应用，仿mac端的网易云app
+> 一款 web 应用，仿 mac 端的网易云 app
 
 # 免责声明
 
@@ -24,12 +24,10 @@ vue3、typescript、pinia
 - 排行榜
 - 歌手
 - 最新音乐
-- 视频/mv播放
-- 私人fm
+- 视频/mv 播放
+- 私人 fm
 - 个人中心
 - 评论
-
-> 第一次用vue3+ts写完整的项目，代码组织的会有点乱，播放器状态管理以及歌词解析的部分借鉴了[这里](https://github.com/qier222/YesPlayMusic)；一些地方的数量不统一，包括歌单的歌曲数量、歌手的专辑以及mv数量，暂时没做， 后续再补充；
 
 # 预览
 
@@ -41,6 +39,7 @@ vue3、typescript、pinia
 ![6](https://naaaaci-y.github.io/static-netease-pic/WX20230124-175838@2x.png)
 ![7](https://naaaaci-y.github.io/static-netease-pic/WX20230124-175957@2x.png)
 ![8](https://naaaaci-y.github.io/static-netease-pic/WX20230126-211109@2x.png)
+
 # 安装和使用
 
 ### 后端
