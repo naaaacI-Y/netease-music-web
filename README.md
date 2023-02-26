@@ -1,6 +1,6 @@
 # netease-music-web
 
-> 一款 web 应用，仿 mac 端的网易云 app
+> 一款仿 mac 端网易云 app 的 web 应用
 
 # 免责声明
 
