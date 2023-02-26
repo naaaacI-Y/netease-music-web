@@ -17,7 +17,7 @@ const initApp = () => {
     // 初始化音乐播放器
     initPlayer()
 
-    // 如果登录了重新获取用户个人信息 TODO
+    // 如果登录了重新获取用户个人信息
     initUser()
 }
 

@@ -44,7 +44,7 @@ const getAllHotComment = async () => {
         type,
         limit: pages.size,
         offset: (pages.page - 1) * pages.size
-        // before:  // 如果评论大于5000的时候只需要添加，暂时不考虑，后面出问题了再说 TODO
+        // before:  // 如果评论大于5000的时候只需要添加，暂时不考虑
     }
     try {
         const r = await getHotComment(_)

@@ -21,8 +21,8 @@
         </div>
         <div class="head mb-12 text-33" @click="goAllMv(0, 0, 1)">热播MV <i class="iconfont icon-xiangyou1"></i></div>
         <div class="hot-mv-list-wrap d-flex flex-wrap jc-between" style="margin-bottom: 20px;">
-            <RecommendMvCard v-for="item in hotMvList.data" :is-play-btn="true" :key="item.id"
-                :recommend-mv-item="item"></RecommendMvCard>
+            <RecommendMvCard v-for="item in hotMvList.data" :is-play-btn="true" :key="item.id" :recommend-mv-item="item">
+            </RecommendMvCard>
         </div>
         <div class="head mb-12 text-33" @click="goAllMv(0, 4, 2)">网易出品 <i class="iconfont icon-xiangyou1"></i></div>
         <div class="wangyi-mv-list-wrap d-flex flex-wrap jc-between">
@@ -98,11 +98,6 @@ getHotMv()
 
     .head:hover {
         cursor: pointer;
-    }
-
-    .new-mv-list-wrap,
-    .hot-mv-list-wrap {
-        // margin-bottom: 60px;
     }
 
 }

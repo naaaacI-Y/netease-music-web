@@ -1,6 +1,4 @@
 import { checkLogin } from '@/utils';
-import useStore from "@/store"
-// import { storeToRefs } from "pinia"
 import { reactive, ref } from "vue"
 
 // 初始化侧边导航栏的歌单
@@ -8,9 +6,7 @@ import { getSongList } from '@/service/api/user';
 import { Playlist_user } from '@/service/api/user/types';
 import useSideSongListStore from "@/store/sideSongList";
 import useUserProfileStore from "@/store/user";
-// import likeSongList from '@/utils/LIKESONGLIST';
-// const sideSongList = useSideSongListStore()
-// const userProfile = useUserProfileStore()
+
 const hasMore = ref(false)
 const createdList = reactive({ data: [] as Playlist_user[] })
 const collectedList = reactive({ data: [] as Playlist_user[] })
