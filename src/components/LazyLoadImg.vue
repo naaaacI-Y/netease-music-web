@@ -5,8 +5,6 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, nextTick, ref, watch } from 'vue';
-
 const props = withDefaults(defineProps<{
     src: string
     width?: number // 如果传入了宽高，则是独家放送 ==> 不规则宽高

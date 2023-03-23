@@ -34,21 +34,16 @@ import Nav from "@/components/Nav.vue"
 import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import useStore from '@/store';
-import initUser, { clearCookieInfo } from '@/config/user';
-import { getPersonSongList } from '@/config/songList';
-import { passengerLogin } from '@/service/api/user';
-import { setCookieExpireTime } from '@/utils';
+import { clearCookieInfo } from '@/config/user';
 
 const { useGlobal, usePlayer, userProfile } = useStore()
 const { isShowLoginBox, isShowPlayPage, loginOrLogout } = storeToRefs(useGlobal)
 const { player } = storeToRefs(usePlayer)
-const { userFile } = storeToRefs(userProfile)
 const isShowSearchBox = ref(false)
 const searchKeyWords = ref("")
 const musicId = ref<number>()
 const route = useRoute()
 const router = useRouter()
-// const isShowReset = ref(false) // 重新加载
 
 const isNotVideo = computed(() => {
     return !route.path.startsWith('/mv-detail') && !route.path.startsWith('/video-detail')
