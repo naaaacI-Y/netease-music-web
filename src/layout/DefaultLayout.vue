@@ -1,5 +1,6 @@
 <template>
-    <Nav :isChangeBgc='isShowPlayPage' @handle-key-words-change="handleKeyWordsChange">
+    <Nav :isChangeBgc='isShowPlayPage' @handle-key-words-change="handleKeyWordsChange"
+        :is-show-notification="isShowMessageBox">
     </Nav>
     <div class="main-content" :class="[!isNotVideo ? 'isAuto' : '', !isNotVideo ? 'isVideoPlay' : '']">
         <side-bar v-show="isNotVideo"></side-bar>
@@ -7,6 +8,7 @@
             <slot></slot>
             <SearchResultBox :search-keywords="searchKeyWords" v-if="isShowSearchBox" @hideSearchBox="hideSearchBox">
             </SearchResultBox>
+            <MessageBox v-if="isShowMessageBox"></MessageBox>
         </div>
         <div class="content" v-if="isShowReset">
         </div>
@@ -28,6 +30,7 @@
 import Login from '@/components/Login.vue';
 import MusicCommon from '@/components/music/MusicCommon.vue';
 import SearchResultBox from '@/pages/search/SearchResultBox.vue';
+import MessageBox from "@/pages/message/index.vue"
 import Footer from '@/components/Footer.vue'
 import SideBar from '@/components/SideBar.vue'
 import Nav from "@/components/Nav.vue"
@@ -39,7 +42,8 @@ import { clearCookieInfo } from '@/config/user';
 const { useGlobal, usePlayer, userProfile } = useStore()
 const { isShowLoginBox, isShowPlayPage, loginOrLogout } = storeToRefs(useGlobal)
 const { player } = storeToRefs(usePlayer)
-const isShowSearchBox = ref(false)
+const isShowSearchBox = ref(false) // 是否显示搜索弹窗
+const isShowMessageBox = ref(false) // 是否显示消息通知
 const searchKeyWords = ref("")
 const musicId = ref<number>()
 const route = useRoute()
@@ -81,6 +85,10 @@ const showPlayPage = (id: number) => {
     musicId.value = id
 }
 
+// const notificationChange = (isShow: boolean) => {
+//     isShowMessageBox.value = isShow
+// }
+
 // 隐藏搜索框
 const hideSearchBox = () => {
     isShowSearchBox.value = false
@@ -95,6 +103,15 @@ onMounted(() => {
     document.addEventListener("click", (e: Event) => {
         const targetId = (e.target as any)?.id
         const offsetParentId = (e.target as any)?.offsetParent?.id
+        if (targetId === "skin-icon") {
+            isShowMessageBox.value = !isShowMessageBox.value
+        }
+        if (targetId !== "skin-icon" && offsetParentId !== "message-box-wrapper") {
+            isShowMessageBox.value = false
+        }
+        if (offsetParentId === "message-box-wrapper" || targetId === "message-box-wrapper") {
+            isShowMessageBox.value = true
+        }
         if (targetId !== "search-box" && offsetParentId !== "search-result-box-wrapper") {
             // 不是点击的搜索框或者搜索结果弹出框
             isShowSearchBox.value = false

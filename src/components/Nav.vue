@@ -43,9 +43,15 @@
                     </div>
                     <input type="text" placeholder="搜索" v-model="searchKeyWords" id="search-box" />
                 </div>
+                <!--消息通知-->
+                <div class="skin d-flex ai-center jc-center mr-15">
+                    <i class="iconfont icon-youjian1 fs-9" :class="{ isSkinActive: isShowNotification }" id="skin-icon"></i>
+                </div>
+                <!--皮肤-->
                 <div class="skin d-flex ai-center jc-center" @click="showSetTheme">
                     <i class="iconfont icon-icon-pifu fs-9" :class="{ isSkinActive: isShowSetTheme }"></i>
                 </div>
+
                 <div class="set-theme-box fs-1 d-flex jc-around ai-center" v-if="isShowSetTheme"
                     :class="{ isShowShadow: theme !== 'dark' }">
                     <div class="white-box" @click="setTheme('white')">
@@ -73,16 +79,17 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { debounce } from "@/utils"
 import { storeToRefs } from 'pinia';
 import useThemeStore from '@/store/theme';
 import { changeTheme } from '@/config/theme';
 import { firstPagePath, paths } from '@/utils/const';
+import { emit } from 'process';
 
 const props = withDefaults(defineProps<{
     isChangeBgc: boolean
+    isShowNotification: boolean
 }>(), {
     isChangeBgc: false
 })
@@ -117,10 +124,14 @@ const handleKeyWordsChange = () => {
 const showSetTheme = () => {
     isShowSetTheme.value = !isShowSetTheme.value
 }
+
+// 主题设置显示/隐藏
 const setTheme = (theme: string) => {
     changeTheme(theme)
     isShowSetTheme.value = false
 }
+
+
 const debounceTextChange = debounce(handleKeyWordsChange, 200)
 
 const isActive = (path1: string, path2?: string) => {
