@@ -24,10 +24,7 @@
             </div>
         </div>
         <div class="message-content">
-            <PrivateMessage v-if="tabType === 0"></PrivateMessage>
-            <CommentMessage v-if="tabType === 1"></CommentMessage>
-            <MentionMessage v-if="tabType === 2"></MentionMessage>
-            <NotificationMessage v-if="tabType === 3"></NotificationMessage>
+            <component :is="tabsComponents[showWhichComponent]"></component>
         </div>
     </div>
 </template>
@@ -38,11 +35,19 @@ import CommentMessage from './CommentMessage.vue';
 import PrivateMessage from './PrivateMessage.vue';
 import NotificationMessage from './NotificationMessage.vue';
 import useThemeStore from '@/store/theme';
+
 import { storeToRefs } from 'pinia';
+import { messageTypeList } from '@/utils/const';
 
 const { theme } = storeToRefs(useThemeStore())
 const tabType = ref(0)
-
+const tabsComponents = {
+    MentionMessage, CommentMessage, PrivateMessage, NotificationMessage
+}
+const showWhichComponent = computed(() => {
+    const type = Object.keys(messageTypeList)[tabType.value] as keyof typeof messageTypeList
+    return messageTypeList[type].component
+})
 </script>
 <style lang="scss" scoped>
 .message-box-wrapper {

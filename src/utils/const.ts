@@ -73,6 +73,21 @@ const songMenuTypes: obj = {
 const labelListMap = ["歌曲列表", "评论", "收藏者"] // 歌单tab
 const labelList = ["专辑", "MV", "歌手详情", "相似歌手"]
 const tabsComponents = ["Album", "Lyric", "Singer", "Video", "Song", "User", "Radio", "SongList"] as const
+const messageComponents = ["PrivateMessage", "CommentMessage", "MentionMessage", "NotificationMessage"] as const
+const messageTypeList: { [key: string]: { component: typeof messageComponents[number] } } = {
+    "私信": {
+        component: "PrivateMessage"
+    },
+    "评论": {
+        component: "CommentMessage"
+    },
+    "@我": {
+        component: "MentionMessage"
+    },
+    "通知": {
+        component: "NotificationMessage"
+    }
+}
 const searchTypeList: { [key: string]: { id: number, unit: string, component: typeof tabsComponents[number] } } = {
     "单曲": {
         id: 1,
@@ -145,6 +160,7 @@ export {
     firstPagePath,
     labelListMap,
     paths,
+    messageTypeList,
     BannerType
 
 }
