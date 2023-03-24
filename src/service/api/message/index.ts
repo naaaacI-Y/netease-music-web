@@ -7,7 +7,7 @@ import * as T from "./types"
  * @param params offset : 偏移数量，用于分页 , 如 :( 页数 -1)*30, 其中 30 为 limit 的值 , 默认为 0
  * @returns {PrivateResult}
  */
-export const getMeesagePrivateInfo = (params: T.QueryParam) => {
+export const getMessagePrivateInfo = (params: T.QueryParam) => {
     return http.get<T.PrivateResult>(`/msg/private`, params)
 }
 

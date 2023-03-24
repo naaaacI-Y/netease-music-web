@@ -15,11 +15,14 @@ type FormatList<T> = { id: number | string, dataList: T[] }[]
  * 日期格式化
  * @param time 时间戳
  * @param format yyy-Mm-dd hh:mm:ss
+ * @param flag boolean 是否需要裁切时间 年内的显示日月
  * @returns
  */
-const formatTime = (time: number, format: string) => {
+const formatTime = (time: number, format: string, flag?: boolean) => {
     let t = new Date(time);
     if (t) {
+        const year = t.getFullYear()
+        const now_year = new Date().getFullYear()
         var date: { [key: string]: any } = {
             "M+": t.getMonth() + 1,
             "d+": t.getDate(),
@@ -32,7 +35,7 @@ const formatTime = (time: number, format: string) => {
         if (/(y+)/i.test(format)) {
             format = format.replace(
                 RegExp.$1,
-                (t.getFullYear() + "").substr(4 - RegExp.$1.length)
+                (year + "").substr(4 - RegExp.$1.length)
             );
         }
         for (var k in date) {
@@ -44,6 +47,9 @@ const formatTime = (time: number, format: string) => {
                         : ("00" + date[k]).substr(("" + date[k]).length)
                 );
             }
+        }
+        if (flag) {
+            return year < now_year ? format.split(" ")[0] : format.split(" ")[0].split("年")[1]
         }
         return format;
 
