@@ -85,7 +85,6 @@ import { storeToRefs } from 'pinia';
 import useThemeStore from '@/store/theme';
 import { changeTheme } from '@/config/theme';
 import { firstPagePath, paths } from '@/utils/const';
-import { emit } from 'process';
 
 const props = withDefaults(defineProps<{
     isChangeBgc: boolean

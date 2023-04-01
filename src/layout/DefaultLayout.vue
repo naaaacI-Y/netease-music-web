@@ -31,9 +31,9 @@ import Login from '@/components/Login.vue';
 import MusicCommon from '@/components/music/MusicCommon.vue';
 import SearchResultBox from '@/pages/search/SearchResultBox.vue';
 import MessageBox from "@/pages/message/index.vue"
-import Footer from '@/components/Footer.vue'
-import SideBar from '@/components/SideBar.vue'
-import Nav from "@/components/Nav.vue"
+import Footer from '@/layout/Footer.vue'
+import SideBar from '@/layout/SideBar.vue'
+import Nav from "@/layout/Nav.vue"
 import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import useStore from '@/store';
